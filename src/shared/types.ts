@@ -211,6 +211,19 @@ export interface StatsPayload {
   } | null;
   /** Ostatnie 7 dni (z dziś, od najstarszego) do wykresów słupkowych; null = brak danych tego dnia. */
   last7: { date: string; weekday: number; avgFatigue: number | null; goodPercent: number | null; presentMinutes: number }[];
+  /** Ostatnie 30 dni (z dziś, od najstarszego) do wyboru zakresu w Statystykach; null = brak pracy tego dnia. */
+  last30: {
+    date: string;
+    weekday: number;
+    /** Dzień miesiąca (podpis osi). */
+    day: number;
+    goodPercent: number | null;
+    avgPosture: number | null;
+    avgFatigue: number | null;
+    presentMinutes: number;
+    breaks: number;
+    alerts: number;
+  }[];
   heatmap: { weekday: number; hour: number; form: number; minutes: number }[];
   bestHours: string | null;
   dipText: string | null;

@@ -413,8 +413,9 @@ function notify(n: { title: string; body: string; kind: string; openBreak?: bool
 
 function statsNow() {
   const now = Date.now();
-  const since = now - 28 * 864e5;
   const dayStart = new Date(new Date().setHours(0, 0, 0, 0)).getTime();
+  // Od północy 29 dni temu: pełne 30 dni kalendarzowych dla zakresu „Ostatni miesiąc” w Statystykach.
+  const since = new Date(dayStart).setDate(new Date(dayStart).getDate() - 29);
   return buildStats({
     now,
     samples: store.minutesSince(since),
@@ -423,6 +424,8 @@ function statsNow() {
     breakTimes: store.eventTimes('break-done', dayStart),
     alertTimes: store.eventTimes('alert', dayStart),
     breaksYesterday: store.countEvents('break-done', new Date(dayStart - 12 * 3600e3).setHours(0, 0, 0, 0), dayStart),
+    breakHistory: store.eventTimes('break-done', since),
+    alertHistory: store.eventTimes('alert', since),
   });
 }
 

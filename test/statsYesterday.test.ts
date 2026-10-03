@@ -57,3 +57,20 @@ test('znaczniki przerw i alertów trafiają do dzisiejszych statystyk', () => {
   assert.deepEqual(st.today.alertTimes, [3]);
   assert.deepEqual(buildStats({ ...base, samples: [] }).today.breakTimes, []);
 });
+
+test('ostatnie 30 dni: średnie dnia, przerwy i alerty policzone per dzień', () => {
+  const samples = [...minutes(NOW, -29, 9, 30, 90, 30, 15), ...minutes(NOW, -1, 9, 30, 70, 60, 12), ...minutes(NOW, 0, 9, 30, 85, 20, 16)];
+  const at = (dayOffset: number, hour: number) => { const d = new Date(NOW); d.setDate(d.getDate() + dayOffset); d.setHours(hour, 0, 0, 0); return d.getTime(); };
+  const m = buildStats({ ...base, samples, breakHistory: [at(-1, 10), at(-1, 11), at(0, 9)], alertHistory: [at(-29, 9)] }).last30;
+  assert.equal(m.length, 30);
+  assert.equal(m[29].date, localDate(NOW));
+  assert.equal(m[0].date, localDate(at(-29, 12)));
+  assert.equal(m[0].avgPosture, 90);
+  assert.equal(m[0].alerts, 1);
+  assert.equal(m[28].avgFatigue, 60);
+  assert.equal(m[28].breaks, 2);
+  assert.equal(m[29].breaks, 1);
+  assert.equal(m[29].day, new Date(NOW).getDate());
+  assert.equal(m[15].presentMinutes, 0);
+  assert.equal(m[15].goodPercent, null);
+});
