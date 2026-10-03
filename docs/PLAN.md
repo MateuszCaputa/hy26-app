@@ -15,6 +15,55 @@
 - [ ] A8 Record 2–3 landmark fixture clips (good posture, slouch, tired) for tests + demo mode.
 - [ ] A9 Document every formula in the README's "Jak liczona jest ocena" (how the score is computed), updated for A3–A7.
 
+## Area MP: MediaPipe & camera (bugs first, then precision, then wow). One task at a time, in this order.
+> Investigated 2026-10-03 against `src/renderer/{analyzer,app,draw}.ts` and `views/live.ts`. Root causes below are from the code plus the HTML media spec. **Reproduce first** (`/start`), then fix.
+
+- [ ] **MP1 (BUG, A, highest priority) Camera freezes after switching tabs (Na żywo → Statystyki → Na żywo).**
+  - **Root cause:** `LiveView.detach()` removes `root` from the DOM, and the shared `<video>` (`analyzer.video`) lives inside it. Per the HTML spec, a media element removed from the document is **paused**. `LiveView.mount()` re-inserts it but **never calls `video.play()`**, so the picture stays frozen.
+  - **Worse:** the analyzer loop keeps running `detectForVideo()` on the paused video, i.e. the **same stale frame** (`readyState` stays ≥ 2). Posture score, alerts and minute samples are computed on a frozen image. That's data corruption, not just a visual glitch.
+  - **Fix:**
+    - (a) Keep the `<video>` always attached: a hidden host element outside `#view`; LiveView only shows it, e.g. by moving it with `stage.prepend(video)` and calling `video.play()`. Or call `play()` on every mount **and** re-`play()` on the `pause` event while `analyzer.isRunning`.
+    - (b) In `Analyzer.tick()`, skip detection when there's no new frame: `video.paused`, or `video.currentTime === lastVideoTime`. Better: drive the loop with `video.requestVideoFrameCallback`.
+  - **Done when:** after 10× switching views the preview is live; no frames are analysed while the video is paused (log or test); score updates only from fresh frames.
+- [ ] **MP2 (BUG, A) Freeze after Wstrzymaj → Wznów (pause/resume).**
+  - Likely the same root cause as MP1 when pause/resume happens while another view is mounted. Plus `await this.video.play().catch(() => undefined)` in `Analyzer.start()` **swallows the play error**, so we're blind.
+  - **Steps:**
+    1. Log `play()` rejections, plus `video.paused` and `readyState` after start.
+    2. Reproduce: pause on Live, resume on Live; pause on Live, switch to Stats, resume, return.
+    3. Verify the MP1 fix covers it; otherwise fix the actual cause.
+  - **Done when:** pause/resume in any view order brings back a live preview within 2 s.
+- [ ] **MP3 (precision, A) True head pose.**
+  - Enable `outputFacialTransformationMatrixes: true` in FaceLandmarker and decompose the matrix into **pitch/yaw/roll in degrees**.
+  - Use pitch for forward head and nodding (today it's an indirect nose-to-shoulder proxy), and yaw for "turned away / looking at a second screen".
+  - Unit-test the decomposition with a known matrix.
+- [ ] **MP4 (precision, A) Higher camera resolution:** 1280×720 instead of 640×480 (eyes get ~2× the pixels, which helps blinks and glasses). Measure FPS on the M2 and keep the 25 fps face loop; fall back to 640 if slower.
+- [ ] **MP5 (precision, A) Better pose model:** `pose_landmarker_full` instead of `lite` (more stable shoulders and ears).
+  - Bundle it per A1.
+  - Tune `minPoseDetectionConfidence`, `minPosePresenceConfidence` and `minTrackingConfidence` (0.6).
+  - If FPS allows, raise the pose rate from 8 Hz (`POSE_INTERVAL_MS = 125`) to ~15 Hz.
+  - **Done when:** the score jitter while sitting still is lower than before (measure the std-dev over 30 s).
+- [ ] **MP6 (glasses, A) Blink/PERCLOS that works with glasses.**
+  - Today `EyeAnalyzer` takes `max(EAR-based closure, blendshape eyeBlink)`, with closed = `0.35 × open reference`. Glasses glare corrupts the EAR landmarks.
+  - **Steps:**
+    1. Record 2 people with glasses + 2 without, 60 s each, counting blinks by hand.
+    2. Compare the EAR-only and blendshape-only counts.
+    3. Add **glasses mode**: auto-detected when EAR is noisy or barely bimodal, or set as a checkbox in settings. It weights blendshapes higher and uses an adaptive threshold from rolling percentiles.
+    4. Add "blink 5 times" to calibration to learn each user's blink amplitude.
+  - **Done when:** the blink count is within ±20% of the manual count for every tester, glasses included (Rytm A1 criterion).
+- [ ] **MP7 (wow, C) Neon face mesh.**
+  - `FaceLandmarker.FACE_LANDMARKS_TESSELATION` in thin cyan at ~0.35 alpha.
+  - `FACE_LANDMARKS_FACE_OVAL`, `_LIPS`, `_LEFT_EYE`, `_RIGHT_EYE`, `_LEFT_IRIS`, `_RIGHT_IRIS` bright, with glow (`shadowBlur`).
+  - Video darkened behind it; a blink ripple on the eyes.
+  - Toggle plus a "demo intensity" setting. Keep ≥ 24 fps.
+- [ ] **MP8 (wow, C) Colourful body strands, like Google's hand-tracking demo.**
+  - Use the upper-body `PoseLandmarker.POSE_CONNECTIONS` (face, shoulders, arms, torso): each chain gets its own colour (e.g. face cyan, left arm magenta, right arm lime, torso violet), with gradient strokes, glowing joint dots, and thickness by depth (z).
+  - Fewer strands than the hand demo, but vivid.
+  - The posture-state colour still drives the spine line. Keep the existing angle labels and the ideal-head ring.
+- [ ] **MP9 (wow + feel, C) Smooth overlay.**
+  - Today the overlay redraws only on pose ticks (8 Hz), so it looks choppy.
+  - Draw on `requestAnimationFrame`, interpolating between the last two landmark sets (or One-Euro smoothing per point, see `core/oneEuro.ts`), so strands move fluidly at 60 fps while detection stays at 8–15 Hz.
+- [ ] MP10 (WON'T unless time) Hand landmarker (e.g. phone in hand or hand on face). It costs FPS and isn't in the pitch story.
+
 ## Area B: Health data, decisions & care (owner: Marcin, author of Rytm's decisions, doctor report and NFZ path)
 - [ ] B1 (M5) **Doctor report screen** (Polish): 14-day summary, dominant issues, fatigue trend, sleep (Garmin), what the user already tried, "questions for your doctor". Print to PDF.
 - [ ] B2 (M5) **NFZ path card:** when to see a GP vs a physio vs an eye doctor; the TIP 800 190 590 info line; red flags → 112. Wording reviewed against ENGINEERING §4 (no diagnoses). Port from `docs/archive-rytm/`.
