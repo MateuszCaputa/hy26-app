@@ -324,18 +324,11 @@ test('zakresy godzin i statystyki', () => {
       }
     }
   }
-  const garmin = Array.from({ length: 5 }, (_, d) => {
-    const ms = base + d * 864e5;
-    const dt = new Date(ms);
-    const date = `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
-    return { date, sleepHours: 7.5, sleepScore: 80, stressAvg: 25, bodyBatteryHigh: 80, bodyBatteryLow: 20, restingHr: 55, hrv: 60 };
-  });
-  const st = buildStats({ now: base + 4 * 864e5 + 17 * 3600e3, samples, garmin, garminConnected: true, breaksToday: 3, alertsToday: 2 });
+  const st = buildStats({ now: base + 4 * 864e5 + 17 * 3600e3, samples, breaksToday: 3, alertsToday: 2 });
   assert.equal(st.bestHours, '9–11');
   assert.match(st.dipText!, /13:00/);
   assert.equal(st.daysOfData, 5);
   assert.equal(st.weekTopIssue, 'slouch');
   assert.ok(st.heatmap.length > 0);
   assert.equal(st.today.presentMinutes, 540);
-  assert.ok(st.garmin.insight);
 });

@@ -92,7 +92,8 @@ button, input, select { font: inherit; color: inherit; }
 .lead { font-size: 16px; max-width: 70ch; }
 
 /* ——— Na żywo ——— */
-.live { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 0; min-height: 100%; }
+/* Widok ma wysokość okna: kamera stoi w miejscu, a przewija się tylko panel (np. po rozwinięciu „Szczegółów”). */
+.live { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 0; height: 100%; }
 .stage {
   position: relative; margin: 18px; border-radius: var(--radius-lg); overflow: hidden;
   background: #121314; height: calc(100vh - 36px); min-height: 360px;
@@ -117,7 +118,7 @@ button, input, select { font: inherit; color: inherit; }
 .legend-ring { width: 14px; height: 14px; border: 2px dashed rgba(255,255,255,.85); border-radius: 50%; }
 .stage { box-shadow: 0 0 0 1px var(--line); }
 
-.readout { border-left: 1px solid var(--line); padding: 18px 22px; display: flex; flex-direction: column; overflow: auto; }
+.readout { border-left: 1px solid var(--line); padding: 18px 22px; display: flex; flex-direction: column; overflow-y: auto; min-height: 0; overscroll-behavior: contain; }
 .r-block { padding: 13px 0; border-bottom: 1px solid var(--line); display: grid; gap: 8px; }
 .r-block:last-child { border-bottom: 0; }
 .score-block { padding-top: 6px; }
@@ -226,15 +227,13 @@ button, input, select { font: inherit; color: inherit; }
 .hint { color: var(--muted); font-size: 13px; font-weight: 400; }
 .field.toggle { grid-template-columns: auto 1fr; }
 .field input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--spine); }
-.field input[type="number"], .field input[type="time"], .field select, .garmin-form input {
+.field input[type="number"], .field input[type="time"], .field select {
   background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 6px 10px;
 }
 .field input[type="number"] { width: 76px; text-align: right; }
 .field input[type="range"] { width: 220px; accent-color: var(--spine); }
 .num { display: flex; align-items: center; gap: 8px; }
 .unit { color: var(--muted); font-size: 14px; min-width: 2.2em; }
-.garmin-form { display: grid; grid-template-columns: 70px 1fr; gap: 10px; align-items: center; max-width: 440px; }
-.garmin-form .btn { grid-column: 2; }
 
 /* ——— Nakładki ——— */
 .overlay {
@@ -312,8 +311,8 @@ button, input, select { font: inherit; color: inherit; }
 .w-sub { color: var(--muted); font-weight: 400; font-size: 12.5px; }
 
 @media (max-width: 1000px) {
-  .live { grid-template-columns: 1fr; }
-  .readout { border-left: 0; border-top: 1px solid var(--line); }
+  .live { grid-template-columns: 1fr; height: auto; min-height: 100%; }
+  .readout { border-left: 0; border-top: 1px solid var(--line); overflow: visible; }
   .break { grid-template-columns: 1fr; }
   .break-fig { max-width: 200px; }
 }

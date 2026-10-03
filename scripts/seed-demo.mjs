@@ -12,27 +12,20 @@ db.exec(`
     blink_rate REAL, perclos REAL, long_blinks REAL, yawns INTEGER, kb INTEGER, mouse INTEGER, issues TEXT);
   CREATE TABLE IF NOT EXISTS events (id INTEGER PRIMARY KEY AUTOINCREMENT, ts INTEGER NOT NULL, type TEXT NOT NULL, detail TEXT);
   CREATE TABLE IF NOT EXISTS kv (key TEXT PRIMARY KEY, value TEXT NOT NULL);
-  CREATE TABLE IF NOT EXISTS garmin_daily (date TEXT PRIMARY KEY, sleep_hours REAL, sleep_score REAL, stress_avg REAL,
-    bb_high REAL, bb_low REAL, resting_hr REAL, hrv REAL);
-  DELETE FROM minutes; DELETE FROM events; DELETE FROM garmin_daily;
+  DELETE FROM minutes; DELETE FROM events;
 `);
 
 let seed = 7;
 const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
 const ins = db.prepare('INSERT INTO minutes VALUES (?,?,?,?,?,?,?,?,?,?,?,?)');
 const ev = db.prepare('INSERT INTO events(ts, type, detail) VALUES (?,?,?)');
-const gar = db.prepare('INSERT INTO garmin_daily VALUES (?,?,?,?,?,?,?,?)');
 const now = new Date();
-const p2 = (n) => String(n).padStart(2, '0');
 
 for (let d = 11; d >= 0; d--) {
   const day = new Date(now);
   day.setDate(now.getDate() - d);
   if (day.getDay() === 0) continue; // niedziela wolna
-  const sleep = 5.4 + rnd() * 2.8;
-  const dateStr = `${day.getFullYear()}-${p2(day.getMonth() + 1)}-${p2(day.getDate())}`;
-  gar.run(dateStr, Math.round(sleep * 10) / 10, Math.round(50 + sleep * 5 + rnd() * 10), Math.round(22 + rnd() * 18),
-    Math.round(45 + sleep * 6 + rnd() * 8), Math.round(10 + rnd() * 15), 52 + Math.round(rnd() * 6), 48 + Math.round(rnd() * 20));
+  const sleep = 5.4 + rnd() * 2.8; // słabsze i lepsze dni, żeby statystyki nie były płaskie
   const sleepPenalty = Math.max(0, 7 - sleep) * 6;
   const endHour = d === 0 ? Math.min(17, Math.max(9, now.getHours())) : 17;
   for (let h = 8; h < endHour; h++) {
@@ -58,7 +51,4 @@ for (let d = 11; d >= 0; d--) {
     }
   }
 }
-db.prepare("INSERT INTO kv(key, value) VALUES('secret:garmin', ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value")
-  .run(JSON.stringify(`plain:${Buffer.from(JSON.stringify({ email: 'demo@example.com', password: 'x' })).toString('base64')}`));
-db.prepare("INSERT INTO kv(key, value) VALUES('meta:garminLastSync', ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value").run(JSON.stringify(Date.now()));
 console.log('Dane demo zapisane w', dir);

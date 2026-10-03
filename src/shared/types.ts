@@ -185,17 +185,6 @@ export interface LiveStatus {
   energy?: { percent: number; minutesToLow: number | null } | null;
 }
 
-export interface GarminDay {
-  date: string; // YYYY-MM-DD
-  sleepHours: number | null;
-  sleepScore: number | null;
-  stressAvg: number | null;
-  bodyBatteryHigh: number | null;
-  bodyBatteryLow: number | null;
-  restingHr: number | null;
-  hrv: number | null;
-}
-
 export interface StatsPayload {
   today: {
     minutes: MinuteSample[];
@@ -214,7 +203,6 @@ export interface StatsPayload {
   daysOfData: number;
   weekTopIssue: IssueId | null;
   weekIssueShare: Partial<Record<IssueId, number>>;
-  garmin: { lastNight: GarminDay | null; insight: string | null; connected: boolean };
 }
 
 export interface AppEvent {

@@ -82,9 +82,8 @@ export class Analyzer {
   } | null = null;
   private drift: BaselineDrift | null = null;
   private lastPositionT = 0;
-  /** Bateria z kolejnych minut (do prognozy) i Body Battery z zegarka rano. */
+  /** Bateria z kolejnych minut (do prognozy). */
   private energyHistory: EnergyPoint[] = [];
-  private morningBodyBattery: number | null = null;
   private driftHintDay = '';
   demo = false;
   /** Bez WebGL MediaPipe nie przyjmuje <video>: wtedy podajemy klatki jako ImageData. */
@@ -451,10 +450,6 @@ export class Analyzer {
     return c.getImageData(0, 0, w, h);
   }
 
-  setMorningBodyBattery(v: number | null): void {
-    this.morningBodyBattery = v;
-  }
-
   private energyNow(t: number): number | null {
     const tr = this.lastTracker;
     if (!this.calibration || !tr?.present) return null;
@@ -462,7 +457,6 @@ export class Analyzer {
       fatiguePercent: this.lastFatigue?.percent ?? null,
       postureAvg15: postureAvg(this.recent.slice(-15)) ?? tr.score,
       minutesSinceBreak: this.breaks.minutesSinceBreak(t),
-      morningBodyBattery: this.morningBodyBattery,
     });
   }
 

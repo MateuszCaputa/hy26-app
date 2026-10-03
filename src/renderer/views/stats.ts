@@ -1,4 +1,4 @@
-// Widok „Statystyki”: dzisiejszy dzień, godziny formy, co poprawić na stałe, Garmin.
+// Widok „Statystyki”: dzisiejszy dzień, godziny formy, co poprawić na stałe.
 import type { AppCtx } from '../app';
 import type { IssueId, MinuteSample, StatsPayload } from '../../shared/types';
 import { h, plural } from '../dom';
@@ -25,7 +25,7 @@ export async function renderStats(view: HTMLElement, ctx: AppCtx): Promise<void>
     );
     return;
   }
-  page.append(todaySection(st), formSection(st), issuesSection(st), garminSection(st, ctx));
+  page.append(todaySection(st), formSection(st), issuesSection(st));
 }
 
 function figure(value: string, label: string): HTMLElement {
@@ -184,31 +184,5 @@ function issuesSection(st: StatsPayload): HTMLElement {
     ),
     h('p', { class: 'fine' }, 'Udział w czasie ze złą postawą z ostatnich 7 dni.'),
   );
-  return sec;
-}
-
-function garminSection(st: StatsPayload, ctx: AppCtx): HTMLElement {
-  const sec = h('section', { class: 'block' }, h('h2', null, 'Sen i regeneracja (Garmin)'));
-  if (!st.garmin.connected) {
-    sec.append(
-      h('p', { class: 'fine' }, 'Połącz konto Garmin Connect, aby zobaczyć, jak sen, stres i Body Battery wpływają na Twoją formę.'),
-      h('button', { class: 'btn', onclick: () => ctx.navigate('settings') }, 'Połącz w ustawieniach'),
-    );
-    return sec;
-  }
-  const g = st.garmin.lastNight;
-  if (g) {
-    const v = (x: number | null, s = '') => (x === null ? '–' : `${x}${s}`);
-    sec.append(
-      h('div', { class: 'figs' },
-        figure(g.sleepHours === null ? '–' : `${g.sleepHours.toFixed(1).replace('.', ',')} h`, 'snu ostatniej nocy'),
-        figure(v(g.sleepScore), 'ocena snu'),
-        figure(g.bodyBatteryHigh === null ? '–' : `${g.bodyBatteryHigh}`, 'Body Battery (maks.)'),
-        figure(v(g.stressAvg), 'średni stres'),
-        figure(v(g.hrv, ' ms'), 'HRV w nocy'),
-      ),
-    );
-  }
-  sec.append(h('p', { class: 'lead' }, st.garmin.insight ?? 'Wnioski o wpływie snu pojawią się po 5 dniach danych z zegarka i z biurka.'));
   return sec;
 }

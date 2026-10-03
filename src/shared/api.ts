@@ -7,7 +7,6 @@ export interface InitData {
   modelsReady: boolean;
   paused: boolean;
   platform: string;
-  garmin: { connected: boolean; email: string | null };
 }
 
 export interface PosturaApi {
@@ -26,9 +25,6 @@ export interface PosturaApi {
   onNavigate(cb: (view: string) => void): void;
   onShowBreak(cb: () => void): void;
   onStatus(cb: (s: LiveStatus) => void): void;
-  garminConnect(email: string, password: string): Promise<{ ok: boolean; error?: string }>;
-  garminDisconnect(): Promise<void>;
-  garminSync(): Promise<{ ok: boolean; error?: string; days?: number }>;
   activityStatus(): Promise<{ running: boolean; error: string | null }>;
   wipeData(): Promise<void>;
   openExternal(url: string): void;

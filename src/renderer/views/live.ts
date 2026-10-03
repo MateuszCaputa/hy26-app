@@ -127,7 +127,14 @@ export class LiveView {
         this.breakSub,
         h('button', { class: 'btn', onclick: () => ctx.startBreak() }, 'Zrób przerwę teraz'),
       ),
-      h('details', { class: 'r-block details' },
+      h('details', {
+        class: 'r-block details',
+        // Po rozwinięciu przewiń sam panel do szczegółów – kamera zostaje na miejscu.
+        ontoggle: (e: Event) => {
+          const d = e.currentTarget as HTMLDetailsElement;
+          if (d.open) requestAnimationFrame(() => d.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+        },
+      },
         h('summary', null, 'Szczegóły pomiaru'),
         h('div', { class: 'details-body' },
           h('h2', null, 'Zmęczenie oczu'),
