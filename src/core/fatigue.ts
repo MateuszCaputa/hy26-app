@@ -478,21 +478,45 @@ export function eyesUsable(reliable: boolean, blinkRate: number | null, perclos:
   return reliable && (blinkRate !== null || perclos !== null);
 }
 
+/**
+ * Tryb prezentacji (pokaz dla jury): sygnały oczu przesuwają się od bieżących w stronę typowego zmęczenia.
+ * k = 0 → bez zmian, k = 1 → mruganie 3/min („gapienie się”), PERCLOS 20%, 2,5 długiego mrugnięcia/min, +3 ziewnięcia.
+ * Postawa i czas od przerwy zostają prawdziwe. Wynik musi być oznaczony jako symulacja.
+ */
+export function simulateTired(i: FatigueInputs, k: number): FatigueInputs {
+  const q = clamp01(k);
+  const lerp = (from: number, to: number) => from + (to - from) * q;
+  return {
+    ...i,
+    blinkRate: lerp(i.blinkRate ?? 7, 3),
+    perclos: lerp(i.perclos ?? 0.03, 0.2),
+    longBlinksPerMin: lerp(i.longBlinksPerMin ?? 0, 2.5),
+    yawns10m: i.yawns10m + Math.round(3 * q),
+  };
+}
+
 /** Wygładza wskaźnik zmęczenia (stała czasowa ~60 s), by nie skakał co klatkę. */
 export class FatigueEstimator {
   private value: number | null = null;
   private lastT: number | null = null;
 
   /** null = oczy niewiarygodne: nie oceniamy zmęczenia (i nie przenosimy starej wartości dalej). */
-  update(t: number, eyes: EyeAnalyzer, extra: { postureAvg15: number | null; minutesSinceBreak: number }): FatigueSnapshot | null {
+  update(
+    t: number,
+    eyes: EyeAnalyzer,
+    extra: { postureAvg15: number | null; minutesSinceBreak: number },
+    /** Tryb prezentacji: siła symulacji 0–1 (patrz simulateTired); undefined = prawdziwe dane. */
+    simulate?: number,
+  ): FatigueSnapshot | null {
     const reliable = eyes.isReliable(t);
     const blinkRate = eyes.blinkRate(t);
     const perclos = eyes.perclos(t);
-    if (!eyesUsable(reliable, blinkRate, perclos)) {
+    const sim = simulate !== undefined;
+    if (!sim && !eyesUsable(reliable, blinkRate, perclos)) {
       this.reset();
       return null;
     }
-    const inputs: FatigueInputs = {
+    const real: FatigueInputs = {
       blinkRate,
       perclos,
       longBlinksPerMin: eyes.longBlinksPerMin(t),
@@ -500,10 +524,12 @@ export class FatigueEstimator {
       nods10m: eyes.nods10m(t),
       ...extra,
     };
+    const inputs = sim ? simulateTired(real, simulate) : real;
     const raw = fatiguePercent(inputs);
     const dt = this.lastT === null ? 0 : Math.max(0, t - this.lastT);
     this.lastT = t;
-    this.value = this.value === null ? raw : this.value + (1 - Math.exp(-dt / 60)) * (raw - this.value);
+    // Symulacja na scenie: krótsze wygładzanie (~8 s), żeby zmiana była widoczna w czasie pokazu.
+    this.value = this.value === null ? raw : this.value + (1 - Math.exp(-dt / (sim ? 8 : 60))) * (raw - this.value);
     const percent = Math.round(this.value);
     return {
       percent,
@@ -514,6 +540,10 @@ export class FatigueEstimator {
       yawns10m: inputs.yawns10m,
       nods10m: inputs.nods10m,
       faceReliable: reliable,
+      components: fatigueComponents(inputs),
+      postureAvg15: inputs.postureAvg15,
+      minutesSinceBreak: inputs.minutesSinceBreak,
+      simulated: sim || undefined,
     };
   }
 

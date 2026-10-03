@@ -22,6 +22,7 @@
 - Minimal Stats: Postawa / Zmęczenie tabs, range select (today, 3/7/30 days), bar charts only (C20) → PR #94
 - Simpler Stats and Settings: no „Godziny formy” chart, no work-hours / keyboard-tempo options (C21, C22) → PR #98
 - Camera-verified exercises (chin tuck, shoulder raises, neck side stretch) with a rep counter on the break screen, real Bateria change after a break, animated exercise figures (A4, A5, C6, C23) → PR #99
+- Fatigue breakdown „Dlaczego X%?” (6 components with weights and norms) and a labelled presentation mode that simulates fatigue on stage without saving it (B9, B10) → PR #104
 
 ## AI tools used
 - **Claude Code** (Anthropic): used by all developers for planning, implementation, tests, docs and review. Every module is understood and can be explained by the team.

@@ -135,6 +135,13 @@ export interface FatigueSnapshot {
   yawns10m: number;
   nods10m: number;
   faceReliable: boolean;
+  /** Składowe wskaźnika jako kara 0–1 (null = brak danych) – do „Dlaczego tyle?” w widoku na żywo. */
+  components?: Record<'perclos' | 'blink' | 'long' | 'yawn' | 'posture' | 'time', number | null>;
+  /** Wejścia spoza oczu, pokazywane przy składowych. */
+  postureAvg15?: number | null;
+  minutesSinceBreak?: number;
+  /** Tryb prezentacji: sygnały oczu są symulowane (etykieta „SYMULACJA”, nie trafia do bazy). */
+  simulated?: boolean;
 }
 
 /** Agregat z jednej minuty, wysyłany do procesu głównego i zapisywany w SQLite. */

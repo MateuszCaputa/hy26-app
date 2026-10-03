@@ -4,6 +4,7 @@ import type { Frame } from '../analyzer';
 import type { IssueId, LiveStatus, Settings } from '../../shared/types';
 import { drawOverlay } from '../draw';
 import { h, fmtMin } from '../dom';
+import { fatigueWhy } from '../fatigueWhy';
 import { BREAK_TITLE, ISSUE_LABEL, ISSUE_TIP } from '../../core/coach';
 import { ISSUE_DEFS } from '../../core/scoring';
 import { LandmarkFollower } from '../../core/landmarkFollower';
@@ -60,6 +61,8 @@ export class LiveView {
   private tip: HTMLElement;
   private fatNum: HTMLElement;
   private fatBar: HTMLElement;
+  private why = fatigueWhy();
+  private simBadge = h('span', { class: 'sim-badge', hidden: true, 'data-tip': 'Tryb prezentacji: sygnały oczu są symulowane (Ustawienia → Prezentacja).' }, 'SYMULACJA');
   private blinkVal: HTMLElement;
   private yawnVal: HTMLElement;
   private breakText: HTMLElement;
@@ -117,8 +120,9 @@ export class LiveView {
         h('div', { class: 'hero-row' }, this.figure.el, h('div', { class: 'hero-text' }, this.scoreState, this.tip)),
       ),
       h('section', { class: 'r-block energy-row' },
-        h('div', { class: 'energy-head' }, h('span', null, 'Zmęczenie'), this.fatNum),
+        h('div', { class: 'energy-head' }, h('span', null, 'Zmęczenie', this.simBadge), this.fatNum),
         h('span', { class: 'meter', role: 'presentation' }, this.fatBar),
+        this.why.el,
       ),
       // Przerwy w jednej linii: ile zostało i przycisk.
       h('section', { class: 'r-block break-line' }, this.breakText, this.breakBtn),
@@ -287,6 +291,8 @@ export class LiveView {
     this.fatNum.textContent = fatOn ? `${f!.percent}%` : '–';
     this.fatBar.style.width = fatOn ? `${f!.percent}%` : '0';
     if (fatOn) this.fatBar.dataset.level = f!.level;
+    this.why.update(fatOn ? f : null);
+    this.simBadge.hidden = !(fatOn && f!.simulated);
     // W „Szczegółach” tylko surowe liczby z oczu.
     const blinks = f?.blinkRate != null ? `${Math.round(f.blinkRate)}/min` : '–';
     const yawns = f ? `${f.yawns10m} w 10 min` : '–';

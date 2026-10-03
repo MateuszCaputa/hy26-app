@@ -64,6 +64,8 @@ export class Analyzer {
   private tracker: PostureTracker | null = null;
   private eyes = new EyeAnalyzer();
   private fatigue = new FatigueEstimator();
+  /** Tryb prezentacji (tylko do zamknięcia aplikacji): od kiedy symulujemy zmęczenie, w sekundach analizatora. */
+  private presentationSince: number | null = null;
   private breaks: BreakEngine;
   private agg = new MinuteAggregator();
   private recent: MinuteSample[] = [];
@@ -181,6 +183,16 @@ export class Analyzer {
 
   get hasCalibration(): boolean {
     return this.calibration !== null;
+  }
+
+  get presentationMode(): boolean {
+    return this.presentationSince !== null;
+  }
+
+  /** Tryb prezentacji: włącza/wyłącza symulację zmęczenia (wynik oznaczony „SYMULACJA”, bez zapisu do bazy). */
+  setPresentationMode(on: boolean): void {
+    this.presentationSince = on ? this.now() : null;
+    this.fatigue.reset();
   }
 
   get breakEngine(): BreakEngine {
@@ -390,10 +402,12 @@ export class Analyzer {
           this.cb.onAlert(out.alert);
         }
         const avg15 = postureAvg(this.recent.slice(-15));
+        // Tryb prezentacji: symulowane zmęczenie narasta przez ~45 s od włączenia.
+        const sim = this.presentationSince === null ? undefined : Math.min(1, (t - this.presentationSince) / 45);
         this.lastFatigue = this.fatigue.update(t, this.eyes, {
           postureAvg15: avg15,
           minutesSinceBreak: this.breaks.minutesSinceBreak(t),
-        });
+        }, sim);
         const fat = this.lastFatigue;
 
         const sug = this.breaks.update(t, {
@@ -415,7 +429,8 @@ export class Analyzer {
           score: out.score,
           state: out.state,
           severities: out.severities,
-          fatigue: fat,
+          // Symulacja z trybu prezentacji nie trafia do bazy ani statystyk.
+          fatigue: fat?.simulated ? null : fat,
         });
         if (sample) this.emitMinute(sample);
       }

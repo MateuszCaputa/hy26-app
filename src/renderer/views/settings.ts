@@ -104,6 +104,19 @@ export async function renderSettings(view: HTMLElement, ctx: AppCtx): Promise<vo
         ),
       ),
       previewGroup(ctx),
+      // Tryb prezentacji: nie zapisujemy go w ustawieniach – działa tylko do zamknięcia aplikacji.
+      group('Prezentacja', [
+        h('div', { class: 'field toggle' },
+          h('input', { type: 'checkbox', id: 's-presentation', checked: ctx.analyzer.presentationMode,
+            onchange: (e: Event) => {
+              const on = (e.target as HTMLInputElement).checked;
+              ctx.analyzer.setPresentationMode(on);
+              ctx.toast(on ? 'Symulacja zmęczenia włączona: wynik rośnie przez ok. 45 s i jest oznaczony „SYMULACJA”.' : 'Symulacja wyłączona – wracam do prawdziwych pomiarów.');
+            } }),
+          h('label', { for: 's-presentation' }, 'Tryb prezentacji: symulacja zmęczenia',
+            h('span', { class: 'hint' }, 'rzadsze mruganie, przymykanie oczu i ziewanie narastają przez ok. 45 s; wynik oznaczony „SYMULACJA”, nie trafia do statystyk; wyłącza się po zamknięciu aplikacji')),
+        ),
+      ]),
       group('Dane', [
         h('p', { class: 'fine' }, 'Obraz z kamery nie jest zapisywany ani wysyłany. Baza zawiera tylko liczby: wyniki co minutę i zdarzenia.'),
         h('button', { class: 'btn danger small', onclick: async (e: Event) => {
