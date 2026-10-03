@@ -101,17 +101,49 @@ export interface InsightInput {
   samples: MinuteSample[]; // np. ostatnie 28 dni
   breaksToday: number;
   alertsToday: number;
+  /** Czasy (ms) dzisiejszych przerw i alertów, do znaczników na wykresie. */
+  breakTimes?: number[];
+  alertTimes?: number[];
+  breaksYesterday?: number;
+}
+
+/** Średnie jednego dnia z minut, w których użytkownik był przy biurku. */
+function dayAverages(samples: MinuteSample[]) {
+  const present = samples.filter((s) => s.present >= 0.5);
+  const r = (v: number | null) => (v === null ? null : Math.round(v));
+  const goodVals = present.filter((s) => s.goodRatio !== null).map((s) => s.goodRatio as number);
+  const blink = avg(present.filter((s) => s.blinkRate !== null).map((s) => s.blinkRate as number));
+  return {
+    goodPercent: goodVals.length ? Math.round(avg(goodVals)! * 100) : null,
+    avgPosture: r(avg(present.filter((s) => s.posture !== null).map((s) => s.posture as number))),
+    avgFatigue: r(avg(present.filter((s) => s.fatigue !== null).map((s) => s.fatigue as number))),
+    avgBlinkRate: blink === null ? null : Math.round(blink * 10) / 10,
+    presentMinutes: present.length,
+  };
 }
 
 export function buildStats(i: InsightInput): StatsPayload {
   const today = localDate(i.now);
   const todays = i.samples.filter((s) => localDate(s.ts) === today);
-  const present = todays.filter((s) => s.present >= 0.5);
-  const actRef = activityReference(i.samples);
+  const yesterdayDate = localDate(new Date(i.now).setHours(0, 0, 0, 0) - 12 * 3600e3);
+  const yAvg = dayAverages(i.samples.filter((s) => localDate(s.ts) === yesterdayDate));
 
-  const goodVals = present.filter((s) => s.goodRatio !== null).map((s) => s.goodRatio as number);
-  const goodPercent = goodVals.length ? Math.round(avg(goodVals)! * 100) : null;
-  const r = (v: number | null) => (v === null ? null : Math.round(v));
+  // Ostatnie 7 dni kalendarzowych (z dziś), od najstarszego; dzień bez pracy = null.
+  const last7 = Array.from({ length: 7 }, (_, k) => {
+    const noon = new Date(i.now);
+    noon.setHours(12, 0, 0, 0);
+    noon.setDate(noon.getDate() - (6 - k));
+    const date = localDate(noon.getTime());
+    const a = dayAverages(i.samples.filter((s) => localDate(s.ts) === date));
+    return {
+      date,
+      weekday: weekdayMon0(noon.getTime()),
+      avgFatigue: a.presentMinutes ? a.avgFatigue : null,
+      goodPercent: a.presentMinutes ? a.goodPercent : null,
+      presentMinutes: a.presentMinutes,
+    };
+  });
+  const actRef = activityReference(i.samples);
 
   // Mapa: dzień tygodnia × godzina.
   const cells = new Map<string, number[]>();
@@ -146,18 +178,15 @@ export function buildStats(i: InsightInput): StatsPayload {
   return {
     today: {
       minutes: todays,
-      goodPercent,
-      avgPosture: r(avg(present.filter((s) => s.posture !== null).map((s) => s.posture as number))),
-      avgFatigue: r(avg(present.filter((s) => s.fatigue !== null).map((s) => s.fatigue as number))),
-      avgBlinkRate: (() => {
-        const v = avg(present.filter((s) => s.blinkRate !== null).map((s) => s.blinkRate as number));
-        return v === null ? null : Math.round(v * 10) / 10;
-      })(),
+      ...dayAverages(todays),
       breaksTaken: i.breaksToday,
       alerts: i.alertsToday,
-      presentMinutes: present.length,
       topIssue: topIssueOf(todays),
+      breakTimes: i.breakTimes ?? [],
+      alertTimes: i.alertTimes ?? [],
     },
+    yesterday: yAvg.presentMinutes > 0 ? { ...yAvg, breaksTaken: i.breaksYesterday ?? 0 } : null,
+    last7,
     heatmap,
     bestHours: best,
     dipText: dip,
