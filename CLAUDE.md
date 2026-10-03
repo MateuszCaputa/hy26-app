@@ -11,6 +11,7 @@
 - **Deadline / demo time:**
 
 Work split and task list live in `docs/PLAN.md` — read it before starting any task, update it when you finish one.
+Human workflow (git, worktrees, conflict handling, cadence) is in `docs/TEAM.md`; follow the same conventions.
 
 ## Stack & commands
 
