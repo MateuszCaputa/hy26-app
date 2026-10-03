@@ -158,12 +158,18 @@ button, input, select { font: inherit; color: inherit; }
 .energy-pct { color: var(--ink); font-size: 15px; font-weight: 500; font-variant-numeric: tabular-nums; }
 .energy-row .fine[hidden] { display: none; }
 .details { padding: 0; border-bottom: 0; }
-.details > summary { cursor: pointer; padding: 13px 0; color: var(--muted); font-weight: 600; font-size: 15px; list-style: none; }
+/* Strzałka po prawej: tytuł i cała treść zaczynają się od tej samej lewej krawędzi co reszta panelu. */
+.details > summary {
+  cursor: pointer; padding: 13px 0; color: var(--muted); font-weight: 600; font-size: 15px; list-style: none;
+  display: flex; justify-content: space-between; align-items: center;
+}
 .details > summary::-webkit-details-marker { display: none; }
-.details > summary::before { content: "▸"; display: inline-block; width: 1.1em; transition: transform .15s ease; }
-.details[open] > summary::before { transform: rotate(90deg); }
+.details > summary::after { content: "▸"; font-size: 13px; transition: transform .15s ease; }
+.details[open] > summary { padding-bottom: 4px; }
+.details[open] > summary::after { transform: rotate(90deg); }
 .details-body { display: grid; gap: 10px; padding-bottom: 16px; }
-.details-body h2 { margin-top: 12px; }
+/* Podtytuły mniejsze od „Szczegółów pomiaru”, żeby było widać, co jest czym. */
+.details-body h2 { margin-top: 12px; font-size: 13px; }
 .details-body h2:first-child { margin-top: 0; }
 /* Przycisk kalibracji oddzielony od listy, na całą szerokość panelu – nie wisi pod ostatnim paskiem. */
 .details-foot { margin-top: 8px; padding-top: 14px; border-top: 1px solid var(--line); display: grid; }
