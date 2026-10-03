@@ -171,6 +171,8 @@ button, input, select { font: inherit; color: inherit; }
 /* Podtytuły mniejsze od „Szczegółów pomiaru”, żeby było widać, co jest czym. */
 .details-body h2 { margin-top: 12px; font-size: 13px; }
 .details-body h2:first-child { margin-top: 0; }
+/* Wiersze wcięte pod swoim podtytułem, żeby było widać, do której sekcji należą. */
+.details-body .metric-list { padding-left: 14px; }
 /* Przycisk kalibracji oddzielony od listy, na całą szerokość panelu – nie wisi pod ostatnim paskiem. */
 .details-foot { margin-top: 8px; padding-top: 14px; border-top: 1px solid var(--line); display: grid; }
 .details-foot .btn { justify-self: stretch; padding-block: 8px; }
