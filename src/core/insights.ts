@@ -105,6 +105,9 @@ export interface InsightInput {
   breakTimes?: number[];
   alertTimes?: number[];
   breaksYesterday?: number;
+  /** Czasy (ms) przerw i alertów z całego okna `samples`, do podsumowań dzień po dniu (last30). */
+  breakHistory?: number[];
+  alertHistory?: number[];
 }
 
 /** Średnie jednego dnia z minut, w których użytkownik był przy biurku. */
@@ -141,6 +144,39 @@ export function buildStats(i: InsightInput): StatsPayload {
       avgFatigue: a.presentMinutes ? a.avgFatigue : null,
       goodPercent: a.presentMinutes ? a.goodPercent : null,
       presentMinutes: a.presentMinutes,
+    };
+  });
+
+  // Ostatnie 30 dni (z dziś), od najstarszego: średnie dnia + liczba przerw i alertów (wybór zakresu w Statystykach).
+  const byDate = new Map<string, MinuteSample[]>();
+  for (const s of i.samples) {
+    const d = localDate(s.ts);
+    if (!byDate.has(d)) byDate.set(d, []);
+    byDate.get(d)!.push(s);
+  }
+  const countByDate = (times: number[] | undefined) => {
+    const m = new Map<string, number>();
+    for (const t of times ?? []) m.set(localDate(t), (m.get(localDate(t)) ?? 0) + 1);
+    return m;
+  };
+  const breaksByDate = countByDate(i.breakHistory);
+  const alertsByDate = countByDate(i.alertHistory);
+  const last30 = Array.from({ length: 30 }, (_, k) => {
+    const noon = new Date(i.now);
+    noon.setHours(12, 0, 0, 0);
+    noon.setDate(noon.getDate() - (29 - k));
+    const date = localDate(noon.getTime());
+    const a = dayAverages(byDate.get(date) ?? []);
+    return {
+      date,
+      weekday: weekdayMon0(noon.getTime()),
+      day: noon.getDate(),
+      goodPercent: a.presentMinutes ? a.goodPercent : null,
+      avgPosture: a.presentMinutes ? a.avgPosture : null,
+      avgFatigue: a.presentMinutes ? a.avgFatigue : null,
+      presentMinutes: a.presentMinutes,
+      breaks: breaksByDate.get(date) ?? 0,
+      alerts: alertsByDate.get(date) ?? 0,
     };
   });
   const actRef = activityReference(i.samples);
@@ -187,6 +223,7 @@ export function buildStats(i: InsightInput): StatsPayload {
     },
     yesterday: yAvg.presentMinutes > 0 ? { ...yAvg, breaksTaken: i.breaksYesterday ?? 0 } : null,
     last7,
+    last30,
     heatmap,
     bestHours: best,
     dipText: dip,
