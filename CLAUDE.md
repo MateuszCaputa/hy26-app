@@ -108,6 +108,7 @@ Layout:
 ## Gotchas
 
 <!-- one line each, add as discovered -->
+- Dev loop: `npm run dev` (watch, also re-copies HTML/CSS) + `npx electron .` (the dot matters). Renderer changes auto-reload the windows; `src/main/` changes need an Electron restart (tray → Zakończ). Launched from a terminal, macOS attributes permission prompts (Accessibility, camera) to that terminal app.
 - Verified 2026-10-03 14:xx on macOS / Node 22.19: `npm install`, typecheck, 17/17 tests and build are all green on main.
 - MediaPipe models currently download on first run (`src/main/models.ts`), which is a stage risk offline. Task A1 bundles them.
 - Electron binary downloads on first `npx electron` run (npm 11 allow-scripts skips postinstall) — run `npx electron --version` once after `npm install`.
