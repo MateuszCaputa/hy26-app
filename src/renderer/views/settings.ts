@@ -41,12 +41,6 @@ export async function renderSettings(view: HTMLElement, ctx: AppCtx): Promise<vo
       ),
     );
   };
-  const time = (k: 'workStart' | 'workEnd', label: string) =>
-    h('div', { class: 'field' },
-      h('label', { for: `s-${k}` }, label),
-      h('input', { type: 'time', id: `s-${k}`, value: ctx.settings[k], onchange: (e: Event) => set(k, (e.target as HTMLInputElement).value) }),
-    );
-
   // Kamera
   const camSelect = h('select', { id: 's-cam', onchange: (e: Event) => set('cameraId', (e.target as HTMLSelectElement).value) },
     h('option', { value: '' }, 'Domyślna kamera'));
@@ -68,19 +62,6 @@ export async function renderSettings(view: HTMLElement, ctx: AppCtx): Promise<vo
       onchange: (e: Event) => set('sensitivity', Number((e.target as HTMLInputElement).value)) }),
   );
 
-  // Aktywność klawiatury i myszy – status modułu.
-  const actStatus = h('p', { class: 'fine' });
-  const refreshAct = async () => {
-    const s = await api?.activityStatus();
-    if (!s) return;
-    actStatus.textContent = !ctx.settings.activityTracking
-      ? 'Wyłączone.'
-      : s.running
-        ? 'Działa: zapisuję tylko liczbę naciśnięć i ruchów myszy na minutę, nigdy treść.'
-        : `Nie działa${s.error ? ` (${s.error})` : ''}. ${ctx.init.platform === 'darwin' ? 'Na macOS nadaj Posturze uprawnienie w Ustawieniach systemowych → Prywatność → Dostępność.' : ''}`;
-  };
-  void refreshAct();
-
   view.append(
     h('div', { class: 'page settings' },
       h('div', { class: 'page-head' }, h('h1', null, 'Ustawienia'), saved),
@@ -92,9 +73,6 @@ export async function renderSettings(view: HTMLElement, ctx: AppCtx): Promise<vo
       ]),
       group('Powiadomienia', [
         toggle('doNotDisturb', 'Nie przeszkadzać', 'wycisza wszystkie powiadomienia, analiza działa dalej'),
-        toggle('onlyWorkHours', 'Powiadamiaj tylko w godzinach pracy'),
-        time('workStart', 'Początek pracy'),
-        time('workEnd', 'Koniec pracy (podsumowanie dnia)'),
         toggle('soundAlerts', 'Dźwięk powiadomień'),
         toggle('systemNotifications', 'Powiadomienia systemowe', 'gdy mini-widget jest wyłączony; z widgetem przypomnienia wysuwają się spod niego')
       ]),
@@ -122,8 +100,6 @@ export async function renderSettings(view: HTMLElement, ctx: AppCtx): Promise<vo
             num('moveBreakMin', 'Przerwa ruchowa co', 'min', 30, 180),
             h('p', { class: 'fine' }, 'Wyjście z kadru na ponad 2 min liczy się jako przerwa. Przy rosnącym zmęczeniu przerwa może pojawić się wcześniej.'),
             toggle('faceAnalysis', 'Mrugnięcia i zmęczenie z obrazu twarzy', 'wymaga ok. 25 klatek/s; wyłącz, by oszczędzać baterię'),
-            toggle('activityTracking', 'Tempo pracy z klawiatury i myszy', 'dokładniejsze „godziny formy”; na macOS wymaga uprawnienia Dostępności'),
-            actStatus,
           ),
         ),
       ),
@@ -145,8 +121,6 @@ export async function renderSettings(view: HTMLElement, ctx: AppCtx): Promise<vo
       ]),
     ),
   );
-  // Odśwież status klawiatury po zmianie przełącznika.
-  view.querySelector('#s-activityTracking')?.addEventListener('change', () => setTimeout(() => void refreshAct(), 300));
 }
 
 /** Podgląd powiadomień: każdy rodzaj okienka na żądanie, żeby zobaczyć, jak wygląda. */

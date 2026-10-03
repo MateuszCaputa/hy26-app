@@ -255,7 +255,6 @@ button, input, select { font: inherit; color: inherit; }
 .fig-delta { font-size: 13px; font-weight: 600; margin-left: 8px; vertical-align: 6px; }
 .fig-delta.up { color: var(--good); }
 .fig-delta.down { color: var(--bad); }
-.stat-hint { margin: 0; font-size: 15px; }
 
 .chart { margin: 0; display: grid; gap: 6px; }
 .chart svg { width: 100%; height: auto; overflow: visible; }
@@ -344,13 +343,48 @@ button, input, select { font: inherit; color: inherit; }
 .break-fig { background: var(--spine-soft); border-radius: var(--radius-lg); padding: 24px; }
 .break-body { display: grid; gap: 12px; }
 .break-body h2 { color: var(--ink); font-size: 18px; margin-top: 6px; }
-.break-timer { margin: 4px 0; }
-.running .figure-svg .move-x { animation: nudge-x 3s ease-in-out infinite; }
-.running .figure-svg .move-y { animation: nudge-y 2s ease-in-out infinite; }
-.running .figure-svg .tilt { animation: tilt 4s ease-in-out infinite; transform-origin: 100px 90px; }
-@keyframes nudge-x { 50% { transform: translateX(-10px); } }
-@keyframes nudge-y { 50% { transform: translateY(-10px); } }
-@keyframes tilt { 50% { transform: rotate(10deg); } }
+.break-timer { margin: 4px 0; display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
+/* Licznik ćwiczenia sprawdzanego kamerą (A4/C6) */
+.verify { display: grid; gap: 6px; min-width: 220px; flex: 1; max-width: 340px; }
+.verify-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.verify-label { color: var(--muted); font-size: 13px; }
+.verify-count { font-size: 30px; font-weight: 300; font-variant-numeric: tabular-nums; line-height: 1.1; transition: color .2s ease, transform .2s ease; }
+.verify-note { color: var(--muted); font-size: 13px; }
+.verify .meter-fill { transition: width .25s ease; }
+.verify[data-state="move"] .verify-count { color: var(--good); }
+.verify[data-state="done"] .verify-count { color: var(--good); font-weight: 600; transform: scale(1.15); }
+.verify[data-state="done"] .meter-fill { background: var(--good); }
+.verify[data-state="done"] .verify-note { color: var(--good); font-weight: 600; }
+/* Animowane ćwiczenia (figures.ts): pozycja spoczynkowa = klatka 0%, więc zatrzymana animacja pokazuje start.
+   Okno przerwy: gra zawsze; lista ćwiczeń: po najechaniu albo fokusie. */
+.figure-svg .a { transform-box: view-box; animation-play-state: paused; animation-iteration-count: infinite; animation-timing-function: ease-in-out; }
+.fig-lg .figure-svg .a, .ex:hover .figure-svg .a, .ex:focus-within .figure-svg .a { animation-play-state: running; }
+.figure-svg .a-chin { animation-name: fx-chin; animation-duration: 3.2s; }
+.figure-svg .a-blade-l { animation-name: fx-blade-l; animation-duration: 3.2s; }
+.figure-svg .a-blade-r { animation-name: fx-blade-r; animation-duration: 3.2s; }
+.figure-svg .a-shrug { animation-name: fx-shrug; animation-duration: 2.4s; }
+.figure-svg .a-neck { animation-name: fx-neck; animation-duration: 6s; transform-origin: 100px 80px; }
+.figure-svg .a-pupil { animation-name: fx-pupil; animation-duration: 4s; }
+.figure-svg .a-gaze { animation-name: fx-gaze; animation-duration: 1s; animation-timing-function: linear; }
+.figure-svg .a-leg1, .figure-svg .a-leg2 { animation-name: fx-swing; animation-duration: 1.2s; transform-origin: 101px 110px; }
+.figure-svg .a-arm1, .figure-svg .a-arm2 { animation-name: fx-swing-arm; animation-duration: 1.2s; transform-origin: 103px 64px; }
+.figure-svg .a-leg2, .figure-svg .a-arm2 { animation-delay: -0.6s; }
+.figure-svg .a-chest-torso { animation-name: fx-lean-back; animation-duration: 4s; transform-origin: 98px 120px; }
+.figure-svg .a-chest-arm { animation-name: fx-arm-back; animation-duration: 4s; transform-origin: 101px 62px; }
+.figure-svg .a-twist { animation-name: fx-twist; animation-duration: 5s; transform-origin: 100px 100px; }
+@keyframes fx-chin { 0%, 15% { transform: none; } 35%, 65% { transform: translateX(-14px); } 85%, 100% { transform: none; } }
+@keyframes fx-blade-l { 0%, 15% { transform: none; } 35%, 65% { transform: translateX(10px); } 85%, 100% { transform: none; } }
+@keyframes fx-blade-r { 0%, 15% { transform: none; } 35%, 65% { transform: translateX(-10px); } 85%, 100% { transform: none; } }
+@keyframes fx-shrug { 0%, 100% { transform: none; } 25% { transform: translateY(-16px); } 50% { transform: none; } 75% { transform: translateY(-16px); } }
+@keyframes fx-neck { 0%, 8% { transform: none; } 22%, 42% { transform: rotate(-30deg); } 52%, 58% { transform: none; } 72%, 92% { transform: rotate(30deg); } 100% { transform: none; } }
+@keyframes fx-pupil { 0%, 15% { transform: none; } 30%, 75% { transform: translateX(18px); } 90%, 100% { transform: none; } }
+@keyframes fx-gaze { to { stroke-dashoffset: -16; } }
+@keyframes fx-swing { 0%, 100% { transform: rotate(-20deg); } 50% { transform: rotate(20deg); } }
+@keyframes fx-swing-arm { 0%, 100% { transform: rotate(18deg); } 50% { transform: rotate(-18deg); } }
+@keyframes fx-lean-back { 0%, 15% { transform: none; } 35%, 70% { transform: rotate(-6deg); } 90%, 100% { transform: none; } }
+@keyframes fx-arm-back { 0%, 15% { transform: none; } 35%, 70% { transform: rotate(38deg); } 90%, 100% { transform: none; } }
+@keyframes fx-twist { 0%, 8% { transform: none; } 22%, 40% { transform: scaleX(.55) translateX(-10px); } 50% { transform: none; } 62%, 80% { transform: scaleX(.55) translateX(10px); } 92%, 100% { transform: none; } }
+@media (prefers-reduced-motion: reduce) { .figure-svg .a { animation: none !important; } }
 
 .toast-root { position: fixed; right: 22px; bottom: 22px; z-index: 30; }
 .toast {
