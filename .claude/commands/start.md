@@ -7,7 +7,7 @@ You are starting a work session on the HackYeah repo. Area / task: **$ARGUMENTS*
 
 Do these in order:
 
-1. **Read** `docs/SCOPE.md`, `docs/PLAN.md` and `docs/ENGINEERING.md` (CLAUDE.md is already loaded).
+1. **Read** `NA-KONIEC.md` (the must-have list before the pitch), `docs/ROADMAP.md`, `docs/SCOPE.md`, `docs/PLAN.md` and `docs/ENGINEERING.md` (CLAUDE.md is already loaded).
 2. **Sync:** `git switch main && git pull --rebase origin main`. If `package-lock.json` changed, run `npm install`. Then run `npm run typecheck && npm test` so you know `main` is green before you touch anything. If `main` is red, report it and stop.
 3. **Pick the task:** use the given task ID, or else the first unchecked `[ ]` task in this area in `docs/PLAN.md`, respecting MUST before SHOULD and the time gates at the top. Skip tasks marked `(@someone, in progress)`.
 4. **Claim it:** edit only that line in `docs/PLAN.md` to append `(@<name>, in progress)`, commit `docs: claim <ID>`, then `git pull --rebase origin main && git push origin main`. This is a one-line commit straight to main, the only allowed exception.
