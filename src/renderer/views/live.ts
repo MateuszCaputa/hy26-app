@@ -7,6 +7,7 @@ import { h, fmtMin, plural } from '../dom';
 import { BREAK_TITLE, FATIGUE_LABEL, ISSUE_LABEL, ISSUE_TIP, fatigueAdvice } from '../../core/coach';
 import { ISSUE_DEFS } from '../../core/scoring';
 import { LandmarkFollower } from '../../core/landmarkFollower';
+import { PostureFigure } from '../postureFigure';
 
 const STATE_WORD: Record<string, string> = {
   good: 'Siedzisz prosto',
@@ -48,6 +49,7 @@ export class LiveView {
   private breakText: HTMLElement;
   private breakSub: HTMLElement;
   private metricRows = new Map<IssueId, { val: HTMLElement; bar: HTMLElement; row: HTMLElement }>();
+  private figure = new PostureFigure();
   private calibrateCta: HTMLElement;
   private hint: HTMLElement;
   private mounted = false;
@@ -102,19 +104,20 @@ export class LiveView {
         h('span', { class: 'meter big', role: 'presentation' }, this.energyBar),
         this.energyNote,
       ),
+      // C16 (uwaga mentora F3): ludzik pokazuje problem i strzałką, jak go poprawić; obok jedno zdanie.
       h('section', { class: 'r-block score-block' },
         h('div', { class: 'state-line' }, this.scoreState, h('span', { class: 'fine' }, 'postawa ', this.scoreNum, '/100')),
+        this.figure.el,
         this.tip,
       ),
-      h('section', { class: 'r-block' },
-        h('h2', null, 'Przerwy'),
+      h('section', { class: 'r-block break-line' },
         this.breakText,
-        this.breakSub,
-        h('button', { class: 'btn', onclick: () => ctx.startBreak() }, 'Zrób przerwę teraz'),
+        h('button', { class: 'btn small ghost', onclick: () => ctx.startBreak() }, 'Przerwa teraz'),
       ),
       h('details', { class: 'r-block details' },
         h('summary', null, 'Szczegóły pomiaru'),
         h('div', { class: 'details-body' },
+          this.breakSub,
           h('h2', null, 'Zmęczenie'),
           h('div', { class: 'fat-line' }, this.fatNum, this.fatWord),
           h('span', { class: 'meter', role: 'presentation' }, this.fatBar, h('span', { class: 'meter-tick t40' }), h('span', { class: 'meter-tick t70' })),
@@ -156,6 +159,7 @@ export class LiveView {
       if (!this.mounted) return;
       const dt = Math.min(100, now - this.lastDraw);
       this.lastDraw = now;
+      this.figure.tick(dt);
       const f = this.lastFrame;
       if (f) {
         try {
@@ -210,6 +214,15 @@ export class LiveView {
     const sev = f.tracker?.severities ?? {};
     const m = f.metrics;
     const cal = this.ctx.calibration;
+    // Przechyły ze znakiem względem kalibracji; w lustrzanym podglądzie odwracamy, żeby ludzik był jak odbicie.
+    const flip = this.ctx.settings.mirror ? -1 : 1;
+    this.figure.update({
+      state: !cal ? 'paused' : f.tracker?.state ?? 'absent',
+      topIssue: f.tracker?.topIssue ?? null,
+      severities: sev,
+      headRollDeg: m && cal ? flip * (m.headRollDeg - cal.headRollDeg) : 0,
+      shoulderRollDeg: m && cal ? flip * (m.shoulderTiltDeg - cal.shoulderTiltDeg) : 0,
+    });
     for (const d of ISSUE_DEFS) {
       const r = this.metricRows.get(d.id)!;
       const s = sev[d.id] ?? 0;

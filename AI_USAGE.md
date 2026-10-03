@@ -15,6 +15,7 @@
 - No fatigue score on unreliable eye data; 2+ min away from the desk counts as a break (A13, A14) → PR #77
 - Whole-number posture score in widget/tray; widget text ellipsis (A15, C12) → PR #81
 - Stats: breaks/alerts on the day chart, norms and vs-yesterday under figures, 7-day bar charts for fatigue and good posture (C14, C15) → PR #83
+- Posture figure in the live panel that mirrors the top issue with a correction arrow (C16, mentor feedback F3) → PR #85
 
 ## AI tools used
 - **Claude Code** (Anthropic): used by all developers for planning, implementation, tests, docs and review. Every module is understood and can be explained by the team.

@@ -144,6 +144,26 @@ button, input, select { font: inherit; color: inherit; }
 .live[data-state="bad"] .score-state { color: var(--bad); }
 .tip { font-size: 15px; min-height: 1.5em; }
 
+/* C16: ludzik postawy w panelu (kolor = stan, strzałka = jak poprawić) */
+.pfig { width: 100%; max-width: 320px; height: auto; justify-self: center; --pf: var(--muted); }
+.pfig[data-state="good"] { --pf: var(--good); }
+.pfig[data-state="warn"] { --pf: var(--warn); }
+.pfig[data-state="bad"] { --pf: var(--bad); }
+.pfig .pfig-body { fill: none; stroke: var(--pf); stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; transition: stroke .4s ease; }
+.pfig .pfig-thin { stroke-width: 5; }
+.pfig .pfig-head { fill: var(--pf); transition: fill .4s ease; }
+.pfig .pfig-face { fill: none; stroke: var(--surface); stroke-width: 2; stroke-linecap: round; }
+.pfig .pfig-prop { fill: none; stroke: var(--line); stroke-width: 3; stroke-linecap: round; }
+.pfig .pfig-screen { fill: var(--line); }
+.pfig[data-view="side"] .pfig-front, .pfig[data-view="front"] .pfig-side { display: none; }
+.pfig .pfig-arrow { opacity: 0; transition: opacity .3s ease; }
+.pfig .pfig-arrow.on { opacity: 1; animation: pfig-pulse 1.6s ease-in-out infinite; }
+.pfig .pfig-arrow path { fill: none; stroke: var(--spine); stroke-width: 4; stroke-linecap: round; }
+.pfig .pfig-arrowhead { fill: var(--spine); }
+@keyframes pfig-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
+.break-line { grid-template-columns: 1fr auto; align-items: center; }
+.break-line .break-text { margin: 0; }
+
 .fat-line { display: flex; align-items: baseline; gap: 10px; }
 .fat-num { font-size: 30px; font-weight: 300; font-variant-numeric: tabular-nums; }
 .fat-word { color: var(--muted); }
