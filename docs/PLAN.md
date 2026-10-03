@@ -66,7 +66,7 @@
 
 ## Area B: Health data, decisions & care (owner: Marcin, author of Rytm's decisions, doctor report and NFZ path)
 - [ ] B1 (M5) **Doctor report screen** (Polish): 14-day summary, dominant issues, fatigue trend, sleep (Garmin), what the user already tried, "questions for your doctor". Print to PDF.
-- [ ] B2 (M5) **NFZ path card:** when to see a GP vs a physio vs an eye doctor; the TIP 800 190 590 info line; red flags → 112. Wording reviewed against ENGINEERING §4 (no diagnoses). Port from `docs/archive-rytm/`.
+- [ ] B2 (M5) **NFZ path card:** when to see a GP vs a physio vs an eye doctor; the TIP 800 190 590 info line; red flags → 112. Wording reviewed against ENGINEERING §4 (no diagnoses). Port from `docs/archive-rytm/`. (@Marcin, in progress)
 - [ ] B3 (M3) Show "why now" (A3 output) in notifications and the break screen.
 - [ ] B4 (S2) AI coach (optional, opt-in): main-process call to the Claude API with **numbers only**; daily summary + one action; a canned fallback offline. Key from `.env`, never in the renderer.
 - [ ] B5 (S3) Team view: an anonymous aggregate of our 4 people's hackathon data (export/import JSON); powers the pitch hook.
