@@ -55,7 +55,7 @@
   - `FACE_LANDMARKS_FACE_OVAL`, `_LIPS`, `_LEFT_EYE`, `_RIGHT_EYE`, `_LEFT_IRIS`, `_RIGHT_IRIS` bright, with glow (`shadowBlur`).
   - Video darkened behind it; a blink ripple on the eyes.
   - Toggle plus a "demo intensity" setting. Keep ≥ 24 fps.
-- [ ] **MP8 (wow, C) Colourful body strands, like Google's hand-tracking demo.** (@Mateusz, in progress)
+- [ ] **MP8 (wow, C) Colourful body strands, like Google's hand-tracking demo.** (DROPPED by Mateusz: the 33-point pose has only ~11 face points, so face strands looked like a moustache; the face web is MP7 / FaceLandmarker tessellation. Kacper is on visuals. Code kept on local branch `mateusz/mp8-color-strands`.)
   - Use the upper-body `PoseLandmarker.POSE_CONNECTIONS` (face, shoulders, arms, torso): each chain gets its own colour (e.g. face cyan, left arm magenta, right arm lime, torso violet), with gradient strokes, glowing joint dots, and thickness by depth (z).
   - Fewer strands than the hand demo, but vivid.
   - The posture-state colour still drives the spine line. Keep the existing angle labels and the ideal-head ring.
