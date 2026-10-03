@@ -29,6 +29,8 @@ export interface AnalyzerCallbacks {
   onStatus(s: LiveStatus): void;
   onAlert(issue: IssueId): void;
   onBreak(s: BreakSuggestion): void;
+  /** Wrócono po ≥ 2 min poza kadrem: liczymy to jak zrobioną przerwę ruchową. */
+  onAwayBreak(awaySec: number): void;
   onMinute(s: MinuteSample): void;
   onCameraState(state: 'starting' | 'running' | 'busy' | 'denied' | 'missing' | 'stopped', detail?: string): void;
   /** camera: kamera/krzesło się zmieniły; straighter: siedzisz prościej niż przy kalibracji. */
@@ -384,6 +386,11 @@ export class Analyzer {
           recentIssue: topIssueOf(this.recent.slice(-10)) ?? out.topIssue,
         });
         if (sug) this.cb.onBreak(sug);
+        const away = this.breaks.takeAwayBreak();
+        if (away?.kind === 'move') {
+          this.resetAfterBreak();
+          this.cb.onAwayBreak(away.awaySec);
+        }
 
         const sample = this.agg.add(Date.now(), {
           present: out.present,
@@ -459,11 +466,14 @@ export class Analyzer {
   breakDone(kind: BreakSuggestion['kind']): void {
     const t = this.now();
     this.breaks.done(kind, t);
-    if (kind !== 'eye') {
-      this.energyHistory = []; // po przerwie trend liczymy od nowa
-      this.fatigue.reset();
-      this.tracker?.resetStillness();
-    }
+    if (kind !== 'eye') this.resetAfterBreak();
+  }
+
+  /** Po prawdziwej przerwie (klikniętej albo z odejścia od biurka) zmęczenie, trend Baterii i bezruch liczymy od nowa. */
+  private resetAfterBreak(): void {
+    this.energyHistory = [];
+    this.fatigue.reset();
+    this.tracker?.resetStillness();
   }
 
   breakSnoozed(): void {

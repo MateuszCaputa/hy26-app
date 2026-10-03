@@ -158,6 +158,7 @@ test('estymator zmęczenia wygładza wynik', () => {
   const eyes = simulateEyes(90, 4, 0.15);
   const est = new FatigueEstimator();
   const a = est.update(90, eyes, { postureAvg15: 90, minutesSinceBreak: 5 });
+  assert.ok(a);
   assert.equal(a.level, 'fresh');
   assert.ok(a.faceReliable);
 });

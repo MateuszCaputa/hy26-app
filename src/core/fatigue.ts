@@ -281,15 +281,32 @@ export function fatigueLevel(percent: number): FatigueLevel {
   return 'fresh';
 }
 
+/**
+ * Czy dane z oczu nadają się do oceny zmęczenia: twarz wiarygodna (światło, odblaski okularów, fps)
+ * i jest już mruganie albo PERCLOS. Bez tego wynik składałby się tylko z postawy, czasu i opadania głowy,
+ * czyli nie mówiłby nic o zmęczeniu.
+ */
+export function eyesUsable(reliable: boolean, blinkRate: number | null, perclos: number | null): boolean {
+  return reliable && (blinkRate !== null || perclos !== null);
+}
+
 /** Wygładza wskaźnik zmęczenia (stała czasowa ~60 s), by nie skakał co klatkę. */
 export class FatigueEstimator {
   private value: number | null = null;
   private lastT: number | null = null;
 
-  update(t: number, eyes: EyeAnalyzer, extra: { postureAvg15: number | null; minutesSinceBreak: number }): FatigueSnapshot {
+  /** null = oczy niewiarygodne: nie oceniamy zmęczenia (i nie przenosimy starej wartości dalej). */
+  update(t: number, eyes: EyeAnalyzer, extra: { postureAvg15: number | null; minutesSinceBreak: number }): FatigueSnapshot | null {
+    const reliable = eyes.isReliable(t);
+    const blinkRate = eyes.blinkRate(t);
+    const perclos = eyes.perclos(t);
+    if (!eyesUsable(reliable, blinkRate, perclos)) {
+      this.reset();
+      return null;
+    }
     const inputs: FatigueInputs = {
-      blinkRate: eyes.blinkRate(t),
-      perclos: eyes.perclos(t),
+      blinkRate,
+      perclos,
       longBlinksPerMin: eyes.longBlinksPerMin(t),
       yawns10m: eyes.yawns10m(t),
       nods10m: eyes.nods10m(t),
@@ -308,7 +325,7 @@ export class FatigueEstimator {
       longBlinksPerMin: inputs.longBlinksPerMin,
       yawns10m: inputs.yawns10m,
       nods10m: inputs.nods10m,
-      faceReliable: eyes.isReliable(t),
+      faceReliable: reliable,
     };
   }
 
