@@ -45,15 +45,20 @@ export interface CalibrationVerdict {
 /** Minimalna różnica „prosto vs zwykle”, poniżej której prosta pozycja raczej nie była prosta. */
 export const MIN_PERSONAL_RANGE = 0.06;
 
+/** Drugi krok „prościej” niż pierwszy o więcej niż 5% (szyja i uszy) = kroki pomylone. */
+const SWAPPED_STEPS_MARGIN = 0.05;
+/** Bez różnicy w metrykach wystarczy 6° różnicy pochylenia głowy, by uznać kroki za różne. */
+const MIN_PITCH_RANGE_DEG = 6;
+
 /** Ocena dwóch kroków kalibracji. */
 export function judgeCalibration(cal: Calibration, slouch: SlouchReference): CalibrationVerdict {
   const neck = relDrop(slouch.neckRatio, cal.neckRatio);
   const ear = relDrop(slouch.earRatio, cal.earRatio);
   const pitch = slouch.headPitchDeg != null && cal.headPitchDeg != null ? slouch.headPitchDeg - cal.headPitchDeg : 0;
-  if (neck < -0.05 && ear < -0.05) {
+  if (neck < -SWAPPED_STEPS_MARGIN && ear < -SWAPPED_STEPS_MARGIN) {
     return { ok: false, warning: tr('W drugim kroku siedziałeś prościej niż w pierwszym. Spróbuj jeszcze raz: najpierw najprościej, potem zwyczajnie.') };
   }
-  if (Math.max(neck, ear) < MIN_PERSONAL_RANGE && pitch < 6) {
+  if (Math.max(neck, ear) < MIN_PERSONAL_RANGE && pitch < MIN_PITCH_RANGE_DEG) {
     return {
       ok: false,
       warning: tr('Twoja „prosta” postawa prawie nie różni się od zwykłej. Spróbuj wyprostować się mocniej: usiądź głęboko, unieś mostek, cofnij brodę.'),
@@ -61,6 +66,11 @@ export function judgeCalibration(cal: Calibration, slouch: SlouchReference): Cal
   }
   return { ok: true };
 }
+
+// Osobisty próg: 40% osobistego zakresu, w granicach 8–20%.
+const PERSONAL_SHARE = 0.4;
+const PERSONAL_THR_MIN = 0.08;
+const PERSONAL_THR_MAX = 0.2;
 
 /**
  * Osobisty próg ostrzeżenia dla metryki „spadku” (szyja, uszy): 40% drogi od prostej
@@ -70,8 +80,16 @@ export function personalThreshold(defaultThr: number, baseValue: number, slouchV
   if (slouchValue === undefined) return defaultThr;
   const range = relDrop(slouchValue, baseValue);
   if (range < MIN_PERSONAL_RANGE) return defaultThr;
-  return Math.min(0.2, Math.max(0.08, 0.4 * range));
+  return Math.min(PERSONAL_THR_MAX, Math.max(PERSONAL_THR_MIN, PERSONAL_SHARE * range));
 }
+
+// Dryf wzorca: minuta liczy się od 20 odczytów; pamiętamy do 600 minut, oceniamy od 30;
+// 90. percentyl szyi wyższy o 8% od kalibracji = siedzisz prościej niż przy kalibracji.
+const DRIFT_MIN_READINGS = 20;
+const DRIFT_MAX_MINUTES = 600;
+const DRIFT_MIN_MINUTES = 30;
+const DRIFT_PERCENTILE = 0.9;
+const DRIFT_FACTOR = 1.08;
 
 /**
  * Dryf wzorca: zbiera mediany minutowe „szyi” z chwil, gdy twarz patrzy na ekran.
@@ -105,20 +123,20 @@ export class BaselineDrift {
   }
 
   private flush(): void {
-    if (this.bucket.length >= 20) {
+    if (this.bucket.length >= DRIFT_MIN_READINGS) {
       const s = [...this.bucket].sort((a, b) => a - b);
       this.medians.push(s[s.length >> 1]);
-      if (this.medians.length > 600) this.medians.shift();
+      if (this.medians.length > DRIFT_MAX_MINUTES) this.medians.shift();
     }
     this.bucket = [];
   }
 
   /** true, gdy warto zaproponować nową kalibrację. */
   suggestsRecalibration(): boolean {
-    if (this.medians.length < 30) return false;
+    if (this.medians.length < DRIFT_MIN_MINUTES) return false;
     const s = [...this.medians].sort((a, b) => a - b);
-    const p90 = s[Math.floor(s.length * 0.9)];
-    return p90 > this.calNeck * 1.08;
+    const p90 = s[Math.floor(s.length * DRIFT_PERCENTILE)];
+    return p90 > this.calNeck * DRIFT_FACTOR;
   }
 }
 

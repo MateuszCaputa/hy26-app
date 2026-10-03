@@ -31,6 +31,11 @@ export const FACE = {
 
 const REQUIRED = [POSE.nose, POSE.leftEye, POSE.rightEye, POSE.leftShoulder, POSE.rightShoulder];
 const MIN_VISIBILITY = 0.5;
+const MIN_POSE_POINTS = 13; // do prawego barku (indeks 12) włącznie
+const FACE_KEY_OFFSET = 1000; // klucze filtra dla punktów twarzy, osobne od punktów sylwetki
+const MIN_EYE_DIST_PX = 3; // mniejszy rozstaw oczu = to nie twarz przy ekranie, tylko szum
+const MIN_SHOULDER_W_PX = 10; // węższe barki = brak osoby w kadrze
+const MIN_YAW_COS = 0.5; // korekta rozstawu oczu najwyżej ×2 (obrót do 60°)
 
 /** Kąt odcinka względem poziomu, sprowadzony do zakresu −90°…90° (kierunek linii nie ma znaczenia). */
 export function lineAngleDeg(x1: number, y1: number, x2: number, y2: number): number {
@@ -71,7 +76,7 @@ export function computeMetrics(
   t: number,
   opts: MetricsOptions = {},
 ): MetricsResult {
-  if (!lm || lm.length < 13) return { metrics: null, reason: 'no-person' };
+  if (!lm || lm.length < MIN_POSE_POINTS) return { metrics: null, reason: 'no-person' };
   const vis = (i: number) => lm[i]?.visibility ?? 1;
   const face = opts.face && opts.face.length > FACE.leftIris ? opts.face : null;
   if (vis(POSE.leftShoulder) < MIN_VISIBILITY || vis(POSE.rightShoulder) < MIN_VISIBILITY) {
@@ -83,13 +88,13 @@ export function computeMetrics(
   const smooth = (key: number, x: number, y: number): [number, number] => (sm ? sm.smooth(key, x, y, t) : [x, y]);
   const p = (i: number): [number, number] => smooth(i, lm[i].x * width, lm[i].y * height);
   // Punkty twarzy dostają osobne klucze filtra (1000+), żeby nie mieszać się z punktami sylwetki.
-  const f = (i: number): [number, number] => smooth(1000 + i, face![i].x * width, face![i].y * height);
+  const f = (i: number): [number, number] => smooth(FACE_KEY_OFFSET + i, face![i].x * width, face![i].y * height);
 
   const [nx, ny] = face ? f(FACE.noseTip) : p(POSE.nose);
   const [lex, ley] = face ? f(FACE.leftIris) : p(POSE.leftEye);
   const [rex, rey] = face ? f(FACE.rightIris) : p(POSE.rightEye);
   const eyeDist = dist(lex, ley, rex, rey);
-  if (eyeDist < 3) return { metrics: null, reason: 'no-person' };
+  if (eyeDist < MIN_EYE_DIST_PX) return { metrics: null, reason: 'no-person' };
 
   let [lsx, lsy] = p(POSE.leftShoulder);
   let [rsx, rsy] = p(POSE.rightShoulder);
@@ -106,7 +111,7 @@ export function computeMetrics(
   }
 
   const shoulderW = dist(lsx, lsy, rsx, rsy);
-  if (shoulderW < 10) return { metrics: null, reason: 'no-person' };
+  if (shoulderW < MIN_SHOULDER_W_PX) return { metrics: null, reason: 'no-person' };
   const shoulderMidX = (lsx + rsx) / 2;
   const shoulderMidY = (lsy + rsy) / 2;
 
@@ -127,7 +132,7 @@ export function computeMetrics(
 
   const pose = opts.headPose ?? null;
   // Obrót głowy zmniejsza widoczny rozstaw oczu: korygujemy, żeby nie udawał oddalenia od ekranu.
-  const yawCos = pose ? Math.max(0.5, Math.cos((pose.yawDeg * Math.PI) / 180)) : 1;
+  const yawCos = pose ? Math.max(MIN_YAW_COS, Math.cos((pose.yawDeg * Math.PI) / 180)) : 1;
   const eyeDistFrontal = eyeDist / yawCos;
 
   return {

@@ -67,10 +67,13 @@ const REGION: Record<Exclude<IssueId, 'stillness'>, 'head' | 'roll' | 'shoulders
   shoulderTilt: 'shoulders', twist: 'shoulders', shrug: 'shoulders',
 };
 
+/** Kara, poniżej której problem jest za drobny, by o nim mówić. */
+const MIN_RANKED_SEVERITY = 0.25;
+
 /** Bieżące problemy od najważniejszego (waga × kara), najwyżej jeden na część ciała; drobne (< 0,25) pomijamy. */
 export function rankIssues(sev: Partial<Record<IssueId, number>>, max = 2): IssueId[] {
   const seen = new Set<string>();
-  return ISSUE_DEFS.filter((d) => (sev[d.id] ?? 0) >= 0.25)
+  return ISSUE_DEFS.filter((d) => (sev[d.id] ?? 0) >= MIN_RANKED_SEVERITY)
     .sort((a, b) => (sev[b.id] ?? 0) * b.weight - (sev[a.id] ?? 0) * a.weight)
     .filter((d) => !seen.has(REGION[d.id]) && !!seen.add(REGION[d.id]))
     .slice(0, max)
@@ -113,9 +116,13 @@ export function scoreFromIssues(issues: IssueReading[]): number {
   return Math.round(100 * (1 - Math.min(1, penalty / PENALTY_FOR_ZERO)));
 }
 
+/** Granice stanów: od 80 „dobrze”, od 60 „uwaga”, niżej „źle” (te same pasma pokazują Statystyki). */
+const SCORE_GOOD = 80;
+const SCORE_WARN = 60;
+
 export function stateFromScore(score: number): PostureState {
-  if (score >= 80) return 'good';
-  if (score >= 60) return 'warn';
+  if (score >= SCORE_GOOD) return 'good';
+  if (score >= SCORE_WARN) return 'warn';
   return 'bad';
 }
 
@@ -147,6 +154,12 @@ const CLEAR_SCORE = 75;
 const CLEAR_HOLD_SEC = 5;
 const STILL_WINDOW_SEC = 300;
 const STILL_THRESHOLD = 0.08; // odchylenie położenia nosa w rozstawach oczu
+const MAX_STEP_SEC = 2; // dłuższa przerwa między klatkami nie liczy się jako czas wygładzania
+const RESET_AFTER_ABSENT_SEC = 120; // po 2 min nieobecności ocena zaczyna się od nowa
+// Bezruch: kara od 30 min bez ruchu (0,5), pełna po kolejnych 30 min.
+const STILL_ALERT_MIN = 30;
+const STILL_RAMP_MIN = 30;
+const STILL_START_SEVERITY = 0.5;
 
 /** Śledzi postawę w czasie: wygładza wynik i decyduje o alertach z histerezą. */
 export class PostureTracker {
@@ -178,7 +191,7 @@ export class PostureTracker {
 
   /** @param t czas w sekundach */
   update(t: number, m: PostureMetrics | null): TrackerOutput {
-    const dt = this.lastT === null ? 0 : Math.min(2, Math.max(0, t - this.lastT));
+    const dt = this.lastT === null ? 0 : Math.min(MAX_STEP_SEC, Math.max(0, t - this.lastT));
     this.lastT = t;
 
     if (!m) {
@@ -202,7 +215,7 @@ export class PostureTracker {
       };
     }
 
-    if (this.lastSeenT !== null && t - this.lastSeenT > 120) {
+    if (this.lastSeenT !== null && t - this.lastSeenT > RESET_AFTER_ABSENT_SEC) {
       // Długa nieobecność: zaczynamy ocenę od nowa.
       this.smoothed = null;
       this.sev = {};
@@ -221,7 +234,7 @@ export class PostureTracker {
     }
 
     const stillMinutes = this.updateStillness(t, m);
-    if (stillMinutes >= 30) this.sev.stillness = Math.min(1, (stillMinutes - 30) / 30 + 0.5);
+    if (stillMinutes >= STILL_ALERT_MIN) this.sev.stillness = Math.min(1, (stillMinutes - STILL_ALERT_MIN) / STILL_RAMP_MIN + STILL_START_SEVERITY);
     else delete this.sev.stillness;
 
     const score = Math.round(this.smoothed);

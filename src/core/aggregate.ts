@@ -51,6 +51,13 @@ const newAcc = (minute: number): Acc => ({
 
 const round1 = (v: number) => Math.round(v * 10) / 10;
 
+const MAX_STEP_SEC = 2; // dłuższa przerwa między klatkami liczy się najwyżej jako 2 s
+const ISSUE_SEVERITY = 0.5; // od tej kary problem liczy się do czasu „z problemem” w minucie
+const MIN_MINUTE_SEC = 5; // minuta z mniej niż 5 s danych nie jest zapisywana
+const MIN_PRESENT = 0.5; // minuta liczy się do trendu, gdy osoba była przy ekranie przez ≥ połowę czasu
+const MIN_TREND_MINUTES = 8; // trend dopiero z 8 minut
+const MIN_TOP_ISSUE_SEC = 30; // „najczęstszy problem” dopiero od 30 s łącznie
+
 /** Zbiera odczyty klatka po klatce; po zmianie minuty zwraca gotową próbkę. Czas w ms. */
 export class MinuteAggregator {
   private acc: Acc | null = null;
@@ -64,7 +71,7 @@ export class MinuteAggregator {
       this.acc = null;
     }
     if (!this.acc) this.acc = newAcc(minute);
-    const dt = this.lastMs === null ? 0 : Math.min(2, Math.max(0, (ms - this.lastMs) / 1000));
+    const dt = this.lastMs === null ? 0 : Math.min(MAX_STEP_SEC, Math.max(0, (ms - this.lastMs) / 1000));
     this.lastMs = ms;
     const a = this.acc;
     a.seen += dt;
@@ -76,7 +83,7 @@ export class MinuteAggregator {
         if (r.state === 'good') a.goodSec += dt;
       }
       for (const [k, v] of Object.entries(r.severities) as [IssueId, number][]) {
-        if (v >= 0.5) a.issues[k] = (a.issues[k] ?? 0) + dt;
+        if (v >= ISSUE_SEVERITY) a.issues[k] = (a.issues[k] ?? 0) + dt;
       }
       const f = r.fatigue;
       if (f) {
@@ -102,7 +109,7 @@ export class MinuteAggregator {
   }
 
   private finish(a: Acc): MinuteSample | null {
-    if (a.seen < 5) return null; // za mało danych w tej minucie
+    if (a.seen < MIN_MINUTE_SEC) return null; // za mało danych w tej minucie
     const issues: Partial<Record<IssueId, number>> = {};
     for (const [k, v] of Object.entries(a.issues) as [IssueId, number][]) issues[k] = Math.round(v);
     return {
@@ -122,8 +129,8 @@ export class MinuteAggregator {
 
 /** Nachylenie prostej (pkt/min) dopasowanej do średnich minutowych wyniku postawy. */
 export function postureSlope(samples: MinuteSample[]): number | null {
-  const pts = samples.filter((s) => s.posture !== null && s.present >= 0.5);
-  if (pts.length < 8) return null;
+  const pts = samples.filter((s) => s.posture !== null && s.present >= MIN_PRESENT);
+  if (pts.length < MIN_TREND_MINUTES) return null;
   const x0 = pts[0].ts;
   const xs = pts.map((s) => (s.ts - x0) / 60000);
   const ys = pts.map((s) => s.posture as number);
@@ -140,7 +147,7 @@ export function postureSlope(samples: MinuteSample[]): number | null {
 }
 
 export function postureAvg(samples: MinuteSample[]): number | null {
-  const pts = samples.filter((s) => s.posture !== null && s.present >= 0.5);
+  const pts = samples.filter((s) => s.posture !== null && s.present >= MIN_PRESENT);
   if (!pts.length) return null;
   return pts.reduce((a, s) => a + (s.posture as number), 0) / pts.length;
 }
@@ -152,5 +159,5 @@ export function topIssueOf(samples: MinuteSample[]): IssueId | null {
   let best: IssueId | null = null;
   let bv = 0;
   for (const [k, v] of Object.entries(sum) as [IssueId, number][]) if (v > bv) { bv = v; best = k; }
-  return bv >= 30 ? best : null;
+  return bv >= MIN_TOP_ISSUE_SEC ? best : null;
 }
