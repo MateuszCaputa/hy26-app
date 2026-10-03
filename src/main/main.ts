@@ -286,7 +286,11 @@ function toggleWidget(on: boolean): void {
     });
     widgetWin.setAlwaysOnTop(true, 'floating');
     void widgetWin.loadURL(`app://local/widget.html?style=${settings.widgetStyle}`);
-    widgetWin.on('closed', () => (widgetWin = null));
+    // Przy zmianie wyglądu stare okno zamyka się asynchronicznie – nie wolno mu wyzerować referencji do nowego.
+    const win = widgetWin;
+    win.on('closed', () => {
+      if (widgetWin === win) widgetWin = null;
+    });
     if (lastStatus) widgetWin.webContents.once('did-finish-load', () => widgetWin?.webContents.send('status', lastStatus));
   } else if (!on && widgetWin) {
     widgetWin.close();
