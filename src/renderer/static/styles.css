@@ -175,10 +175,13 @@ button, input, select { font: inherit; color: inherit; }
 .empty { display: grid; gap: 14px; padding: 28px; background: var(--surface); border-radius: var(--radius-lg); max-width: 60ch; }
 
 .figs { display: flex; flex-wrap: wrap; gap: 0; }
-.fig { display: grid; padding: 4px 18px 4px 0; margin: 0 18px 8px 0; border-right: 1px solid var(--line); }
+.fig { display: grid; align-content: start; padding: 4px 14px 4px 0; margin: 0 14px 8px 0; border-right: 1px solid var(--line); }
 .fig:last-child { border-right: 0; }
 .fig-val { font-size: 28px; font-weight: 300; font-variant-numeric: tabular-nums; line-height: 1.2; }
 .fig-label { color: var(--muted); font-size: 13px; }
+.fig-note { color: var(--muted); font-size: 12px; opacity: .85; }
+.fig-note.up { color: var(--good); opacity: 1; }
+.fig-note.down { color: var(--bad); opacity: 1; }
 
 .chart { margin: 0; display: grid; gap: 6px; }
 .chart svg { width: 100%; height: auto; overflow: visible; }
@@ -191,6 +194,16 @@ button, input, select { font: inherit; color: inherit; }
 .chart .end { font-size: 12.5px; font-weight: 600; }
 .chart .end-post { fill: var(--spine); }
 .chart .end-fat { fill: var(--warn); }
+.chart .grid-tired { stroke: var(--bad); stroke-dasharray: 2 6; opacity: .55; }
+.chart .mark-break line { stroke: var(--good); stroke-width: 1.5; stroke-dasharray: 3 4; opacity: .5; }
+.chart .mark-break circle { fill: var(--good); }
+.chart .mark-alert { fill: var(--warn); opacity: .9; }
+.chart-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; }
+.chart-legend .lg { display: inline-block; width: 14px; height: 0; margin-right: -8px; vertical-align: middle; }
+.chart-legend .lg-break { width: 0; height: 12px; border-left: 2px dashed var(--good); margin-left: 4px; }
+.chart-legend .lg-alert { width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 8px solid var(--warn); }
+.chart-legend .lg-good { border-top: 2px dashed var(--good); }
+.chart-legend .lg-tired { border-top: 2px dotted var(--bad); }
 
 .heat { display: grid; gap: 3px; font-size: 11.5px; font-variant-numeric: tabular-nums; }
 .heat-h { text-align: center; color: var(--muted); }

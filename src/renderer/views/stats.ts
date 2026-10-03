@@ -28,32 +28,50 @@ export async function renderStats(view: HTMLElement, ctx: AppCtx): Promise<void>
   page.append(todaySection(st), formSection(st), issuesSection(st), garminSection(st, ctx));
 }
 
-function figure(value: string, label: string): HTMLElement {
-  return h('div', { class: 'fig' }, h('span', { class: 'fig-val' }, value), h('span', { class: 'fig-label' }, label));
+function figure(value: string, label: string, ...notes: (HTMLElement | null)[]): HTMLElement {
+  return h('div', { class: 'fig' }, h('span', { class: 'fig-val' }, value), h('span', { class: 'fig-label' }, label), ...notes);
 }
+
+/** Krótka norma pod liczbą, np. „norma 15–20”. */
+function norm(text: string): HTMLElement {
+  return h('span', { class: 'fig-note' }, text);
+}
+
+/** Zmiana względem wczoraj; kolor mówi, czy to dobrze (higherIsBetter decyduje o kierunku). */
+function delta(now: number | null, prev: number | null | undefined, higherIsBetter: boolean, unit = ''): HTMLElement | null {
+  if (now === null || prev === null || prev === undefined) return null;
+  const d = Math.round(now - prev);
+  if (d === 0) return h('span', { class: 'fig-note' }, '= jak wczoraj');
+  const good = d > 0 === higherIsBetter;
+  return h('span', { class: `fig-note ${good ? 'up' : 'down'}` }, `${d > 0 ? '↑' : '↓'} ${Math.abs(d)}${unit} vs wczoraj`);
+}
+
+const fmtDuration = (m: number) => (Math.floor(m / 60) ? `${Math.floor(m / 60)} h ${m % 60} min` : `${m % 60} min`);
 
 function todaySection(st: StatsPayload): HTMLElement {
   const t = st.today;
+  const y = st.yesterday;
   const n = (v: number | null, suffix = '') => (v === null ? '–' : `${v}${suffix}`);
-  const hours = Math.floor(t.presentMinutes / 60);
-  const mins = t.presentMinutes % 60;
+  // BHP przy monitorze: co najmniej 5 min przerwy po każdej godzinie pracy.
+  const breaksDue = Math.floor(t.presentMinutes / 60);
   return h('section', { class: 'block' },
     h('h2', null, 'Dziś'),
     h('div', { class: 'figs' },
-      figure(n(t.goodPercent, '%'), 'czasu w dobrej postawie'),
-      figure(n(t.avgPosture), 'średni wynik postawy'),
-      figure(n(t.avgFatigue, '%'), 'średnie zmęczenie'),
-      figure(String(t.breaksTaken), plural(t.breaksTaken, 'przerwa', 'przerwy', 'przerw')),
-      figure(t.avgBlinkRate === null ? '–' : String(Math.round(t.avgBlinkRate)), 'mrugnięć na minutę'),
-      figure(hours ? `${hours} h ${mins} min` : `${mins} min`, 'przy biurku'),
+      figure(n(t.goodPercent, '%'), 'czasu w dobrej postawie', delta(t.goodPercent, y?.goodPercent, true, ' pkt')),
+      figure(n(t.avgPosture), 'średni wynik postawy', norm('dobra ≥ 80'), delta(t.avgPosture, y?.avgPosture, true)),
+      figure(n(t.avgFatigue, '%'), 'średnie zmęczenie', norm('świeży < 40%'), delta(t.avgFatigue, y?.avgFatigue, false, ' pkt')),
+      figure(String(t.breaksTaken), plural(t.breaksTaken, 'przerwa', 'przerwy', 'przerw'),
+        breaksDue ? norm(`zalecane ≥ ${breaksDue}`) : null, delta(t.breaksTaken, y?.breaksTaken, true)),
+      figure(t.avgBlinkRate === null ? '–' : String(Math.round(t.avgBlinkRate)), 'mrugnięć na minutę', norm('norma 15–20'), delta(t.avgBlinkRate, y?.avgBlinkRate, true)),
+      figure(fmtDuration(t.presentMinutes), 'przy biurku', y ? h('span', { class: 'fig-note' }, `wczoraj ${fmtDuration(y.presentMinutes)}`) : null),
     ),
-    t.minutes.length ? dayChart(t.minutes) : h('p', { class: 'fine' }, 'Dziś jeszcze nie pracowałeś przy kamerze.'),
+    t.minutes.length ? dayChart(t.minutes, t.breakTimes, t.alertTimes) : h('p', { class: 'fine' }, 'Dziś jeszcze nie pracowałeś przy kamerze.'),
     t.topIssue ? h('p', { class: 'lead' }, `Najczęstszy problem dziś: ${ISSUE_LABEL[t.topIssue].toLowerCase()}.`) : null,
   );
 }
 
-/** Wykres dnia: wynik postawy i zmęczenie (średnia krocząca z 5 min). */
-function dayChart(mins: MinuteSample[]): HTMLElement {
+/** Wykres dnia: wynik postawy i zmęczenie (średnia krocząca z 5 min), przerwy i alerty jako znaczniki. */
+function dayChart(mins: MinuteSample[], breakTimes: number[], alertTimes: number[]): HTMLElement {
   const W = 760, H = 220, L = 36, R = 92, T = 14, B = 28;
   const first = new Date(mins[0].ts);
   const last = new Date(mins[mins.length - 1].ts);
@@ -93,6 +111,23 @@ function dayChart(mins: MinuteSample[]): HTMLElement {
     grid += `<line x1="${L}" x2="${W - R}" y1="${Y(v)}" y2="${Y(v)}" class="grid${v === 80 ? ' grid-good' : ''}"/>`;
     grid += `<text x="${L - 8}" y="${Y(v) + 4}" text-anchor="end" class="axis">${v}</text>`;
   }
+  // Próg „bardzo zmęczony” (70%) dla linii zmęczenia.
+  grid += `<line x1="${L}" x2="${W - R}" y1="${Y(70)}" y2="${Y(70)}" class="grid grid-tired"/>`;
+
+  // Znaczniki: przerwy (pionowa kreska) i alerty postawy (trójkąt przy osi), tylko w zakresie wykresu.
+  const dayEnd = new Date(dayStart).setHours(h1);
+  const inRange = (ts: number) => ts >= dayStart && ts <= dayEnd;
+  let marks = '';
+  for (const ts of breakTimes.filter(inRange)) {
+    const x = X(ts).toFixed(1);
+    const label = `<title>Przerwa ${new Date(ts).toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' })}</title>`;
+    marks += `<g class="mark-break"><line x1="${x}" x2="${x}" y1="${T + 4}" y2="${H - B}"/><circle cx="${x}" cy="${T + 2}" r="3"/>${label}</g>`;
+  }
+  for (const ts of alertTimes.filter(inRange)) {
+    const x = X(ts);
+    const yb = H - B;
+    marks += `<path d="M${(x - 4).toFixed(1)} ${yb} L${(x + 4).toFixed(1)} ${yb} L${x.toFixed(1)} ${yb - 7} Z" class="mark-alert"><title>Alert postawy ${new Date(ts).toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' })}</title></path>`;
+  }
   for (let hh = h0; hh <= h1; hh++) {
     const x = X(new Date(dayStart).setHours(hh));
     grid += `<text x="${x}" y="${H - 8}" text-anchor="middle" class="axis">${hh}:00</text>`;
@@ -110,11 +145,21 @@ function dayChart(mins: MinuteSample[]): HTMLElement {
   const el = h('figure', { class: 'chart' });
   el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Wynik postawy i zmęczenie w ciągu dnia">
     ${grid}
+    ${marks}
     <path d="${path(fat)}" class="line line-fat"/>
     <path d="${path(post)}" class="line line-post"/>
     ${ends}
   </svg>`;
-  el.append(h('figcaption', { class: 'fine' }, 'Średnia z 5 minut. Linia 80 to granica dobrej postawy; przerwy w linii to czas poza biurkiem.'));
+  el.append(
+    h('figcaption', { class: 'fine chart-legend' },
+      h('span', { class: 'lg lg-break' }), 'przerwa',
+      h('span', { class: 'lg lg-alert' }), 'alert postawy',
+      h('span', { class: 'lg lg-good' }), 'dobra postawa (80)',
+      h('span', { class: 'lg lg-tired' }), 'bardzo zmęczony (70%)',
+    ),
+    h('figcaption', { class: 'fine' },
+      'Średnia z 5 minut. Dziury w obu liniach to czas poza biurkiem; dziura tylko w linii zmęczenia to za mało danych z oczu (np. słabe światło) – wtedy nie zgadujemy.'),
+  );
   return el;
 }
 
