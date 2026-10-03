@@ -1,0 +1,279 @@
+ TEMPLATE WYZWANIA
+
+ Zaprojektuj inteligentne narzdzie wspierajce rozwj Malopolskiego Hubu Innowacji
+ Spolecznych.
+
+Narzdzie bdzie wspieralo dzialalno Malopolskiego Hubu Innowacji Spolecznych poprzez
+automatyzacj procesw, kojarzenie potrzeb z rozwizaniami oraz budowanie wsplpracy
+midzy mieszkacami, samorzdami i organizacjami.
+
+1. Wprowadzenie - opis organizacji, sytuacji i stanu aktualnego
+
+Jako Regionalny Orodek Polityki Spolecznej w Krakowie (ROPS Krakw) jestemy instytucj
+Samorzdu Wojewdztwa Malopolskiego odpowiedzialn za rozwj polityki spolecznej w
+regionie. Nasz misja jest midzy innymi kreowanie i wdraanie nowoczesnych rozwiza w
+obszarze polityki spolecznej, bdcych odpowiedzi na wyzwania spoleczne oraz wspieranie
+wsplpracy pomidzy administracj, organizacjami pozarzdowymi, rodowiskiem naukowym i
+mieszkacami. Od 10 lat pelnimy funkcj regionalnego inkubatora innowacji, szukamy,
+testujemy i wdraamy innowacje spoleczne ktre odpowiadaj na realne wyzwania
+mieszkacw Malopolski takie jak starzenie si spoleczestwa, dostpno uslug publicznych
+dla osb z szczeglnymi potrzebami czy te integracja spoleczna. W naszym portfolio jest ju
+blisko 200 innowacji spolecznych- od prostych przedmiotw codziennego uytku, po nowe
+metody pracy i formy organizacyjne, a do nowoczesnych technologii i aplikacji, ktre realnie
+zmieniaj codzienno wielu osb. Wsplpracujemy z ekspertami z rnych dziedzin,
+organizacjami pozarzdowymi, podmiotami ekonomii spolecznej i osobami zaangaowanymi w
+rozwizywanie problemw spolecznych.
+
+Malopolska stoi dzi przed wieloma wyzwaniami spolecznymi:
+
+ starzeniem si spoleczestwa,
+ kryzysem zdrowia psychicznego,
+ samotnoci,
+ wykluczeniem cyfrowym,
+ ograniczonym dostpem do uslug spolecznych,
+ potrzeb lepszej koordynacji dziala zapewniajcych sprawn realizacj zada
+
+ publicznych oraz wsplpracy midzysektorowej,
+ zmian struktury osadniczej regionu (depopulacja wikszoci obszarw regionu przy
+ dynamicznym wzrocie liczby ludnoci w wybranych gminach wokl aglomeracji
+ krakowskiej
+
+Jednoczenie w regionie dziala wiele oddolnych inicjatyw- organizacje pozarzdowe, jednostki
+publiczne, w tym Centra Uslug Spolecznych oraz grupy zaangaowanych spolecznie
+mieszkacw tworz wartociowe mikro-rozwizania, ktre odpowiadaj na lokalne wyzwania i
+potrzeby mieszkacw. Jednak wikszo z nich nie posiada odpowiednich narzdzi do rozwoju
+i skalowania swoich pomyslw, co uniemoliwia ich rozwijanie i implementowanie w skali
+calego regionu. Brakuje miejsca, ktre w sposb usystematyzowany lczyloby:
+
+ diagnozowanie problemw,
+ rozwj nowych pomyslw,
+ testowanie innowacji,
+ upowszechnianie sprawdzonych rozwiza,
+ budowanie partnerstw.
+
+Dlatego chcemy stworzy Malopolski Hub Innowacji Spolecznych - regionalny ekosystem
+wsplpracy wspierany przez nowoczesne narzdzia cyfrowe.
+
+Malopolski HUB Innowacji Spolecznych bdzie ,,przestrzeni", w ktrym spotykaj si potrzeby
+spoleczne, wiedza, dowiadczenie oraz innowacyjne rozwizania. Aby taki ekosystem mgl
+dziala skutecznie, potrzebuje nowoczesnego narzdzia cyfrowego wspierajcego jego
+codzienn prac.
+
+Zadaniem uczestnikw jest zaprojektowanie, nazwanie i stworzenie prototypu rozwizania,
+ktre usprawni proces wyszukiwania, rozwijania, testowania i upowszechniania innowacji
+spolecznych. Narzdzie powinno wspiera pracownikw Hubu w zarzdzaniu wiedz, ulatwia
+mieszkacom i instytucjom zglaszanie potrzeb, automatycznie kojarzy problemy z istniejcymi
+rozwizaniami oraz tworzy przestrze do wsplpracy pomidzy wszystkimi uczestnikami
+ekosystemu. Projekt powinien przyj form platformy/ rozwizania wykorzystujcego sztuczn
+inteligencj. Najwaniejsze jest pokazanie, w jaki sposb technologia moe usprawni prac
+Hubu oraz przyspieszy proces powstawania i upowszechniania innowacji spolecznych w
+regionie.
+2. Wyzwanie
+
+Glwnym zadaniem jest zaprojektowanie, nazwanie i stworzenie prototypu interaktywnego
+narzdzia cyfrowego, ktre stanie si platform wymiany wiedzy i wsplpracy w ramach
+Malopolskiego Hubu Innowacji Spolecznych. Poszukujemy rozwizania, ktre w sposb
+przejrzysty i intuicyjny polczy zasoby publiczne z oddoln energi mieszkacw i instytucji.
+
+Kluczowe funkcjonalnoci narzdzia powinny obejmowa:
+
+ I. Matchmaking spoleczny (obligatoryjna funkcjonalno) - inteligentny mechanizm
+ lczcy zglaszane problemy spoleczne z istniejcymi rozwizaniami. Uytkownik
+ opisuje problem, a system automatycznie:
+ wyszukuje podobne przypadki/ informacje o danej kwestii,
+ proponuje gotowe rozwizania/innowacje spoleczne,
+
+ II. Zasobnik wiedzy - modul pozwoli na prezentacj zasobw i wiedzy ROPS Krakw, w
+ tym:
+ najwaniejsze wyzwania spoleczne Malopolski - kondycja Malopolski na bazie
+ raportw i Mapy Wyzwa Spolecznych,
+ baz sprawdzonych innowacji spolecznych- Biblioteka Innowacji Spolecznych
+ (ciekawa forma prezentacji innowacji, m.in. filmw o nich)
+ materialy edukacyjne z obszaru innowacji spolecznych i problemw
+ spolecznych ktre rozwizuj.
+
+ Uytkownik w prosty sposb bdzie mgl pozyska konkretne informacje na temat
+ danej kwestii spolecznej. Modul musi pozwala na sprawn i szybk aktualizacj
+ danych. Interesuje nas ciekawa, pomyslowa, ale te dostpna forma prezentacji
+ zasobw.
+ Dodatkowo modul gromadzi dane o potrzebach, agreguje je w odpowiednich
+ obszarach, co pozwoli wyznacza trendy - ta opcja widoczna jest wylcznie dla
+ administratora.
+ III. Kreator pomyslw- modul umoliwiajcy zglaszanie nowych pomyslw na innowacje
+ spoleczne oraz prezentowanie dobrych praktyk lub rozwiza testowanych w
+ mikroskali. W ramach tego modulu, uytkownik bdzie mgl zaprezentowa swj
+ pomysl w ramach fiszki (krtki opisu pomyslu, co jest jego istot, komu jest
+ dedykowany, na jakim etapie jest jego realizacji)- funkcja dostpna caly czas. Czasowo
+ (w okresie prowadzenia naborw w organizowanych konkursach grantowych) bdzie
+ dostpna druga opcja - generatora wnioskw, gdzie uytkownik bdzie mgl zglosi
+ wniosek w naborze i pozyska finansowanie swojego pomyslu na innowacj.
+ Kadorazowo bdzie wniosek modyfikowany do konkretnego naboru. Dodatkowo w tym
+ module, uytkownik bdzie mgl skorzysta z opracowanych materialw pomagajcych
+ w procesie prototypowania rozwizania tj. Canwy innowacji spolecznych, udostpnione
+ uczestnikom HackYeah. Dodatkowo, mile widziany bylby Asystent kreatora innowacji
+ ktry podpowiada, jak zbudowa innowacj, pomaga rozwin pomysl, podpowiada
+ nietuzinkowe rozwizania, robi jego wizualizacj np. innowacyjnego przedmiotu.
+ IV. Tester innowacji - modul umoliwiajcy zgloszenie chci udzialu w testach, ocen
+ istniejcych rozwiza, przekazywanie informacji zwrotnej, proponowanie usprawnie.
+ V. Platforma aktywnej komunikacji- zintegrowany system pozwalajcy na bezporedni
+ dialog midzy ROPS Krakw a uytkownikami, ulatwiajcy szybkie zadawanie pyta,
+ otrzymywanie wsparcia od mentorw oraz budowanie midzysektorowych partnerstw.
+ VI. Panel administratora - pozwalajcy w szybki sposb modyfikowanie, weryfikacj i
+ udostpniania wiedzy.
+VII. Middleman Innowacji - Usluga pozwalajca na dostosowanie innowacji do formy
+ uslugi, wedlug potrzeb instytucjo zglaszajcej si (Asystent AI)
+
+Celem wyzwania jest stworzenie ,,cyfrowego serca" Hubu, ktre poprzez mechanizm
+matchmakingu spolecznego sprawnie polczy zgloszone problemy z dostpnymi lub nowo
+powstajcymi rozwizaniami. Powysze moduly s opisane pod ktem ich funkcjonalnoci.
+Uczestnicy mog nadawa im nazwy, opracowa interfesj i logik dzialania, tak by cale
+narzdzie bylo jak najbardziej uyteczne i intuicyjne dla uytkownika.
+
+3. Oczekiwany rezultat
+
+Oczekiwanym rezultatem wyzwania jest funkcjonalny prototyp platformy, ktry polczy
+rozproszone dotychczas procesy i stanie si technologicznym sercem Malopolskiego Hubu
+Innowacji Spolecznych. Szukamy interaktywnego rozwizania, w formie dzialajcego MVP,
+ktre udowodni, jak technologia moe skutecznie eliminowa biurokracj, usprawnia
+wymian wiedzy i napdza wsplprac midzysektorow.
+
+Wymagane elementy:
+ Zespl musi dostarczy funkcjonalny prototyp prezentujcy najwaniejsze moduly
+ (obligatoryjny- Matchmaking spoleczny). Kady dodatkowo zrealizowany modul
+ bdzie dodatkowo punktowany.
+
+ Wizualizacja rozwizania: minimum makiety UX/UI
+ Dostpno i brak barier: Narzdzie docelowo musi spelnia standardy dostpnoci
+
+ cyfrowej (WCAG 2.1 poziom AA)
+ Rozwizanie powinno by skalowalne i umoliwia dalsz rozbudow, by
+
+ przygotowane do integracji z innymi systemami, uwzgldnia bezpieczestwo
+ danych.
+
+ Uytkownicy kocowi:
+
+ Mieszkacy oraz organizacje pozarzdowe - zglaszaj oddolnie pomysl lub
+ sygnalizuj realne problemy swojego rodowiska. Oczekuj intuicyjnego prostego
+ interfejsu, przejrzystego procesu, oraz sprawnej komunikacji.
+
+ Jednostki Samorzdu Terytorialnego - to odbiorcy, ktrzy z jednej strony diagnozuj i
+ zglaszaj lokalne wyzwania a z drugiej szukaj gotowych rozwiza. Oczekuj oni
+ narzdzia, ktre dziala jak katalog skd bd mogli latwo czerpa i implementowa
+ innowacje w swoich politykach lokalnych.
+
+ Pracownicy ROPS Krakw - to administratorzy i koordynatorzy systemu. Potrzebuj
+ oni przejrzystego panelu administratora do prezentowania zgromadzonej wiedzy,
+ monitorowania zglosze oraz prowadzenia dialogu z uytkownikami.
+
+ Eksperci branowi- to osoby pelnice rol konsultantw dla innowatorw oraz
+ funkcj doradcz dla JST. Potrzebuj sprawnego systemu komunikacji, ktry
+ pozwoli im na szybkie udzielanie feedbacku i budowania wsplpracy.
+
+ 4. Wymagania formalne
+
+Projekt przeslany do oceny powinien zawiera:
+
+ nazwa i opis rozwizania,
+ krtka prezentacja w formie PDF (Maks 10 slajdw) o rozwizaniu lub film
+
+ prezentujcy projekt (maksymalnie 3 minuty),
+ link do dzialajcej wersji demo oraz Makiety UX/UI,
+ przewidywany koszt obslugi/utrzymania rozwizania i opis niezbdnych do tego
+
+ zasobw.
+5. Wymagania techniczne
+
+ Skalowalno: Moliwo obslugi danych z calego wojewdztwa i duej liczby
+ uytkownikw jednoczenie.
+
+ Integracj i Automatyzacj: Rozwizanie powinno docelowo wsplpracowa z innymi
+ systemami Hubu (np. baz grantow) oraz automatyzowa procesy powiadamiania o
+ nowych pomyslach czy zmianach w naborach.
+
+ Dostpno: Projektowanie z uwzgldnieniem standardw WCAG, aby z narzdzia
+ mogli korzysta seniorzy oraz osoby z niepelnosprawnociami.
+
+6. Sposb testowania i/lub walidacji
+
+Co bierzemy pod uwag:
+
+Intuicyjno: Czy mieszkaniec w rnym wieku, o rnym poziomie umiejtnoci cyfrowych,
+bez przygotowania technicznego potrafi intuicyjne wypelni moduly i odnale informacje?
+
+Szybko komunikacji: W jaki sposb system powiadamia administratora o nowym pomyle i
+jak wyglda cieka odpowiedzi do autora?
+
+Trafno dopasowania: Czy narzdzie skutecznie sugeruje istniejce innowacje na podstawie
+slw kluczowych wpisanych w opisie potrzeb uytkownika?
+
+Pomyslowo: czy narzdzie w sposb odtwrczy jedynie integruje na platformie istniejce
+funkcje innych portali/narzdzi czy tworzy ich now jako? Proponuje nowatorskie narzdzia o
+wymaganych funkcjonalnociach?
+
+Podczas oceny zwrcimy uwag przede wszystkim na:
+
+ pomyslowo i atrakcyjno platformy,
+ latwo zgloszenia problemu,
+ trafno proponowanych rozwiza,
+ intuicyjno interfejsu,
+ jako komunikacji pomidzy uytkownikami,
+ moliwo dalszego rozwoju platformy.
+
+7. Dostpne zasoby
+Uczestnicy otrzymaj:
+ map wyzwa spolecznych Malopolski oraz linki do raportw,
+ Link do biblioteki innowacji spolecznych,
+ materialy opisujce dowiadczenia ROPS Krakw,
+ plansze Canw Innowacji Spolecznych,
+ wsparcie mentorw podczas wydarzenia.
+ przykladowe dane, ktre mog by wykorzystane do przedstawienia funkcjonalnoci
+ MVP
+
+8. Kryteria oceny
+
+Przyjte kryteria:
+
+ Stopie spelnienia wyzwania - Brana jest pod uwag
+
+jako dzialania kluczowych elementw oraz liczba dostarczonych
+dodatkowych funkcjonalnoci - 40% (obligatoryjna funkcjonalno -
+10%, kada nastpna + 5%)
+
+ Potencjal wdroeniowy - Ocena stopnia gotowoci rozwizania do wdroenia.
+
+Wyej punktowane bd produkty nadajce si do praktycznego uytku, ktre
+charakteryzuj si skalowalnoci, elastycznoci, optymalizacj oraz
+wysok efektywnoci kosztow i prostot utrzymania.- 20%
+
+ Dostpno i intuicyjno prototypu - Weryfikowane jest, czy
+
+interfejs narzdzia jest przejrzysty i latwy w obsludze dla wszystkich
+docelowych grup odbiorcw, niezalenie od ich wieku i poziomu umiejtnoci
+cyfrowych. Szczeglna uwaga zwracana jest na zaprojektowanie narzdzia z
+myl o docelowych standardach dostpnoci cyfrowej WCAG 2.1 na poziomie
+AA, aby nie stwarzalo ono barier uytkowych. - 20%
+
+ Kryteria premiujce - 20%
+ Atrakcyjno,pomyslowo i jako interfejsu - Kryterium to promuje nowatorskie,
+ nieszablonowe podejcie do przedstawionego wyzwania oraz wizualn
+ atrakcyjno dostarczonych makiet UX/UI.- 10%
+
+ Jako dostarczonych materialw oraz MVP - Ocenie podlega sposb komunikacji
+ koncepcji oraz jako materialw przeslanych do oceny - 10%
+
+9. Dodatkowe uwagi / kontekst wdroeniowy
+
+Zespl realizujcy wyzwanie nie powinien wykorzystywa prawdziwych danych osobowych ani
+danych wraliwych zawartych w materialach dostarczonych przez ROPS Krakw.
+
+Zwyciskie rozwizanie ma szans sta si fundamentem dla Malopolskiego Hubu Innowacji
+Spolecznych. ROPS planuje dalsze prace nad wybranym prototypem, w tym jego integracj z
+regionaln sieci liderw innowacji oraz wykorzystanie do obslugi grantw wdroeniowych.
+
+10. Kontakt
+
+Wszelkie pytania dotyczce merytoryki wyzwa spolecznych oraz procedur ROPS mona
+kierowa do mentorw i mentorek dostpnych na stoisku informacyjnym ROPS podczas
+hackathonu.
+

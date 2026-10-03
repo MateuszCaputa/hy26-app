@@ -3,3 +3,4 @@ dist/
 release/
 demo-data/
 *.log
+.playwright-mcp/

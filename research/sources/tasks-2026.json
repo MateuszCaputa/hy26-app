@@ -1,0 +1,505 @@
+[
+ {
+  "id": "0c57acde-ab06-4579-9340-f2e06f49050f",
+  "name": "Open Tasks",
+  "nameI18n": {
+   "en": "Open Tasks",
+   "pl": "Zadania Otwarte",
+   "legacy": "Open Tasks"
+  },
+  "tasks": [
+   {
+    "id": "384540c5-dfac-4b8e-93ed-b5cdc843d97c",
+    "name": "DEFENCE",
+    "nameI18n": {
+     "en": "DEFENCE",
+     "pl": "DEFENCE",
+     "legacy": "DEFENCE"
+    },
+    "logoUrl": "https://mudnibfuppwadjkynscc.supabase.co/storage/v1/object/public/task-files/6f0f5e2e-246f-4078-a3f7-1aad9152e9f0/logos/dca261a3-2562-434b-83db-19754c841cc4.svg",
+    "label": "PRIZE POOL",
+    "labelI18n": {
+     "en": "PRIZE POOL",
+     "pl": "PULA NAGRÓD",
+     "legacy": "PRIZE POOL"
+    },
+    "amount": "8 000 PLN",
+    "note": "Note: Projects can be submitted in Polish or English.",
+    "noteI18n": {
+     "en": "Note: Projects can be submitted in Polish or English.",
+     "pl": "Uwaga: Projekty można zgłaszać w języku polskim lub angielskim.",
+     "legacy": "Note: Projects can be submitted in Polish or English."
+    },
+    "description": "Modern threats rarely come as a single, visible attack. They often start with disrupted information, loss of trust, or pressure on systems and infrastructure we rely on. In this category, we’re looking for solutions that strengthen defense and security – helping detect threats earlier, reduce their impact, and protect users, data, and systems.\\n\\nYou can focus on cybersecurity, infrastructure resilience, countering disinformation, crisis response, or any related area. Your task is to build a tool, application, system, or prototype that addresses a real problem.\\n\\nThis is an open category, but the direction is clear: defense means resilience. Build something that works when it really matters.",
+    "descriptionI18n": {
+     "en": "Modern threats rarely come as a single, visible attack. They often start with disrupted information, loss of trust, or pressure on systems and infrastructure we rely on. In this category, we’re looking for solutions that strengthen defense and security – helping detect threats earlier, reduce their impact, and protect users, data, and systems.\\n\\nYou can focus on cybersecurity, infrastructure resilience, countering disinformation, crisis response, or any related area. Your task is to build a tool, application, system, or prototype that addresses a real problem.\\n\\nThis is an open category, but the direction is clear: defense means resilience. Build something that works when it really matters.",
+     "pl": "Współczesne zagrożenia rzadko przybierają formę pojedynczego, widocznego ataku. Często zaczynają się od zakłócenia przepływu informacji, utraty zaufania lub presji wywieranej na systemy i infrastrukturę, na których polegamy. W tej kategorii poszukujemy rozwiązań, które wzmacniają obronność i bezpieczeństwo — pomagają wcześniej wykrywać zagrożenia, ograniczać ich skutki oraz chronić użytkowników, dane i systemy.\\n\\nMożesz skupić się na cyberbezpieczeństwie, odporności infrastruktury, przeciwdziałaniu dezinformacji, reagowaniu kryzysowym lub dowolnym powiązanym obszarze. Twoim zadaniem jest stworzenie narzędzia, aplikacji, systemu lub prototypu, który rozwiązuje rzeczywisty problem.\\n\\nTo kategoria otwarta, ale kierunek jest jasny: obronność oznacza odporność. Zbuduj coś, co działa wtedy, gdy ma to naprawdę znaczenie.",
+     "legacy": "Modern threats rarely come as a single, visible attack. They often start with disrupted information, loss of trust, or pressure on systems and infrastructure we rely on. In this category, we’re looking for solutions that strengthen defense and security – helping detect threats earlier, reduce their impact, and protect users, data, and systems.\\n\\nYou can focus on cybersecurity, infrastructure resilience, countering disinformation, crisis response, or any related area. Your task is to build a tool, application, system, or prototype that addresses a real problem.\\n\\nThis is an open category, but the direction is clear: defense means resilience. Build something that works when it really matters."
+    },
+    "buttons": [
+     {
+      "label": "Rules",
+      "url": "https://mudnibfuppwadjkynscc.supabase.co/storage/v1/object/public/task-files/6f0f5e2e-246f-4078-a3f7-1aad9152e9f0/files/312cc8e5-48a3-4c4b-a9a1-9b28861995e9.pdf",
+      "kind": "rules"
+     },
+     {
+      "label": "Details",
+      "url": "https://mudnibfuppwadjkynscc.supabase.co/storage/v1/object/public/task-files/6f0f5e2e-246f-4078-a3f7-1aad9152e9f0/files/020c69e4-f03f-4e5b-b3f3-2038d424f127.pdf",
+      "kind": "details"
+     }
+    ]
+   },
+   {
+    "id": "9eff5451-d35d-402c-b6d8-91dd537ca1f9",
+    "name": "SPORT & HEALTHCARE",
+    "nameI18n": {
+     "en": "SPORT & HEALTHCARE",
+     "pl": "SPORT & HEALTHCARE",
+     "legacy": "SPORT & HEALTHCARE"
+    },
+    "logoUrl": "https://mudnibfuppwadjkynscc.supabase.co/storage/v1/object/public/task-files/6f0f5e2e-246f-4078-a3f7-1aad9152e9f0/logos/3ebc84a9-345b-4c02-b0d5-d13c3a3808ef.svg",
+    "label": "PRIZE POOL",
+    "labelI18n": {
+     "en": "PRIZE POOL",
+     "pl": "PULA NAGRÓD",
+     "legacy": "PRIZE POOL"
+    },
+    "amount": "8 000 PLN",
+    "note": "Note: Projects can be submitted in Polish or English.",
+    "noteI18n": {
+     "en": "Note: Projects can be submitted in Polish or English.",
+     "pl": "Uwaga: Projekty można zgłaszać w języku polskim lub angielskim.",
+     "legacy": "Note: Projects can be submitted in Polish or English."
+    },
+    "description": "Today’s users have access to an enormous amount of data related to their health and physical activity, from smartwatches and fitness apps to medical test results, treatment history, and everyday wellbeing. The challenge is that this data is often scattered, difficult to interpret, and rarely translates into real-life actions.\\n\\nIn this category, we are looking for solutions that holistically combine sports, physical health, mental wellbeing, and access to healthcare.\\n\\nYour task is to create a tool, application, or system that not only monitors the body’s parameters, but most importantly helps users make better decisions about their health and lifestyle.",
+    "descriptionI18n": {
+     "en": "Today’s users have access to an enormous amount of data related to their health and physical activity, from smartwatches and fitness apps to medical test results, treatment history, and everyday wellbeing. The challenge is that this data is often scattered, difficult to interpret, and rarely translates into real-life actions.\\n\\nIn this category, we are looking for solutions that holistically combine sports, physical health, mental wellbeing, and access to healthcare.\\n\\nYour task is to create a tool, application, or system that not only monitors the body’s parameters, but most importantly helps users make better decisions about their health and lifestyle.",
+     "pl": "Dzisiejsi użytkownicy mają dostęp do ogromnej ilości danych związanych ze swoim zdrowiem i aktywnością fizyczną — od smartwatchy i aplikacji fitness po wyniki badań medycznych, historię leczenia i codzienne samopoczucie. Wyzwanie polega na tym, że dane te są często rozproszone, trudne do interpretacji i rzadko przekładają się na konkretne działania w codziennym życiu.\\n\\nW tej kategorii poszukujemy rozwiązań, które w holistyczny sposób łączą sport, zdrowie fizyczne, dobrostan psychiczny oraz dostęp do opieki zdrowotnej.\\n\\nTwoim zadaniem jest stworzenie narzędzia, aplikacji lub systemu, który nie tylko monitoruje parametry organizmu, ale przede wszystkim pomaga użytkownikom podejmować lepsze decyzje dotyczące ich zdrowia i stylu życia.",
+     "legacy": "Today’s users have access to an enormous amount of data related to their health and physical activity, from smartwatches and fitness apps to medical test results, treatment history, and everyday wellbeing. The challenge is that this data is often scattered, difficult to interpret, and rarely translates into real-life actions.\\n\\nIn this category, we are looking for solutions that holistically combine sports, physical health, mental wellbeing, and access to healthcare.\\n\\nYour task is to create a tool, application, or system that not only monitors the body’s parameters, but most importantly helps users make better decisions about their health and lifestyle."
+    },
+    "buttons": [
+     {
+      "label": "Rules",
+      "url": "https://mudnibfuppwadjkynscc.supabase.co/storage/v1/object/public/task-files/6f0f5e2e-246f-4078-a3f7-1aad9152e9f0/files/029107f5-9da2-42b8-89f7-1fa1ae9b7820.pdf",
+      "kind": "rules"
+     },
+     {
+      "label": "Details",
+      "url": "https://mudnibfuppwadjkynscc.supabase.co/storage/v1/object/public/task-files/6f0f5e2e-246f-4078-a3f7-1aad9152e9f0/files/23b5d0fe-2660-4930-ab3e-811b65efe951.pdf",
+      "kind": "details"
+     }
+    ]
+   },
+   {
+    "id": "f8bedbcc-29ff-4435-a274-6f9a367bc8bc",
+    "name": "SMART CITY",
+    "nameI18n": {
+     "en": "SMART CITY",
+     "pl": "SMART CITY",
+     "legacy": "SMART CITY"
+    },
+    "logoUrl": "https://mudnibfuppwadjkynscc.supabase.co/storage/v1/object/public/task-files/6f0f5e2e-246f-4078-a3f7-1aad9152e9f0/logos/b890c30c-d810-4933-887d-f5860e4dcb4d.svg",
+    "label": "PRIZE POOL",
+    "labelI18n": {
+     "en": "PRIZE POOL",
+     "pl": "PULA NAGRÓD",
+     "legacy": "PRIZE POOL"
+    },
+    "amount": "8 000 PLN",
+    "note": "Note: Projects can be submitted in Polish or English.",
+    "noteI18n": {
+     "en": "Note: Projects can be submitted in Polish or English.",
+     "pl": "Uwaga: Projekty można zgłaszać w języku polskim lub angielskim.",
+     "legacy": "Note: Projects can be submitted in Polish or English."
+    },
+    "description": "Cities are operating at the edge of their capacity. Growing populations, overloaded infrastructure, transportation, energy, and access to information all need to work faster, smoother, and more reliably than ever before.\\n\\nIn this category, we’re looking for solutions that help cities function better in everyday conditions – improving mobility, resource management, communication with citizens, and crisis response. You can focus on mobility, energy, urban data, public services, quality of life, or any related area. Your task is to build a tool, application, system, or prototype that addresses a real problem.\\n\\nThis is an open category, but the direction is clear: technology that helps cities work better. Build something that makes everyday life in a city easier.",
+    "descriptionI18n": {
+     "en": "Cities are operating at the edge of their capacity. Growing populations, overloaded infrastructure, transportation, energy, and access to information all need to work faster, smoother, and more reliably than ever before.\\n\\nIn this category, we’re looking for solutions that help cities function better in everyday conditions – improving mobility, resource management, communication with citizens, and crisis response. You can focus on mobility, energy, urban data, public services, quality of life, or any related area. Your task is to build a tool, application, system, or prototype that addresses a real problem.\\n\\nThis is an open category, but the direction is clear: technology that helps cities work better. Build something that makes everyday life in a city easier.",
+     "pl": "Miasta funkcjonują na granicy swoich możliwości. Rosnąca liczba mieszkańców, przeciążona infrastruktura, transport, energetyka i dostęp do informacji — wszystkie te obszary muszą działać szybciej, sprawniej i bardziej niezawodnie niż kiedykolwiek wcześniej.\\n\\nW tej kategorii poszukujemy rozwiązań, które pomagają miastom lepiej funkcjonować na co dzień — usprawniają mobilność, zarządzanie zasobami, komunikację z mieszkańcami oraz reagowanie kryzysowe. Możesz skupić się na mobilności, energetyce, danych miejskich, usługach publicznych, jakości życia lub dowolnym powiązanym obszarze. Twoim zadaniem jest stworzenie narzędzia, aplikacji, systemu lub prototypu, który rozwiązuje rzeczywisty problem.\\n\\nTo kategoria otwarta, ale kierunek jest jasny: technologia, która pomaga miastom działać lepiej. Zbuduj coś, co ułatwia codzienne życie w mieście.",
+     "legacy": "Cities are operating at the edge of their capacity. Growing populations, overloaded infrastructure, transportation, energy, and access to information all need to work faster, smoother, and more reliably than ever before.\\n\\nIn this category, we’re looking for solutions that help cities function better in everyday conditions – improving mobility, resource management, communication with citizens, and crisis response. You can focus on mobility, energy, urban data, public services, quality of life, or any related area. Your task is to build a tool, application, system, or prototype that addresses a real problem.\\n\\nThis is an open category, but the direction is clear: technology that helps cities work better. Build something that makes everyday life in a city easier."
+    },
+    "buttons": [
+     {
+      "label": "Rules",
+      "url": "https://mudnibfuppwadjkynscc.supabase.co/storage/v1/object/public/task-files/6f0f5e2e-246f-4078-a3f7-1aad9152e9f0/files/4754ff1a-572e-4c2b-8468-6e11c86620d8.pdf",
+      "kind": "rules"
+     },
+     {
+      "label": "Details",
+      "url": "https://mudnibfuppwadjkynscc.supabase.co/storage/v1/object/public/task-files/6f0f5e2e-246f-4078-a3f7-1aad9152e9f0/files/da3aa4cf-87be-4277-8c37-3bb145646ec2.pdf",
+      "kind": "details"
+     }
+    ]
+   },
+   {
+    "id": "1c36af8b-92ca-4f7f-8df1-11f26a03303e",
+    "name": "ARTIFICIAL INTELLIGENCE",
+    "nameI18n": {
+     "en": "ARTIFICIAL INTELLIGENCE",
+     "pl": "ARTIFICIAL INTELLIGENCE",
+     "legacy": "ARTIFICIAL INTELLIGENCE"
+    },
+    "logoUrl": "https://mudnibfuppwadjkynscc.supabase.co/storage/v1/object/public/task-files/6f0f5e2e-246f-4078-a3f7-1aad9152e9f0/logos/06455bb7-9487-4a6d-9146-5caaece13a95.svg",
+    "label": "PRIZE POOL",
+    "labelI18n": {
+     "en": "PRIZE POOL",
+     "pl": "Note: Projects can be submitted in Polish or English.",
+     "legacy": "PRIZE POOL"
+    },
+    "amount": "8 000 PLN",
+    "note": null,
+    "noteI18n": {
+     "en": null,
+     "pl": null,
+     "legacy": null
+    },
+    "description": "Artificial Intelligence is becoming a natural part of how people and organizations operate, shaping the way we work, create, communicate, and solve challenges.\\n\\nThis category is open to ideas that explore practical, impactful, or unconventional uses of AI across different areas and industries. We’re looking for projects that combine innovation with real-world relevance, applying modern technologies thoughtfully to address tangible problems.\\n\\nAnd while the category stays open, don’t be surprised if a few unexpected twists, themes, or extra challenges appear along the way.",
+    "descriptionI18n": {
+     "en": "Artificial Intelligence is becoming a natural part of how people and organizations operate, shaping the way we work, create, communicate, and solve challenges.\\n\\nThis category is open to ideas that explore practical, impactful, or unconventional uses of AI across different areas and industries. We’re looking for projects that combine innovation with real-world relevance, applying modern technologies thoughtfully to address tangible problems.\\n\\nAnd while the category stays open, don’t be surprised if a few unexpected twists, themes, or extra challenges appear along the way.",
+     "pl": "Artificial Intelligence is becoming a natural part of how people and organizations operate, shaping the way we work, create, communicate, and solve challenges.\\n\\nThis category is open to ideas that explore practical, impactful, or unconventional uses of AI across different areas and industries. We’re looking for projects that combine innovation with real-world relevance, applying modern technologies thoughtfully to address tangible problems.\\n\\nAnd while the category stays open, don’t be surprised if a few unexpected twists, themes, or extra challenges appear along the way.",
+     "legacy": "Artificial Intelligence is becoming a natural part of how people and organizations operate, shaping the way we work, create, communicate, and solve challenges.\\n\\nThis category is open to ideas that explore practical, impactful, or unconventional uses of AI across different areas and industries. We’re looking for projects that combine innovation with real-world relevance, applying modern technologies thoughtfully to address tangible problems.\\n\\nAnd while the category stays open, don’t be surprised if a few unexpected twists, themes, or extra challenges appear along the way."
+    },
+    "buttons": [
+     {
+      "label": "Rules",
+      "url": "https://mudnibfuppwadjkynscc.supabase.co/storage/v1/object/public/task-files/6f0f5e2e-246f-4078-a3f7-1aad9152e9f0/files/8916e095-9cd0-47ce-bd1f-b0ee4b75f7c3.pdf",
+      "kind": "rules"
+     },
+     {
+      "label": "Details",
+      "url": "https://mudnibfuppwadjkynscc.supabase.co/storage/v1/object/public/task-files/6f0f5e2e-246f-4078-a3f7-1aad9152e9f0/files/abcc192a-ac75-438c-a99e-d09519a68c2b.pdf",
+      "kind": "details"
+     }
+    ]
+   },
+   {
+    "id": "a3559104-3b41-494c-8894-0395f7429021",
+    "name": "ImpactHer: TECHNOLOGY FOR REAL CHANGE",
+    "nameI18n": {
+     "en": "ImpactHer: TECHNOLOGY FOR REAL CHANGE",
+     "pl": "ImpactHer: TECHNOLOGY FOR REAL CHANGE",
+     "legacy": "ImpactHer: TECHNOLOGY FOR REAL CHANGE"
+    },
+    "logoUrl": "https://mudnibfuppwadjkynscc.supabase.co/storage/v1/object/public/task-files/6f0f5e2e-246f-4078-a3f7-1aad9152e9f0/logos/713540b3-377c-4521-bfe6-8b7f5606a5a0.svg",
+    "label": "PRIZE POOL",
+    "labelI18n": {
+     "en": "PRIZE POOL",
+     "pl": "PULA NAGRÓD",
+     "legacy": "PRIZE POOL"
+    },
+    "amount": "8 000 PLN",
+    "note": "Note: Projects can be submitted in Polish or English.",
+    "noteI18n": {
+     "en": "Note: Projects can be submitted in Polish or English.",
+     "pl": "Uwaga: Projekty można zgłaszać w języku polskim lub angielskim.",
+     "legacy": "Note: Projects can be submitted in Polish or English."
+    },
+    "description": "Technology can transform reality when it responds to real challenges. Not all problems are visible at first glance - many issues related to safety, health, education, professional development, access to services, or navigating the digital world have a particularly significant impact on women.\\n\\nIn this category, we are looking for technology-driven solutions that address real needs. Projects that start with a well-identified problem and lead to solutions with the potential for practical implementation.\\n\\nShow how technology can help remove barriers, improve accessibility, and create measurable change.",
+    "descriptionI18n": {
+     "en": "Technology can transform reality when it responds to real challenges. Not all problems are visible at first glance - many issues related to safety, health, education, professional development, access to services, or navigating the digital world have a particularly significant impact on women.\\n\\nIn this category, we are looking for technology-driven solutions that address real needs. Projects that start with a well-identified problem and lead to solutions with the potential for practical implementation.\\n\\nShow how technology can help remove barriers, improve accessibility, and create measurable change.",
+     "pl": "Technologia może zmieniać rzeczywistość, gdy odpowiada na realne wyzwania. Nie wszystkie problemy są widoczne na pierwszy rzut oka - wiele kwestii związanych z bezpieczeństwem, zdrowiem, edukacją, rozwojem zawodowym, dostępem do usług czy poruszaniem się w świecie cyfrowym ma szczególnie istotny wpływ na kobiety.\\n\\nW tej kategorii poszukujemy rozwiązań opartych na technologii, które odpowiadają na rzeczywiste potrzeby. Projektów, które zaczynają się od dobrze zidentyfikowanego problemu i prowadzą do rozwiązań mających potencjał praktycznego wdrożenia.\\n\\nPokaż, w jaki sposób technologia może pomagać usuwać bariery, poprawiać dostępność i tworzyć mierzalną zmianę.",
+     "legacy": "Technology can transform reality when it responds to real challenges. Not all problems are visible at first glance - many issues related to safety, health, education, professional development, access to services, or navigating the digital world have a particularly significant impact on women.\\n\\nIn this category, we are looking for technology-driven solutions that address real needs. Projects that start with a well-identified problem and lead to solutions with the potential for practical implementation.\\n\\nShow how technology can help remove barriers, improve accessibility, and create measurable change."
+    },
+    "buttons": [
+     {
+      "label": "Rules",
+      "url": "https://mudnibfuppwadjkynscc.supabase.co/storage/v1/object/public/task-files/6f0f5e2e-246f-4078-a3f7-1aad9152e9f0/files/8f63a03d-dc46-4326-ba5a-8848d00e27c5.pdf",
+      "kind": "rules"
+     },
+     {
+      "label": "Details",
+      "url": "https://mudnibfuppwadjkynscc.supabase.co/storage/v1/object/public/task-files/6f0f5e2e-246f-4078-a3f7-1aad9152e9f0/files/b6340e4d-2e46-4657-a9ad-6cb051396d01.pdf",
+      "kind": "details"
+     }
+    ]
+   },
+   {
+    "id": "825a72c9-db07-470c-a156-f4b4428cd62b",
+    "name": "REENTRY CTF",
+    "nameI18n": {
+     "en": "REENTRY CTF",
+     "pl": "REENTRY CTF",
+     "legacy": "REENTRY CTF"
+    },
+    "logoUrl": "https://mudnibfuppwadjkynscc.supabase.co/storage/v1/object/public/task-files/6f0f5e2e-246f-4078-a3f7-1aad9152e9f0/logos/27923431-7291-4476-b87d-1da38128ee3b.jpg",
+    "label": "PRIZE POOL",
+    "labelI18n": {
+     "en": "PRIZE POOL",
+     "pl": "Pula Nagród",
+     "legacy": "PRIZE POOL"
+    },
+    "amount": "5 000 PLN",
+    "note": "+ 5 annual IDA Pro Expert-4 subscriptions from Hex-Rays",
+    "noteI18n": {
+     "en": "+ 5 annual IDA Pro Expert-4 subscriptions from Hex-Rays",
+     "pl": "+ 5 rocznych subskrypcji IDA Pro Expert-4 od Hex-Rays",
+     "legacy": "+ 5 annual IDA Pro Expert-4 subscriptions from Hex-Rays"
+    },
+    "description": "An abandoned space station. An onboard AI refusing to relinquish control. The countdown has begun. Take control and stop the REENTRY protocol before it’s too late.\\n\\nREENTRY CTF is a story-driven cybersecurity competition at HackYeah 2026. Solve challenges, capture flags and score points across web security, cryptography, reverse engineering, pwn, forensics and more. Expect real hardware, AI challenges and an on-site team game woven into a cosmic storyline. Join solo or with a team. Beginner-friendly challenge paths make it easy to get started.",
+    "descriptionI18n": {
+     "en": "An abandoned space station. An onboard AI refusing to relinquish control. The countdown has begun. Take control and stop the REENTRY protocol before it’s too late.\\n\\nREENTRY CTF is a story-driven cybersecurity competition at HackYeah 2026. Solve challenges, capture flags and score points across web security, cryptography, reverse engineering, pwn, forensics and more. Expect real hardware, AI challenges and an on-site team game woven into a cosmic storyline. Join solo or with a team. Beginner-friendly challenge paths make it easy to get started.",
+     "pl": "Opuszczona stacja kosmiczna. Pokładowa AI, która nie chce oddać kontroli. Odliczanie już trwa. Przejmij stery i zatrzymaj protokół REENTRY, zanim będzie za późno.\\n\\nREENTRY CTF to fabularne zawody z cyberbezpieczeństwa podczas HackYeah 2026. Rozwiązuj zadania, zdobywaj flagi i zbieraj punkty w kategoriach takich jak bezpieczeństwo aplikacji webowych, kryptografia, inżynieria wsteczna, pwn czy informatyka śledcza. Czekają też prawdziwy sprzęt, wyzwania związane z AI i zespołowa gra terenowa, połączone kosmiczną fabułą. Możesz wystartować solo lub z drużyną. Ścieżki zadań zaczynają się od poziomu początkującego.",
+     "legacy": "An abandoned space station. An onboard AI refusing to relinquish control. The countdown has begun. Take control and stop the REENTRY protocol before it’s too late.\\n\\nREENTRY CTF is a story-driven cybersecurity competition at HackYeah 2026. Solve challenges, capture flags and score points across web security, cryptography, reverse engineering, pwn, forensics and more. Expect real hardware, AI challenges and an on-site team game woven into a cosmic storyline. Join solo or with a team. Beginner-friendly challenge paths make it easy to get started."
+    },
+    "buttons": [
+     {
+      "label": "Rules",
+      "url": "https://drive.google.com/file/d/132aS0FA9Zu3voxLoIV6QCMsbnbnpMMB0/view",
+      "kind": "rules"
+     },
+     {
+      "label": "Registration",
+      "url": "https://docs.google.com/forms/d/e/1FAIpQLSeDuVWV3Y86p4PWVhABLii5q1UueD9y0YYlDFfdVTTYlHAExA/viewform",
+      "kind": "other"
+     }
+    ]
+   },
+   {
+    "id": "d57d8c12-735f-4da1-a75b-cfe5f288a350",
+    "name": "Prelint Challenge",
+    "nameI18n": {
+     "en": "Prelint Challenge",
+     "pl": "Prelint Challenge",
+     "legacy": "Prelint Challenge"
+    },
+    "logoUrl": "https://mudnibfuppwadjkynscc.supabase.co/storage/v1/object/public/task-files/6f0f5e2e-246f-4078-a3f7-1aad9152e9f0/logos/7a994174-1b38-4354-bf67-d79e70d9b808.png",
+    "label": "PRIZE POOL",
+    "labelI18n": {
+     "en": "PRIZE POOL",
+     "pl": "PULA NAGRÓD",
+     "legacy": "PRIZE POOL"
+    },
+    "amount": "5000 USD",
+    "note": "Note: The prize is awarded as USD 5,000 worth of credits to be used on the Prelint platform.",
+    "noteI18n": {
+     "en": "Note: The prize is awarded as USD 5,000 worth of credits to be used on the Prelint platform.",
+     "pl": "Uwaga: Nagroda ma formę kredytów o wartości 5 000 USD do wykorzystania na platformie Prelint.",
+     "legacy": "Note: The prize is awarded as USD 5,000 worth of credits to be used on the Prelint platform."
+    },
+    "description": "Hackathons move fast - and so do the decisions behind your project. Prelint helps teams keep their implementation aligned with product and architecture decisions, review pull requests for potential drift, and give AI agents access to the project’s decision history.\\nBuild your HackYeah project using Prelint and show how it helped your team move quickly without losing control over the direction of your solution.\\nThe best project using Prelint will receive USD 5,000 in Prelint credits.",
+    "descriptionI18n": {
+     "en": "Hackathons move fast - and so do the decisions behind your project. Prelint helps teams keep their implementation aligned with product and architecture decisions, review pull requests for potential drift, and give AI agents access to the project’s decision history.\\nBuild your HackYeah project using Prelint and show how it helped your team move quickly without losing control over the direction of your solution.\\nThe best project using Prelint will receive USD 5,000 in Prelint credits.",
+     "pl": "Hackathony to szybkie tempo pracy - i równie szybkie decyzje dotyczące projektu. Prelint pomaga zespołom utrzymać implementację w zgodzie z decyzjami produktowymi i architektonicznymi, sprawdzać pull requesty pod kątem potencjalnych odstępstw oraz udostępniać agentom AI historię decyzji projektowych.\\nZbuduj swój projekt HackYeah z wykorzystaniem Prelint i pokaż, jak narzędzie pomogło Waszemu zespołowi działać szybko, nie tracąc kontroli nad kierunkiem rozwiązania.\\nNajlepszy projekt wykorzystujący Prelint otrzyma 5 000 USD w kredytach Prelint.",
+     "legacy": "Hackathons move fast - and so do the decisions behind your project. Prelint helps teams keep their implementation aligned with product and architecture decisions, review pull requests for potential drift, and give AI agents access to the project’s decision history.\\nBuild your HackYeah project using Prelint and show how it helped your team move quickly without losing control over the direction of your solution.\\nThe best project using Prelint will receive USD 5,000 in Prelint credits."
+    },
+    "buttons": []
+   }
+  ]
+ },
+ {
+  "id": "1b8ab51d-349e-407d-87a8-b6d0c77ed22c",
+  "name": "Task Partner",
+  "nameI18n": {
+   "en": "Task Partner",
+   "pl": "Zadania Partnerskie",
+   "legacy": "Task Partner"
+  },
+  "tasks": [
+   {
+    "id": "9b628c53-ee49-4354-9eca-b2fdc6e33456",
+    "name": "HubMI.pl",
+    "nameI18n": {
+     "en": "HubMI.pl",
+     "pl": "HubMI.pl",
+     "legacy": "HubMI.pl"
+    },
+    "logoUrl": "https://mudnibfuppwadjkynscc.supabase.co/storage/v1/object/public/task-files/6f0f5e2e-246f-4078-a3f7-1aad9152e9f0/logos/9cb56ed8-d424-4961-9eca-856cdae49ede.png",
+    "label": "PRIZE POOL",
+    "labelI18n": {
+     "en": "PRIZE POOL",
+     "pl": "PULA NAGRÓD",
+     "legacy": "PRIZE POOL"
+    },
+    "amount": "15 000 PLN",
+    "note": "Note: Projects must be submitted in Polish.",
+    "noteI18n": {
+     "en": "Note: Projects must be submitted in Polish.",
+     "pl": "Uwaga: Projekty należy zgłaszać w języku polskim.",
+     "legacy": "Note: Projects must be submitted in Polish."
+    },
+    "description": "How can we ensure that good ideas for solving social problems do not go unnoticed? Use technology to connect residents’ needs more effectively with knowledge, proven solutions, and people ready to take action. Create a concept that will help valuable initiatives reach the places where they are needed most and facilitate cooperation between residents, institutions, and social organizations.",
+    "descriptionI18n": {
+     "en": "How can we ensure that good ideas for solving social problems do not go unnoticed? Use technology to connect residents’ needs more effectively with knowledge, proven solutions, and people ready to take action. Create a concept that will help valuable initiatives reach the places where they are needed most and facilitate cooperation between residents, institutions, and social organizations.",
+     "pl": "Jak sprawić, by dobre pomysły na rozwiązywanie problemów społecznych nie pozostawały niezauważone? Wykorzystaj technologię, aby skuteczniej łączyć potrzeby mieszkańców z wiedzą, sprawdzonymi rozwiązaniami i osobami gotowymi do działania. Stwórz koncepcję, która pomoże wartościowym inicjatywom docierać tam, gdzie są najbardziej potrzebne, i ułatwi współpracę między mieszkańcami, instytucjami oraz organizacjami społecznymi.",
+     "legacy": "How can we ensure that good ideas for solving social problems do not go unnoticed? Use technology to connect residents’ needs more effectively with knowledge, proven solutions, and people ready to take action. Create a concept that will help valuable initiatives reach the places where they are needed most and facilitate cooperation between residents, institutions, and social organizations."
+    },
+    "buttons": [
+     {
+      "label": "Rules",
+      "url": "https://mudnibfuppwadjkynscc.supabase.co/storage/v1/object/public/task-files/6f0f5e2e-246f-4078-a3f7-1aad9152e9f0/files/91aa36c4-a174-4b60-a88e-1506a7b0f086.pdf",
+      "kind": "rules"
+     },
+     {
+      "label": "Details",
+      "url": "https://mudnibfuppwadjkynscc.supabase.co/storage/v1/object/public/task-files/6f0f5e2e-246f-4078-a3f7-1aad9152e9f0/files/efccaa75-3e01-4db0-bcc5-cf10f1e9dc7a.pdf",
+      "kind": "details"
+     }
+    ]
+   },
+   {
+    "id": "b4216bf6-9b05-4403-81b1-90c11b8eeac5",
+    "name": "IMAGINE WHAT'S NEXT",
+    "nameI18n": {
+     "en": "IMAGINE WHAT'S NEXT",
+     "pl": "IMAGINE WHAT'S NEXT",
+     "legacy": "IMAGINE WHAT'S NEXT"
+    },
+    "logoUrl": "https://mudnibfuppwadjkynscc.supabase.co/storage/v1/object/public/task-files/6f0f5e2e-246f-4078-a3f7-1aad9152e9f0/logos/6698cc95-4dba-4733-be65-f28e12d26580.png",
+    "label": "PRIZE POOL",
+    "labelI18n": {
+     "en": "PRIZE POOL",
+     "pl": "PULA NAGRÓD",
+     "legacy": "PRIZE POOL"
+    },
+    "amount": "25 000 PLN",
+    "note": "Note: Projects must be submitted in English.",
+    "noteI18n": {
+     "en": "Note: Projects must be submitted in English.",
+     "pl": "Uwaga: Projekty należy zgłaszać w języku angielskim.",
+     "legacy": "Note: Projects must be submitted in English."
+    },
+    "description": "HarmonyOS is one of the most significant new operating system ecosystems to emerge in years, challenging a landscape long dominated by Android and iOS. Built on OpenHarmony, an open-source operating system, it already runs on tens of millions of devices, including phones, tablets, PCs, TVs and watches.\\n\\nThis new ecosystem is now starting to make its way to global markets. At HackYeah, you'll get a sneak peek at what's coming next.\\n\\nBring your creativity and help us write the next chapter of operating systems.",
+    "descriptionI18n": {
+     "en": "HarmonyOS is one of the most significant new operating system ecosystems to emerge in years, challenging a landscape long dominated by Android and iOS. Built on OpenHarmony, an open-source operating system, it already runs on tens of millions of devices, including phones, tablets, PCs, TVs and watches.\\n\\nThis new ecosystem is now starting to make its way to global markets. At HackYeah, you'll get a sneak peek at what's coming next.\\n\\nBring your creativity and help us write the next chapter of operating systems.",
+     "pl": "HarmonyOS to jeden z najważniejszych nowych ekosystemów systemów operacyjnych, jakie pojawiły się w ostatnich latach, stanowiący wyzwanie dla rynku od dawna zdominowanego przez Androida i iOS. Zbudowany na bazie OpenHarmony, systemu operacyjnego typu open source, działa już na dziesiątkach milionów urządzeń, w tym telefonach, tabletach, komputerach PC, telewizorach i zegarkach.\\nTen nowy ekosystem zaczyna teraz wchodzić na rynki globalne. Podczas HackYeah będziecie mogli zobaczyć zapowiedź tego, co pojawi się w kolejnej kolejności.\\nWnieście swoją kreatywność i pomóżcie nam napisać kolejny rozdział w historii systemów operacyjnych.",
+     "legacy": "HarmonyOS is one of the most significant new operating system ecosystems to emerge in years, challenging a landscape long dominated by Android and iOS. Built on OpenHarmony, an open-source operating system, it already runs on tens of millions of devices, including phones, tablets, PCs, TVs and watches.\\n\\nThis new ecosystem is now starting to make its way to global markets. At HackYeah, you'll get a sneak peek at what's coming next.\\n\\nBring your creativity and help us write the next chapter of operating systems."
+    },
+    "buttons": [
+     {
+      "label": "Rules",
+      "url": "https://mudnibfuppwadjkynscc.supabase.co/storage/v1/object/public/task-files/6f0f5e2e-246f-4078-a3f7-1aad9152e9f0/files/5c37d383-6e2a-4e33-b2f5-77e5436127c7.pdf",
+      "kind": "rules"
+     },
+     {
+      "label": "Details",
+      "url": "https://mudnibfuppwadjkynscc.supabase.co/storage/v1/object/public/task-files/6f0f5e2e-246f-4078-a3f7-1aad9152e9f0/files/f97e834f-d47c-4acf-8228-5d894329ec91.pdf",
+      "kind": "details"
+     }
+    ]
+   },
+   {
+    "id": "b1bc63f3-81d7-4a86-99e2-fd27af9b1390",
+    "name": "Finance Without Intermediaries",
+    "nameI18n": {
+     "en": "Finance Without Intermediaries",
+     "pl": "Finanse bez pośrednika",
+     "legacy": "Finance Without Intermediaries"
+    },
+    "logoUrl": "https://mudnibfuppwadjkynscc.supabase.co/storage/v1/object/public/task-files/6f0f5e2e-246f-4078-a3f7-1aad9152e9f0/logos/f90d27e6-9907-40a4-9e2b-8ab7164e5f7e.png",
+    "label": "PRIZE POOL",
+    "labelI18n": {
+     "en": "PRIZE POOL",
+     "pl": "PULA NAGRÓD",
+     "legacy": "PRIZE POOL"
+    },
+    "amount": "11 300 PLN",
+    "note": "Note: Projects can be submitted in Polish or English.",
+    "noteI18n": {
+     "en": "Note: Projects can be submitted in Polish or English.",
+     "pl": "Uwaga: Projekty można zgłaszać w języku polskim lub angielskim.",
+     "legacy": "Note: Projects can be submitted in Polish or English."
+    },
+    "description": "Imagine a transaction with someone you don’t know. No history, no reputation, no way to go after them if they disappear with your money. \\n\\nBlockchain makes this irrelevant:\\nthe terms execute themselves, regardless of what the other party wants. Put this capability to use in an application.",
+    "descriptionI18n": {
+     "en": "Imagine a transaction with someone you don’t know. No history, no reputation, no way to go after them if they disappear with your money. \\n\\nBlockchain makes this irrelevant:\\nthe terms execute themselves, regardless of what the other party wants. Put this capability to use in an application.",
+     "pl": "Wyobraź sobie transakcję z kimś, kogo nie znasz. Bez historii, bez reputacji, bez możliwości ścigania go, gdy zniknie z Twoimi pieniędzmi. \\n\\nBlockchain sprawia, że to przestaje mieć znaczenie - warunki wykonują się same, niezależnie od tego, czego chce druga strona.  Użyj tych możliwości w aplikacji.",
+     "legacy": "Imagine a transaction with someone you don’t know. No history, no reputation, no way to go after them if they disappear with your money. \\n\\nBlockchain makes this irrelevant:\\nthe terms execute themselves, regardless of what the other party wants. Put this capability to use in an application."
+    },
+    "buttons": [
+     {
+      "label": "Rules",
+      "url": "https://mudnibfuppwadjkynscc.supabase.co/storage/v1/object/public/task-files/6f0f5e2e-246f-4078-a3f7-1aad9152e9f0/files/88126c23-c18e-42ad-926c-fc9bbfb7e367.pdf",
+      "kind": "rules"
+     },
+     {
+      "label": "Details",
+      "url": "https://mudnibfuppwadjkynscc.supabase.co/storage/v1/object/public/task-files/6f0f5e2e-246f-4078-a3f7-1aad9152e9f0/files/eb29bdde-c400-46a0-9407-ef7db258a4e2.pdf",
+      "kind": "details"
+     }
+    ]
+   },
+   {
+    "id": "19aa4e9c-cb8c-4068-88da-495f6df07f91",
+    "name": "Cracow without barriers",
+    "nameI18n": {
+     "en": "Cracow without barriers",
+     "pl": "Kraków bez barier",
+     "legacy": "Cracow without barriers"
+    },
+    "logoUrl": "https://mudnibfuppwadjkynscc.supabase.co/storage/v1/object/public/task-files/6f0f5e2e-246f-4078-a3f7-1aad9152e9f0/logos/c95a2b36-c5ea-4479-94e3-da579d210606.png",
+    "label": "PRIZE POOL",
+    "labelI18n": {
+     "en": "PRIZE POOL",
+     "pl": "PULA NAGRÓD",
+     "legacy": "PRIZE POOL"
+    },
+    "amount": "5 000 PLN",
+    "note": "Note: Projects must be submitted in Polish.",
+    "noteI18n": {
+     "en": "Note: Projects must be submitted in Polish.",
+     "pl": "Uwaga: Projekty należy zgłaszać w języku polskim.",
+     "legacy": "Note: Projects must be submitted in Polish."
+    },
+    "description": "Create a tool that helps residents and tourists assess the accessibility of places and routes according to their individual needs, while also serving as a source of information about the accessibility of the city’s services and offerings. The solution should present specific information about barriers and available facilities, while also having the potential for further development.",
+    "descriptionI18n": {
+     "en": "Create a tool that helps residents and tourists assess the accessibility of places and routes according to their individual needs, while also serving as a source of information about the accessibility of the city’s services and offerings. The solution should present specific information about barriers and available facilities, while also having the potential for further development.",
+     "pl": "Stwórz narzędzie, które pomoże mieszkańcom i turystom ocenić dostępność miejsc i tras zgodnie z ich indywidualnymi potrzebami, a jednocześnie będzie źródłem informacji o dostępności oferty miasta. Rozwiązanie powinno prezentować konkretne informacje o barierach i udogodnieniach, a jednocześnie mieć potencjał do dalszego rozwoju, komercjalizacji i skalowania na inne miasta.",
+     "legacy": "Create a tool that helps residents and tourists assess the accessibility of places and routes according to their individual needs, while also serving as a source of information about the accessibility of the city’s services and offerings. The solution should present specific information about barriers and available facilities, while also having the potential for further development."
+    },
+    "buttons": [
+     {
+      "label": "Rules",
+      "url": "https://mudnibfuppwadjkynscc.supabase.co/storage/v1/object/public/task-files/6f0f5e2e-246f-4078-a3f7-1aad9152e9f0/files/515b3774-1421-4554-8d19-fc5cce3c6910.pdf",
+      "kind": "rules"
+     },
+     {
+      "label": "Details",
+      "url": "https://mudnibfuppwadjkynscc.supabase.co/storage/v1/object/public/task-files/6f0f5e2e-246f-4078-a3f7-1aad9152e9f0/files/17b7999e-e2c0-42fd-8402-b008fb4b392c.pdf",
+      "kind": "details"
+     }
+    ]
+   },
+   {
+    "id": "bf75555c-f0f9-4ae6-838b-726de0ad7b16",
+    "name": "AI Control Layer",
+    "nameI18n": {
+     "en": "AI Control Layer",
+     "pl": "AI Control Layer",
+     "legacy": "AI Control Layer"
+    },
+    "logoUrl": "https://mudnibfuppwadjkynscc.supabase.co/storage/v1/object/public/task-files/6f0f5e2e-246f-4078-a3f7-1aad9152e9f0/logos/3e6853cc-bc3c-48e5-ba56-4b41435e7fb9.png",
+    "label": "PRIZE POOL",
+    "labelI18n": {
+     "en": "PRIZE POOL",
+     "pl": "PULA NAGRÓD",
+     "legacy": "PRIZE POOL"
+    },
+    "amount": "15 000 PLN",
+    "note": "Note: Projects must be submitted in English.",
+    "noteI18n": {
+     "en": "Note: Projects must be submitted in English.",
+     "pl": "Uwaga: Projekty należy zgłaszać w języku angielskim.",
+     "legacy": "Note: Projects must be submitted in English."
+    },
+    "description": "AI is moving beyond answering questions to taking actions, accessing organizational resources and automatic complex business workflows. These capabilities bring new risks, from sensitive data exposure and unauthorized actions to unpredictable costs, which traditional security tools are not always equipped to handle. How can organizations maintain control without slowing down innovation or developer productivity? Goldman Sachs’ challenge explores security and trust in the world of agentic AI.",
+    "descriptionI18n": {
+     "en": "AI is moving beyond answering questions to taking actions, accessing organizational resources and automatic complex business workflows. These capabilities bring new risks, from sensitive data exposure and unauthorized actions to unpredictable costs, which traditional security tools are not always equipped to handle. How can organizations maintain control without slowing down innovation or developer productivity? Goldman Sachs’ challenge explores security and trust in the world of agentic AI.",
+     "pl": "Sztuczna inteligencja wykracza już poza samo odpowiadanie na pytania - zaczyna podejmować działania, uzyskiwać dostęp do zasobów organizacji oraz automatyzować złożone procesy biznesowe. Możliwości te niosą ze sobą nowe ryzyka: od ujawnienia wrażliwych danych i nieautoryzowanych działań po nieprzewidywalne koszty, z którymi tradycyjne narzędzia bezpieczeństwa nie zawsze są w stanie sobie poradzić.\\nJak organizacje mogą zachować kontrolę, nie spowalniając jednocześnie innowacji ani produktywności deweloperów? Wyzwanie Goldman Sachs koncentruje się na bezpieczeństwie i zaufaniu w świecie agentowej sztucznej inteligencji.",
+     "legacy": "AI is moving beyond answering questions to taking actions, accessing organizational resources and automatic complex business workflows. These capabilities bring new risks, from sensitive data exposure and unauthorized actions to unpredictable costs, which traditional security tools are not always equipped to handle. How can organizations maintain control without slowing down innovation or developer productivity? Goldman Sachs’ challenge explores security and trust in the world of agentic AI."
+    },
+    "buttons": [
+     {
+      "label": "Rules",
+      "url": "https://mudnibfuppwadjkynscc.supabase.co/storage/v1/object/public/task-files/6f0f5e2e-246f-4078-a3f7-1aad9152e9f0/files/61290006-9e3e-4582-b381-2cd6f313ecf5.pdf",
+      "kind": "rules"
+     },
+     {
+      "label": "Details",
+      "url": "https://mudnibfuppwadjkynscc.supabase.co/storage/v1/object/public/task-files/6f0f5e2e-246f-4078-a3f7-1aad9152e9f0/files/e251f2e9-fc1d-45b4-b92e-03be0adce8dc.pdf",
+      "kind": "details"
+     }
+    ]
+   }
+  ]
+ }
+]

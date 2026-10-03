@@ -1,0 +1,183 @@
+Regulamin Konkursu "REENTRY CTF - HackYeah
+
+2026"
+
+§ 1. Postanowienia ogólne
+
+    1. Niniejszy regulamin, zwany dalej "Regulaminem", okrela warunki konkursu "REENTRY
+         CTF - HackYeah 2026" (dalej "Konkurs") oraz tryb przeprowadzania Konkursu.
+
+    2. Organizatorem Konkursu, zwanym dalej "Organizatorem", jest UNSHADE sp. z o.o. z
+         siedzib w Poznaniu, ul. wity Marcin 29/8, 61-806 Pozna, zarejestrowana w
+         Rejestrze Przedsibiorców Krajowego Rejestru Sdowego pod numerem KRS:
+         0001001182, NIP: 7831867981.
+
+    3. Nad przebiegiem Konkursu czuwa Organizator oraz osoby powolane przez
+         Organizatora.
+              a. Z Organizatorem mona skontaktowa si poprzez platform Discord,
+                   opublikowan przed startem Konkursu opisanym w ust. 5 lub mailowo na adres
+                   biuro@unshade.pl.
+
+    4. Konkurs odbywa si z wykorzystaniem platformy konkursowej udostpnionej przez
+         Organizatora przed startem Konkursu w terminie opisanym w ust. 5. (dalej "Platforma
+         Konkursowa" lub "Platforma"), na której publikowane s zadania konkursowe i wyniki.
+
+    5. Konkurs jest wydarzeniem organizowanym w ramach konferencji "HackYeah" (dalej
+         "Konferencja" lub "HackYeah"), odbywajcej si w dniach 3-4.10.2026 na Tauron Arenie
+         w Krakowie i poza niniejszym Regulaminem podlega równie pod regulamin HackYeah.
+
+    6. Niniejszy Regulamin wchodzi w ycie z dniem 03.08.2026. Organizator zastrzega sobie
+         prawo do wprowadzania zmian w Regulaminie w dowolnym momencie bez podania
+         przyczyny.
+
+§ 2. Zasady uczestnictwa
+
+    1. Uczestnikami Konkursu (dalej "Uczestnikami") s obecni fizycznie na miejscu,
+         zarejestrowani uczestnicy Konferencji HackYeah, którzy zarejestruj si na Platformie, o
+         której mowa w § 1 ust. 4 Regulaminu.
+
+    2. Warunkiem wzicia udzialu w Konkursie jest uprzednia rejestracja za porednictwem
+         formularza rejestracyjnego udostpnionego przez Organizatora pod adresem:
+         https://docs.google.com/forms/d/e/1FAIpQLSeDuVWV3Y86p4PWVhABLii5q1UueD9y0Y
+         YlDFfdVTTYlHAExA/viewform
+
+    3. Uczestnicy tworz zespoly liczce od jednej do czterech osób (dalej "Zespoly"). Kady
+         Zespól wyznacza kapitana odpowiedzialnego za kontakt z Organizatorem i
+         reprezentowanie Zespolu.
+
+    4. Przystpujc do Konkursu, kady Uczestnik akceptuje niniejszy Regulamin oraz zasady
+         przetwarzania danych osobowych, o których mowa w § 7.
+    5. Uczestnikiem Konkursu moe by wylcznie osoba pelnoletnia, która fizycznie
+         uczestniczy w Konferencji.
+
+§ 3. Warunki uczestnictwa
+
+    1. Udzial w Konkursie jest dobrowolny i bezplatny. Uczestnicy Konkursu nie s uprawnieni
+         do otrzymania wynagrodzenia od Organizatora z tytulu udzialu w Konkursie.
+
+    2. Konkurs ma charakter zamknity i jest skierowany wylcznie do osób wskazanych w § 2
+         ust. 1-5 Regulaminu.
+
+    3. Zgloszenia Zespolu dokonuje si poprzez rejestracj przez Uczestników na Platformie, a
+         nastpnie utworzenie Zespolu.
+
+    4. Rejestracja Zespolów jest moliwa przez caly okres trwania Konkursu, nie dluej jednak
+         ni do momentu zakoczenia Konkursu okrelonego w § 4 ust. 1 Regulaminu.
+
+    5. Kady Zespól korzysta z wlasnego sprztu wraz z oprogramowaniem. Organizator nie
+         zapewnia sprztu ani oprogramowania.
+
+§ 4. Przebieg Konkursu
+
+    1. Konkurs jest przeprowadzany od 3 padziernika 2026 r. godz. 12:00 do 4 padziernika
+         2026 r. godz. 12:00.
+
+    2. Konkurs sklada si z jednego etapu.
+    3. Konkurs polega na rozwizywaniu przez Zespoly zada udostpnionych na Platformie.
+    4. Rozwizaniem kadego zadania jest tekstowy cig znaków w postaci flag{sekret},
+
+         gdzie pomidzy nawiasami umieszcza si cig znaków odpowiadajcy sekretnemu
+         rozwizaniu konkretnego zadania, chyba e w opisie zadania wskazano inaczej.
+         Rozwizanie zadania przedstawione w opisanej powyej postaci zwane jest dalej
+         "Flag".
+    5. Pozyskanie poprawnej Flagi oraz wprowadzenie jej w formularzu odpowiedzi na stronie
+         odpowiedniego zadania skutkuje uznaniem rozwizania zadania przez dany Zespól,
+         oraz przyznaniem przez Platform odpowiedniej iloci punktów.
+    6. Klasyfikacja w Konkursie prowadzona jest na podstawie wyników na Platformie. O
+         kolejnoci decyduje lczna liczba punktów zdobytych przez Zespól, a w przypadku
+         równej liczby punktów decyduje wczeniejszy czas ostatniego poprawnego zgloszenia
+         Flagi przez Zespól.
+    7. Organizator promuje zasady uczciwego wspóluczestnictwa i surowo potpia przypadki
+         niesamodzielnej pracy, w szczególnoci dzielenie si rozwizaniami z innymi Zespolami,
+         wprowadzanie rozwiza uzyskanych od osób trzecich lub korzystanie z
+         nieautoryzowanej pomocy.
+    8. W razie wtpliwoci dotyczcych samodzielnoci pracy Zespolu Organizator ma prawo
+         da opisu sposobu rozwizania zadania w celu weryfikacji pracy Zespolu.
+    9. Organizator ma prawo odmówi przyznania nagród, o których mowa w § 5, w przypadku
+         uznania pracy Zespolu za niesamodzieln lub sprzeczn z Regulaminem, bez
+         obowizku podania uzasadnienia.
+    10.Za dzialania niezgodne z Regulaminem lub regulaminem Konferencji Organizator moe
+         naloy na Zespól kar dyskwalifikacji.
+
+    11.Organizator nie ponosi odpowiedzialnoci za przerwy w dzialaniu Platformy oraz
+         problemy techniczne wynikajce z przyczyn od niego niezalenych, w tym awarie lcza
+         internetowego, sprztu lub oprogramowania Uczestników, dzialania sily wyszej lub
+         przerwy w dostawie prdu, chyba e zostaly one spowodowane win umyln
+         Organizatora.
+
+§ 5. Nagrody
+
+    1. Nagrod w Konkursie jest nagroda pienina w wysokoci 5000 zl brutto, przyznawana
+         Zespolowi, który zajmie pierwsze miejsce. Zespolom, które zajm kolejne miejsca,
+         nagrody pienine nie przysluguj.
+
+    2. Nagroda przyznawana jest Zespolowi z najwyszym wynikiem na Platformie w
+         momencie zakoczenia Konkursu, okrelonego w §4 ust. 1, z uwzgldnieniem zasad
+         klasyfikacji opisanych w § 4 ust. 6 Regulaminu.
+
+    3. Kwota nagrody jest stala i nie zaley od liczby czlonków Zespolu.
+    4. Przyznanie nagrody nastpuje po potwierdzeniu skladu Zespolu oraz spelnieniu
+
+         wszelkich wymaga formalnych wskazanych przez Organizatora.
+    5. Wyplaty nagrody pieninej dokonuje organizator Konferencji: Proidea sp. z o.o. z
+
+         siedzib w Krakowie, ul. Zakopiaska 9, 30-418 Kraków, zarejestrowana w KRS pod
+         numerem 0000448243, NIP: 6793088842, w terminie do 90 dni od ogloszenia wyników i
+         po wypelnieniu przez czlonków zwyciskiego Zespolu formularza przekazania nagrody.
+
+§ 6. Kwestie nieujte w Regulaminie i zmiana zasad Konkursu
+
+    1. Wszystkie kwestie nieujte w niniejszym Regulaminie rozstrzygane s niezaskaralnymi
+         i ostatecznymi decyzjami Organizatora, który kieruje si przede wszystkim
+         promowaniem postaw uczciwego wspólzawodnictwa.
+
+    2. Organizator zastrzega sobie prawo do wprowadzania zmian do Regulaminu, jeeli
+         pojawi si okolicznoci uzasadniajce ich wprowadzenie. Kada zmiana Regulaminu
+         musi zosta ogloszona na Platformie Konkursowej i obowizuje od momentu ogloszenia
+         lub póniejszego, jeeli zostalo to wskazane w treci ogloszenia.
+
+§ 7. Sposób przetwarzania danych uczestników Konkursu
+
+    1. Administratorem danych osobowych Uczestników Konkursu jest UNSHADE sp. z o.o. z
+         siedzib w Poznaniu, ul. wity Marcin 29/8, 61-806 Pozna, zarejestrowana w
+         Rejestrze Przedsibiorców Krajowego Rejestru Sdowego pod numerem KRS:
+         0001001182, NIP: 7831867981.
+
+    2. Dane osobowe s przetwarzane przez administratora w celu:
+              1. organizacji i przeprowadzenia Konkursu, w tym weryfikacji uprawnienia do
+                   udzialu oraz rozliczenia nagrody, zgodnie z art. 6 ust. 1 lit. b RODO (niezbdno
+              do wykonania umowy, której stron jest Uczestnik, lub do podjcia dziala na
+              danie Uczestnika przed zawarciem umowy),
+         2. informowania (take w mediach) o wynikach Konkursu, zgodnie z art. 6 ust. 1 lit.
+              a RODO (zgoda),
+         3. wypelnienia cicych na administratorze obowizków wynikajcych z przepisów
+              powszechnie obowizujcych, zgodnie z art. 6 ust. 1 lit. c RODO.
+         4. Realizacji zobowiza umów partnerskich zawartych przez Organizatora
+              Konkursu lub Konferencji.
+3. Dane osobowe dotyczce Uczestników Konkursu mog by udostpniane podmiotom
+    uprawnionym do ich otrzymywania na podstawie przepisów prawa lub umów zawartych
+    przez Organizatora Konkursu lub Konferencji, w szczególnoci spólce Proidea sp. z o.o.
+    z siedzib w Krakowie, ul. Zakopiaska 9, 30-418 Kraków (KRS: 0000448243, NIP:
+    6793088842)
+4. Dane osobowe s przechowywane przez okres niezbdny do realizacji Konkursu, a
+    nastpnie do momentu wyganicia obowizku ich przechowywania wynikajcego z
+    przepisów prawa.
+5. Osobie, której dane osobowe s przetwarzane, przysluguje prawo:
+         1. dostpu do treci danych osobowych, dania ich sprostowania lub usunicia, na
+              zasadach okrelonych w art. 15-17 RODO,
+         2. ograniczenia przetwarzania danych, w przypadkach okrelonych w art. 18
+              RODO,
+         3. przenoszenia danych na zasadach okrelonych w art. 20 RODO, tj. do
+              otrzymania od administratora danych jej dotyczcych w ustrukturyzowanym,
+              powszechnie uywanym formacie nadajcym si do odczytu maszynowego,
+         4. cofnicia zgody w dowolnym momencie, bez wplywu na zgodno z prawem
+              przetwarzania, którego dokonano na podstawie zgody przed jej cofniciem,
+         5. wniesienia skargi do Prezesa Urzdu Ochrony Danych Osobowych na adres: ul.
+              Stawki 2, 00-193 Warszawa.
+2. W celu skorzystania z praw, o których mowa w ust. 7 pkt 1-4 powyej, naley
+    skontaktowa si z administratorem lub inspektorem ochrony danych, korzystajc ze
+    wskazanych wyej danych kontaktowych.
+3. Dane osobowe pochodz ze zglosze dokonanych zgodnie z Regulaminem Konkursu.
+4. Podanie danych osobowych jest dobrowolne, ale konieczne do wzicia udzialu w
+    Konkursie.
+
