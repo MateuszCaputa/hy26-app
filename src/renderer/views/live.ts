@@ -143,7 +143,7 @@ export class LiveView {
           h('h2', null, 'Oczy'),
           // Te same wiersze co odchylenia niżej (nazwa po lewej, liczba po prawej), żeby panel czytał się jak jedna lista.
           h('ul', { class: 'metric-list' },
-            h('li', { class: 'metric plain' }, h('span', { class: 'metric-name' }, 'Mrugnięcia'), this.blinkVal),
+            h('li', { class: 'metric plain' }, h('span', { class: 'metric-name', 'data-tip': 'Średnio z ostatnich 3 minut, bez chwil, gdy mówisz. Przy pracy przy ekranie 5–10/min to norma (w spoczynku ok. 15–20).' }, 'Mrugnięcia (śr. 3 min)'), this.blinkVal),
             h('li', { class: 'metric plain' }, h('span', { class: 'metric-name' }, 'Ziewnięcia'), this.yawnVal),
           ),
           h('h2', null, 'Jak daleko jesteś od swojej prostej postawy'),
@@ -315,7 +315,7 @@ function drawEyeDebug(canvas: HTMLCanvasElement, e: Frame['eyes']): void {
     : [
         `zamknięcie ${n(e.closed)}   EAR ${n(e.ear, 3)} / wzorzec ${n(e.earRef, 3)}`,
         `eyeBlink surowy ${n(e.blend)} → względny ${n(e.blendRel)}`,
-        `MRUGNIĘCIA (licznik) ${e.blinksTotal}   długie ${e.longTotal}   tempo ${e.rate == null ? '– (zbieram dane)' : `${e.rate.toFixed(0)}/min`}`,
+        `MRUGNIĘCIA (licznik) ${e.blinksTotal}   długie ${e.longTotal}   śr. 3 min ${e.rate == null ? '– (zbieram dane, min. 60 s)' : `${e.rate.toFixed(0)}/min`}`,
         `${e.reliable ? 'dane OK' : 'DANE NIEPEWNE'} · ${e.fps.toFixed(0)} kl./s${e.gazeDown ? ' · PATRZYSZ W DÓŁ' : ''}${e.talking ? ' · MÓWISZ' : ''}`,
       ];
   const dpr = window.devicePixelRatio || 1;

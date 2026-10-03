@@ -80,3 +80,26 @@ test('skinienia (zerknięcia) nie podnoszą wskaźnika zmęczenia', () => {
   const base = { blinkRate: 16, perclos: 0.03, longBlinksPerMin: 0, yawns10m: 0, postureAvg15: 90, minutesSinceBreak: 10 };
   assert.equal(fatiguePercent({ ...base, nods10m: 0 }), fatiguePercent({ ...base, nods10m: 5 }));
 });
+
+test('trzepotanie / mrużenie 0,6 s bez pełnego zamknięcia to mrugnięcie, nie „długie”', () => {
+  const eyes = new EyeAnalyzer(OPEN);
+  // EAR 0,17 przy wzorcu 0,3 → zamknięcie ok. 0,67: ponad progiem mrugnięcia, ale oko nie jest zamknięte
+  run(eyes, 0, 120, (t) => ({ ear: t % 6 < 0.6 ? 0.17 : OPEN }));
+  const d = eyes.debug(120);
+  assert.equal(d.longTotal, 0, `długie ${d.longTotal}`);
+  assert.ok(d.blinksTotal >= 18, `mrugnięcia ${d.blinksTotal}`);
+});
+
+test('płytkie mrugnięcie w okularach (zamknięcie ok. 0,59) jest liczone', () => {
+  const eyes = new EyeAnalyzer(0.342);
+  // EAR 0,211 przy wzorcu 0,342 → zamknięcie ≈ 0,59 (zrzut z testu na żywo)
+  run(eyes, 0, 120, (t) => ({ ear: t % 4 < 0.12 ? 0.211 : 0.342 }));
+  const r = eyes.blinkRate(120)!;
+  assert.ok(r > 13 && r < 17, `rate ${r}`);
+});
+
+test('prawdziwie zamknięte oczy przez 1 s to nadal długie mrugnięcie', () => {
+  const eyes = new EyeAnalyzer(OPEN);
+  run(eyes, 0, 120, (t) => (t % 10 < 1 ? { ear: CLOSED } : {}));
+  assert.ok(eyes.debug(120).longTotal >= 10);
+});

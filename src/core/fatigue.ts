@@ -39,8 +39,12 @@ export interface FaceFrame {
 const BLINK_MIN = 0.02;
 const BLINK_MAX = 0.4; // dłużej = długie mrugnięcie
 const LONG_MAX = 3.0; // dłużej = raczej patrzenie w dół (klawiatura), nie liczymy
-const CLOSE_ON = 0.6;
-const CLOSE_OFF = 0.4;
+// Test na żywo (okulary): mrugnięcie dawało zamknięcie ok. 0,59 i nie przekraczało 0,6. Węższa histereza
+// rozdziela też szybkie mrugnięcia, które przy CLOSE_OFF 0,4 zlewały się w jedno „długie”.
+const CLOSE_ON = 0.52;
+const CLOSE_OFF = 0.42;
+/** Długie mrugnięcie = oko naprawdę zamknięte przez większość czasu, nie seria szybkich mrugnięć. */
+const LONG_MIN_CLOSED_SHARE = 0.6;
 const PERCLOS_CLOSED = 0.8; // oko zamknięte w co najmniej 80%
 const YAWN_JAW = 0.55;
 const YAWN_MIN_SEC = 1.5;
@@ -138,6 +142,12 @@ export class EyeAnalyzer {
       gazeDown: this.gazeDown,
       talking: this.talking,
     };
+  }
+
+  private countBlink(t: number): void {
+    this.blinks.push(t);
+    this.blinkTalking.push(this.talking);
+    this.blinksTotal++;
   }
 
   /** Czy w ostatnich ~2 s użytkownik mówił. */
@@ -244,14 +254,13 @@ export class EyeAnalyzer {
         for (const s of this.closure.samples) s.closed = false;
       }
       if (c <= CLOSE_OFF) {
-        if (d >= BLINK_MIN && d <= BLINK_MAX) {
-          this.blinks.push(t);
-          this.blinkTalking.push(this.talking);
-          this.blinksTotal++;
-        }
+        const closedShare = this.closure.samples.filter((s) => s.closed).length / this.closure.samples.length;
+        if (d >= BLINK_MIN && d <= BLINK_MAX) this.countBlink(t);
         else if (d > BLINK_MAX && d <= LONG_MAX) {
-          this.longBlinks.push(t);
-          this.longTotal++;
+          if (closedShare >= LONG_MIN_CLOSED_SHARE) {
+            this.longBlinks.push(t);
+            this.longTotal++;
+          } else this.countBlink(t); // seria szybkich mrugnięć bez pełnego otwarcia – to nie senność
         }
         this.closure = null;
       }
