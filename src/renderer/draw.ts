@@ -1,5 +1,5 @@
 // Rysowanie linii kręgosłupa, barków i głowy na podglądzie kamery.
-import type { Calibration } from '../shared/types';
+import type { Calibration, IssueId } from '../shared/types';
 import type { Frame } from './analyzer';
 import { POSE, type Landmark } from '../core/metrics';
 import { drawBody, drawFaceContours } from './landmarks';
@@ -37,8 +37,10 @@ export function drawOverlay(canvas: HTMLCanvasElement, video: { videoWidth: numb
   // Tło nakładki: twarz i szkielet zawsze przygaszone i neutralne – pokazują tylko, że kamera „widzi”.
   // Kolorem zapala się wyłącznie odcinek, z którym jest problem (FEEDBACK F2).
   const st = f.tracker?.state;
-  const issue = st === 'warn' || st === 'bad' ? f.tracker?.topIssue ?? null : null;
-  ctx.globalAlpha = issue ? 0.45 : 0.3;
+  // Do dwóch problemów naraz (np. uniesione barki i wysunięta głowa) – każdy podświetla swój odcinek.
+  const issues = st === 'warn' || st === 'bad' ? f.tracker?.issues ?? [] : [];
+  const has = (...ids: IssueId[]) => ids.some((id) => issues.includes(id));
+  ctx.globalAlpha = issues.length ? 0.45 : 0.3;
   if (f.face) drawFaceContours(ctx, f.face, project);
   const lm = f.pose;
   if (lm) drawBody(ctx, lm, project);
@@ -102,7 +104,9 @@ export function drawOverlay(canvas: HTMLCanvasElement, video: { videoWidth: numb
   if (!ls || !rs) return;
   const mid: [number, number] = [(ls[0] + rs[0]) / 2, (ls[1] + rs[1]) / 2];
   const shoulderW = Math.hypot(ls[0] - rs[0], ls[1] - rs[1]);
-  const headIssue = issue === 'headForward' || issue === 'slouch' || issue === 'tooClose';
+  const HEAD: IssueId[] = ['headForward', 'headBack', 'slouch', 'tooClose'];
+  const SHOULDERS: IssueId[] = ['shoulderTilt', 'twist', 'shrug'];
+  const headIssue = has(...HEAD);
 
   // Szyja (barki → nos): spokojna, gdy jest dobrze; w kolorze, gdy problem dotyczy głowy lub pleców.
   if (nose) {
@@ -139,23 +143,29 @@ export function drawOverlay(canvas: HTMLCanvasElement, video: { videoWidth: numb
     ctx.globalAlpha = 1;
   }
 
-  // Barki: podświetlone tylko przy przechyle lub skręcie, z poziomicą obok.
-  if (issue === 'shoulderTilt' || issue === 'twist') {
-    if (issue === 'shoulderTilt') level(ls, rs);
+  // Barki: podświetlone tylko przy przechyle, skręcie lub uniesieniu; przy przechyle z poziomicą obok.
+  if (has(...SHOULDERS)) {
+    if (has('shoulderTilt')) level(ls, rs);
     line(ls, rs, 5, hot);
     dot(ls, 5, hot);
     dot(rs, 5, hot);
   }
 
   // Głowa: linia oczu w kolorze przy przechyle głowy, z poziomicą obok.
-  if (issue === 'headTilt' && le && re) {
+  if (has('headTilt') && le && re) {
     level(le, re);
     line(le, re, 4, hot);
   }
 
-  // Jeden podpis prostymi słowami – tylko gdy coś jest nie tak. Liczby i stopnie są w „Szczegółach pomiaru”.
-  if (issue && issue !== 'stillness' && nose) {
-    const y = issue === 'shoulderTilt' || issue === 'twist' ? mid[1] + 34 : (mid[1] + nose[1]) / 2;
-    label(issue === 'shoulderTilt' || issue === 'twist' ? mid[0] : nose[0], y, ISSUE_LABEL[issue], hot);
+  // Podpis prostymi słowami przy każdym podświetlonym odcinku. Liczby i stopnie są w „Szczegółach pomiaru”.
+  if (!nose) return;
+  const used: number[] = [];
+  for (const id of issues) {
+    if (id === 'stillness') continue;
+    const atShoulders = SHOULDERS.includes(id);
+    let y = atShoulders ? mid[1] + 34 : id === 'headTilt' && le && re ? Math.min(le[1], re[1]) - 30 : (mid[1] + nose[1]) / 2;
+    while (used.some((u) => Math.abs(u - y) < 28)) y += 28; // dwa podpisy w tym samym miejscu – jeden pod drugim
+    used.push(y);
+    label(atShoulders ? mid[0] : nose[0], y, ISSUE_LABEL[id], hot);
   }
 }

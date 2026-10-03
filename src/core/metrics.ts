@@ -141,6 +141,7 @@ export function computeMetrics(
       shoulderToEye: shoulderW / eyeDistFrontal,
       noseX: nx,
       noseY: ny,
+      shoulderY: shoulderMidY,
       headPitchDeg: pose ? pose.pitchDeg : null,
       headYawDeg: pose ? pose.yawDeg : null,
     },

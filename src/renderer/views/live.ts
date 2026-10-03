@@ -250,6 +250,7 @@ export class LiveView {
     this.scoreNum.hidden = !showScore;
     this.scoreState.textContent = noCal ? 'Czekam na kalibrację' : STATE_WORD[ctx.paused ? 'paused' : s.state] ?? '';
     this.tip.textContent = noCal ? 'Pokaż mi raz prostą postawę – od niej liczę resztę.'
+      : s.issues?.length && s.state !== 'absent' ? s.issues.map((id) => ISSUE_TIP[id]).join(' ') // do dwóch wskazówek naraz
       : s.topIssue && s.state !== 'absent' ? ISSUE_TIP[s.topIssue]
       : s.state === 'good' ? 'Tak trzymaj.'
       : s.state === 'absent' ? 'Usiądź przed kamerą, a pomiar wróci sam.' : '';

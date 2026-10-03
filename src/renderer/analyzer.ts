@@ -472,6 +472,7 @@ export class Analyzer {
       score: tr?.score ?? null,
       fatigue: tr?.present ? this.lastFatigue : null,
       topIssue: tr?.topIssue ?? null,
+      issues: tr?.issues ?? [],
       minutesSinceBreak: Math.round(this.breaks.minutesSinceBreak(t)),
       note: !this.calibration ? 'Wymagana kalibracja' : undefined,
     };
@@ -579,6 +580,11 @@ export class Analyzer {
       headPitchDeg: (() => {
         const v = c.samples.map((m) => m.headPitchDeg).filter((x): x is number => x != null);
         return v.length >= c.samples.length / 2 ? median(v) : null;
+      })(),
+      noseY: median(c.samples.map((m) => m.noseY)),
+      shoulderY: (() => {
+        const v = c.samples.map((m) => m.shoulderY).filter((x): x is number => x != null);
+        return v.length ? median(v) : undefined;
       })(),
     };
     this.setCalibration(cal);
