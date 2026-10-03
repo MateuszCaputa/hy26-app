@@ -1,4 +1,4 @@
-// Nakładka w stylu demo MediaPipe: czysty szkielet górnej części ciała (limonkowe linie, różowe stawy)
+// Nakładka: spokojny, neutralny szkielet górnej części ciała (białe linie, małe stawy)
 // i kontury z siatki twarzy (powieki, tęczówki, brwi, usta, owal). Kontur powiek zamyka się przy mrugnięciu,
 // więc widać, że licznik mrugnięć naprawdę „widzi” oczy.
 import { FaceLandmarker, PoseLandmarker } from '@mediapipe/tasks-vision';
@@ -23,10 +23,10 @@ const points = (list: Pair[]): number[] => [...new Set(list.flat())];
 const EYE_DOTS = points(EYES);
 const BROW_DOTS = points(BROWS);
 
-const LIME = '#b6ff3b';
-const PINK = '#ff3d9a';
-const VIOLET = '#c08bff';
-const SOFT = 'rgba(235, 245, 240, 0.35)';
+// Neutralne barwy: nakładka ma pokazywać, co widzi kamera, a nie konkurować z twarzą.
+const BONE = 'rgba(255, 255, 255, 0.7)';
+const EYE = 'rgba(255, 255, 255, 0.85)';
+const SOFT = 'rgba(255, 255, 255, 0.28)';
 const MIN_VIS = 0.5;
 
 /** Jedna ścieżka na grupę odcinków (szybko: jedno stroke zamiast dziesiątek). */
@@ -70,19 +70,13 @@ export function drawFaceContours(ctx: CanvasRenderingContext2D, face: Landmark[]
   ctx.lineWidth = 1.5;
   strokePairs(ctx, face, BROWS, project, always);
   strokePairs(ctx, face, LIPS, project, always);
-  // Powieki i tęczówki: wyraźnie, z lekką poświatą – to „dowód” na mrugnięcia.
-  ctx.strokeStyle = VIOLET;
-  ctx.shadowColor = VIOLET;
-  ctx.shadowBlur = 6;
-  ctx.lineWidth = 1.5;
+  // Powieki i tęczówki: wyraźniej niż reszta twarzy – to „dowód” na mrugnięcia.
+  ctx.strokeStyle = EYE;
+  ctx.lineWidth = 1.2;
   strokePairs(ctx, face, EYES, project, always);
-  ctx.fillStyle = VIOLET;
-  dots(ctx, face, EYE_DOTS, project, 1.8);
-  if (face.length > 468) {
-    ctx.lineWidth = 1.5;
-    strokePairs(ctx, face, IRISES, project, always);
-  }
-  ctx.shadowBlur = 0;
+  ctx.fillStyle = EYE;
+  dots(ctx, face, EYE_DOTS, project, 1.2);
+  if (face.length > 468) strokePairs(ctx, face, IRISES, project, always);
   ctx.fillStyle = SOFT;
   dots(ctx, face, BROW_DOTS, project, 1.4);
   ctx.restore();
@@ -92,31 +86,10 @@ export function drawBody(ctx: CanvasRenderingContext2D, pose: Landmark[], projec
   ctx.save();
   ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
-  ctx.strokeStyle = LIME;
-  // 1) miękka, szeroka poświata (tania: bez shadowBlur), 2) jasna linia z rozmyciem
-  ctx.globalAlpha = 0.18;
-  ctx.lineWidth = 12;
+  ctx.strokeStyle = BONE;
+  ctx.lineWidth = 2.5;
   strokePairs(ctx, pose, BODY, project, poseVisible);
-  ctx.globalAlpha = 1;
-  ctx.lineWidth = 3.5;
-  ctx.shadowColor = LIME;
-  ctx.shadowBlur = 12;
-  strokePairs(ctx, pose, BODY, project, poseVisible);
-  // stawy: różowe kółka z poświatą i jasnym środkiem
-  ctx.shadowColor = PINK;
-  ctx.shadowBlur = 14;
-  for (const i of BODY_JOINTS) {
-    const p = pose[i];
-    if (!p || !poseVisible(p)) continue;
-    const [x, y] = project(p);
-    ctx.fillStyle = PINK;
-    ctx.beginPath();
-    ctx.arc(x, y, 6.5, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = '#fff3f9';
-    ctx.beginPath();
-    ctx.arc(x, y, 2.4, 0, Math.PI * 2);
-    ctx.fill();
-  }
+  ctx.fillStyle = '#ffffff';
+  dots(ctx, pose, BODY_JOINTS.filter((i) => pose[i] && poseVisible(pose[i])), project, 3.5);
   ctx.restore();
 }

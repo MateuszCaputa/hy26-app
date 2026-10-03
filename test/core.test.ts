@@ -71,6 +71,24 @@ test('przechył barków i głowy oraz zbyt bliska twarz', () => {
   assert.ok(close.find((i) => i.id === 'headForward')!.severity < 0.2);
 });
 
+test('odchylenie tułowia w bok to przechył barków, nie wysunięta głowa', () => {
+  const cal = calFrom(body());
+  // Cała górna część ciała obrócona o 25° wokół bioder (ok. 200 px pod barkami).
+  const lean = (deg: number): Landmark[] => {
+    const a = (deg * Math.PI) / 180;
+    const px = 320 / W, py = 580 / H;
+    return body().map((l) => {
+      const dx = (l.x - px) * W, dy = (l.y - py) * H;
+      return { ...l, x: px + (dx * Math.cos(a) - dy * Math.sin(a)) / W, y: py + (dx * Math.sin(a) + dy * Math.cos(a)) / H };
+    });
+  };
+  const issues = evaluateIssues(computeMetrics(lean(25), W, H, 0).metrics!, cal);
+  const sev = (id: string) => issues.find((i) => i.id === id)!.severity;
+  assert.equal(sev('headForward'), 0);
+  assert.equal(sev('slouch'), 0);
+  assert.ok(sev('shoulderTilt') > 0.5);
+});
+
 test('alert dopiero po 30 s złej postawy, z odstępem i histerezą', () => {
   const cal = calFrom(body());
   const tr = new PostureTracker(cal, { sensitivity: 1, alertDelaySec: 30, alertCooldownMin: 5 });

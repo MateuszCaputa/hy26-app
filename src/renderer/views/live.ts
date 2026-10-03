@@ -16,6 +16,16 @@ const STATE_WORD: Record<string, string> = {
   paused: 'Analiza wstrzymana',
 };
 
+/** Ocena postawy słowami, żeby „68/100” coś znaczyło. */
+const scoreWord = (score: number): string => (score >= 85 ? 'dobra' : score >= 65 ? 'do poprawy' : 'słaba');
+
+/** Bateria słowami: co ta liczba znaczy dla pracy teraz. */
+function energyMeaning(percent: number): { word: string; hint: string } {
+  if (percent >= 60) return { word: 'Dużo energii', hint: 'Dobry moment na zadania wymagające skupienia.' };
+  if (percent >= 30) return { word: 'Energia spada', hint: 'Lżejsze zadania pójdą dobrze; przerwa wkrótce pomoże.' };
+  return { word: 'Mało energii', hint: 'Zrób przerwę ruchową – wstań, napij się wody.' };
+}
+
 const CAMERA_MSG: Record<string, string> = {
   starting: 'Włączam kamerę…',
   busy: 'Kamerę używa inna aplikacja (np. Teams lub Zoom). Analiza wróci sama, gdy kamera się zwolni.',
@@ -45,6 +55,7 @@ export class LiveView {
   private energyNum: HTMLElement;
   private energyBar: HTMLElement;
   private energyNote: HTMLElement;
+  private energyWord: HTMLElement;
   private breakText: HTMLElement;
   private breakSub: HTMLElement;
   private metricRows = new Map<IssueId, { val: HTMLElement; bar: HTMLElement; row: HTMLElement }>();
@@ -69,8 +80,9 @@ export class LiveView {
     this.energyNum = h('span', { class: 'energy-num' }, '–');
     this.energyBar = h('span', { class: 'meter-fill' });
     this.energyNote = h('p', { class: 'fine' });
+    this.energyWord = h('span', { class: 'energy-word' });
 
-    this.scoreNum = h('span', { class: 'score-small' }, '–');
+    this.scoreNum = h('span', { class: 'score-small' }, '');
     this.scoreState = h('span', { class: 'score-state' }, 'Uruchamiam…');
     this.tip = h('p', { class: 'tip' });
 
@@ -93,18 +105,21 @@ export class LiveView {
       }),
     );
 
-    // Na pierwszym planie trzy rzeczy: bateria, co poprawić teraz i kiedy przerwa.
-    // Pomiary szczegółowe są jedno kliknięcie dalej (prosty ekran dla kogoś, kto widzi aplikację pierwszy raz).
+    // Na pierwszym planie trzy pytania, na które odpowiadamy prostymi słowami:
+    // „Jak siedzę i co poprawić?”, „Ile mam jeszcze siły?”, „Kiedy przerwa?”.
+    // Pomiary szczegółowe są jedno kliknięcie dalej.
     const panel = h('aside', { class: 'readout' },
-      h('section', { class: 'r-block energy-block', 'aria-live': 'polite' },
-        h('h2', null, 'Bateria'),
-        h('div', { class: 'score-line' }, this.energyNum, h('span', { class: 'score-of' }, '%')),
+      h('section', { class: 'r-block score-block', 'aria-live': 'polite' },
+        h('h2', null, 'Twoja postawa'),
+        h('div', { class: 'state-line' }, this.scoreState),
+        this.tip,
+        this.scoreNum,
+      ),
+      h('section', { class: 'r-block energy-block' },
+        h('h2', null, 'Bateria – ile masz siły na pracę'),
+        h('div', { class: 'score-line' }, this.energyNum, h('span', { class: 'score-of' }, '%'), this.energyWord),
         h('span', { class: 'meter big', role: 'presentation' }, this.energyBar),
         this.energyNote,
-      ),
-      h('section', { class: 'r-block score-block' },
-        h('div', { class: 'state-line' }, this.scoreState, h('span', { class: 'fine' }, 'postawa ', this.scoreNum, '/100')),
-        this.tip,
       ),
       h('section', { class: 'r-block' },
         h('h2', null, 'Przerwy'),
@@ -115,12 +130,14 @@ export class LiveView {
       h('details', { class: 'r-block details' },
         h('summary', null, 'Szczegóły pomiaru'),
         h('div', { class: 'details-body' },
-          h('h2', null, 'Zmęczenie'),
+          h('h2', null, 'Zmęczenie oczu'),
+          h('p', { class: 'fine' }, 'Z mrugania, przymykania oczu i ziewania. Im mniej, tym lepiej.'),
           h('div', { class: 'fat-line' }, this.fatNum, this.fatWord),
           h('span', { class: 'meter', role: 'presentation' }, this.fatBar, h('span', { class: 'meter-tick t40' }), h('span', { class: 'meter-tick t70' })),
           this.fatDetail,
           this.fatAdvice,
-          h('h2', null, 'Odchylenia od Twojej prostej postawy'),
+          h('h2', null, 'Jak daleko jesteś od swojej prostej postawy'),
+          h('p', { class: 'fine' }, 'Porównanie z kalibracją. Pusty pasek = tak jak wtedy, pełny = wyraźne odchylenie.'),
           metrics,
           h('button', { class: 'btn ghost small', onclick: () => ctx.startCalibration() }, 'Skalibruj ponownie'),
         ),
@@ -228,20 +245,27 @@ export class LiveView {
     const noCal = !ctx.calibration;
     this.calibrateCta.hidden = !noCal || ctx.paused;
     this.root.dataset.state = ctx.paused ? 'paused' : s.state;
-    this.scoreNum.textContent = s.score === null || noCal ? '–' : String(s.score);
+    const showScore = s.score !== null && !noCal && !ctx.paused && s.state !== 'absent';
+    this.scoreNum.textContent = showScore ? `Ocena ${s.score}/100 – ${scoreWord(s.score!)}. 100 = tak prosto jak przy kalibracji.` : '';
+    this.scoreNum.hidden = !showScore;
     this.scoreState.textContent = noCal ? 'Czekam na kalibrację' : STATE_WORD[ctx.paused ? 'paused' : s.state] ?? '';
-    this.tip.textContent = s.topIssue && !noCal && s.state !== 'absent' ? ISSUE_TIP[s.topIssue] : s.state === 'good' ? 'Tak trzymaj.' : '';
+    this.tip.textContent = noCal ? 'Pokaż mi raz prostą postawę – od niej liczę resztę.'
+      : s.topIssue && s.state !== 'absent' ? ISSUE_TIP[s.topIssue]
+      : s.state === 'good' ? 'Tak trzymaj.'
+      : s.state === 'absent' ? 'Usiądź przed kamerą, a pomiar wróci sam.' : '';
 
     const e = s.energy;
     if (e && !noCal && !ctx.paused) {
       this.energyNum.textContent = String(e.percent);
       this.energyBar.style.width = `${e.percent}%`;
       this.energyBar.dataset.level = e.percent < 30 ? 'veryTired' : e.percent < 60 ? 'tired' : 'fresh';
+      const meaning = energyMeaning(e.percent);
+      this.energyWord.textContent = meaning.word;
       this.energyNote.textContent =
-        e.minutesToLow !== null ? `Za ok. ${fmtMin(e.minutesToLow)} spadnie poniżej 30% – zaplanuj przerwę wcześniej.`
-        : e.percent < 30 ? 'Niski poziom – zrób przerwę ruchową.'
-        : 'Stabilnie. Bateria łączy zmęczenie, postawę i czas od przerwy.';
+        e.minutesToLow !== null ? `W tym tempie za ok. ${fmtMin(e.minutesToLow)} zabraknie Ci siły – zaplanuj przerwę wcześniej.`
+        : meaning.hint;
     } else {
+      this.energyWord.textContent = '';
       this.energyNum.textContent = '–';
       this.energyBar.style.width = '0';
       this.energyNote.textContent = noCal ? 'Pojawi się po kalibracji.' : 'Pojawi się, gdy będziesz w kadrze.';
@@ -282,6 +306,6 @@ export class LiveView {
       const next = be.nextDueInMin(t);
       this.breakText.textContent = next.min <= 0 ? `${BREAK_TITLE[next.kind]} – teraz` : `${BREAK_TITLE[next.kind]} za ${fmtMin(next.min)}`;
     }
-    this.breakSub.textContent = `Od ostatniej przerwy: ${fmtMin(s.minutesSinceBreak)}`;
+    this.breakSub.textContent = `Pracujesz bez przerwy od ${fmtMin(s.minutesSinceBreak)}.`;
   }
 }
