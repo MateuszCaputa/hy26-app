@@ -30,11 +30,14 @@ Layout: `src/lib/` measurement core (`monitor.js` camera loop, `metrics.js` post
 
 ## Team & ownership
 
-| Person   | Area (directories they own) |
-|----------|-----------------------------|
-| Mateusz  | TODO                        |
-| Dev 2    | TODO                        |
-| Dev 3    | TODO                        |
+Full split, tasks and data contracts: `docs/PODZIAL-PRACY.md` (4 people). Read it before starting a task.
+
+| Area | Person | Directories they own |
+|------|--------|----------------------|
+| A — Measurement & app | `<name>` | `src/lib/{monitor,metrics,db,ticker.worker}.js`, `electron/`, `scripts/`, `public/` |
+| B — Health data & decisions | `<name>` | `src/lib/import/`, `src/lib/decisions/`, `src/lib/whatif/`, `src/data/` |
+| C — UI & design | `<name>` | `src/screens/`, `src/components/`, `src/index.css`, `src/App.jsx` |
+| D — Healthcare content, pitch, experiment | `<name>` | `src/content/`, `docs/pitch/`, `README.md` |
 
 - Stay inside your owner's area. Touching another area = tell that person first (or leave a note in `docs/PLAN.md`).
 - **Shared hot files** (dependency manifest + lockfile, DB schema/migrations, shared types, route/nav registry, global styles, env config): pull right before editing, keep the change minimal, commit it on its own and push immediately so others rebase onto it.
