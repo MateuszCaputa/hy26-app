@@ -279,6 +279,16 @@ export class Analyzer {
     return this.lastMetrics;
   }
 
+  /** Ostatnie punkty sylwetki (0–1) – do sprawdzania kadru i rysowania w kalibratorze. */
+  get currentPose(): Landmark[] | null {
+    return this.lastPose;
+  }
+
+  /** Ostatnie ustawienie głowy z modelu twarzy (null bez twarzy lub w trybie demo). */
+  get currentHeadPose(): HeadPose | null {
+    return this.lastHeadPose;
+  }
+
   private loop = (): void => {
     if (!this.running) return;
     const started = performance.now();

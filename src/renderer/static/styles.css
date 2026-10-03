@@ -351,3 +351,47 @@ button, input, select { font: inherit; color: inherit; }
 .n-timeline { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: color-mix(in srgb, var(--spine) 60%, transparent); transform-origin: left; }
 .nudge[data-kind="eye"] .n-timeline { display: none; }
 @media (prefers-reduced-motion: reduce) { .nudge { transition: none; } }
+
+/* ——— Kalibrator (pełny ekran z podglądem kamery) ——— */
+.calib {
+  position: fixed; inset: 0; z-index: 25; display: grid; grid-template-columns: minmax(0, 1fr) 380px;
+  background: var(--bg);
+}
+.calib-stage { position: relative; margin: 18px; border-radius: var(--radius-lg); overflow: hidden; background: #0d1416; }
+.calib-video, .calib-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.calib-video { object-fit: cover; }
+.calib-video.mirror { transform: scaleX(-1); }
+.calib-panel { padding: 34px 30px; display: flex; flex-direction: column; gap: 14px; border-left: 1px solid var(--line); overflow: auto; }
+.calib-panel h1 { font-size: 26px; }
+.calib-step { color: var(--spine); font-weight: 600; font-size: 14px; }
+.calib-list { list-style: none; margin: 4px 0; padding: 0; display: grid; gap: 10px; }
+.calib-list li { display: flex; align-items: center; gap: 12px; font-size: 16px; color: var(--muted); transition: color .2s ease; }
+.calib-list .tick {
+  width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--line); display: inline-grid; place-items: center;
+  transition: background .2s ease, border-color .2s ease;
+}
+.calib-list li.ok { color: var(--ink); }
+.calib-list li.ok .tick { background: var(--good); border-color: var(--good); }
+.calib-list li.ok .tick::after { content: ""; width: 9px; height: 5px; border: solid #fff; border-width: 0 0 2.5px 2.5px; transform: translateY(-1px) rotate(-45deg); }
+.calib-hint { min-height: 3em; font-size: 17px; font-weight: 600; }
+.calib-panel .row { margin-top: auto; }
+.calib-extra:empty { display: none; }
+.calib [hidden] { display: none !important; }
+
+.slouch-demo { color: var(--ink); width: 120px; }
+.slouch-fig { width: 100%; height: auto; }
+.slouch-fig .sf-upper { transform-origin: 60px 92px; animation: slouch 3s ease-in-out infinite; }
+@keyframes slouch { 0%, 20% { transform: rotate(0); } 50%, 80% { transform: rotate(14deg) translateY(6px); } 100% { transform: rotate(0); } }
+
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.skel-card { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 8px; display: grid; gap: 4px; }
+.skel-card canvas { width: 100%; height: auto; }
+.skel-card figcaption { text-align: center; font-weight: 600; font-size: 14px; color: var(--muted); }
+.calib-summary { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.calib-summary li { display: flex; justify-content: space-between; border-bottom: 1px solid var(--line); padding: 6px 0; }
+.calib-summary b { font-variant-numeric: tabular-nums; }
+
+@media (max-width: 1000px) {
+  .calib { grid-template-columns: 1fr; grid-template-rows: 55vh auto; }
+  .calib-panel { border-left: 0; }
+}

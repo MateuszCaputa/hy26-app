@@ -1,8 +1,8 @@
 // Nakładki: ekran przerwy z ćwiczeniem, kalibracja, pobieranie modeli.
 import type { AppCtx } from './app';
-import type { BreakSuggestion, Calibration, SlouchReference } from '../shared/types';
+import type { BreakSuggestion, Calibration } from '../shared/types';
 import { BREAK_REASON, BREAK_TITLE, exerciseById, pickExercise } from '../core/coach';
-import { judgeCalibration } from '../core/calibration';
+import { openCalibrator } from './calibrator';
 import { $, clear, h, svg } from './dom';
 import { FIGURES } from './figures';
 
@@ -112,115 +112,9 @@ export function openBreakOverlay(ctx: AppCtx, sug?: BreakSuggestion, exerciseId?
   snoozeBtn.addEventListener('click', () => finish(false));
 }
 
-/**
- * Kalibracja w dwóch krokach (zadanie A11):
- * 1. „Najprościej, jak umiesz” – z kontrolą na żywo; licznik idzie tylko, gdy postawa przechodzi kontrolę.
- * 2. „Tak, jak zwykle siedzisz” – osobisty zakres, z którego liczone są progi ostrzeżeń.
- * Gdy oba kroki prawie się nie różnią, prosimy o powtórkę (pierwsza pozycja nie była prosta).
- */
+/** Kalibracja: pełnoekranowy kalibrator z podglądem kamery (calibrator.ts). */
 export function openCalibration(ctx: AppCtx, onDone: (c: Calibration) => void): void {
-  const title = h('h1', null, 'Krok 1 z 2: usiądź najprościej, jak umiesz');
-  const lead = h('p', { class: 'fine' }, 'Zapamiętam tę pozycję jako Twoją prostą postawę. Licznik idzie tylko wtedy, gdy postawa jest poprawna.');
-  const steps = h('ol', { class: 'steps' },
-    h('li', null, 'Stopy płasko na podłodze, plecy oparte o krzesło.'),
-    h('li', null, 'Barki rozluźnione, broda lekko cofnięta, wzrok na środek ekranu.'),
-    h('li', null, 'Głowa i barki muszą być widoczne w kadrze.'),
-  );
-  const status = h('p', { class: 'cal-status', 'aria-live': 'polite' });
-  const checks = h('ul', { class: 'cal-checks', 'aria-live': 'polite' });
-  const rg = ring();
-  rg.set(0, '5 s');
-  const go = h('button', { class: 'btn primary' }, 'Rozpocznij');
-  const cancel = h('button', { class: 'btn ghost' }, 'Później');
-  const { close } = overlay(
-    'Kalibracja postawy',
-    h('div', { class: 'cal' }, title, lead, steps, h('div', { class: 'cal-run' }, rg.el, h('div', null, status, checks)), h('div', { class: 'row' }, go, cancel)),
-  );
-
-  let phase: 'tall' | 'slouch' | 'verdict' = 'tall';
-  let tall: Calibration | null = null;
-  let slouch: SlouchReference | null = null;
-  const busy = (b: boolean) => {
-    go.disabled = b;
-    cancel.disabled = b;
-  };
-  const save = (c: Calibration) => {
-    ctx.analyzer.setCalibration(c);
-    onDone(c);
-    close();
-  };
-
-  const runTall = async () => {
-    busy(true);
-    status.textContent = 'Siedź prosto i patrz na ekran…';
-    const cal = await ctx.analyzer.calibrate(5, (f, list) => {
-      rg.set(f, `${Math.max(0, Math.ceil(5 * (1 - f)))} s`);
-      checks.replaceChildren(...list.map((c) => h('li', null, c.text)));
-      status.textContent = list.length ? 'Popraw, a licznik ruszy dalej:' : 'Świetnie, trzymaj tak…';
-    });
-    busy(false);
-    checks.replaceChildren();
-    if (!cal) {
-      rg.set(0, '!');
-      status.textContent = 'Nie udało się zapamiętać prostej postawy. Sprawdź, czy głowa i barki są w kadrze, i spróbuj ponownie.';
-      go.textContent = 'Spróbuj ponownie';
-      return;
-    }
-    tall = cal;
-    phase = 'slouch';
-    title.textContent = 'Krok 2 z 2: usiądź tak, jak zwykle przy pracy';
-    lead.textContent = 'Nie poprawiaj się – przyjmij swoją zwykłą pozycję, nawet jeśli jest zgarbiona. Dzięki temu Postura dopasuje czułość do Ciebie.';
-    steps.hidden = true;
-    rg.set(0, '4 s');
-    status.textContent = '';
-    go.textContent = 'Rozpocznij (4 s)';
-    cancel.textContent = 'Pomiń';
-  };
-
-  const runSlouch = async () => {
-    busy(true);
-    status.textContent = 'Siedź zwyczajnie…';
-    slouch = await ctx.analyzer.captureSlouch(4, (f) => rg.set(f, `${Math.max(0, Math.ceil(4 * (1 - f)))} s`));
-    busy(false);
-    if (!slouch) {
-      // Bez drugiego kroku też działa – progi zostają domyślne.
-      save(tall!);
-      return;
-    }
-    const verdict = judgeCalibration(tall!, slouch);
-    if (verdict.ok) {
-      rg.set(1, 'OK');
-      save({ ...tall!, slouch });
-      return;
-    }
-    phase = 'verdict';
-    rg.set(1, '!');
-    title.textContent = 'Sprawdźmy jeszcze raz';
-    lead.textContent = verdict.warning ?? '';
-    status.textContent = '';
-    go.textContent = 'Powtórz kalibrację';
-    cancel.textContent = 'Zapisz mimo to';
-  };
-
-  go.addEventListener('click', () => {
-    if (phase === 'tall') void runTall();
-    else if (phase === 'slouch') void runSlouch();
-    else {
-      phase = 'tall';
-      tall = null;
-      title.textContent = 'Krok 1 z 2: usiądź najprościej, jak umiesz';
-      lead.textContent = 'Usiądź głęboko, unieś mostek, cofnij brodę. Licznik idzie tylko wtedy, gdy postawa jest poprawna.';
-      steps.hidden = false;
-      rg.set(0, '5 s');
-      cancel.textContent = 'Później';
-      void runTall();
-    }
-  });
-  cancel.addEventListener('click', () => {
-    if (phase === 'tall') close();
-    else if (phase === 'slouch') save(tall!);
-    else save({ ...tall!, slouch: slouch! });
-  });
+  openCalibrator(ctx, onDone);
 }
 
 /** Pierwsze uruchomienie: pobranie modeli MediaPipe (ok. 13 MB, jednorazowo). */
