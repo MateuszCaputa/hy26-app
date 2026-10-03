@@ -1,9 +1,9 @@
 // Proces główny: okna, zasobnik, protokół app://, baza, powiadomienia, klawiatura/mysz, Garmin.
 import {
-  app, BrowserWindow, ipcMain, Menu, nativeImage, Notification, powerMonitor, protocol, session,
+  app, BrowserWindow, ipcMain, Menu, nativeImage, Notification, powerMonitor, protocol, screen, session,
   shell, systemPreferences, Tray,
 } from 'electron';
-import { existsSync } from 'node:fs';
+import { existsSync, watch } from 'node:fs';
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import type { AppEvent, Calibration, LiveStatus, MinuteSample, Settings } from '../shared/types';
@@ -102,30 +102,79 @@ function showMain(view?: string): void {
   if (view) mainWin.webContents.send('navigate', view);
 }
 
-function setPaused(p: boolean): void {
+let resumeTimer: NodeJS.Timeout | null = null;
+let pausedUntil = 0;
+
+/** Pauza; `minutes` > 0 wznawia analizę automatycznie (szybka akcja z menu w zasobniku). */
+function setPaused(p: boolean, minutes = 0): void {
   paused = p;
+  if (resumeTimer) clearTimeout(resumeTimer);
+  resumeTimer = null;
+  pausedUntil = 0;
+  if (p && minutes > 0) {
+    pausedUntil = Date.now() + minutes * 60_000;
+    resumeTimer = setTimeout(() => setPaused(false), minutes * 60_000);
+  }
   mainWin?.webContents.send('paused', p);
   updateTray();
 }
+
+const STATE_WORD: Record<string, string> = { good: 'prosto', warn: 'popraw się', bad: 'zła postawa' };
+let trayMenuKey = '';
 
 function updateTray(): void {
   if (!tray) return;
   const s = lastStatus;
   const state = paused ? 'paused' : s?.state ?? 'absent';
+  const present = !paused && !!s && s.state !== 'absent' && s.state !== 'paused';
   tray.setImage(trayIcon(state));
+  // macOS: wynik postawy w pasku menu obok kolorowej ikony (Windows nie pokazuje tekstu w zasobniku).
+  if (process.platform === 'darwin') tray.setTitle(present && s.score !== null ? ` ${s.score}` : '', { fontType: 'monospacedDigit' });
+
+  const resumeAt = pausedUntil ? new Date(pausedUntil).toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' }) : '';
   const label =
-    paused ? 'Postura – pauza'
-    : !s || s.state === 'absent' ? 'Postura – brak osoby w kadrze'
+    paused ? (resumeAt ? `Postura – pauza do ${resumeAt}` : 'Postura – pauza')
+    : !present ? 'Postura – brak osoby w kadrze'
     : `Postura – postawa ${s.score ?? '–'}/100${s.fatigue ? `, zmęczenie ${s.fatigue.percent}%` : ''}`;
   tray.setToolTip(label);
+
+  // Szybki podgląd bez otwierania okna: liczby + najczęstsze akcje.
+  const info: string[] = [];
+  if (present) {
+    // Bez liczby: macOS zamraża treść otwartego menu, a liczba obok ikony odświeża się na żywo.
+    info.push(`Postawa: ${STATE_WORD[s.state] ?? ''}`);
+    if (s.energy) {
+      const low = s.energy.minutesToLow !== null ? ` · spadek <30% za ~${s.energy.minutesToLow} min` : '';
+      info.push(`Bateria: ${s.energy.percent}%${low}`);
+    }
+    if (s.fatigue) info.push(`Zmęczenie: ${s.fatigue.percent}%`);
+    info.push(`Od przerwy: ${Math.round(s.minutesSinceBreak)} min`);
+  } else info.push(label.replace('Postura – ', ''));
+
+  // Menu przebudowujemy tylko, gdy zmienia się jego treść (status przychodzi kilka razy na sekundę).
+  const key = [...info, paused, settings.miniWidget].join('|');
+  if (key === trayMenuKey) return;
+  trayMenuKey = key;
   tray.setContextMenu(
     Menu.buildFromTemplate([
-      { label, enabled: false },
+      ...info.map((l) => ({ label: l, enabled: false })),
+      { type: 'separator' },
+      {
+        label: 'Zrób przerwę teraz',
+        enabled: !paused,
+        click: () => {
+          showMain('live');
+          mainWin?.webContents.send('show-break');
+        },
+      },
+      paused
+        ? { label: 'Wznów analizę', click: () => setPaused(false) }
+        : { label: 'Wstrzymaj na 30 min', click: () => setPaused(true, 30) },
+      ...(paused ? [] : [{ label: 'Wstrzymaj do odwołania', click: () => setPaused(true) }]),
       { type: 'separator' },
       { label: 'Pokaż okno', click: () => showMain('live') },
       { label: 'Statystyki', click: () => showMain('stats') },
       { label: 'Kalibracja', click: () => showMain('calibrate') },
-      { label: paused ? 'Wznów analizę' : 'Wstrzymaj analizę', click: () => setPaused(!paused) },
       { label: 'Mini-widget', type: 'checkbox', checked: settings.miniWidget, click: (i) => applySettings({ ...settings, miniWidget: i.checked }) },
       { type: 'separator' },
       { label: 'Zakończ', click: () => { quitting = true; app.quit(); } },
@@ -177,11 +226,43 @@ function createMainWindow(): void {
   });
 }
 
+const WIDGET_W = 230;
+const WIDGET_H = 74;
+
+/** Zapamiętana pozycja widgetu, jeśli nadal leży na którymś ekranie; inaczej prawy górny róg. */
+function widgetPosition(): { x: number; y: number } {
+  const saved = store.getMeta<{ x: number; y: number }>('widgetPos');
+  if (saved && screen.getAllDisplays().some((d) => {
+    const a = d.workArea;
+    return saved.x >= a.x && saved.y >= a.y && saved.x + WIDGET_W <= a.x + a.width && saved.y + WIDGET_H <= a.y + a.height;
+  })) return saved;
+  const a = screen.getPrimaryDisplay().workArea;
+  return { x: a.x + a.width - WIDGET_W - 16, y: a.y + 16 };
+}
+
+/** Tylko w trybie deweloperskim: przeładuj okna, gdy `npm run dev` przebuduje interfejs (bez restartu Electrona). */
+function watchRendererForReload(): void {
+  if (app.isPackaged || DEBUG_SHOT) return;
+  let t: NodeJS.Timeout | null = null;
+  try {
+    watch(RENDERER_DIR, { recursive: true }, () => {
+      if (t) clearTimeout(t);
+      t = setTimeout(() => {
+        for (const w of [mainWin, widgetWin]) w?.webContents.reloadIgnoringCache();
+      }, 300);
+    });
+  } catch (e) {
+    console.warn('Auto-przeładowanie niedostępne:', (e as Error).message);
+  }
+}
+
 function toggleWidget(on: boolean): void {
   if (on && !widgetWin) {
+    const pos = widgetPosition();
     widgetWin = new BrowserWindow({
-      width: 230,
-      height: 74,
+      ...pos,
+      width: WIDGET_W,
+      height: WIDGET_H,
       frame: false,
       resizable: false,
       alwaysOnTop: true,
@@ -193,6 +274,10 @@ function toggleWidget(on: boolean): void {
     widgetWin.setAlwaysOnTop(true, 'floating');
     void widgetWin.loadURL('app://local/widget.html');
     widgetWin.on('closed', () => (widgetWin = null));
+    widgetWin.on('moved', () => {
+      const b = widgetWin?.getBounds();
+      if (b) store.setMeta('widgetPos', { x: b.x, y: b.y });
+    });
     if (lastStatus) widgetWin.webContents.once('did-finish-load', () => widgetWin?.webContents.send('status', lastStatus));
   } else if (!on && widgetWin) {
     widgetWin.close();
@@ -201,9 +286,14 @@ function toggleWidget(on: boolean): void {
 }
 
 function applySettings(s: Settings): void {
+  const prev = settings as Settings | undefined; // przy starcie jeszcze nieustawione
   settings = s;
   store.saveSettings(s);
-  if (s.activityTracking) activity.start();
+  // macOS: bez zgody na Dostępność nie uruchamiamy haka – każda próba wywołuje systemowe pytanie od nowa.
+  // Pytamy tylko raz: gdy użytkownik sam włącza śledzenie tempa pracy.
+  const justEnabled = s.activityTracking && !!prev && !prev.activityTracking;
+  const accessOk = process.platform !== 'darwin' || systemPreferences.isTrustedAccessibilityClient(justEnabled);
+  if (s.activityTracking && accessOk) activity.start();
   else activity.stop();
   toggleWidget(s.miniWidget);
   if (app.isPackaged) app.setLoginItemSettings({ openAtLogin: s.autostart, args: ['--hidden'] });
@@ -303,9 +393,8 @@ function registerIpc(): void {
     store.saveMinute(s);
   });
   ipcMain.on('status', (_e, s: LiveStatus) => {
-    const changed = s.state !== lastStatus?.state || s.score !== lastStatus?.score || s.fatigue?.percent !== lastStatus?.fatigue?.percent;
     lastStatus = s;
-    if (changed) updateTray();
+    updateTray(); // tani: menu przebudowuje się tylko przy zmianie treści
     widgetWin?.webContents.send('status', s);
   });
   ipcMain.on('notify', (_e, n) => notify(n));
@@ -369,6 +458,7 @@ void app.whenReady().then(async () => {
 
   registerIpc();
   createMainWindow();
+  watchRendererForReload();
   tray = new Tray(trayIcon('idle'));
   tray.on('click', () => showMain());
   applySettings(settings);

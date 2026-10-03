@@ -1,6 +1,7 @@
 // Buduje proces główny, preload i interfejs (esbuild) oraz kopiuje pliki statyczne.
 import * as esbuild from 'esbuild';
 import { cp, mkdir, rm } from 'node:fs/promises';
+import { watch as fsWatch } from 'node:fs';
 
 const watch = process.argv.includes('--watch');
 const prod = process.argv.includes('--prod');
@@ -47,7 +48,13 @@ async function copyStatic() {
 await copyStatic();
 if (watch) {
   for (const c of configs) await (await esbuild.context(c)).watch();
-  console.log('Obserwuję zmiany… (pliki statyczne kopiowane przy starcie)');
+  // HTML/CSS też: kopiujemy ponownie przy każdej zmianie w src/renderer/static.
+  let t = null;
+  fsWatch('src/renderer/static', { recursive: true }, () => {
+    clearTimeout(t);
+    t = setTimeout(() => cp('src/renderer/static', 'dist/renderer', { recursive: true }).then(() => console.log('[watch] static copied')), 150);
+  });
+  console.log('Obserwuję zmiany… (TS przez esbuild, HTML/CSS kopiowane przy zmianie)');
 } else {
   await Promise.all(configs.map((c) => esbuild.build(c)));
 }
