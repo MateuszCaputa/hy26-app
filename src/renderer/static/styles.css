@@ -179,7 +179,11 @@ button, input, select { font: inherit; color: inherit; }
 /* Wiersze wcięte pod swoim podtytułem, żeby było widać, do której sekcji należą. */
 .details-body .metric-list { padding-left: 14px; }
 /* Przycisk kalibracji oddzielony od listy, na całą szerokość panelu – nie wisi pod ostatnim paskiem. */
-.details-foot { margin-top: 8px; padding-top: 14px; border-top: 1px solid var(--line); display: grid; }
+/* Przypięty do dołu panelu: po rozwinięciu nie wystaje ucięty poza krawędź, lista przewija się pod nim. */
+.details-foot {
+  margin-top: 8px; padding: 14px 0 4px; border-top: 1px solid var(--line); display: grid;
+  position: sticky; bottom: -18px; padding-bottom: 18px; background: var(--bg);
+}
 .details-foot .btn { justify-self: stretch; padding-block: 8px; }
 .adv > summary { cursor: pointer; font-weight: 600; color: var(--muted); padding: 6px 0; }
 .adv[open] > summary { margin-bottom: 8px; }
