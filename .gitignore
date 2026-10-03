@@ -29,3 +29,12 @@ __pycache__/
 # Rytm: paczki Electrona i zrzuty z testów
 release/
 scripts/*.png
+
+# Prywatne eksporty zdrowotne z telefonów: nigdy do repozytorium
+eksporty/
+export.xml
+eksport.xml
+export_cda.xml
+eksport_cda.xml
+com.samsung.*.csv
+rytm-*.json
