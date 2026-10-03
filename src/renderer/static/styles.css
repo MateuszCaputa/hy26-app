@@ -178,8 +178,9 @@ button, input, select { font: inherit; color: inherit; }
 .details-body h2:first-child { margin-top: 0; }
 /* Wiersze wcięte pod swoim podtytułem, żeby było widać, do której sekcji należą. */
 .details-body .metric-list { padding-left: 14px; }
-/* Kalibracja to rzadka akcja: mały przycisk w stopce, oddzielony linią od listy – nie przykrywa „Zrób przerwę”. */
+/* Przycisk kalibracji oddzielony od listy, na całą szerokość panelu – nie wisi pod ostatnim paskiem. */
 .details-foot { margin-top: 8px; padding-top: 14px; border-top: 1px solid var(--line); display: grid; }
+.details-foot .btn { justify-self: stretch; padding-block: 8px; }
 .adv > summary { cursor: pointer; font-weight: 600; color: var(--muted); padding: 6px 0; }
 .adv[open] > summary { margin-bottom: 8px; }
 .score-num { font-size: 72px; font-weight: 250; line-height: .95; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }

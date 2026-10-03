@@ -121,11 +121,8 @@ export class LiveView {
       h('section', { class: 'r-block break-line' }, this.breakText, this.breakBtn),
       h('details', {
         class: 'r-block details',
-        // Po rozwinięciu przewiń sam panel do szczegółów – kamera zostaje na miejscu.
-        ontoggle: (e: Event) => {
-          const d = e.currentTarget as HTMLDetailsElement;
-          if (d.open) requestAnimationFrame(() => d.scrollIntoView({ behavior: 'smooth', block: 'start' }));
-        },
+        // Bez automatycznego przewijania: przewinięcie do „Szczegółów” ucinało górę panelu (ludzik, stan) w przypadkowym miejscu.
+        // Szczegóły rozwijają się w dół, a panel przewija się sam (kamera i tak stoi w miejscu).
       },
         h('summary', null, 'Szczegóły pomiaru'),
         h('div', { class: 'details-body' },
