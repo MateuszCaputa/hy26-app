@@ -13,7 +13,7 @@ import { ActivityCounter } from './activity';
 import { GarminSync } from './garmin';
 import { ensureModels, modelsReady } from './models';
 import { buildStats, localDate } from '../core/insights';
-import { ERGONOMIC_TIP, ISSUE_LABEL } from '../core/coach';
+import { ERGONOMIC_TIP, ISSUE_LABEL, ISSUE_TIP } from '../core/coach';
 
 const argv = process.argv.slice(1);
 const flag = (name: string) => argv.find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
@@ -184,7 +184,13 @@ function updateTray(): void {
             submenu: [
               { label: 'Oczy 20-20-20', click: () => showNudge({ kind: 'eye', title: 'Spójrz w dal', body: 'Przez 20 s patrz na coś odległego (ok. 6 m).', seconds: 20 }) },
               { label: 'Mikroprzerwa', click: () => showNudge({ kind: 'break', title: 'Mikroprzerwa', body: 'Krążenia barków' }) },
-              { label: 'Postawa', click: () => showNudge({ kind: 'posture', title: 'Głowa wysunięta do przodu', body: 'Cofnij brodę, jakbyś robił(a) podwójny podbródek.' }) },
+              {
+                label: 'Postawa (Twój obecny największy problem)',
+                click: () => {
+                  const issue = lastStatus?.topIssue ?? 'headForward';
+                  showNudge({ kind: 'posture', title: ISSUE_LABEL[issue], body: ISSUE_TIP[issue] });
+                },
+              },
             ],
           }]
         : []),
@@ -338,13 +344,27 @@ function withinWorkHours(d = new Date()): boolean {
 const NUDGE_W = 340;
 const NUDGE_H = 120;
 
-/** Podpowiedź w prawym górnym rogu: nie kradnie fokusu, sama znika (logika w nudge.ts). */
+/** Gdzie pokazać podpowiedź: tuż pod widgetem (albo nad nim, gdy brak miejsca), inaczej prawy górny róg. */
+function nudgeBounds(): Electron.Rectangle {
+  if (widgetWin?.isVisible()) {
+    const wb = widgetWin.getBounds();
+    const a = screen.getDisplayMatching(wb).workArea;
+    const rightSide = wb.x + wb.width / 2 > a.x + a.width / 2;
+    let x = rightSide ? wb.x + wb.width - NUDGE_W : wb.x;
+    x = Math.min(Math.max(x, a.x), a.x + a.width - NUDGE_W);
+    const below = wb.y + wb.height + NUDGE_H <= a.y + a.height;
+    const y = below ? wb.y + wb.height - 4 : wb.y - NUDGE_H + 4;
+    return { x, y, width: NUDGE_W, height: NUDGE_H };
+  }
+  const a = screen.getPrimaryDisplay().workArea;
+  return { x: a.x + a.width - NUDGE_W - 12, y: a.y + 12, width: NUDGE_W, height: NUDGE_H };
+}
+
+/** Podpowiedź obok widgetu lub w rogu: nie kradnie fokusu, sama znika (logika w nudge.ts). */
 function showNudge(n: Nudge): void {
   if (!nudgeWin) {
-    const a = screen.getPrimaryDisplay().workArea;
     nudgeWin = new BrowserWindow({
-      x: a.x + a.width - NUDGE_W - 12,
-      y: a.y + 12,
+      ...nudgeBounds(),
       width: NUDGE_W,
       height: NUDGE_H,
       frame: false,
@@ -372,6 +392,7 @@ function showNudge(n: Nudge): void {
     });
     return;
   }
+  nudgeWin.setBounds(nudgeBounds()); // widget mógł zostać przesunięty
   nudgeWin.showInactive();
   nudgeWin.webContents.send('nudge', n);
 }
