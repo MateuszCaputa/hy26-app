@@ -56,6 +56,22 @@ const TALK_JAW_STD = 0.08;
 
 interface PerclosSample { t: number; dt: number; closed: boolean }
 
+/** Podgląd diagnostyczny oczu (klawisz D w widoku „Na żywo”). */
+export interface EyeDebug {
+  closed: number | null; // 0 otwarte – 1 zamknięte (po wszystkich poprawkach)
+  ear: number | null;
+  earRef: number | null;
+  blend: number | null; // surowy eyeBlink z MediaPipe
+  blendRel: number | null; // eyeBlink względem osobistej normy
+  blinksTotal: number; // licznik od startu – rośnie od razu po mrugnięciu
+  longTotal: number;
+  rate: number | null;
+  reliable: boolean;
+  fps: number;
+  gazeDown: boolean;
+  talking: boolean;
+}
+
 const median = (v: number[]): number => {
   const s = [...v].sort((a, b) => a - b);
   return s[Math.floor(s.length / 2)];
@@ -87,6 +103,9 @@ export class EyeAnalyzer {
   private blinkTalking: boolean[] = [];
   private gazeDown = false;
   private talking = false;
+  private last: { closed: number | null; ear: number | null; blend: number | null } = { closed: null, ear: null, blend: null };
+  private blinksTotal = 0;
+  private longTotal = 0;
 
   constructor(private calibratedEarOpen: number | null = null) {}
 
@@ -102,6 +121,23 @@ export class EyeAnalyzer {
   /** Czy w ostatniej klatce głowa była pochylona w dół (klawiatura, notatki). */
   isGazeDown(): boolean {
     return this.gazeDown;
+  }
+
+  debug(t: number): EyeDebug {
+    return {
+      closed: this.last.closed,
+      ear: this.last.ear,
+      earRef: this.earOpenRef(),
+      blend: this.last.blend,
+      blendRel: this.last.blend === null ? null : this.blendRelative(this.last.blend),
+      blinksTotal: this.blinksTotal,
+      longTotal: this.longTotal,
+      rate: this.blinkRate(t),
+      reliable: this.isReliable(t),
+      fps: this.fps(t),
+      gazeDown: this.gazeDown,
+      talking: this.talking,
+    };
   }
 
   /** Czy w ostatnich ~2 s użytkownik mówił. */
@@ -182,6 +218,7 @@ export class EyeAnalyzer {
     }
 
     const c = this.closedness(f) ?? 0;
+    this.last = { closed: c, ear: f.ear, blend: f.blinkBlend };
     if (f.ear !== null && c < 0.5) {
       this.earHist.push({ t, v: f.ear });
       while (this.earHist.length && t - this.earHist[0].t > 30) this.earHist.shift();
@@ -210,8 +247,12 @@ export class EyeAnalyzer {
         if (d >= BLINK_MIN && d <= BLINK_MAX) {
           this.blinks.push(t);
           this.blinkTalking.push(this.talking);
+          this.blinksTotal++;
         }
-        else if (d > BLINK_MAX && d <= LONG_MAX) this.longBlinks.push(t);
+        else if (d > BLINK_MAX && d <= LONG_MAX) {
+          this.longBlinks.push(t);
+          this.longTotal++;
+        }
         this.closure = null;
       }
     }

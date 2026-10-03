@@ -4,7 +4,7 @@ import type { Calibration, FatigueSnapshot, IssueId, LiveStatus, MinuteSample, P
 import { computeMetrics, median, type Landmark } from '../core/metrics';
 import { PointSmoother } from '../core/oneEuro';
 import { PostureTracker, type TrackerOutput } from '../core/scoring';
-import { EyeAnalyzer, FatigueEstimator, LEFT_EYE, RIGHT_EYE, eyeAspectRatio, mouthAspectRatio, type FaceFrame } from '../core/fatigue';
+import { EyeAnalyzer, FatigueEstimator, type EyeDebug, LEFT_EYE, RIGHT_EYE, eyeAspectRatio, mouthAspectRatio, type FaceFrame } from '../core/fatigue';
 import { BreakEngine } from '../core/breakEngine';
 import { MinuteAggregator, postureAvg, postureSlope, topIssueOf } from '../core/aggregate';
 import { FrameGate } from '../core/frameGate';
@@ -22,6 +22,8 @@ export interface Frame {
   tracker: TrackerOutput | null;
   fatigue: FatigueSnapshot | null;
   reason?: string;
+  /** Diagnostyka oczu (podgląd pod klawiszem D). */
+  eyes?: EyeDebug;
 }
 
 export interface AnalyzerCallbacks {
@@ -429,6 +431,7 @@ export class Analyzer {
       tracker: this.lastTracker,
       fatigue: this.lastFatigue,
       reason: this.lastReason,
+      eyes: this.settings.faceAnalysis ? this.eyes.debug(t) : undefined,
     });
 
     if (ms - this.lastStatusMs > 500) {
