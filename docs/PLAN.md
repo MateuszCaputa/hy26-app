@@ -1,5 +1,6 @@
 # PLAN: live task list
 
+> **Order of work = `docs/ROADMAP.md`** (phases + gates). This file is the full backlog.
 > Tick `[x]` when done (definition of done: `docs/ENGINEERING.md` §5). Add `(@name, in progress)` when you start a task.
 > IDs map to `docs/SCOPE.md` §5 (M = must, S = should, C = could). Areas map to the ownership table in `CLAUDE.md`.
 > **Gates:** 16:00 everyone has a branch running · **19:00 the demo path works end to end with M2 + M3** · 23:00 all MUSTs merged · 03:00 polish only · **07:00 FEATURE FREEZE** · 10:00 submitted.
@@ -73,15 +74,15 @@
 - [ ] B3 (M3) Show "why now" (A3 output) in notifications and the break screen.
 - [ ] B4 (S2) AI coach (optional, opt-in): main-process call to the Claude API with **numbers only**; daily summary + one action; a canned fallback offline. Key from `.env`, never in the renderer.
 - [ ] B5 (S3) Team view: an anonymous aggregate of our 4 people's hackathon data (export/import JSON); powers the pitch hook.
-- [ ] B6 (S4) Phone health import (Apple Health / Samsung export) into steps/sleep, only if cheap. Port from Rytm.
-- [ ] B7 (C) A "what if" screen (e.g. "if you took breaks every 50 min, your afternoon energy would be X"). Port from Rytm.
+- [ ] ~~B6~~ CUT (ROADMAP §1). B6 (S4) Phone health import (Apple Health / Samsung export) into steps/sleep, only if cheap. Port from Rytm.
+- [ ] ~~B7~~ CUT (ROADMAP §1). B7 (C) A "what if" screen (e.g. "if you took breaks every 50 min, your afternoon energy would be X"). Port from Rytm.
 
 ## Area C: UI, wow visuals & design (owner: Mateusz)
-- [ ] C1 (M2) **Neon face mesh** in the live view: `FaceLandmarker.FACE_LANDMARKS_TESSELATION` thin cyan lines + bright contours/irises with a glow; video darkened behind it. Toggle in settings.
+- [ ] C1 (M2) → **merged into MP7** (same task, do it there). **Neon face mesh** in the live view: `FaceLandmarker.FACE_LANDMARKS_TESSELATION` thin cyan lines + bright contours/irises with a glow; video darkened behind it. Toggle in settings.
 - [ ] C2 (M2) **Neon skeleton:** shoulders/neck/head in magenta, the ear–shoulder angle arc, a dotted "calibrated posture" ghost.
 - [ ] C3 (M2) Blink ripple on the eyes; the colour shifts green → amber → red with the score.
 - [ ] C4 (M6) **Demo-mode intensity** (hotkey): brighter glow, bigger numbers for the projector.
-- [ ] C5 (S1) The energy / battery widget: a big animated number + a sparkline + the prediction badge, in the live view and the tray widget.
+- [ ] C5 (S1) → **live-view part in Kacper's PR #74**; remaining: tray widget + prediction badge. The energy / battery widget: a big animated number + a sparkline + the prediction badge, in the live view and the tray widget.
 - [ ] C6 (M4) Exercise screen: a guide figure, a rep counter driven by A4, a ✓ animation, the recovery moment.
 - [ ] C7 Visual pass on all views (live, stats, exercises, settings) against ENGINEERING §8: one palette, typography, the projector test.
 - [ ] C8 A calm empty/error state for every view (no face, camera busy, no data yet).

@@ -5,6 +5,7 @@
 
 ## ⛔ BEFORE ANY TASK, read these (mandatory, every new session)
 
+0. **`docs/ROADMAP.md`**: **the order we work in.** Phases, gates, and who does what right now. Only take tasks from the current phase.
 1. **`docs/SCOPE.md`**: what we build, what's done vs missing, Must/Should/Won't. Never build a WON'T.
 2. **`docs/PLAN.md`**: the live task list. Work only on a task ID from here, in **your owner's area** (table below).
 3. **`docs/ENGINEERING.md`**: the quality bar and **definition of done**. "Done" without typecheck + tests + seeing it run is not done.
