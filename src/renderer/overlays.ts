@@ -47,9 +47,13 @@ function ring(): { el: HTMLElement; set: (fraction: number, text: string) => voi
   };
 }
 
+/** Ostatnio pokazane ćwiczenie: kolejna przerwa „z ręki” losuje inne. */
+let lastExerciseId: string | null = null;
+
 export function openBreakOverlay(ctx: AppCtx, sug?: BreakSuggestion, exerciseId?: string): void {
   const kind = sug?.kind ?? (exerciseId ? exerciseById(exerciseId).kinds[0] : 'micro');
-  const ex = exerciseById(exerciseId ?? sug?.exerciseId ?? pickExercise(kind, ctx.status?.topIssue ?? null, Date.now() / 6e4));
+  const ex = exerciseById(exerciseId ?? sug?.exerciseId ?? pickExercise(kind, ctx.status?.topIssue ?? null, Math.random() * 1e6, lastExerciseId));
+  lastExerciseId = ex.id;
   const rg = ring();
   const fmt = (sec: number) => {
     const s = Math.ceil(sec);

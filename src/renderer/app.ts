@@ -76,7 +76,8 @@ async function main(): Promise<void> {
     onAlert: (issue: IssueId) => {
       api?.logEvent({ type: 'alert', detail: issue });
       api?.notify({ title: ISSUE_LABEL[issue], body: ISSUE_TIP[issue], kind: 'posture', nudge: { kind: 'posture', title: ISSUE_LABEL[issue], body: ISSUE_TIP[issue] } });
-      if (document.hasFocus()) ctx.toast(`${ISSUE_LABEL[issue]}. ${ISSUE_TIP[issue]}`);
+      // Z mini-widgetem przypomnienie jest tylko w okienku pod nim – bez dubla w aplikacji.
+      if (document.hasFocus() && !ctx.settings.miniWidget) ctx.toast(`${ISSUE_LABEL[issue]}. ${ISSUE_TIP[issue]}`);
     },
     onBreak: (s) => {
       ctx.pendingBreak = s;
@@ -85,9 +86,9 @@ async function main(): Promise<void> {
       const nudge =
         s.kind === 'eye'
           ? { kind: 'eye' as const, title: 'Spójrz w dal', body: 'Przez 20 s patrz na coś odległego (ok. 6 m).', seconds: 20 }
-          : { kind: 'break' as const, title, body: exerciseById(s.exerciseId).name };
+          : { kind: 'break' as const, title, body: exerciseById(s.exerciseId).name, exerciseId: s.exerciseId };
       api?.notify({ title, body: s.kind === 'eye' ? 'Spójrz na 20 s w dal.' : 'Kliknij, aby zobaczyć ćwiczenie.', kind: 'break', openBreak: true, nudge });
-      ctx.toast(`${title}: czas na chwilę odpoczynku.`, { label: 'Zacznij przerwę', run: () => ctx.startBreak(s) });
+      if (!ctx.settings.miniWidget) ctx.toast(`${title}: czas na chwilę odpoczynku.`, { label: 'Zacznij przerwę', run: () => ctx.startBreak(s) });
       live?.status(analyzer.status());
     },
     onAwayBreak: (awaySec) => {
@@ -157,9 +158,9 @@ async function main(): Promise<void> {
   api?.onNavigate((v) => (v === 'calibrate' ? ctx.startCalibration() : navigate(ctx, v as ViewId)));
   api?.onShowBreak(() => ctx.startBreak());
   // Akcje z podpowiedzi w rogu ekranu.
-  api?.onNudgeAction((a) => {
+  api?.onNudgeAction((a, exerciseId) => {
     const s = ctx.pendingBreak;
-    if (a === 'start') ctx.startBreak(s ?? undefined);
+    if (a === 'start') ctx.startBreak(s ?? undefined, exerciseId);
     else if (a === 'snooze') {
       analyzer.breakSnoozed();
       api.logEvent({ type: 'break-snoozed', detail: s?.kind ?? 'micro' });

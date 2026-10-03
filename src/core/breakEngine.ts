@@ -85,7 +85,8 @@ export class BreakEngine {
     const mk = (kind: BreakKind, reason: BreakSuggestion['reason']): BreakSuggestion => ({
       kind,
       reason,
-      exerciseId: pickExercise(kind, i.recentIssue, Math.floor(t / 60)),
+      // Losowe ćwiczenie z listy (najpierw pasujące do ostatniego problemu z postawą).
+      exerciseId: pickExercise(kind, i.recentIssue, Math.random() * 1e6),
     });
     const sinceAny = t - Math.max(this.lastMicro, this.lastMove);
 

@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { computeMetrics, lineAngleDeg, type Landmark } from '../src/core/metrics';
 import { followPositionRef } from '../src/core/calibration';
+import { pickExercise } from '../src/core/coach';
 import { evaluateIssues, PostureTracker, rankIssues, scoreFromIssues } from '../src/core/scoring';
 import { EyeAnalyzer, FatigueEstimator, fatiguePercent } from '../src/core/fatigue';
 import { BreakEngine } from '../src/core/breakEngine';
@@ -332,3 +333,35 @@ test('zakresy godzin i statystyki', () => {
   assert.ok(st.heatmap.length > 0);
   assert.equal(st.today.presentMinutes, 540);
 });
+
+test('pickExercise działa z ułamkowym ziarnem (ręczne „Zrób przerwę” bez propozycji)', () => {
+  for (const kind of ['eye', 'micro', 'move'] as const) {
+    for (const seed of [0, 1.5, 29812345.67, Date.now() / 6e4]) {
+      assert.equal(typeof pickExercise(kind, null, seed), 'string');
+      assert.equal(typeof pickExercise(kind, 'shrug', seed), 'string');
+    }
+  }
+});
+
+test('pickExercise z `avoid` nie powtarza ostatniego ćwiczenia', () => {
+  for (const kind of ['micro', 'move'] as const) {
+    let last: string | null = null;
+    for (let i = 0; i < 50; i++) {
+      const id = pickExercise(kind, 'shrug', Math.random() * 1e6, last);
+      assert.notEqual(id, last);
+      last = id;
+    }
+  }
+});
+
+test('pickExercise daje różne ćwiczenia, nie tylko te pasujące do problemu', () => {
+  const seen = new Set<string>();
+  let last: string | null = null;
+  for (let i = 0; i < 200; i++) {
+    last = pickExercise('micro', 'headForward', Math.random() * 1e6, last);
+    seen.add(last);
+  }
+  // Wszystkie 6 mikroprzerw (bez 20-20-20 i „Przejdź się”).
+  assert.deepEqual([...seen].sort(), ['blade-squeeze', 'chest-opener', 'chin-tuck', 'neck-side', 'seated-twist', 'shrugs']);
+});
+

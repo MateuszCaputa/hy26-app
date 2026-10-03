@@ -36,8 +36,10 @@ export interface PosturaApi {
   /** Okno podpowiedzi: nowa podpowiedź / akcja użytkownika (Start, Za 5 min, Pomiń, koniec odliczania). */
   onNudge(cb: (n: Nudge) => void): void;
   nudgeAction(a: NudgeAction): void;
+  /** Podgląd powiadomień z Ustawień: pokazuje od razu, bez limitów (odstęp, „nie przeszkadzać”, godziny pracy). */
+  testNotify(t: { target: 'corner' | 'system'; nudge: Nudge }): void;
   /** Główne okno: akcja z podpowiedzi do wykonania w analizatorze. */
-  onNudgeAction(cb: (a: NudgeAction) => void): void;
+  onNudgeAction(cb: (a: NudgeAction, exerciseId?: string) => void): void;
 }
 
 declare global {

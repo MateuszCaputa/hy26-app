@@ -32,8 +32,8 @@ export interface Settings {
   faceAnalysis: boolean;
   activityTracking: boolean;
   miniWidget: boolean;
-  /** Gdzie pokazywać przypomnienia: dyskretnie w rogu ekranu albo jako powiadomienia systemowe. */
-  nudges: 'corner' | 'system';
+  /** Powiadomienia systemowe, gdy mini-widget jest wyłączony (z widgetem przypomnienia są w okienku pod nim). */
+  systemNotifications: boolean;
   /** Wygląd mini-widgetu: karta (wynik + stan + zmęczenie) albo mała pigułka z samą liczbą. */
   widgetStyle: 'card' | 'pill';
   autostart: boolean;
@@ -58,7 +58,7 @@ export const DEFAULT_SETTINGS: Settings = {
   // Domyślnie wyłączone: na macOS wymaga uprawnienia Dostępności, co myli przy pierwszym uruchomieniu.
   activityTracking: false,
   miniWidget: false,
-  nudges: 'corner',
+  systemNotifications: true,
   widgetStyle: 'card',
   autostart: false,
   soundAlerts: false,
@@ -162,6 +162,10 @@ export interface Nudge {
   body: string;
   /** Odliczanie (np. 20 s patrzenia w dal); bez niego podpowiedź sama znika po chwili. */
   seconds?: number;
+  /** Ćwiczenie z okienka przerwy: „Start” otwiera właśnie je. */
+  exerciseId?: string;
+  /** Skąd okienko się wysuwa: spod widgetu (w dół) albo znad niego (w górę). Ustawia proces główny. */
+  from?: 'below' | 'above';
 }
 
 export type NudgeAction = 'start' | 'snooze' | 'dismiss' | 'eye-done';
