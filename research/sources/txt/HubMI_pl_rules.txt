@@ -1,0 +1,1333 @@
+ Regulamin zadania ,,HubMI.pl"
+
+ 1. Postanowienia oglne
+1. Niniejszy regulamin (dalej: ,,Regulamin") okrela zasady i warunki Konkursu ,,HubMI.pl",
+
+ organizowanego w ramach wydarzenia HackYeah.
+2. Organizatorem Konkursu w rozumieniu art. 921 3 Kodeksu cywilnego (Dz.U. z 2017 r.
+
+ poz. 459) jest Proidea Sp. z o.o. z siedzib w Krakowie, 30-418, przy ul. Zakopiaskiej 9,
+ posiadajca numery identyfikacyjne: NIP 6793088842 oraz REGON 122769022, wpisana
+ do Krajowego Rejestru Sdowego pod numerem KRS 0000448243. Z Organizatorem
+ mona skontaktowa si pod adresem e-mail: biuro@proidea.org.pl.
+3. Wojewdztwo Malopolskie, pelnice funkcj: Host Region HackYeah 2026, jest
+ inicjatorem Konkursu ,,HubMI.pl".
+4. Szczegly zadania konkursowego zostan przedstawione na pocztku Konkursu.
+5. Zasady uczestnictwa w Hackathonie okrela regulamin Hackathonu opublikowany na
+ stronie internetowej Organizatora. Udzial w Konkursie jest moliwy wylcznie dla
+ uczestnikw Hackathonu.
+6. Organizator sklada przyrzeczenie wyplaty nagrd Laureatom na zasadach
+ okrelonych w Regulaminie, z zastrzeeniem zawarcia umowy przeniesienia
+ autorskich praw majtkowych z Organizatorem (PROIDEA sp. z o.o.).
+7. Celem Regulaminu jest dokladne opisanie zasad uczestnictwa w Konkursie i nie
+ stanowi on oferty umownej ani wzorca umownego.
+
+ 2. Czas trwania Konkursu
+
+1. Konkurs rozpoczyna si 3 padziernika 2026 r. o godz. 11:00 i koczy 4 padziernika
+ 2026r. o godz. 11:00.
+
+2. Szczeglowy harmonogram Konkursu bdzie udostpniony na stronie
+ internetowej Organizatora www.hackyeah.pl
+
+ 3. Warunki uczestnictwa
+
+1. Uczestnikiem Konkursu (dalej: ,,Uczestnik") moe by osoba fizyczna - uczestnik
+ Hackathonu, ktra w dniu rozpoczcia Konkursu ukoczyla 18 lat i posiada peln
+ zdolno do czynnoci prawnych.
+
+2. Przed przystpieniem do udzialu w Konkursie Uczestnik Konkursu zobowizany
+ jest do zapoznania si z Regulaminem.
+
+3. Udzial w Konkursie jest rwnoznaczny z zapoznaniem si z Regulaminem oraz
+ akceptacj postanowie Regulaminu i jego zalcznikw przez Uczestnika Konkursu
+ oraz zobowizaniem Uczestnika Konkursu do przestrzegania postanowie
+ Regulaminu.
+
+4. Uczestnicy mog bra udzial indywidualnie albo w zespolach do 6 osb.
+5. Uczestnicy zobowizani s do przestrzegania Regulaminu oraz regulaminu
+
+ Hackathonu.
+ 4. Przebieg Konkursu
+
+1. Tre zadania ,,HubMI.pl " zostanie opublikowana na stronie internetowej
+ HackYeah tj. www.hackyeah.pl, o godz. 11:00 w dniu rozpoczcia
+ Konkursu.
+
+2. Zapoznanie si przez Uczestnikw Konkursu z treci zadania konkursowego oraz
+ rozpoczcie jego rozwizywania moliwe bdzie po uroczystym otwarciu Konkursu
+ przez przedstawiciela Organizatora.
+
+3. Uczestnicy Konkursu maj maksymalnie 24 godziny na rozwizanie zadania
+ konkursowego i przeslanie go na platform HackTribe.
+
+4. Udzial w Hackathonie i Konkursie jest moliwy wylcznie w formie stacjonarnej w
+ Hali Widowiskowo-Sportowej Tauron Arena w Krakowie (31-571) przy ul. Stanislawa
+ Lema 7.
+
+5. Wojewdztwo Malopolskie oraz Organizator nie zapewniaj Uczestnikom
+ Konkursu adnego sprztu ani wyposaenia, jak rwnie nie wiadcz uslug
+ wsparcia technicznego i naprawy sprztu.
+
+6. Uczestnicy Konkursu mog bra udzial w Konkursie indywidualnie lub w
+ ramach Zespolw liczcych nie wicej ni 6 osb.
+
+7. Zadanie konkursowe realizowane jest w formule otwartej (nie ma jednego
+ poprawnego rozwizania), za projekty rozwiza zadania konkursowego
+ zgloszone przez indywidualnych Uczestnikw Konkursu lub Zespoly ocenia Jury
+ Konkursu, w ktrego sklad wchodz przedstawiciele Wojewdztwa
+ Malopolskiego oraz reprezentanci delegowani przez Organizatora.
+
+8. Projekty rozwiza zadania konkursowego przygotowane przez indywidualnych
+ Uczestnikw Konkursu lub Zespoly, aby mogly by brane pod uwag przy
+ rozstrzygniciu Konkursu, musz zosta przekazane Organizatorowi nie pniej ni
+ do godz. 11:00 w dniu 4 padziernika 2026 roku w formie okrelonej przez
+ Organizatora na dedykowanej stronie internetowej
+ (https://hackyeah2026.hacktribe.co/), na ktrej przedstawiona zostanie tre zadania
+ konkursowego. Projekty rozwiza zadania konkursowego przekazane po tym
+ terminie nie bd uwzgldniane i nie bd poddane ocenie Jury Konkursu.
+
+9. Rozwizanie zadania zgloszone do oceny musi zawiera: tytul projektu, identyfikator
+ zespolu, opis projektu, prezentacj w formacie PDF liczc maksymalnie 10 slajdw
+ oraz film prezentujcy projekt w formacie MP4, trwajcy maksymalnie 3 minuty. Moe
+ rwnie zawiera: zrzuty ekranu, repozytorium kodu, linki do wersji demonstracyjnych,
+ materialy graficzne oraz inne materialy zwizane z projektem. Rozwizania zada naley
+ zglasza za porednictwem platformy Hacktribe w jzyku polskim.
+
+10. Wojewdztwo Malopolskie lub Organizator mog wykluczy Uczestnika/Zespl w
+ razie naruszenia Regulaminu lub przepisw prawa; w razie podejrzenia popelnienia
+ przestpstwa Organizator zawiadomi wlaciwe organy.
+
+ 5. Zasady oceny
+
+1. Rozwizania ocenia Jury Konkursu zloone glwnie z przedstawicieli
+ Wojewdztwa Malopolskiego, Sklad Jury zostanie opublikowany na stronie
+ Hackathonu najpniej w dniu startu.
+
+2. Jury wybiera ze swego grona przewodniczcego; decyzje zapadaj zwykl
+ wikszoci glosw w obecnoci wszystkich czlonkw; przy rwnej liczbie
+ glosw decyduje przewodniczcy.
+3. Kade zgloszenie oceniane jest w skali od 1-10 w ramach poniszych
+ kryteriw; wynik kocowy stanowi rednia waona:
+
+ Stopie spelnienia wyzwania - 40%. Brana jest pod uwag jako dzialania
+ kluczowych elementw oraz liczba dostarczonych dodatkowych funkcjonalnoci
+
+ Potencjal wdroeniowy - 20%. Ocena stopnia gotowoci rozwizania do
+ wdroenia. Wyej punktowane bd produkty nadajce si do praktycznego
+ uytku, ktre charakteryzuj si skalowalnoci, elastycznoci, optymalizacj
+ oraz wysok efektywnoci kosztow i prostot utrzymania.
+
+ Dostpno i intuicyjno prototypu - 20%. Weryfikowane jest, czy interfejs
+ narzdzia jest przejrzysty i latwy w obsludze dla wszystkich docelowych grup
+ odbiorcw, niezalenie od ich wieku i poziomu umiejtnoci cyfrowych.
+ Szczeglna uwaga zwracana jest na zaprojektowanie narzdzia z myl o
+ docelowych standardach dostpnoci cyfrowej WCAG 2.1 na poziomie AA, aby
+ nie stwarzalo ono barier uytkowych.
+
+ Kryteria premiujce - 20%, w tym:
+ - Atrakcyjno, pomyslowo i jako interfejsu - 10% . Kryterium to promuje
+ nowatorskie, nieszablonowe podejcie do przedstawionego wyzwania oraz
+ wizualn atrakcyjno dostarczonych makiet UX/UI ,
+ - Jako dostarczonych materialw oraz MVP - 10%. Ocenie podlega sposb
+ komunikacji koncepcji oraz jako materialw przeslanych do oceny.
+
+4. Aby zosta Laureatem, zgloszenie musi uzyska co najmniej 50% maksymalnej
+ moliwej oceny.
+
+5. Prezentacja projektu przed Jury odbywa si w jzyku polskim.
+
+ 6. Rozstrzygnicie i nagrody
+
+1. Rozstrzygnicie Konkursu nastpi 4 padziernika 2026 r. podczas ceremonii
+ zakoczenia Hackathonu (ok. godz. 17:45) oraz na oficjalnym komunikatorze
+ wydarzenia.
+
+2. Wylonionych zostanie maksymalnie 3 Laureatw (Uczestnicy indywidualni lub
+ Zespoly) zajmujcych miejsca 1-3. O kolejnoci decyduje wynik z 5; przy
+ remisie - glos przewodniczcego Jury.
+
+3. Nagrody:
+ I miejsce - 6 000 zl,
+ II miejsce - 5 000 zl,
+
+ III miejsce - 4 000 zl.
+4. Kwoty nagrd pomniejsza si o nalene podatki, skladki i oplaty zgodnie z
+
+ przepisami prawa.
+5. W przypadku nagrodzenia Zespolu, nagroda jest dzielona proporcjonalnie do
+
+ liczby czlonkw i wyplacana przez Organizatora (PROIDEA sp. z o.o.) kademu
+ czlonkowi na wskazany rachunek bankowy.
+6. Warunkiem wydania nagrody jest lczne spelnienie przez Laureata/Laureatw:
+
+ a) zawarcia z Organizatorem (PROIDEA sp. z o.o.) umowy przeniesienia
+ autorskich praw majtkowych do nagrodzonych utworw/rozwiza
+ (wzr/istotne postanowienia udostpni Organizator);
+ b) podania danych niezbdnych do realizacji obowizkw
+
+ podatkowych i rozliczeniowych przez Organizatora.
+7. Wyplata nagrd nastpi przez Organizatora na rachunki Laureatw w terminie do 60
+
+ dni od zawarcia umowy, o ktrej mowa w ust. 6 lit. a, o ile umowa nie stanowi
+ inaczej.
+
+ 7. Prawa autorskie
+
+1. Rozwizania (dziela) powstale w ramach realizacji przez Laureatw zadania
+ konkursowego (w caloci lub czci), w tym ich fragmenty oraz ich elementy, a
+ take wszelkie materialy, w tym dokumentacja zwizana z ww.
+ rozwizaniami/dzielami) stanowi utwory w rozumieniu ustawy z dnia 4 lutego 1994
+ r. prawach autorskich i prawach pokrewnych (Dz. U. z 2025 r. poz. 24) (dalej zwane
+ lcznie w niniejszym paragrafie ,,Utworami" lub osobno ,,Utworem").
+
+2. Stosownie do art. 921 3 ustawy z dnia 23 kwietnia 1964 r. - Kodeksu cywilnego (Dz.
+ U. z 2025 r. poz. 1071, z pn. zm.) autorskie prawa majtkowe do nagrodzonych w
+ Konkursie Utworw (dziel), przechodz na Organizatora w chwili wyplaty Laureatom
+ nagrd.
+
+3. Odmowa przez indywidualnego Uczestnika Konkursu lub ktregokolwiek z
+ Uczestnikw konkursu bdcego czlonkiem Zespolu zawarcia umowy, o ktrej mowa
+ w 6 ust. 6 lit. a Regulaminu, zostanie uznana za rezygnacj z przyjcia nagrody
+ przewidzianej w Konkursie, stosownie do Regulaminu, i stanowi podstaw do
+ odmowy wydania Laureatowi nagrody przewidzianej w Konkursie. W takiej sytuacji
+ indywidualnemu Uczestnikowi Konkursu oraz wszystkim Uczestnikom Konkursu
+ bdcymi czlonkami danego Zespolu nie przysluguj adne roszczenia ani
+ wzgldem Organizatora ani wzgldem Wojewdztwa Malopolskiego.
+
+4. W chwili wyplaty nagrody odpowiednio kademu z Laureatw Organizator nabywa
+ prawa wlasnoci wszelkich egzemplarzy Utworw (w tym kodw rdlowych) i
+ nonikw, na ktrych Utwory zostaly utrwalone, a take nabywa calo autorskich
+ praw majtkowych do Utworw obejmujcych nastpujce pola eksploatacji:
+ a) trwale lub czasowe utrwalanie lub zwielokrotnianie w caloci lub w
+ czci, jakimikolwiek rodkami i w jakiejkolwiek formie, niezalenie od
+ formatu, systemu lub standardu, w tym technik drukarsk, technik
+ zapisu magnetycznego, technik cyfrow lub poprzez wprowadzanie do
+ pamici komputera oraz trwale lub czasowe utrwalanie lub
+ zwielokrotnianie takich zapisw, wlczajc w to sporzdzanie ich kopii
+ oraz dowolne korzystanie i rozporzdzanie tymi kopiami;
+ b) tworzenie nowych wersji i adaptacji (tlumaczenie, przystosowanie, zmian
+ ukladu lub jakiekolwiek inne zmiany) oraz dowolne przetwarzanie Utworw, w
+ tym lczenie z innymi utworami, z zachowaniem praw osoby, ktra tych
+ zmian dokonala;
+ c) wprowadzania do obrotu, uyczenia lub najmu oryginalu albo egzemplarzy;
+ d) wprowadzanie Utworu do pamici komputerw oraz udostpnianie go w
+ sieciach komputerowych, w tym w Internecie i Intranecie, w szczeglnoci
+ poprzez stale umieszczenie Utworu lub jego czci na stronach
+ internetowych Nabywcy lub podmiotw, ktrym Nabywca przekae prawa
+ do Utworu lub udzieli upowanienia do korzystania z niego, w sposb
+ umoliwiajcy kademu zainteresowanemu dostp w miejscu i czasie przez
+ siebie wybranym oraz swobodne, wielokrotne kopiowanie Utworu lub jego
+ czci;
+
+ e) publiczne rozpowszechnianie, w szczeglnoci wywietlanie, publiczne
+ odtwarzanie, nadawanie i reemitowanie w dowolnym systemie lub
+ standardzie, a take publiczne udostpnianie Utworw w ten sposb, aby
+ kady mgl mie do nich dostp w miejscu i czasie przez siebie wybranym, w
+ szczeglnoci elektroniczne udostpnianie na danie, w tym
+ rozpowszechnianie w sieci Internet i sieciach zamknitych;
+
+ f) wystawianie, wywietlanie i nadawanie i reemitowanie drog emisji radiowej
+ lub telewizyjnej prowadzonej w sposb bezprzewodowy lub przewodowy
+ (naziemny, za porednictwem satelity lub sieci komputerowych, drog
+ kablow), w tym nadawanie za pomoc fonii lub wizji, w sposb
+ bezprzewodowy (drog naziemn i satelitarn) lub w sposb przewodowy, w
+ dowolnym systemie i standardzie, w tym take poprzez sieci kablowe i
+ platformy cyfrowe;
+
+ g) prawa do okrelania nazw Utworw, pod ktrymi bd one wykorzystywane
+ lub rozpowszechniane, w tym nazw handlowych;
+
+ h) prawa do wykorzystywania Utworw do celw marketingowych lub promocji,
+ a take dla celw edukacyjnych lub szkoleniowych;
+
+ i) prawo do rozporzdzania opracowaniami Utworw oraz prawo udostpniania
+ ich do korzystania, w tym udzielania licencji na rzecz osb trzecich, na
+ wszystkich wymienionych powyej polach eksploatacji;
+
+ j) zezwalanie na wykonywanie przez osoby trzecie praw autorskich zalenych w
+ stosunku do Utworw;
+
+ k) sporzdzanie wersji obcojzycznych (jak rwnie z uyciem technik
+ umoliwiajcych przekazywanie informacji dla osb z rnymi
+ rodzajami niepelnosprawnoci);
+
+ l) nadawanie za pomoc wizji przewodowej albo bezprzewodowej lub w inny
+ sposb poprzez sie komputerow w tym zamieszczanie filmw w sieci
+ Internet bez adnych ogranicze, z wylczeniem moliwoci publicznego
+ emitowania filmw lub ich czci w telewizji.
+
+5. Przeniesienie autorskich praw majtkowych do Utworw, w odniesieniu do kodw
+ rdlowych, nastpuje na wszystkich polach eksploatacji okrelonych w ust. 4 oraz
+ obejmuje w szczeglnoci modyfikacj, kompilacj i lczenie, testowanie,
+ wdraanie, uywanie wytworzonego za jego pomoc Utworu, w szczeglnoci
+ oprogramowania oraz prawo do dalszego przenoszenia tych praw na podmioty
+ trzecie w zakresie tak szerokim, w jakim Organizator nabyl te prawa. Laureaci
+ zobowizani s do przekazania Organizatorowi kodw rdlowych.
+
+6. W wyniku przeniesienia autorskich praw majtkowych, zgodnie z ust. 4,
+ Organizator nabywa wylczne prawo do korzystania z Utworw, w pelnym
+ zakresie, w jakikolwiek sposb, bez ogranicze czasowych i terytorialnych na
+ wszystkich opisanych w Regulaminie polach eksploatacji oraz prawo do
+ dalszego przenoszenia tych praw na podmioty trzecie w zakresie tak szerokim,
+ w jakim Organizator nabyl te prawa.
+
+7. Laureat wyraa zgod na dokonywanie przez Organizatora lub na jego zlecenie
+ wszelkich zmian, aktualizacji i uzupelnie Utworw - opracowa. Wszelkie prawa w
+ tym zakresie (prawa do opracowa Utworu) przyslugiwa bd Organizatorowi.
+ Laureat wyraa zgod na rozporzdzanie i korzystanie z opracowa Utworu przez
+ Organizatora oraz prawo do dalszego przenoszenia tych praw na podmioty trzecie w
+ zakresie tak szerokim, w jakim Organizator nabyl te prawa.
+8. Laureat przenosi na Organizatora wylczne prawo do wykonywania zalenych praw
+ autorskich oraz prawo do zezwalania na wykonywanie zalenych praw autorskich do
+ Utworu, w szczeglnoci do tlumaczenia, przystosowywania, zmiany ukladu oraz
+ wprowadzania innych zmian lub modyfikacji oraz rozporzdzania i korzystania z
+ opracowa Utworw na polach eksploatacji okrelonych w ust. 4 i nie bdzie
+ domagal si z tego tytulu adnego wynagrodzenia oraz prawo do dalszego
+ przenoszenia tych praw na podmioty trzecie w zakresie tak szerokim, w jakim
+ Organizator nabyl te prawa.
+9. Laureat upowania Organizatora do decydowania o pierwszym udostpnieniu Utworw
+ publicznoci, do decydowania o oznaczeniu Utworw nazwiskiem lub pseudonimem
+ Laureata lub o udostpnianiu Utworw anonimowo (bez oznaczania autorstwa
+ Laureata), a take do nadzoru nad sposobem korzystania z Utworw. Laureat
+ upowania rwnie Organizatora do przenoszenia tych upowanie w pelnym zakresie
+ na podmioty trzecie, w szczeglnoci na podmioty, ktre nabd autorskie prawa
+ majtkowe do Utworw lub uzyskaj prawo do korzystania z nich.
+
+10. Laureatowi nie przysluguje wynagrodzenie za kade odrbne pole eksploatacji.
+ Organizator jest uprawniony do korzystania z Utworw, na polach eksploatacji
+ wskazanych w ust. 4, od daty udostpnienia Utworu Organizatorowi do daty nabycia
+ autorskich praw majtkowych przez Organizatora. Laureat zapewnia, e takie
+ korzystanie z Utworw nie bdzie narusza praw osobistych lub majtkowych
+ Organizatora ani osb trzecich i nie bdzie powodowa adnych dodatkowych
+ kosztw ani obowizku zaplaty jakichkolwiek dodatkowych oplat po stronie
+ Organizatora.
+
+11. Niezalenie od powyszego Laureat zobowizuje si do:
+ a) przeniesienia w przyszloci autorskich praw majtkowych na Wojewdztwo
+ Malopolskie (ktre nabdzie od Organizatora autorskie prawa majtkowe do
+ Utworw) na polach eksploatacji nieznanych w chwili zawarcia umowy, o
+ ktrej mowa w 6 ust. 6 lit. a Regulaminu, bez wynagrodzenia, w zakresie
+ swojej czci Utworu majcej samodzielne znaczenie;
+ b) niewykonywania autorskich praw osobistych do swojej czci Utworu
+ majcej samodzielne znaczenie na wszystkich polach eksploatacji
+ wymienionych w ust. 4 oraz w art. 16 ustawy z dnia 4 lutego 1994 r. o prawie
+ autorskim i prawach pokrewnych wzgldem Organizatora oraz Wojewdztwa
+ Malopolskiego, jak rwnie upowania Organizatora oraz Wojewdztwo
+ Malopolskie do wykonywania ww. autorskich praw osobistych. Organizator
+ oraz Wojewdztwo Malopolskie s uprawnieni m.in. do zrezygnowania z
+ zamieszczania w Utworach imion i nazwisk Laureata lub Laureatw.
+
+ 8. Dane osobowe
+
+1. Administratorem danych osobowych Uczestnikw jest PROIDEA sp. z o.o. z
+ siedzib w Krakowie (Organizator). Informacje dotyczce przetwarzania danych
+ znajduj si w polityce prywatnoci na stronie Organizatora.
+
+2. Dane bd przetwarzane w celu organizacji i przeprowadzenia Hackathonu i
+ Konkursu, w tym kontaktu z Uczestnikami, rozliczenia nagrd i realizacji
+ obowizkw prawnych.
+
+ 9. Odpowiedzialno
+
+1. Wojewdztwo Malopolskie ani Organizator nie ponosz odpowiedzialnoci za brak
+ moliwoci przekazania nagrody w przypadku podania przez Uczestnika Konkursu
+ nieprawidlowych, niepelnych lub nieprawdziwych danych osobowych, danych
+ kontaktowych oraz innych informacji uniemoliwiajcych przekazanie nagrody.
+
+2. Uczestnik moe wycofa si z Konkursu w dowolnym momencie, wycofanie
+ oznacza utrat prawa do nagrody.
+
+3. Laureat traci prawo do nagrody w przypadku stwierdzenia przez Wojewdztwo
+ Malopolskie lub Organizatora naruszenia postanowie Regulaminu przez
+ Laureata Konkursu oraz zaistnienia przeslanek uzasadniajcych wykluczenie, o
+ ktrych mowa w Regulaminie.
+
+ 10. Postanowienia kocowe
+1. Organizator, w uzgodnieniu z Wojewdztwem Malopolskim, moe odwola,
+
+ przerwa lub zakoczy Konkurs przed czasem wylcznie z wanych przyczyn, w
+ szczeglnoci z powodu sily wyszej, wystpienia zagroenia dla bezpieczestwa
+ Uczestnikw, awarii technicznej uniemoliwiajcej przeprowadzenie Konkursu lub
+ innych okolicznoci niezalenych od Organizatora lub Wojewdztwa
+ Malopolskiego uniemoliwiajcych prawidlowe przeprowadzenie Konkursu.
+2. Od wynikw Konkursu nie przysluguje odwolanie.
+3. Zmiana Regulaminu po rozpoczciu Konkursu moe nastpi wylcznie z wanej
+ przyczyny i nie moe narusza praw nabytych Uczestnikw ani pogarsza warunkw
+ ich uczestnictwa, w szczeglnoci zasad przyznawania nagrd, kryteriw oceny lub
+ zasad dotyczcych praw wlasnoci intelektualnej.
+4. Spory zwizane z uczestnictwem w Konkursie ,,HubMI.pl" bdzie dyl
+ rozstrzygn polubownie; w razie braku porozumienia decyzj podejmuje
+ Wojewdztwo Malopolskie i jest ona wica dla Uczestnikw.
+5. W przypadku rozbienoci midzy regulaminem Hackathonu, niniejszym
+ Regulaminem a treci umowy z Laureatem, pierwszestwo ma umowa zawarta z
+ Organizatorem, nastpnie niniejszy Regulamin, a na kocu regulamin Hackathonu.
+6. Regulamin obowizuje od dnia publikacji przez Organizatora.
+ UMOWA O PRZENIESIENIE PRAW AUTORSKICH
+
+ zwana dalej ,,Umow" zawarta w dniu 04.10.2026 r. pomidzy:
+
+1.
+ zwanym dalej ,,Wspltwrc I"
+
+2. ,
+ zwanym dalej ,,Wspltwrc II"
+
+3. ,
+ zwan dalej ,,Wspltwrc III"
+
+4. ,
+ zwanym dalej ,,Wspltwrc IV"
+
+5. ,
+ zwanym dalej ,,Wspltwrc V"
+
+6. ,
+ zwanym dalej ,,Wspltwrc VI"
+
+ zwani dalej lcznie ,,Twrcami"
+
+ a
+
+Proidea splka z ograniczon odpowiedzialnoci z siedzib w Krakowie, ul. Zakopiaska 9, 30-418
+Krakw, wpisan do Rejestru Przedsibiorcw Krajowego Rejestru Sdowego prowadzonego przez
+Sd Rejonowy dla Krakowa rdmiecia w Krakowie, XI Wydzial Gospodarczy Krajowego Rejestru
+ Sdowego pod numerem KRS 0000448243, REGON 122769022, NIP: 6793088842 reprezentowan
+ przez:
+ Jakuba Koziola - Prezesa Zarzdu,
+
+ zwan dalej ,,Nabywc".
+
+ 1
+
+ 1. Twrcy owiadczaj, e wedlug przepisw ustawy z dnia 4 lutego 1994 r. o prawie autorskim
+ i prawach pokrewnych s autorami dziela ,,..." zwanego dalej ,,Utworem" lub
+ ,,Rozwizaniem", stworzonego w ramach wydarzenia Hackathon HackYeah 2026
+ odbywajcego si w dniach 3-4 padziernika 2026 roku w formie stacjonarnej w Tauron
+ Arena Krakw zlokalizowanym przy ul. Stanislawa Lema 7, 31-571 Krakw.
+
+ 2. Twrcy owiadczaj, e przekazane zostan repozytorium zawierajce:
+ .............................................................
+ 3. Twrcy zgodnie owiadczaj, e przysluguje im prawo autorskie wsplne do Utworu, a ich
+
+ udzialy w tym prawie s rwne za prawa te nie s obcione prawami osb trzecich.
+ 4. Twrcy nadto owiadczaj i zapewniaj, e Utwr:
+ a. zostal przez nich wykonany osobicie,
+ b. nie zostal dotychczas opublikowany, a jedynie udostpniony na potrzeby oceny
+
+ podczas eventu Hackathon HackYeah 2026,
+ c. nie stanowi opracowania cudzego dziela i przysluguj im do niego pelne prawa
+
+ majtkowe,
+ d. mog rozporzdza prawami autorskimi do Utworu w zakresie niezbdnym do zawarcia
+
+ i wykonywania Umowy.
+ e. nie zbyli prawa do uzyskania patentw na Rozwizanie oraz nie przenieli prawa
+
+ pierwszestwa do uzyskania patentw na Rozwizanie;
+ f. wykonanie Umowy oraz udzielanie zezwolenia na korzystanie z Rozwizania
+
+ podmiotom trzecim, nie naruszy praw wlasnoci intelektualnej osb trzecich ani
+ Twrcw.
+5. Twrcy owiadczaj, e przyslugujce im majtkowe prawa autorskie do Utworu pozostaj
+ wolne od jakich obcie wynikajcych z przepisw prawa lub czynnoci prawnej,
+ w szczeglnoci nie zostaly zajte w rozumieniu przepisw o postpowaniu egzekucyjnym
+ lub obciane prawami rzeczowymi lub obligacyjnymi.
+6. Twrcy pokryj wszelkie oplaty, koszty, odszkodowania lub zadouczynienia, ktre bdzie
+ musial zaplaci Nabywca, jeeli powysze zapewnienia nie oka si prawdziwe.
+7. Twrcy dostarcz Nabywcy Utwr w nastpujcy sposb: calo pracy zostanie
+ spakowana do pliku w formacie zip. i przeslana za pomoc ... (w przecigu 24 godzin od
+ zawarcia Umowy.
+ Strony potwierdzaj, i w zakresie, w ktrym Utwr stanowi program komputerowy Twrcy
+ dostarcz Nabywcy Utwr rwnie w formie kodu rdlowego. Kod rdlowy, zostanie
+ dostarczony na informatycznym noniku danych, w formie umoliwiajcej Nabywcy
+ swobodny odczyt kodu rdlowego, a take zapisanie kodu na innym noniku
+ i doprowadzenie tego kodu rdlowego do formy wykonywalnej (w szczeglnoci w drodze
+ kompilacji) na odpowiednio wyposaonym stanowisku komputerowym. Wraz z kodem
+ rdlowym Twrcy dostarcz kompletny wykaz narzdzi programistycznych, bibliotek i
+ innych elementw niezbdnych do doprowadzenia takiego Utworu do formy wykonywalnej.
+ Twrca nie jest uprawniony do stosowania jakichkolwiek technik lub ogranicze, ktre
+ uniemoliwilyby lub istotnie utrudnily Nabywcy odczyt lub zapisywanie kodu, w
+ szczeglnoci szyfrowani.
+
+ 2
+
+1. Z chwil wyplaty Nagrody Twrcom, zgodnie z zasadami okrelonymi w Regulaminie
+ Konkursu ,,HubMI.pl", Twrcy przenosz na Nabywc autorskie prawa majtkowe do
+ Utworu na polach eksploatacji wskazanych w Umowie oraz udzielaj zgd i upowanie w
+ niej wymienionych.
+2. Strony zgodnie potwierdzaj, e z chwil zawarcia Umowy, Twrcy nabywaj roszczenie
+
+wzgldem Nabywcy o wyplat nagrody pieninej w kwocie .... (z podatkiem) (,,Nagroda").
+
+Wyplata nagrody pieninej wyczerpuje wszelkie roszczenia Twrcw wzgldem Nabywcy
+
+zwizanych z dokonanym przez Twrcw rozporzdzeniem i upowanieniami, na
+
+podstawie Umowy.
+
+3. Zgodnie z art. 30 ust. 1 pkt 2) ustawy o podatku dochodowym od osb fizycznych pobrany
+
+zostanie zryczaltowany podatek dochodowy w wysokoci 10 % Nagrody.
+
+4. Nagroda zostanie przekazana na rachunek bankowy wskazany przez Twrcw:
+
+- Wspltwrca I - ... zl netto (slownie: ... zlotych netto) na rachunek bankowy o nr: ...
+
+- Wspltwrca II - ... zl netto (slownie: ... zlotych netto) na rachunek bankowy o nr: ...
+
+- Wspltwrca III - ... zl netto (slownie: ... zlotych netto) na rachunek bankowy o nr: ...
+
+- Wspltwrca IV - ... zl netto (slownie: ... zlotych netto) na rachunek bankowy o nr: ...
+
+- Wspltwrca V - ... zl netto (slownie: ... zlotych netto) na rachunek bankowy o nr: ...
+
+- Wspltwrca VI - ... zl netto (slownie: ... zlotych netto) na rachunek bankowy o nr: ...
+
+5. Przeniesienie autorskich praw majtkowych, o ktrych mowa w ust. 1 w zakresie w jakim
+
+Utwr albo jego cz stanowi program komputerowy obejmuje wszystkie pola eksploatacji
+
+znane w chwili zawarcia Umowy, w tym wszelkie pola eksploatacji wskazane w art. 74 ust.
+
+4 ustawy z dnia 4 lutego 1994 r. o prawie autorskim i prawach pokrewnych,
+
+a w szczeglnoci:
+
+a. trwale lub czasowe zwielokrotnianie Rozwizania w caloci lub w czci
+
+jakimikolwiek rodkami i w jakiejkolwiek formie, w szczeglnoci dla celw
+
+wprowadzania, wywietlania, stosowania, przekazywania i przechowywania
+
+oprogramowania, a take wytworzenia ich egzemplarzy dowoln technik, w tym
+
+technik drukarsk, reprograficzn, zapisu magnetycznego oraz technik cyfrow,
+
+b. tlumaczenie, przystosowanie, zmiana ukladu oraz dokonywanie
+
+jakichkolwiek innych zmian,
+
+c. rozpowszechnianie, w tym wprowadzanie do obrotu, sprzeday, udzielania
+
+licencji, uyczanie lub najem Rozwizania lub jego kopii,
+
+d. najmu, uyczenia, publicznego udostpnienia w sposb umoliwiajcy
+
+dostp do Rozwizania w czasie i miejscy dostpnym dla kadego,
+
+e. modyfikowanie, dokonywanie wszelkich zmian, tlumacze, zmian ukladu,
+
+wykonywania praw zalenych, wykonywanie opracowa i zezwalania na ich
+
+wykonywanie przez osoby trzecie.
+
+6. Przeniesienie autorskich praw majtkowych, o ktrych mowa w ust. 1 w zakresie w jakim
+
+Utwr albo jego cz nie stanowi programu komputerowego, obejmuje wszystkie pola
+
+eksploatacji znane w chwili zawarcia Umowy, w tym wszelkie pola eksploatacji wskazane
+
+w art. 50 ustawy z dnia 4 lutego 1994 r. o prawie autorskim i prawach pokrewnych,
+
+a w szczeglnoci:
+ trwale lub czasowe utrwalanie lub zwielokrotnianie w caloci lub w czci,
+ jakimikolwiek rodkami i w jakiejkolwiek formie, niezalenie od formatu,
+ systemu lub standardu, w tym technik drukarsk, technik zapisu
+ magnetycznego, technik cyfrow lub poprzez wprowadzanie do pamici
+ komputera oraz trwale lub czasowe utrwalanie lub zwielokrotnianie takich
+ zapisw, wlczajc w to sporzdzanie ich kopii oraz dowolne korzystanie i
+ rozporzdzanie tymi kopiami;
+
+ tworzenie nowych wersji i adaptacji (tlumaczenie, przystosowanie, zmian
+ ukladu lub jakiekolwiek inne zmiany) oraz dowolne przetwarzanie Utworw,
+ w tym lczenie z innymi utworami, z zachowaniem praw osoby, ktra tych
+ zmian dokonala;
+
+ wprowadzania do obrotu, uyczenia lub najmu oryginalu albo egzemplarzy;
+
+ wprowadzanie Utworu do pamici komputerw oraz udostpnianie go w
+ sieciach komputerowych, w tym w Internecie i Intranecie, w szczeglnoci
+ poprzez stale umieszczenie Utworu lub jego czci na stronach internetowych
+ Nabywcy lub podmiotw, ktrym Nabywca przekae prawa do Utworu lub
+ udzieli upowanienia do korzystania z niego, w sposb umoliwiajcy kademu
+ zainteresowanemu dostp w miejscu i czasie przez siebie wybranym oraz
+ swobodne, wielokrotne kopiowanie Utworu lub jego czci;
+
+ publiczne rozpowszechnianie, w szczeglnoci wywietlanie, publiczne
+ odtwarzanie, nadawanie i reemitowanie w dowolnym systemie lub
+ standardzie, a take publiczne udostpnianie Utworw w ten sposb, aby
+
+ kady mgl mie do nich dostp w miejscu i czasie przez siebie wybranym, w
+ szczeglnoci elektroniczne udostpnianie na danie, w tym
+ rozpowszechnianie w sieci Internet i sieciach zamknitych;
+
+ wystawianie, wywietlanie i nadawanie i reemitowanie drog emisji radiowej
+ lub telewizyjnej prowadzonej w sposb bezprzewodowy lub przewodowy
+ (naziemny, za porednictwem satelity lub sieci komputerowych, drog
+ kablow), w tym nadawanie za pomoc fonii lub wizji, w sposb
+ bezprzewodowy (drog naziemn i satelitarn) lub w sposb przewodowy, w
+ dowolnym systemie i standardzie, w tym take poprzez sieci kablowe i
+ platformy cyfrowe;
+
+ prawa do okrelania nazw Utworw, pod ktrymi bd one wykorzystywane lub
+ rozpowszechniane, w tym nazw handlowych;
+
+ prawa do wykorzystywania Utworw do celw marketingowych lub promocji, a
+ take dla celw edukacyjnych lub szkoleniowych;
+
+ prawo do rozporzdzania opracowaniami Utworw oraz prawo udostpniania
+ ich do korzystania, w tym udzielania licencji na rzecz osb trzecich, na
+ wszystkich wymienionych powyej polach eksploatacji;
+
+ zezwalanie na wykonywanie przez osoby trzecie praw autorskich zalenych w
+ stosunku do Utworw;
+
+ sporzdzanie wersji obcojzycznych (jak rwnie z uyciem technik
+ umoliwiajcych przekazywanie informacji dla osb z rnymi rodzajami
+ niepelnosprawnoci);
+
+ nadawanie za pomoc wizji przewodowej albo bezprzewodowej lub w inny
+ sposb poprzez sie komputerow w tym zamieszczanie filmw w sieci
+ Internet bez adnych ogranicze, z wylczeniem moliwoci publicznego
+ emitowania filmw lub ich czci w telewizji.
+7. Twrcy na mocy Umowy przenosz na Nabywc wylczne prawo zezwalania na
+ wykonywanie praw zalenych do Utworu tj. prawo zezwalania na rozporzdzanie
+ i korzystanie z opracowa Utworu na polach eksploatacji okrelonych w niniejszym
+ paragrafie, zezwala Nabywcy na wykonywanie praw zalenych na tych polach eksploatacji
+ oraz upowania Nabywc do zlecania osobom trzecim wykonywania tych zalenych praw
+ autorskich.
+
+8. Przeniesienie autorskich praw majtkowych do Utworu oraz prawa zezwalania na
+ wykonywanie praw zalenych nastpuje z chwil wyplaty Nagrody.
+
+9. Od dnia udostpnienia Utworu Nabywcy do dnia wyplaty Nagrody i przejcia autorskich
+ praw majtkowych Twrcy udzielaj Nabywcy nieodplatnej, niewylcznej licencji na
+ korzystanie z Utworu na polach eksploatacji wskazanych w niniejszym paragrafie, w
+ zakresie niezbdnym do przeprowadzenia Konkursu, oceny, prezentacji, publikacji
+ wynikw oraz realizacji czynnoci zwizanych z wydaniem Nagrody.
+
+10. Z chwil przeniesienia autorskich praw majtkowych przechodzi na Nabywc prawo
+ wlasnoci nonika, na ktrym Utwr zostal zapisany i/lub utrwalony.
+
+11. Twrcy zobowizuj si do niewykonywania autorskich praw osobistych wobec Nabywcy
+ oraz podmiotw, na rzecz ktrych Nabywca zbyl prawa do Utworu w caloci lub czci,
+ w tym w zakresie oznaczania Utworu imieniem i nazwiskiem Twrcw (co oznacza
+ w szczeglnoci, e jego rozpowszechnianie moe by dokonywane bez ujawnienia
+ autorstwa).
+
+12. Twrcy uprawniaj Nabywc do pierwszej publikacji Utworu.
+13. Twrcy gwarantuj, e Utwr, do ktrego prawa s przenoszone Umow, nie jest obciony
+
+ adnymi roszczeniami i prawami osb trzecich.
+14. Twrcy upowaniaj Organizatora do decydowania o pierwszym udostpnieniu Utworw
+
+ publicznoci, do decydowania o oznaczeniu Utworw nazwiskiem lub pseudonimem
+ Laureata lub o udostpnianiu Utworw anonimowo (bez oznaczania autorstwa Twrcy), a
+ take do nadzoru nad sposobem korzystania z Utworw. Twrca upowania rwnie
+ Organizatora oraz Wojewdztwo Malopolskie do przenoszenia tych upowanie w pelnym
+ zakresie na podmioty trzecie, w szczeglnoci na podmioty, ktre nabd autorskie prawa
+ majtkowe do Utworw lub uzyskaj prawo do korzystania z nich.
+
+ 3
+
+1. Strony zobowizuj si zachowa w tajemnicy wszelkie dane dotyczce przerabiania
+ i publikowania Utworu.
+
+2. Twrcy zobowizuj si do zachowania w tajemnicy wszelkich informacji dotyczcych
+ funkcjonowania i struktury przedsibiorstwa Nabywcy, ktre poznali w trakcie przygotowa
+ do zawierania Umowy.
+
+3. Strony zobowizuj si do zachowania w tajemnicy postanowie Umowy.
+ 4
+1. W sprawach nieuregulowanych w Umowie maj zastosowanie przepisy prawa polskiego, w
+
+ szczeglnoci ustawy z dnia 4 lutego 1994 r. Prawo autorskie i prawa pokrewne oraz
+ przepisy Kodeksu Cywilnego.
+2. Wszelkie zmiany treci Umowy i jej uzupelniania powinny by wprowadzone w formie
+ pisemnej (lub rwnowanej jej formie elektronicznej) jako aneks do Umowy, pod rygorem
+ niewanoci.
+3. W przypadku, gdyby ktrekolwiek z postanowie Umowy okazalo si niewane,
+ nieskuteczne, niezgodne z prawem lub niewykonalne w caloci lub w czci, okoliczno
+ ta nie wplynie na wano pozostalych postanowie.
+
+ 5
+
+1. W przypadku sporw wynikajcych z treci Umowy, wlaciwy bdzie sd dla strony
+ pozwanej.
+
+2. Umow sporzdzono w siedmiu identycznych egzemplarzach, po jednym dla kadego ze
+ wspltwrcw oraz Nabywcy.
+
+Nabywca Twrcy
+1.....................................
+ 1........................................
+ 2..........................................
+ 3..........................................
+ 4..........................................
+ 5..........................................
+ 6..........................................
+ Regulations of the Task "HubMI.pl"
+
+ 1. General provisions
+1. These regulations (hereinafter referred to as the "Regulations") set out the rules and
+
+ conditions of the "HubMI.pl" Competition, organized as part of the HackYeah event.
+2. The Organizer of the Competition within the meaning of Article 921 3 of the Civil Code
+
+ (Journal of Laws 2017, item 459) is Proidea Sp. z o.o., with its registered office at ul.
+ Zakopiaska 9, 30-418 Krakw, with the following identification numbers: NIP (Tax
+ Identification Number) 6793088842 and REGON (Business Identification Number)
+ 122769022, entered in the National Court Register under KRS number 0000448243. The
+ Organizer can be contacted by e-mail at biuro@proidea.org.pl.
+3. Wojewdztwo Malopolskie, serving as the Host Region of HackYeah 2026, is the initiator
+ of the "HubMI.pl" Competition.
+4. Details of the task will be presented at the start of the competition.
+
+5. The rules of participation in the Hackathon are set out in the Hackathon rules
+ published on the Organizer's website. Participation in the Competition is only
+ possible for Hackathon participants.
+
+6. The Organizer makes a promise to pay prizes to the Laureates on the terms set out in the
+ Regulations, subject to the conclusion of a proprietary copyright assignment agreement
+ with the Organizer (PROIDEA sp. z o.o.).
+
+7. The purpose of the Regulations is to accurately describe the rules of participation in
+ the Competition and they do not constitute a contract offer or a contract template.
+
+ 2. Duration of the Competition
+
+1. The Competition starts on 3 October 2026 at 11:00 and ends on 4 October 2026 at
+ 11:00.
+
+2. A detailed schedule of the Competition will be made available on the
+ Organizer's website www.hackyeah.pl
+
+ 3. Conditions for participation
+
+1. A participant in the Competition (hereinafter: the "Participant") may be a natural
+ person - a participant of the Hackathon who, on the day the Competition starts, is
+ at least 18 years old and has full legal capacity.
+
+2. Before joining the Competition, the Competition Participant is obliged to read
+ the Regulations.
+
+3. Participation in the Competition is tantamount to reading the Regulations and
+ accepting the provisions of the Regulations and their annexes by the Competition
+ Participant, and to the Competition Participant's undertaking to comply with the
+ provisions of the Regulations.
+
+4. Participants may take part individually or in teams of up to 6 people.
+5. Participants are obliged to comply with the Regulations and the Hackathon rules.
+
+ 4. Course of the Competition
+1. The content of the "HubMI.pl" task will be published on the HackYeah
+ website, www.hackyeah.pl, at 11:00 on the day the Competition starts.
+
+2. The Competition Participants' review of the content of the competition task and
+ the commencement of solving it will be possible after the ceremonial opening
+ of the Competition by the Organizer's representative.
+
+3. Competition Participants have a maximum of 24 hours to solve the competition task
+ and submit their solution to the HackTribe platform.
+
+4. Participation in the Hackathon and the Competition is only possible in an on-site
+ form at Tauron Arena in Krakw (31-571), ul. Stanislawa Lema 7.
+
+5. Wojewdztwo Malopolskie and the Organizer do not provide Competition
+ Participants with any equipment or hardware, nor do they provide technical
+ support services or hardware repair.
+
+6. Competition Participants may take part in the Competition individually or within
+ Teams of no more than 6 people.
+
+7. The competition task is carried out in an open formula (there is no single correct
+ solution), and the project solutions of the competition task submitted by individual
+ Competition Participants or Teams are assessed by the Competition Jury
+ composed of representatives of Wojewdztwo Malopolskie and representatives
+ appointed by the Organizer.
+
+8. In order to be considered in the settlement of the Competition, the project
+ solutions of the competition task prepared by individual Competition Participants
+ or Teams must be submitted to the Organizer no later than 11:00 on 4 October
+ 2026 in the form specified by the Organizer on the dedicated website
+ (https://hackyeah2026.hacktribe.co/) on which the content of the competition task
+ will be presented. Project solutions of the competition task submitted after this
+ deadline will not be taken into account and will not be assessed by the
+ Competition Jury.
+
+9. The task submitted for evaluation must include: project title, team ID, project
+ description, maximum 10-slides PDF presentation, maximum 3 minute mp4. video
+ presenting a project and could include: snapshots, code repository, demo links,
+ graphic materials and other materials related to the project. The task solutions should
+ be submitted to platform Hacktribe in Polish.
+
+10. Wojewdztwo Malopolskie or the Organizer may exclude a Participant/Team in the
+ event of a breach of the Regulations or of the law; if a criminal offence is suspected,
+ the Organizer will notify the competent authorities.
+
+ 5. Assessment rules
+
+1. Solutions are assessed by the Competition Jury composed mainly of representatives
+ of Wojewdztwo Malopolskie.
+ The composition of the Jury will be published on the Hackathon website no later than
+ on the start day.
+
+2. The Jury elects a chairperson from among its members; decisions are made by a
+ simple majority of votes in the presence of all members; in the event of a tie, the
+ chairperson has the casting vote.
+3. Each submission is assessed on a scale of 1-10 under the criteria below; the final
+
+ score is a weighted average:
+ Challenge fulfilment - 40% Assessment considers how well the key components
+ work and the number of additional features delivered
+ Implementation potential - 20% Assessment of the solution's readiness for
+ implementation. Higher scores will be awarded to products suitable for practical
+ use that demonstrate scalability, flexibility, optimisation, cost-effectiveness and
+ ease of maintenance,
+ Prototype accessibility and intuitiveness - 20% Assessment of whether the
+ tool's interface is clear and easy to use for all target user groups, regardless of age
+ or digital literacy. Particular attention will be paid to whether the tool has been
+ designed with WCAG 2.1 Level AA accessibility standards in mind to avoid
+ creating barriers to use,
+ Bonus criteria - 20%, comprising:
+ - Interface appeal, creativity and quality - 10% This criterion rewards innovative,
+ unconventional approaches to the challenge and the visual appeal of the submitted
+ UX/UI mock-ups,
+ - Quality of the submitted materials and MVP - 10% Assessment considers how
+ clearly the concept is communicated and the quality of the materials submitted for
+ evaluation.
+
+4. To become a Laureate, a submission must obtain at least 50% of the maximum
+ possible score.
+
+5. The project presentation before the Jury shall be conducted in Polish.
+
+ 6. Settlement and prizes
+
+1. The results of the Competition will be announced on 4 October 2026 during the
+ Hackathon closing ceremony (approx. 17:45) and on the event's official
+ messaging platform.
+
+2. A maximum of three Winners will be selected (individual Participants or Teams) will
+ be selected, taking places 1-3. The order is determined by the score under 5; in the
+ event of a tie - the chairperson's vote decides.
+
+3. Prizes:
+ 1st place - PLN 6 000,
+ 2nd place - PLN 5 000,
+ 3rd place - PLN 4 000.
+
+4. The amounts of the prizes are reduced by due taxes, contributions and
+ fees in accordance with the law.
+
+5. In the case of awarding a Team, the prize is divided proportionally to the
+ number of members and paid by the Organizer (PROIDEA sp. z o.o.) to each
+ member to the indicated bank account.
+
+6. The issuance of the prize is conditional upon the cumulative fulfilment by
+ the Laureate/Laureates of:
+ a) conclusion with the Organizer (PROIDEA sp. z o.o.) of a proprietary
+ copyright assignment agreement for the awarded works/solutions (the
+ template/essential provisions will be provided by the Organizer);
+ b) provision of the data necessary for the Organizer to perform tax and
+ settlement obligations.
+
+7. The prizes will be paid by the Organizer to the Laureates' bank accounts within 60
+ days from the conclusion of the agreement referred to in para. 6(a), unless the
+ agreement provides otherwise.
+
+ 7. Copyright
+
+1. Solutions (works) created as part of the implementation by the Laureates of the
+ competition task (in whole or in part), including their fragments and their
+
+ elements, as well as all materials, including documentation related to the above-
+ mentioned solutions/works) constitute works within the meaning of the Act of 4
+ February 1994 on Copyright and Related Rights (Journal of Laws of 2025, item 24)
+ (hereinafter collectively referred to in this paragraph as the "Works" or separately as
+ a "Work").
+
+2. Pursuant to Article 921 3 of the Act of 23 April 1964 - the Civil Code (Journal of Laws
+ of 2025, item 1071, as amended), proprietary copyrights to the prize-winning Works
+ in the Competition pass to the Organizer at the time of payment of prizes to the
+ Laureates.
+
+3. Refusal by an individual Competition Participant or any of the Competition
+ Participants who is a member of a Team to conclude the agreement referred to in 6
+ para. 6 point a of the Regulations shall be deemed a resignation from accepting the
+ prize provided for in the Competition, in accordance with the Regulations, and shall
+ constitute grounds for refusing to issue to the Laureate the prize provided for in the
+ Competition. In such a situation, the individual Competition Participant and all
+ Competition Participants who are members of the given Team shall not be entitled
+ to any claims against Wojewdztwo Malopolskie.
+
+4. At the time of payment of the prize to each of the Laureates, the Organizer
+ acquires ownership rights to all copies of the Works (including source codes) and
+ the media on which the Works have been recorded, as well as acquires all
+ proprietary copyrights to the Works covering the following fields of exploitation:
+
+ a) permanent or temporary fixation or reproduction in whole or in part, by any
+ means and in any form, regardless of the format, system or standard,
+ including by printing, magnetic recording, digital technology or by entering
+ into computer memory, and permanent or temporary fixation or
+ reproduction of such records, including making copies thereof and any use
+ and disposal of such copies;
+
+ b) creating new versions and adaptations (translation, adaptation, change of
+ layout or any other changes) and any processing of the Works, including
+ combining with other works, with the rights of the person who made such
+ changes being preserved;
+
+ c) placing on the market, lending or rental of the original or copies;
+ d) storing the Work in computer memory and making it available on computer
+ networks, including the Internet and intranets, in particular by permanently
+ placing the Work or parts thereof on the websites of the Acquirer or entities to
+ which the Acquirer transfers the rights to the Work or grants authorisation to use
+ it, in a manner that allows any interested person to access it at a place and time
+ of their choosing and to freely and repeatedly copy the Work or parts thereof;
+
+ e) public dissemination, in particular display, public performance,
+ broadcasting and rebroadcasting in any system or standard, as well as
+ making the Works available to the public in such a way that anyone can
+ access them at a place and time individually chosen by them, in particular
+ on-demand electronic making available, including dissemination on the
+ Internet and on closed networks;
+
+ f) exhibiting, displaying and broadcasting and rebroadcasting by radio or
+ television transmission carried out wirelessly or by wire (terrestrial, via
+ satellite or computer networks, by cable), including broadcasting by sound
+ or vision, wirelessly (terrestrial and satellite) or by wire, in any system and
+ standard, including via cable networks and digital platforms;
+
+ g) the right to determine the names of the Works under which they will be used
+ or disseminated, including trade names;
+
+ h) the right to use the Works for marketing or promotion purposes, as well as
+ for educational or training purposes;
+
+ i) the right to dispose of elaborations of the Works and the right to make
+ them available for use, including granting licences to third parties, in all
+ the fields of exploitation listed above;
+
+ j) authorising the exercise by third parties of dependent copyrights in relation to
+ the Works;
+
+ k) preparation of foreign language versions (as well as using techniques
+ enabling the transmission of information for persons with different types of
+ disabilities);
+
+ l) broadcasting by wired or wireless vision or otherwise via a computer
+ network including posting films on the Internet without any restrictions,
+ excluding the possibility of public broadcasting of films or parts thereof on
+ television.
+
+5. The transfer of proprietary copyrights to the Works, in relation to source codes,
+ takes place in all the fields of exploitation specified in para. 4 and includes, in
+ particular, modification, compilation and combination, testing, implementation, use
+ of the Work created with it, in particular software, and the right to further transfer
+ these rights to third parties to the extent to which the Organizer has acquired these
+ rights. The Laureates are obliged to provide the Organizer with source codes.
+
+6. As a result of the transfer of proprietary copyrights, in accordance with para. 4,
+ the Organizer acquires the exclusive right to use the Works, to the full extent, in
+ any way, without time and territorial limitations on all the fields of exploitation
+ described in the Regulations, as well as the right to further transfer these rights to
+ third parties to the extent to which the Organizer has acquired these rights.
+7. The Laureate agrees to the making by the Organizer or at its request of any
+ changes, updates and additions to the Works - elaborations. All rights in this
+ respect (rights to elaborations of the Work) shall be vested in the Organizer. The
+ Laureate agrees to the disposal and use of elaborations of the Work by the
+ Organizer and to the right to further transfer these rights to third parties to the
+ extent to which the Organizer has acquired these rights.
+
+8. The Laureate transfers to the Organizer the exclusive right to exercise dependent
+ copyrights and the right to authorise the exercise of dependent copyrights to the
+ Work, in particular to translate, adapt, change the layout and make other changes or
+
+ modifications, and to dispose of and use elaborations of the Works in the fields
+ of exploitation specified in para. 4, and shall not demand any remuneration for
+ this, as well as the right to further transfer these rights to third parties to the
+ extent to which the Organizer has acquired these rights.
+
+9. The Laureate authorises the Organizer to decide on the first disclosure of the Works
+ to the public, to decide whether the Works are to be identified by the Laureate's
+ name or pseudonym or made available anonymously (without identifying the
+ Laureate as the author), and to supervise the manner in which the Works are used.
+ The Laureate further authorises the Organizer to transfer these authorisations in
+ their entirety to third parties, in particular to entities that acquire the economic
+ copyrights to the Works from the Organizer.
+
+10. The Laureate is not entitled to remuneration for each separate field of exploitation.
+
+11. The Organizer is entitled to use the Works, in the fields of exploitation indicated in
+ para. 4, from the date the Work is made available to the Organizer until the date the
+ Organizer acquires proprietary copyrights. The Laureate ensures that such use of
+ the Works will not violate the personal or property rights of the Organizer or third
+ parties and will not cause any additional costs or the obligation to pay any
+ additional fees on the part of the Organizer.
+
+12. Notwithstanding the above, the Laureate undertakes to:
+
+ a) transfer in the future proprietary copyrights to Wojewdztwo Malopolskie
+ (which will acquire from the Organizer proprietary copyrights to the Works) in
+ fields of exploitation unknown at the time of conclusion of the agreement
+ referred to in 6 para. 6 point a of the Regulations, without remuneration, to
+ the extent of their part of the Work having independent significance;
+
+ b) not to exercise moral rights to their part of the Work having independent
+ significance in all the fields of exploitation listed in para. 4 and in Article 16 of
+ the Act of 4 February 1994 on Copyright and Related Rights with respect to
+ the Organizer and Wojewdztwo Malopolskie, and also
+ authorises the Organizer and Wojewdztwo Malopolskie to exercise the
+ aforementioned moral rights. The Organizer and Wojewdztwo
+ Malopolskie are entitled, inter alia, to refrain from including in the Works
+ the names and surnames of the Laureate or Laureates.
+
+ 8. Personal data
+
+1. The controller of the Participants' personal data is PROIDEA sp. z o.o. with its registered
+ office in Krakw (the Organizer). Information on data processing is available in the
+ privacy policy on the Organizer's website.
+
+ 2. The data will be processed for the purpose of organizing and conducting the
+ Hackathon and the Competition, including contacting Participants, settling prizes
+ and performing legal obligations.
+
+ 9. Liability
+ 1. Wojewdztwo Malopolskie and the Organizer are not liable for the inability to transfer
+
+ the prize where the Competition Participant provides incorrect, incomplete or untrue
+ personal data, contact details or other information preventing the transfer of the
+ prize.
+
+ 2. A Participant may withdraw from the Competition at any time; withdrawal means
+ loss of the right to the prize.
+
+ 3. A Laureate loses the right to the prize if a violation by the Laureate of the
+ provisions of the Regulations is found by Wojewdztwo Malopolskie or the
+ Organizer and there are grounds justifying exclusion as referred to in the
+ Regulations.
+
+ 10. Final provisions
+1. The Organiser, in agreement with the Wojewdztwo Malopolskie, may cancel, suspend or
+
+ terminate the Competition early only for compelling reasons, in particular due to force
+ majeure, a threat to the safety of Participants, a technical failure preventing the
+ Competition from being held, or other circumstances beyond the control of the Organiser
+ or the Wojewdztwo Malopolskie that prevent the proper conduct of the Competition.
+2. The results of the Competition are not subject to appeal.
+3. The Rules may be amended after the Competition has commenced only for a
+ compelling reason. Such amendments must not infringe Participants' acquired rights or
+ adversely affect the conditions of their participation, in particular the rules for awarding
+ prizes, the evaluation criteria or the provisions concerning intellectual property rights.
+4. Wojewdztwo Malopolskie will seek to resolve disputes related to participation in the
+ Competition amicably; in the absence of agreement, the decision is taken by
+ Wojewdztwo Malopolskie and is binding on the Participants.
+5. In the event of discrepancies between the Hackathon rules, these Regulations and
+ the content of the agreement with the Laureate, the agreement concluded with the
+ Organizer shall prevail first, then these Regulations, and finally the Hackathon rules.
+6. The Regulations are effective from the date of publication by the Organizer.
+ UMOWA O PRZENIESIENIE PRAW AUTORSKICH
+
+ zwana dalej ,,Umow" zawarta w dniu 04.10.2026 r. pomidzy:
+
+1.
+ zwanym dalej ,,Wspltwrc I"
+
+2.
+ zwanym dalej ,,Wspltwrc II"
+
+3. ,
+ zwan dalej ,,Wspltwrc III"
+
+4. ,
+ zwanym dalej ,,Wspltwrc IV"
+
+5. ,
+ zwanym dalej ,,Wspltwrc V"
+
+6. ,
+ zwanym dalej ,,Wspltwrc VI"
+
+ zwani dalej lcznie ,,Twrcami"
+
+ a
+
+Proidea splka z ograniczon odpowiedzialnoci z siedzib w Krakowie, ul. Zakopiaska 9, 30-418
+Krakw, wpisan do Rejestru Przedsibiorcw Krajowego Rejestru Sdowego prowadzonego przez
+Sd Rejonowy dla Krakowa rdmiecia w Krakowie, XI Wydzial Gospodarczy Krajowego Rejestru
+ Sdowego pod numerem KRS 0000448243, REGON 122769022, NIP: 6793088842 reprezentowan
+ przez:
+ Jakuba Koziola - Prezesa Zarzdu,
+
+ zwan dalej ,,Nabywc".
+
+ 1
+
+ 1. Twrcy owiadczaj, e wedlug przepisw ustawy z dnia 4 lutego 1994 r. o prawie autorskim
+ i prawach pokrewnych s autorami dziela ,,..." zwanego dalej ,,Utworem" lub
+ ,,Rozwizaniem", stworzonego w ramach wydarzenia Hackathon HackYeah 2026
+ odbywajcego si w dniach 3-4 padziernika 2026 roku w formie stacjonarnej w Tauron
+ Arena Krakw zlokalizowanym przy ul. Stanislawa Lema 7, 31-571 Krakw.
+
+ 2. Twrcy owiadczaj, e przekazane zostan repozytorium zawierajce:
+ .............................................................
+ 3. Twrcy zgodnie owiadczaj, e przysluguje im prawo autorskie wsplne do Utworu, a ich
+
+ udzialy w tym prawie s rwne za prawa te nie s obcione prawami osb trzecich.
+ 4. Twrcy nadto owiadczaj i zapewniaj, e Utwr:
+ g. zostal przez nich wykonany osobicie,
+ h. nie zostal dotychczas opublikowany, a jedynie udostpniony na potrzeby oceny
+
+ podczas eventu Hackathon HackYeah 2026,
+ i. nie stanowi opracowania cudzego dziela i przysluguj im do niego pelne prawa
+
+ majtkowe,
+ j. mog rozporzdza prawami autorskimi do Utworu w zakresie niezbdnym do zawarcia
+
+ i wykonywania Umowy.
+ k. nie zbyli prawa do uzyskania patentw na Rozwizanie oraz nie przenieli prawa
+
+ pierwszestwa do uzyskania patentw na Rozwizanie;
+ l. wykonanie Umowy oraz udzielanie zezwolenia na korzystanie z Rozwizania
+
+ podmiotom trzecim, nie naruszy praw wlasnoci intelektualnej osb trzecich ani
+ Twrcw.
+5. Twrcy owiadczaj, e przyslugujce im majtkowe prawa autorskie do Utworu pozostaj
+ wolne od jakich obcie wynikajcych z przepisw prawa lub czynnoci prawnej,
+ w szczeglnoci nie zostaly zajte w rozumieniu przepisw o postpowaniu egzekucyjnym
+ lub obciane prawami rzeczowymi lub obligacyjnymi.
+6. Twrcy pokryj wszelkie oplaty, koszty, odszkodowania lub zadouczynienia, ktre bdzie
+ musial zaplaci Nabywca, jeeli powysze zapewnienia nie oka si prawdziwe.
+7. Twrcy dostarcz Nabywcy Utwr w nastpujcy sposb: calo pracy zostanie
+ spakowana do pliku w formacie zip. i przeslana za pomoc ... (w przecigu 24 godzin od
+ zawarcia Umowy.
+ Strony potwierdzaj, i w zakresie, w ktrym Utwr stanowi program komputerowy Twrcy
+ dostarcz Nabywcy Utwr rwnie w formie kodu rdlowego. Kod rdlowy, zostanie
+ dostarczony na informatycznym noniku danych, w formie umoliwiajcej Nabywcy
+ swobodny odczyt kodu rdlowego, a take zapisanie kodu na innym noniku
+ i doprowadzenie tego kodu rdlowego do formy wykonywalnej (w szczeglnoci w drodze
+ kompilacji) na odpowiednio wyposaonym stanowisku komputerowym. Wraz z kodem
+ rdlowym Twrcy dostarcz kompletny wykaz narzdzi programistycznych, bibliotek i
+ innych elementw niezbdnych do doprowadzenia takiego Utworu do formy wykonywalnej.
+ Twrca nie jest uprawniony do stosowania jakichkolwiek technik lub ogranicze, ktre
+ uniemoliwilyby lub istotnie utrudnily Nabywcy odczyt lub zapisywanie kodu, w
+ szczeglnoci szyfrowani.
+
+ 2
+
+1. Z chwil wyplaty Nagrody Twrcom, zgodnie z zasadami okrelonymi w Regulaminie
+ Konkursu ,,HubMI.pl", Twrcy przenosz na Nabywc autorskie prawa majtkowe do
+ Utworu na polach eksploatacji wskazanych w Umowie oraz udzielaj zgd i upowanie w
+ niej wymienionych.
+2. Strony zgodnie potwierdzaj, e z chwil zawarcia Umowy, Twrcy nabywaj roszczenie
+
+wzgldem Nabywcy o wyplat nagrody pieninej w kwocie .... (z podatkiem) (,,Nagroda").
+
+Wyplata nagrody pieninej wyczerpuje wszelkie roszczenia Twrcw wzgldem Nabywcy
+
+zwizanych z dokonanym przez Twrcw rozporzdzeniem i upowanieniami, na
+
+podstawie Umowy.
+
+3. Zgodnie z art. 30 ust. 1 pkt 2) ustawy o podatku dochodowym od osb fizycznych pobrany
+
+zostanie zryczaltowany podatek dochodowy w wysokoci 10 % Nagrody.
+
+4. Nagroda zostanie przekazana na rachunek bankowy wskazany przez Twrcw:
+
+- Wspltwrca I - ... zl netto (slownie: ... zlotych netto) na rachunek bankowy o nr: ...
+
+- Wspltwrca II - ... zl netto (slownie: ... zlotych netto) na rachunek bankowy o nr: ...
+
+- Wspltwrca III - ... zl netto (slownie: ... zlotych netto) na rachunek bankowy o nr: ...
+
+- Wspltwrca IV - ... zl netto (slownie: ... zlotych netto) na rachunek bankowy o nr: ...
+
+- Wspltwrca V - ... zl netto (slownie: ... zlotych netto) na rachunek bankowy o nr: ...
+
+- Wspltwrca VI - ... zl netto (slownie: ... zlotych netto) na rachunek bankowy o nr: ...
+
+5. Przeniesienie autorskich praw majtkowych, o ktrych mowa w ust. 1 w zakresie w jakim
+
+Utwr albo jego cz stanowi program komputerowy obejmuje wszystkie pola
+
+eksploatacji znane w chwili zawarcia Umowy, w tym wszelkie pola eksploatacji wskazane
+
+w art. 74 ust. 4 ustawy z dnia 4 lutego 1994 r. o prawie autorskim i prawach pokrewnych,
+
+a w szczeglnoci:
+
+f. trwale lub czasowe zwielokrotnianie Rozwizania w caloci lub w czci
+
+jakimikolwiek rodkami i w jakiejkolwiek formie, w szczeglnoci dla celw
+
+wprowadzania, wywietlania, stosowania, przekazywania i przechowywania
+
+oprogramowania, a take wytworzenia ich egzemplarzy dowoln technik, w tym
+
+technik drukarsk, reprograficzn, zapisu magnetycznego oraz technik cyfrow,
+
+g. tlumaczenie, przystosowanie, zmiana ukladu oraz dokonywanie
+
+jakichkolwiek innych zmian,
+
+h. rozpowszechnianie, w tym wprowadzanie do obrotu, sprzeday, udzielania
+
+licencji, uyczanie lub najem Rozwizania lub jego kopii,
+
+i. najmu, uyczenia, publicznego udostpnienia w sposb umoliwiajcy
+
+dostp do Rozwizania w czasie i miejscy dostpnym dla kadego,
+
+j. modyfikowanie, dokonywanie wszelkich zmian, tlumacze, zmian ukladu,
+
+wykonywania praw zalenych, wykonywanie opracowa i zezwalania na ich
+
+wykonywanie przez osoby trzecie.
+
+6. Przeniesienie autorskich praw majtkowych, o ktrych mowa w ust. 1 w zakresie w jakim
+
+Utwr albo jego cz nie stanowi programu komputerowego, obejmuje wszystkie pola
+
+eksploatacji znane w chwili zawarcia Umowy, w tym wszelkie pola eksploatacji wskazane
+
+w art. 50 ustawy z dnia 4 lutego 1994 r. o prawie autorskim i prawach pokrewnych,
+
+a w szczeglnoci:
+ trwale lub czasowe utrwalanie lub zwielokrotnianie w caloci lub w czci,
+ jakimikolwiek rodkami i w jakiejkolwiek formie, niezalenie od formatu,
+ systemu lub standardu, w tym technik drukarsk, technik zapisu
+ magnetycznego, technik cyfrow lub poprzez wprowadzanie do pamici
+ komputera oraz trwale lub czasowe utrwalanie lub zwielokrotnianie takich
+ zapisw, wlczajc w to sporzdzanie ich kopii oraz dowolne korzystanie i
+ rozporzdzanie tymi kopiami;
+
+ tworzenie nowych wersji i adaptacji (tlumaczenie, przystosowanie, zmian
+ ukladu lub jakiekolwiek inne zmiany) oraz dowolne przetwarzanie Utworw,
+ w tym lczenie z innymi utworami, z zachowaniem praw osoby, ktra tych
+ zmian dokonala;
+
+ wprowadzania do obrotu, uyczenia lub najmu oryginalu albo egzemplarzy;
+
+ wprowadzanie Utworu do pamici komputerw oraz udostpnianie go w
+ sieciach komputerowych, w tym w Internecie i Intranecie, w szczeglnoci
+ poprzez stale umieszczenie Utworu lub jego czci na stronach internetowych
+ Nabywcy lub podmiotw, ktrym Nabywca przekae prawa do Utworu lub
+ udzieli upowanienia do korzystania z niego, w sposb umoliwiajcy kademu
+ zainteresowanemu dostp w miejscu i czasie przez siebie wybranym oraz
+ swobodne, wielokrotne kopiowanie Utworu lub jego czci;
+
+ publiczne rozpowszechnianie, w szczeglnoci wywietlanie, publiczne
+ odtwarzanie, nadawanie i reemitowanie w dowolnym systemie lub
+ standardzie, a take publiczne udostpnianie Utworw w ten sposb, aby
+
+ kady mgl mie do nich dostp w miejscu i czasie przez siebie wybranym, w
+ szczeglnoci elektroniczne udostpnianie na danie, w tym
+ rozpowszechnianie w sieci Internet i sieciach zamknitych;
+
+ wystawianie, wywietlanie i nadawanie i reemitowanie drog emisji radiowej
+ lub telewizyjnej prowadzonej w sposb bezprzewodowy lub przewodowy
+ (naziemny, za porednictwem satelity lub sieci komputerowych, drog
+ kablow), w tym nadawanie za pomoc fonii lub wizji, w sposb
+ bezprzewodowy (drog naziemn i satelitarn) lub w sposb przewodowy, w
+ dowolnym systemie i standardzie, w tym take poprzez sieci kablowe i
+ platformy cyfrowe;
+
+ prawa do okrelania nazw Utworw, pod ktrymi bd one wykorzystywane lub
+ rozpowszechniane, w tym nazw handlowych;
+
+ prawa do wykorzystywania Utworw do celw marketingowych lub promocji, a
+ take dla celw edukacyjnych lub szkoleniowych;
+
+ prawo do rozporzdzania opracowaniami Utworw oraz prawo udostpniania
+ ich do korzystania, w tym udzielania licencji na rzecz osb trzecich, na
+ wszystkich wymienionych powyej polach eksploatacji;
+
+ zezwalanie na wykonywanie przez osoby trzecie praw autorskich zalenych w
+ stosunku do Utworw;
+
+ sporzdzanie wersji obcojzycznych (jak rwnie z uyciem technik
+ umoliwiajcych przekazywanie informacji dla osb z rnymi rodzajami
+ niepelnosprawnoci);
+
+ nadawanie za pomoc wizji przewodowej albo bezprzewodowej lub w inny
+ sposb poprzez sie komputerow w tym zamieszczanie filmw w sieci
+ Internet bez adnych ogranicze, z wylczeniem moliwoci publicznego
+ emitowania filmw lub ich czci w telewizji.
+ 7. Twrcy na mocy Umowy przenosz na Nabywc wylczne prawo zezwalania na
+ wykonywanie praw zalenych do Utworu tj. prawo zezwalania na rozporzdzanie
+ i korzystanie z opracowa Utworu na polach eksploatacji okrelonych w niniejszym
+ paragrafie, zezwala Nabywcy na wykonywanie praw zalenych na tych polach eksploatacji
+ oraz upowania Nabywc do zlecania osobom trzecim wykonywania tych zalenych praw
+ autorskich.
+
+ 8. Przeniesienie autorskich praw majtkowych do Utworu oraz prawa zezwalania na
+ wykonywanie praw zalenych nastpuje z chwil wyplaty Nagrody.
+
+ 9. Od dnia udostpnienia Utworu Nabywcy do dnia wyplaty Nagrody i przejcia autorskich
+ praw majtkowych Twrcy udzielaj Nabywcy nieodplatnej, niewylcznej licencji na
+ korzystanie z Utworu na polach eksploatacji wskazanych w niniejszym paragrafie, w
+ zakresie niezbdnym do przeprowadzenia Konkursu, oceny, prezentacji, publikacji
+ wynikw oraz realizacji czynnoci zwizanych z wydaniem Nagrody.
+
+ 10. Z chwil przeniesienia autorskich praw majtkowych przechodzi na Nabywc prawo
+ wlasnoci nonika, na ktrym Utwr zostal zapisany i/lub utrwalony.
+
+ 11. Twrcy zobowizuj si do niewykonywania autorskich praw osobistych wobec Nabywcy
+ oraz podmiotw, na rzecz ktrych Nabywca zbyl prawa do Utworu w caloci lub czci,
+ w tym w zakresie oznaczania Utworu imieniem i nazwiskiem Twrcw (co oznacza
+ w szczeglnoci, e jego rozpowszechnianie moe by dokonywane bez ujawnienia
+ autorstwa).
+
+ 12. Twrcy uprawniaj Nabywc do pierwszej publikacji Utworu.
+ 13. Twrcy gwarantuj, e Utwr, do ktrego prawa s przenoszone Umow, nie jest obciony
+
+ adnymi roszczeniami i prawami osb trzecich.
+ 14. Twrcy upowaniaj Organizatora do decydowania o pierwszym udostpnieniu Utworw
+
+ publicznoci, do decydowania o oznaczeniu Utworw nazwiskiem lub pseudonimem
+ Laureata lub o udostpnianiu Utworw anonimowo (bez oznaczania autorstwa Twrcy), a
+ take do nadzoru nad sposobem korzystania z Utworw. Twrca upowania rwnie
+ Organizatora oraz Wojewdztwo Malopolskie do przenoszenia tych upowanie w pelnym
+ zakresie na podmioty trzecie, w szczeglnoci na podmioty, ktre nabd autorskie prawa
+ majtkowe do Utworw lub uzyskaj prawo do korzystania z nich.
+
+ 3
+
+1. Strony zobowizuj si zachowa w tajemnicy wszelkie dane dotyczce przerabiania
+i publikowania Utworu.
+2. Twrcy zobowizuj si do zachowania w tajemnicy wszelkich informacji dotyczcych
+funkcjonowania i struktury przedsibiorstwa Nabywcy, ktre poznali w trakcie przygotowa do
+zawierania Umowy.
+3. Strony zobowizuj si do zachowania w tajemnicy postanowie Umowy.
+ 4
+1. W sprawach nieuregulowanych w Umowie maj zastosowanie przepisy prawa
+
+ polskiego, w szczeglnoci ustawy z dnia 4 lutego 1994 r. Prawo autorskie i prawa
+ pokrewne oraz przepisy Kodeksu Cywilnego.
+2. Wszelkie zmiany treci Umowy i jej uzupelniania powinny by wprowadzone w formie
+ pisemnej (lub rwnowanej jej formie elektronicznej) jako aneks do Umowy, pod
+ rygorem niewanoci.
+3. W przypadku, gdyby ktrekolwiek z postanowie Umowy okazalo si niewane,
+ nieskuteczne, niezgodne z prawem lub niewykonalne w caloci lub w czci,
+ okoliczno ta nie wplynie na wano pozostalych postanowie.
+
+ 5
+
+1. W przypadku sporw wynikajcych z treci Umowy, wlaciwy bdzie sd dla strony
+ pozwanej.
+
+2. Umow sporzdzono w siedmiu identycznych egzemplarzach, po jednym dla kadego
+ ze wspltwrcw oraz Nabywcy.
+
+Nabywca Twrcy
+1.....................................
+ 1........................................
+ 2..........................................
+ 3..........................................
+ 4..........................................
+ 5..........................................
+ 6..........................................
+

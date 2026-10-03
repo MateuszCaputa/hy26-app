@@ -1,0 +1,849 @@
+                                    Regulamin
+                                HackYeah 2026
+
+                                (English version below)
+
+1. Definicje
+
+1.1. Uyte w Regulaminie pojcia pisane wielk liter maj nastpujce znaczenie:
+
+a. ,,Konkurs" - przeznaczony dla Uczestników konkurs z nagrodami na rozwizanie
+
+              przedstawionych zagadnie problemowych, odbywajcy si w trakcie w Wydarzenia;
+
+b. ,,Mentor" - pelnoletnia osoba fizyczna, posiadajca odpowiedni wiedz i dowiadczenie
+
+              z zakresu tematyki Wydarzenia, w tym w szczególnoci programici, analitycy, eksperci ds.
+
+              sztucznej inteligencji i bezpieczestwa, projektanci UX/UI, liderzy techniczni,
+
+              menederowie produktów i projektów, prawnicy wykladowcy akademiccy oraz
+
+              przedsibiorcy, której zadaniem jest wspieranie Uczestników podczas pracy nad
+
+              projektami w ramach Wydarzenia swoj wiedz i dowiadczeniem;
+
+c. ,,Organizator" - PROIDEA sp. z o.o. z siedzib w Krakowie przy ulicy Zakopiaska 9, 30-418
+
+              Kraków, wpisana do Rejestru Przedsibiorców prowadzonego przez Sd Rejonowy
+
+              dla Krakowa - ródmiecia w Krakowie pod numerem KRS: 0000448243, NIP: 6793088842,
+
+              kapital zakladowy: 30.000 PLN;
+
+d. ,,Partner" - osoba fizyczna lub prawna, która prezentuje swoje produkty lub uslugi
+
+              podczas Wydarzenia lub jest organizatorem Konkursów oraz fundatorem nagród
+
+              w Konkursach;
+
+e. ,,Platforma"              -  strona        internetowa          dostpna     pod  adresem
+
+              https://eventory.cc/event/hackyeah-2026-cracow/tickets, do której nastpuje
+
+              przekierowanie z Serwisu celem zgloszenia udzialu w Wydarzeniu;
+
+f. ,,Prelegent" - pelnoletnia osoba fizyczna, uprawniona do wygloszenia prelekcji podczas
+
+              Wydarzenia na zasadach okrelonych w pkt. 7 Regulaminu
+
+g. ,,Regulamin" - niniejszy regulamin;
+
+h. ,,Serwis" - strona internetowa dostpna pod adresem https://hackyeah.pl/ zawierajca
+
+              informacje o Wydarzeniu oraz umoliwiajca zgloszenie udzialu w Wydarzeniu
+
+              w charakterze Uczestnika za porednictwem Platformy;
+
+i. ,,Uczestnik" - pelnoletnia osoba fizyczna uprawniona do udzialu w Wydarzeniu;
+
+j. ,,Wydarzenie" - organizowane przez Organizatora wydarzenie typu hackathon, pod nazw
+
+              ,,HackYeah 2026", które odbdzie si w dniach 3-4 padziernika 2026 w Krakowie
+
+              w TAURON Arenie Kraków.
+
+1.2. Pojcia okrelone w pkt. 1.1. bd zawieraly liczb mnog i odwrotnie, a pojcia w okrelonym
+
+rodzaju bd zawieraly wszystkie rodzaje.
+
+2. Postanowienia ogólne
+       2.1. Regulamin okrela, w szczególnoci, zasady dokonywania rejestracji na Wydarzenie oraz zasady
+                uczestniczenia w Wydarzeniu.
+       2.2. Akceptacja Regulaminu jest warunkiem koniecznym dla dokonania rejestracji oraz udzialu
+                w Wydarzeniu.
+       2.3. Uczestnik dokonuje akceptacji Regulaminu podczas procesu rejestracji na Wydarzenie
+                w Platformie.
+       2.4. Uczestnik jest zobowizany do przestrzegania postanowie Regulaminu.
+       2.5. Zasady przetwarzania danych osobowych Uczestników, Prelegentów i Mentorów
+                oraz uytkowników Serwisu zostaly szczególowo okrelone w Polityce Prywatnoci.
+       2.6. Regulamin jest dostpny w Serwisie w sposób cigly do 7 dni od zakoczenia Wydarzenia. Kady
+                moe skopiowa tekst Regulaminu, zapisa lub wydrukowa go za pomoc swoich urzdze.
+       2.7. rodkiem komunikacji wykorzystywanym w celu wykonania umowy jest poczta elektroniczna
+                [email], o ile Regulamin nie stanowi inaczej.
+       2.8. Liczba miejsc na Wydarzenie jest ograniczona, a o moliwoci udzialu w Wydarzeniu decyduje
+                kolejno zglosze.
+
+                                                                                           1
+3. Rejestracja i udzial w Wydarzeniu
+       3.1. Warunkiem umoliwiajcym wzicie udzialu w Wydarzeniu jest zarejestrowanie si poprzez
+                prawidlowe uzupelnienie i przeslanie dostpnego w Platformie formularza oraz dokonanie
+                oplaty za bilet (o ile formularz przewiduje obowizek dokonania oplaty).
+       3.2. Rejestracja na Wydarzenie trwa od 21 kwietnia do 4 padziernika 2026 r.
+       3.3. Organizator zastrzega moliwo wczeniejszego zakoczenia rejestracji w przypadku
+                osignicia maksymalnej liczby Uczestników.
+       3.4. Bilety na Wydarzenie s imienne, w zwizku z czym zmiana danych na bilecie moe nastpi
+                tylko po uzyskaniu uprzedniej zgody Organizatora wyraonej w formie dokumentowej
+                pod rygorem bezskutecznoci.
+       3.5. Przed wejciem na Wydarzenie Uczestnik zobowizany bdzie do okazania biletu a take
+                dowodu tosamoci, celem weryfikacji uprawnienia do wejcia na Wydarzenie.
+       3.6. Uczestnicy zobowizani s do zapewnienia sprztu komputerowego, umoliwiajcego czynny
+                udzial w Wydarzeniu we wlasnym zakresie.
+       3.7. Organizator nie odpowiada za sprzt komputerowy i inne rzeczy Uczestników, a take
+                nie wiadczy uslug wsparcia technicznego i naprawy sprztu.
+       3.8. Organizator zastrzega sobie prawo odmowy umoliwienia uczestnictwa w Wydarzeniu osobom,
+                wobec których powemie uzasadnione podejrzenie, e dokonaly rejestracji w celu innym, ni
+                wzicie czynnego udzialu w Wydarzeniu (w tym w szczególnoci udzialu w Konkursach). Za
+                zachowania uprawniajce Organizatora do realizacji przedmiotowego uprawnienia uznaje si w
+                szczególnoci prowadzenie przez Uczestnika rekrutacji pracowników/wspólpracowników,
+                reklamowanie wlasnych towarów lub uslug.
+       3.9. Wszelkie gadety i inne dodatki zawarte w cenie biletu na Wydarzenie moliwe s do odbioru
+                przez uczestników tylko na miejscu Wydarzenia w trakcie jego trwania.
+
+4. Przebieg Wydarzenia
+       4.1. Godziny rozpoczcia i zakoczenia Wydarzenia oraz poszczególnych Konkursów (jak i ogloszenia
+                wyników Konkursów) dostpne bd w Serwisie, przy czym Organizator zastrzega, e godziny
+                rozpoczcia i zakoczenia zarówno Wydarzenia jak i poszczególnych Konkursów mog ulec
+                zmianie, co zostanie zakomunikowane przez Organizatora.
+       4.2. Podczas Wydarzenia przeprowadzone bd niezalene od siebie Konkursy, których
+                organizatorami i fundatorami nagród bdzie Organizator albo wybrani Partnerzy.
+                Lista Konkursów oraz organizatorów poszczególnych Konkursów dostpna jest w Serwisie. Lista
+                Konkursów zostanie zaktualizowana najpóniej w dniu rozpoczcia Wydarzenia.
+       4.3. Dedykowana strona internetowa, sluca do przesylania i przechowywania rozwiza
+                konkursowych zostanie udostpniona Uczestnikom od godz. 11:00, 3 padziernika 2026 r. do
+                godz. 11:00, 4 padziernika 2026 r. Regulaminy poszczególnych Konkursów mog przewidywa
+                istnienie dedykowanych stron internetowych dla danego Konkursu, wówczas odpowiednie
+                informacje zostan zamieszczone w regulaminie danego Konkursu.
+       4.4. Wydarzenie moe ulec skróceniu w przypadku rozwizania wszystkich zada konkursowych
+                w ramach wszystkich Konkursów, przed uplywem przewidzianego czasu.
+       4.5. Na potrzeby udzialu w Konkursie uczestnicy tworz zespoly. O czlonkostwie danego Uczestnika
+                w zespole decyduj pozostali czlonkowie zespolu.
+       4.6. W dniu Wydarzenia, przed rozpoczciem Konkursu, Uczestnik zostanie poinformowany
+                o szczególowych zasadach udzialu w danym Konkursie, w tym w szczególnoci o:
+                  a. treci zadania konkursowego;
+                  b. minimalnej i maksymalnej liczbie czlonków zespolu;
+                  c. sposobie przeslania rozwizania;
+                  d. nagrodzie lub nagrodach;
+                  e. zasadach przyznawania nagród oraz terminach wydania nagród.
+       4.7. Regulaminy poszczególnych Konkursów oraz lista nagród rzeczowych i pieninych, zostan
+                równie opublikowane w Serwisie, nie póniej ni w dniu rozpoczcia Wydarzenia.
+       4.8. Organizator nie odpowiada za przebieg oraz zasady przeprowadzenia Konkursów, których
+                organizatorami s Partnerzy.
+
+                                                                                                                                                      2
+4.9.   Wyslanie rozwizania zadania w ramach danego Konkursu jest jednoznaczne z akceptacj
+4.10.  regulaminu danego Konkursu.
+4.11.  Nagrody wydawane w Konkursach organizowanych przez Organizatora wydawane bd
+4.12.  w terminie do 90 dni od dnia ogloszenia wyników, chyba e regulamin danego Konkursu
+       stanowi inaczej.
+4.13.  Oferowane nagrody rzeczowe nie podlegaj wymianie na nagrody pienine, inne nagrody lub
+       ekwiwalent pieniny.
+       Nagrody przewidziane s jedynie dla zwyciskich zespolów, jednake zarówno Partnerzy jak
+       i Organizator zastrzegaj moliwo przyznawania wyrónie oraz dodatkowych drobnych
+       nagród rzeczowych dla konkretnych zespolów, których projekty zostan uznane za wartociowe
+       przez organizatora danego Konkursu.
+       W ramach Wydarzenia mog by równie przeprowadzone dodatkowe aktywnoci takie jak:
+       warsztaty, wyklady, konkursy itd.
+
+5. Jury i kryteria ocen
+       5.1. O ile regulamin danego Konkursu nie stanowi inaczej, zastosowanie maj reguly okrelone
+                w niniejszym pkt. 5.
+       5.2. Oceny rozwiza poszczególnych Konkursów dokonuje jury danego Konkursu, skladajce si
+                z minimum trzech czlonków
+       5.3. Czlonkowie jury danego Konkursu wybierane jest przez organizatora danego Konkursu tj. przez
+                Organizatora albo wybranego Partnera. Sklad jury kadego z Konkursów zostanie opublikowany
+                najpóniej drugiego dnia Wydarzenia.
+       5.4. Jury ocenia przygotowane przez zespoly rozwizania zgodnie z zasadami opisanymi
+                w regulaminie danego Konkursu, przy czym w kadym wypadku jury danego Konkursu
+                uprawnione jest do odmowy wylonienia zwycizców i przyznania nagród, jeeli adne
+                z rozwiza nie bdzie przedstawia adekwatnego poziomu (w szczególnoci gdy opracowane
+                rozwizania nie zdobd co najmniej 50% maksymalnej liczby punktów).
+       5.5. Jury danego Konkursu ocenia przygotowane przez zespoly rozwizania wedlug nastpujcych
+                kryteriów:
+                  a. pomyslowo i innowacyjno rozwizania - 30%;
+                  b. zwizek z tematyk Konkursu - 20%;
+                  c. praktyczne zastosowanie - 20%;
+                  d. design (aspekt wizualny) - 20%;
+                  e. kompletno i warto wdroeniowa - 10%.
+       5.6. Decyzje jury zapadaj zwykl wikszoci glosów. W przypadku równego rozloenia liczby
+                glosów wica jest decyzja przewodniczcego jury, wybieranego przez czlonków jury
+                ze swojego grona przed rozpoczciem Konkursu.
+       5.7. Decyzje jury s ostateczne i nie przysluguje od nich odwolanie.
+       5.8. Po uplywie wyznaczonego czasu zabronione jest dokonywanie jakichkolwiek zmian i poprawek
+                do przygotowanego rozwizania. Zmiany i poprawki dokonane po uplywie wyznaczonego czasu
+                nie bd brane pod uwag przez jury danego Konkursu.
+
+6. Wlasno intelektualna
+       6.1. W przypadku gdy rozwizania realizowane przez Uczestników w ramach Konkursów s
+                przedmiotem praw wlasnoci intelektualnej, a w szczególnoci praw autorskich, kady Uczestnik
+                owiadcza, e w zakresie swojego wkladu w rozwizanie, Uczestnik ten jest twórc takiego
+                rozwizania w rozumieniu przepisów ustawy o prawie autorskim i prawach pokrewnych oraz e
+                przysluguje mu pelnia autorskich praw majtkowych do swojego wkladu w rozwizanie.
+       6.2. Uczestnik owiadcza, e w zakresie wkladu Uczestnika w stworzenie rozwizania, rozwizanie
+                jest wolne od wad prawnych tj. nie narusza jakichkolwiek praw osób trzecich, a w szczególnoci
+                autorskich praw majtkowych i autorskich praw osobistych.
+       6.3. Postanowienia regulaminów poszczególnych Konkursów mog przewidywa zasady nabycia
+                przez organizatora danego Konkursu autorskich praw majtkowych do rozwizania
+
+       3
+                stworzonego przez Uczestnika, w szczególnoci na zasadach okrelonych w art. 921 § 3 kodeksu
+                cywilnego (przyrzeczenie publiczne).
+       6.4. Kada z osób uczestniczcych w Wydarzeniu przyjmuje do wiadomoci, e zarówno Organizator
+                jak i Partnerzy s uprawnieni do utrwalania i rozpowszechniania przebiegu Wydarzenia
+                w formie relacji fotograficznej lub audiowizualnej, w tym dla celów dokumentacji Wydarzenia,
+                jak i promocji oraz reklamy wlasnej dzialalnoci. W zwizku z powyszym, kada z osób
+                uczestniczcych w Wydarzeniu zezwala Organizatorowi oraz Partnerom na nieodplatne
+                rozpowszechnianie jej wizerunku w ww. celach przez czas nieokrelony, w tym w szczególnoci
+                poprzez wykorzystanie w mediach spolecznociowych i na innych kanalach promocyjnych
+                Organizatora i Partnerów.
+
+7. Mentorzy i Prelegenci
+       7.1. W przypadku chci wzicia udzialu w Wydarzeniu w charakterze Prelegenta albo Mentora naley
+                wypelni udostpniony w Serwisie formularz aplikacji przeznaczony odpowiednio
+                dla Prelegentów albo Mentorów.
+       7.2. Organizator przesyla potwierdzenie otrzymania zgloszenia na adres e-mail wskazany
+                w formularzu aplikacji Prelegenta/Mentora.
+       7.3. Udzial w Wydarzeniu w charakterze Prelegenta/Mentora uzaleniony jest od decyzji
+                Organizatora, podjtej na podstawie nadeslanego zgloszenia. Oceny nadeslanych zglosze
+                i wyboru Prelegentów i Mentorów dokonuje powolana przez Organizatora rada programowa
+                Wydarzenia.
+       7.4. O dokonanej decyzji co do wyboru Prelegenta/Mentora (pozytywnej albo negatywnej)
+                Organizator poinformuje drog mailow. Wraz z ocen zgloszenia, o której mowa w zdaniu
+                poprzednim Prelegent/Mentor otrzyma kod rabatowy umoliwiajcy zarejestrowanie
+                Prelegenta/Mentora na Wydarzenie za porednictwem Platformy bez koniecznoci
+                dokonywania platnoci (o ile wydarzenie jest odplatne). Celem wzicia udzialu w Wydarzeniu w
+                charakterze Prelegenta lub Mentora, Prelegent/Mentor zobowizany jest do dokonania
+                rejestracji w charakterze Uczestnika.
+       7.5. Dokladna data i godzina przeprowadzenia przez Prelegenta prelekcji zostanie wyznaczona przez
+                Organizatora i przeslana Prelegentowi drog mailow najpóniej na 14 dni przed rozpoczciem
+                Wydarzenia.
+       7.6. W przypadku uzyskania pozytywnej oceny zgloszenia, Prelegent zobowizany jest do:
+                  a. przygotowania i przeslania na adres email Organizatora, prezentacji, w terminie
+                        nie póniejszym ni 14 dni przed dniem rozpoczcia Wydarzenia;
+                  b. przeprowadzenia prelekcji, zgodnej z zaloeniami przedstawionymi w formularzu aplikacji
+                        w dacie i o godzinie okrelonej przez Organizatora zgodnie z pkt. 7.5. powyej.
+       7.7. Wylczn odpowiedzialno za wszelkie treci prezentowane przez Prelegenta podczas prelekcji
+                lub przekazane przez Prelegenta do Organizatora w zwizku z udzialem Prelegenta w
+                Wydarzeniu (w szczególnoci za treci zamieszczone w prezentacji Prelegenta) ponosi Prelegent.
+       7.8. Poprzez dokonanie przez Prelegenta zgloszenia, z chwil akceptacji zgloszenia przez
+                Organizatora, Prelegent udziela Organizatorowi nieodplatnej, niewylcznej, nieograniczonej
+                terytorialnie licencji na korzystanie z wszelkich treci (w tym w szczególnoci prezentacji
+                Prelegenta jak równie wybranych fragmentów prezentacji) przekazanych przez Prelegenta
+                do Organizatora w zwizku z udzialem Prelegenta w Wydarzeniu.
+       7.9. Licencja, o której mowa w pkt. 7.8. powyej udzielona jest na czas trwania Wydarzenia, a po tym
+                okresie przez czas nieokrelony.
+       7.10. Licencja, o której mowa w pkt. 7.8. udzielona jest na nastpujcych polach eksploatacji:
+                  a. w zakresie utrwalania i zwielokrotniania - utrwalanie i zwielokrotnianie treci Prelegenta
+                        dowoln technik, w tym technik drukarsk, reprograficzn i technik cyfrow, na
+                        wszelkich rodzajach noników, jak równie wprowadzanie i przesylanie treci do pamici
+                        systemów teleinformatycznych;
+                  b. w zakresie obrotu oryginalem lub egzemplarzami, na których treci zostaly utrwalone -
+                        wprowadzanie do obrotu, uyczenie lub najem oryginalu albo egzemplarzy;
+                  c. w zakresie rozpowszechniania w sposób inny ni wskazany pod lit. b powyej - publiczne
+                        wykonanie, wystawienie, wywietlenie, odtworzenie oraz nadawanie i reemitowanie,
+
+                                                                                                                                                      4
+7.11.         a take publiczne udostpnianie treci w taki sposób, aby kady mógl mie do nich dostp
+7.12.         w miejscu i w czasie przez siebie wybranym.
+       Prelegenci i Mentorzy pelni swoje funkcje bez wynagrodzenia.
+       Postanowienia Regulaminu dotyczce Uczestników stosuje si odpowiednio do Prelegentów
+       i Mentorów.
+
+8. Zasady porzdkowe
+       8.1. W trakcie uczestniczenia w Wydarzeniu, Uczestnicy s obowizani zachowywa si w sposób
+                niezagraajcy bezpieczestwu innych Uczestników, przestrzega przepisów prawa, zasad
+                bezpieczestwa oraz Regulaminu, jak równie bezzwlocznie stosowa si do polece slub
+                porzdkowych. W szczególnoci zabronione jest tarasowanie i zastawianie wyj i dróg
+                ewakuacyjnych, i innych urzdze niezbdnych w przypadku prowadzenia akcji ratowniczej lub
+                ganiczej podczas Wydarzenia.
+       8.2. Uczestnicy s obowizani do poszanowania praw i godnoci osobistej innych Uczestników.
+                W szczególnoci za zabronione zachowania przyjmuje si: obraliwe komentarze slowne
+                dotyczce plci, tosamoci plciowej, wieku, orientacji seksualnej, niepelnosprawnoci, wygldu
+                fizycznego, rozmiaru ciala, rasy, pochodzenia etnicznego, religii, zastraszanie, przeladowanie,
+                niewlaciwy kontakt fizyczny i niepodana uwaga seksualna.
+       8.3. Niezalenie od innych postanowie niniejszego pkt. 8., podczas Wydarzenia zabrania
+                si uywania slów oraz symboli powszechnie uznanych za niedozwolone, w tym wulgaryzmów
+                lub okrele mogcych powodowa obraz uczu religijnych lub wiatopogldowych, oraz
+                wskazujcych na dyskryminacj, jak równie niszczenia jakiegokolwiek mienia znajdujcego si
+                na terenie Wydarzenia, w szczególnoci oznacze i tablic informacyjnych, noników
+                reklamowych, urzdze i sprztu. Zabronione jest równie wnoszenie na teren Wydarzenia
+                broni lub innych niebezpiecznych przedmiotów, materialów wybuchowych, wyrobów
+                pirotechnicznych, materialów stwarzajcych zagroenie poarowe, napojów alkoholowych,
+                rodków odurzajcych lub substancji psychotropowych.
+       8.4. Uczestnicy zobowizani s korzysta z pomieszcze sanitarnych wylcznie zgodnie z ich
+                przeznaczeniem.
+       8.5. Uczestnicy s zobowizani zglosi niezwlocznie do Organizatora wszelkie przypadki
+                nieodpowiednich zachowa (w szczególnoci tych wskazanych w powyej) innych Uczestników.
+       8.6. Kady Uczestnik zobowizany jest do noszenia opaski oraz identyfikatora, wydanego przez
+                Organizatora podczas wejcia na teren Wydarzenia, w widocznym miejscu oraz do okazania ich
+                kadorazowo na prob Organizatora, przez caly czas trwania Wydarzenia. Brak opaski
+                lub identyfikatora upowania Organizatora do wyproszenia Uczestnika z terenu Wydarzenia.
+                Uczestnik nie moe przekazywa innej osobie swojego identyfikatora lub opaski.
+                Kady Uczestnik na terenie Wydarzenia powinien posiada przy sobie bilet w wersji papierowej
+                bd elektronicznej celem okazania go Organizatorowi.
+       8.7. Uczestnicy, którzy pomimo upomnienia lami postanowienia Regulaminu, nie zastosuj si do
+                polece Organizatora, a w szczególnoci stwarzaj swoim zachowaniem niebezpieczestwo dla
+                innych Uczestników, bd zaklócaj przebieg Wydarzenia zostan zobowizani do
+                natychmiastowego opuszczenia terenu Wydarzenia.
+
+9. Reklamacje
+       9.1. Organizator zobowizany jest do organizacji Wydarzenia z naleyt starannoci.
+                Reklamacja dot. niewykonania lub niewlaciwego wykonania umowy przez Organizatora
+                powinna by zloona pisemnie na adres pocztowy Organizatora lub za porednictwem
+                wiadomoci email na adres: rejestracja@proidea.org.pl i zawiera:
+                  a. dane kontaktowe, umoliwiajce identyfikacj i komunikacj z osob skladajc
+                        reklamacj;
+                  b. informacje na temat zdarzenia, którego dotyczy reklamacja;
+                  c. opis okolicznoci uzasadniajcych reklamacj;
+                  d. dania zwizane z reklamacj.
+
+       5
+       9.2. Organizator zobowizuje si do rozpatrzenia prawidlowo zloonej reklamacji w terminie do 14
+                dni od dnia jej zloenia. W terminie, o którym mowa w zdaniu poprzednim Organizator udzieli
+                odpowiedzi na reklamacj, wskazujc, czy uznaje reklamacj (i w jaki sposób zamierza j
+                zrealizowa), czy te nie uznaje reklamacji (wraz z uzasadnieniem swojego stanowiska).
+
+       9.3. Jeeli w terminie 14 dni Organizator nie udzieli odpowiedzi na danie konsumenta lub osoby
+                fizycznej zawierajcej umow bezporednio zwizan z jej dzialalnoci gospodarcz,
+                gdy z treci umowy wynika, e nie posiada ona dla tej osoby charakteru zawodowego, oznacza
+                to, e Organizator uznal danie za uzasadnione.
+
+       9.4. Organizator zastrzega sobie prawo do wydluenia terminu, o którym mowa w pkt. 9.2 i 9.3.
+                powyej o 7 dni w przypadku koniecznoci wyjanienia dodatkowych okolicznoci,
+                w szczególnoci zwizanych z uslugami wiadczonymi na rzecz Organizatora przez osoby trzecie
+                (postanowienia tego nie stosuje si do umowy zawartej z konsumentem lub osob fizyczn
+                zawierajc umow bezporednio zwizan z jej dzialalnoci gospodarcz, gdy z treci umowy
+                wynika, e nie posiada ona dla tej osoby charakteru zawodowego).
+
+10. Rozwizywanie sporów
+       10.1. Ewentualne spory powstale pomidzy Organizatorem a Uczestnikiem, bdcym konsumentem
+                powinny by w pierwszej kolejnoci rozstrzygane polubownie. Szczególy dotyczce sposobów
+                oraz dostpu do pozasdowych form rozstrzygania sporów znajduj si pod
+                adresem: https://polubowne.uokik.gov.pl/.
+       10.2. Szczególowe informacje dotyczce moliwoci skorzystania z pozasdowych sposobów
+                rozpatrywania reklamacji i dochodzenia roszcze, rozstrzygania sporów oraz zasady dostpu do
+                tych procedur dostpne s równie w siedzibach oraz na stronach internetowych powiatowych
+                (miejskich) rzeczników konsumentów (https://uokik.gov.pl/rzecznicy-konsumentow) oraz
+                wojewódzkich inspektoratów Inspekcji Handlowej (https://uokik.gov.pl/inspekcja-handlowa).
+       10.3. Ewentualne spory sdowe bd poddane jurysdykcji w sdzie wlaciwym dla siedziby
+                Organizatora (postanowienie to nie dotyczy umowy zawartej z Konsumentem lub osob
+                fizyczn zawierajc umow bezporednio zwizan z jej dzialalnoci gospodarcz, gdy z treci
+                umowy wynika, e nie posiada ona dla tej osoby charakteru zawodowego).
+
+11. Odwolanie lub zmiana terminu Wydarzenia
+       11.1. Organizator zastrzega moliwo odwolania lub zmiany terminu Wydarzenia, lub zmiany
+                formuly przeprowadzenia Wydarzenia ze stacjonarnej na wirtualn - w przypadku wystpienia
+                wanych powodów uniemoliwiajcych lub utrudniajcych przeprowadzenie Wydarzenia.
+       11.2. Za wane powody, o których mowa w pkt. 11.1. przyjmuje si w szczególnoci: wystpienie sily
+                wyszej; nieosignicie wystarczajcej liczby Uczestników; wypowiedzenie lub odstpienie przez
+                osoby trzecie od zawartych z Organizatorem umów, niezbdnych dla przeprowadzenia
+                Wydarzenia; wycofanie si sponsorów Wydarzenia lub Partnerów.
+       11.3. Przez termin ,,sila wysza", o którym mowa w pkt. 11.2. powyej naley rozumie wszelkie
+                nadzwyczajne zdarzenia, którym nie mona bylo zapobiec i które pozostaj poza kontrol
+                Organizatora, niezalenie czy mona bylo je przewidzie w dniu ogloszenia Regulaminu.
+                Sila wysza obejmuje w szczególnoci przypadki losowe takie jak poar, huragan lub inne
+                katastrofy spowodowane silami natury, zarzdzenia wladzy pastwowej lub rzdowej, w tym
+                zakazujce prowadzenia dzialalnoci gospodarczej, organizacji wydarze, wojn, zamieszki, akty
+                terroru, powstania, naloenie embargo, niepokoje spoleczne, pandemie, epidemie, stany
+                zagroenia epidemiologicznego, zakazy eksportu lub importu lub strajki generalne.
+       11.4. Organizator poinformuje Uczestników o odwolaniu lub zmianie terminu lub zmianie formuly
+                przeprowadzenia Wydarzenia w drodze wiadomoci email.
+       11.5. W przypadku odwolania Wydarzenia, Organizator zwróci Uczestnikowi kwot zaplacon za
+                bilety uprawniajce do wzicia udzialu w Wydarzeniu, w terminie 90 dni od dnia
+                poinformowania o odwolaniu Wydarzenia. Zwrot wplaconej kwoty zaspokaja bdzie wszelkie
+                roszczenia Uczestnika niebdcego konsumentem wzgldem Organizatora.
+       11.6. W przypadku zmiany terminu lub formuly przeprowadzenia Wydarzenia, Organizator
+                poinformuje mailowo Uczestnika o:
+
+                                                                                                                                                      6
+11.7.   a. nowym terminie lub nowej formule przeprowadzenia Wydarzenia;
+11.8.   b. terminie na akceptacj albo odrzucenie nowego terminu lub formuly przeprowadzenia
+11.9.
+              Wydarzenia;
+        c. skutkach braku udzielenia odpowiedzi w terminie, o którym mowa w lit. b powyej.
+       W przypadku zmiany terminu lub formuly przeprowadzenia Wydarzenia, Uczestnik uprawniony
+       jest do: (i) odstpienia od umowy (co jest jednoznaczne z daniem zwrotu kwoty uiszczonej
+       przez Uczestnika tytulem zakupu biletów, uprawniajcych do udzialu w Wydarzeniu) albo (ii)
+       zachowania biletów i zaakceptowania zmiany terminu Wydarzenia.
+       Uczestnik jest zobowizany do podjcia decyzji, o której mowa w pkt. 11.7. w terminie
+       wskazanym w wiadomoci email, o której mowa w pkt. 11.6. Brak udzielenia odpowiedzi
+       w terminie, o którym mowa w zdaniu poprzednim poczytuje si za owiadczenie o odstpieniu
+       od umowy (co jest jednoznaczne z daniem zwrotu kwoty uiszczonej przez Uczestnika tytulem
+       zakupu biletów, uprawniajcych do udzialu w Wydarzeniu).
+       Zwrot kwoty zaplaconej przez Uczestnika za bilety uprawniajce do wzicia udzialu
+       w Wydarzeniu zostanie dokonany przy zastosowaniu metody platnoci uytej przez Uczestnika.
+
+12. Brak ustawowego prawa odstpienia od umowy przez Konsumenta
+       12.1. Na podstawie art. 38 ust. 1 pkt 12 ustawy z dnia 30 maja 2014 r. o prawach konsumenta
+                Uczestnikowi, bdcemu konsumentem, nie przysluguje prawo do odstpienia od umowy
+                zawartej na podstawie Regulaminu (tj. umowy dotyczcej udzialu w Wydarzeniu).
+                Powysze wynika z faktu, e umowa ma charakter umowy o wiadczenie uslug zwizanych
+                z wydarzeniami rozrywkowymi lub kulturalnymi, w umowie (w definicji Wydarzenia) zostal
+                wskazany okres wiadczenia uslugi, organizacja Wydarzenia wymaga dokonania istotnych
+                nakladów ze strony Organizatora, a w przypadku odstpienia przez konsumenta od umowy,
+                uslugi te nie moglyby zosta zaoferowane innym klientom.
+
+13. Postanowienia kocowe
+       13.1. Kontakt z Organizatorem jest moliwy poprzez:
+                  a. Poczt tradycyjn, kierowan na adres: Zakopiaska 9, 30-418 Kraków,
+                  b. Poczt elektroniczn kierowan na adres email: biuro@proidea.org.pl;
+                  c. Formularze kontaktowe dostpne w Serwisie.
+       13.2. W razie uznania któregokolwiek z postanowie Regulaminu za bezskuteczne lub niewane, nie
+                bdzie to mialo wplywu na wano lub skuteczno pozostalych postanowie, a Organizator,
+                bezzwlocznie, zastpi niewane bd nieskuteczne postanowienia, postanowieniami wanymi
+                i skutecznymi, które bd najpelniej oddawa pierwotne zaloenia i cele zastpionych
+                postanowie Regulaminu.
+       13.3. Calkowita odpowiedzialno Organizatora wobec Uczestnika z wszelkich tytulów (w tym z tytulu
+                odpowiedzialnoci kontraktowej oraz deliktowej) w zwizku z realizacj umowy w stosunku
+                zarówno do jednego zdarzenia, jak równie do wszystkich zdarze lcznie, jest w kadym
+                przypadku ograniczona do wartoci zakupionych przez Uczestnika biletów uprawniajcych do
+                udzialu w Wydarzeniu. W przypadku gdy udzial w Wydarzenie ma charakter bezplatny albo
+                platno nie zostala dokonana przez Uczestnika z innego powodu, odpowiedzialno
+                Organizatora jest ograniczona do 1 PLN. Postanowienie niniejszego punktu nie ma
+                zastosowania do Uczestnika, bdcego konsumentem.
+       13.4. Organizator zastrzega sobie prawo do wprowadzania zmian w Regulaminie z wanych powodów
+                (takich jak m.in. zmiany w przepisach prawa, sila wysza, wycofanie si Partnerów, zmiany
+                warunków wiadczenia uslug na rzecz Organizatora przez osoby trzecie, które s niezbdne do
+                przeprowadzenia Wydarzenia), po uprzednim poinformowaniu Uczestnika o tym fakcie poczt
+                elektroniczn. Zmiany w postanowieniach Regulaminu wchodz w ycie z dniem wskazanym w
+                wiadomoci e-mail, jednak nie wczeniej ni po uplywie 14 dni od chwili poinformowania
+                Uczestników poczt elektroniczn o nowych postanowieniach.
+       13.5. Uczestnik, bdcy konsumentem (lub osob fizyczna zawierajc umow bezporednio
+                zwizan z jej dzialalnoci gospodarcz, gdy z treci umowy wynika, e nie posiada ona dla tej
+                osoby charakteru zawodowego) moe zglosi sprzeciw wobec proponowanych zmian i odstpi
+
+       7
+13.6.  od umowy z Organizatorem w terminie 14 dni od dnia otrzymania wiadomoci e-mail
+13.7.  zawierajcej informacj o zmianie Regulaminu. Termin do zgloszenia sprzeciwu wobec
+       proponowanych zmian i rozwizania umowy w przypadku Uczestnika, niebdcego
+       konsumentem (lub osob fizyczn zawierajc umow bezporednio zwizan z jej
+       dzialalnoci gospodarcz, gdy z treci umowy wynika, e nie posiada ona dla tej osoby
+       charakteru zawodowego) wynosi 7 dni, od dnia otrzymania przez niego wiadomoci e-mail
+       zawierajcej informacj o zmianach Regulaminu.
+       W przypadku skutecznego odstpienia od umowy przez Uczestnika zgodnie z pkt. 13.5 powyej,
+       Organizator zwróci uiszczon przez Uczestnika kwot tytulem zaplaty za zakup biletów
+       uprawniajcych do wzicia udzialu w Wydarzeniu, które jeszcze si nie odbylo, w terminie 14 dni
+       od dnia otrzymania owiadczenia Uczestnika o odstpieniu od umowy. Zwrot kwoty, o której
+       mowa w zdaniu poprzednim nastpi przy zastosowaniu metody platnoci uytej przez
+       Uczestnika.
+       Regulamin obowizuje od 21 kwietnia, 2026 r.
+
+13.8. Ostatnia aktualizacja Regulaminu nastpila dnia 7 lipca, 2026 r.
+
+                                                                       8
+                                        Rules of 
+                                   HackYeah 2026
+
+1. Definitions
+
+1.1. Terms written with a capital letter in the Rules have the following meanings:
+
+a. "Competition" - a prize-based contest intended for Participants, aimed at solving
+
+                presented problem statements, held during the Event;
+
+b. "Mentor" - an adult natural person possessing appropriate knowledge and experience in
+
+                the subject matter of the Event, including in particular programmers, analysts, artificial
+
+                intelligence and security experts, UX/UI designers, technical leaders, product and project
+
+                managers, lawyers, academic lecturers, and entrepreneurs, whose role is to support
+
+                Participants during their work on projects within the Event with their knowledge and
+
+                experience;
+
+c. "Organizer" - PROIDEA sp. z o.o., with its registered office in Kraków at ul. Zakopiaska 9,
+
+                30-418 Kraków, entered into the Entrepreneurs Register kept by the District Court for
+
+                Kraków-ródmiecie in Kraków under KRS number 0000448243, NIP 6793088842, with a
+
+                share capital of PLN 30,000;
+
+d. "Partner" - a natural person or legal entity that presents its products or services during
+
+                the Event, or organizes Competitions and provides prizes for the Competitions;
+
+e. "Platform"-                 an             internet  platform              available         at
+
+                https://eventory.cc/event/hackyeah-2026-cracow/tickets, to which redirection from the
+
+                Website occurs for the purpose of registering participation in the Event;
+
+f. "Speaker" - adult natural person authorized to deliver a presentation during the Event in
+
+                accordance with the rules specified in point 7 of the Rules;
+
+g. "Rules" - these Rules;
+
+h. "Website" - a dedicated website available at https://hackyeah.pl/ containing information
+
+                about the Event and enabling registration for participation in the Event as a Participant via
+
+                the Platform;
+
+i. "Participant" - an adult natural person entitled to participate in the Event;
+
+j. "Event" - a hackathon-type event organized by the Organizer under the name "HackYeah
+
+                2026," to be held on October 3-4, 2026, in Kraków at TAURON Arena Kraków.
+
+1.2. The terms defined in point 1.1. shall be understood in the plural and vice versa, and terms in a
+
+specified gender shall include all genders.
+
+2. General Provisions
+       2.1. The Rules specify, in particular, the principles of registration for the Event and the rules of
+                participation in the Event.
+       2.2. Acceptance of the Rules is a necessary condition for registration and participation in the Event.
+       2.3. The Participant accepts the Rules during the registration process for the Event on the Platform.
+       2.4. Participants are obliged to comply with the provisions of the Rules.
+       2.5. The principles of processing the personal data of Participants, Speakers, Mentors, and Website
+                users are precisely defined in the Privacy Policy.
+       2.6. The Rules are available on the Website continuously until 7 days after the conclusion of the
+                Event. Anyone may copy the text of the Rules, save, or print it using their devices.
+       2.7. The means of communication used to execute the agreement is email, unless the Rules state
+                otherwise.
+       2.8. The number of places at the Event is limited, and the order of applications determines the
+                possibility of participating in the Event.
+
+3. Registration and Participation in the Event
+       3.1. Participation in the Event is conditional upon registration through the correct completion and
+                submission of the form available on the Platform and, where applicable, payment of the ticket
+                fee (if required by the form).
+       3.2. Registration for the Event is open from April 21, 2026, to October 4, 2026.
+
+                                                                                                9
+       3.3. The Organizer reserves the right to close registration earlier if the maximum number of
+                Participants is reached.
+
+       3.4. Tickets for the Event are personal, and any change to the ticket details may only occur with the
+                prior consent of the Organizer, expressed in documented form under pain of ineffectiveness.
+
+       3.5. Before entering the Event, Participants must present their ticket and an identity document for
+                verification of their entitlement to participate.
+
+       3.6. Participants are responsible for providing their own computer equipment necessary for active
+                participation in the Event.
+
+       3.7. The Organizer is not liable for Participants' computer equipment or other belongings and does
+                not provide technical support or repair services.
+
+       3.8. The Organizer reserves the right to refuse participation in the Event to individuals suspected, on
+                reasonable grounds, of registering for purposes other than active participation in the Event
+                (including, in particular, participation in Competitions). Such behavior includes, but is not
+                limited to, recruiting employees/collaborators or advertising personal goods or services by a
+                Participant.
+
+       3.9. Any gadgets or additional items included in the ticket price may only be collected by
+                Participants at the Event venue during its duration.
+
+4. Course of the Event
+       4.1. The start and end times of the Event and individual Competitions (including the announcement
+                of Competition results) will be available on the Website. The Organizer reserves the right to
+                change these times, with such changes communicated by the Organizer.
+       4.2. Independent Competitions will be conducted during the Event, organized and funded by the
+                Organizer or selected Partners. A list of Competitions and their organizers is available on the
+                Website and will be updated no later than the Event's start date.
+       4.3. A dedicated website for submitting and storing Competition solutions will be available to
+                Participants from 11:00 PM on October 3, 2026, to 11:00 PM on October 4, 2026.
+                Competition-specific rules may designate additional dedicated websites, with relevant
+                information included in the respective Competition rules.
+       4.4. The Event may be shortened if all Competition tasks across all Competitions are resolved before
+                the scheduled end time.
+       4.5. For the purpose of participating in a Competition, Participants form teams. Membership in a
+                team is determined by the other team members.
+       4.6. On the day of the Event, prior to the start of a Competition, Participants will be informed of the
+                detailed rules of participation, including, in particular:
+                 a) the content of the Competition task;
+                 b) the minimum and maximum number of team members;
+                 c) the method of submitting solutions;
+                 d) the prize or prizes;
+                 e) the rules for awarding prizes and the deadlines for their issuance.
+       4.7. The rules of individual Competitions and a list of material and monetary prizes will be published
+                on the Website no later than the Event's start date.
+       4.8. The Organizer is not responsible for the course or rules of Competitions organized by Partners.
+       4.9. Submission of a solution in a Competition constitutes acceptance of that Competition's rules.
+
+     4.10. Prizes in Competitions organized by the Organizer will be issued within 90 days from the
+                announcement of results, unless otherwise specified in the respective Competition rules.
+
+     4.11. Material prizes offered are not exchangeable for cash, other prizes, or their monetary
+                equivalent.
+
+     4.12. Prizes are awarded only to winning teams; however, both the Organizer and Partners reserve
+                the right to grant distinctions or additional minor material prizes to specific teams whose
+                projects are deemed valuable by the Competition organizer.
+
+     4.13. Additional activities, such as workshops, lectures, or contests, may also be conducted during
+                the Event.
+
+                                                                                                                                                    10
+5. Jury and Evaluation Criteria
+       5.1. Unless otherwise specified in a Competition's rules, the provisions of this point 5 apply.
+       5.2. Evaluation of solutions in individual Competitions is conducted by a jury for that Competition,
+                consisting of at least three members.
+       5.3. Jury members for each Competition are selected by the organizer of that Competition (the
+                Organizer or a Partner). The composition of the jury for each Competition will be published no
+                later than the second day of the Event.
+       5.4. The jury evaluates team solutions in accordance with the rules described in the respective
+                Competition rules. In all cases, the jury is entitled to refrain from selecting winners or awarding
+                prizes if no solution achieves an adequate level (in particular, if solutions fail to score at least
+                50% of the maximum points).
+       5.5. The jury evaluates solutions based on the following criteria:
+                  a) Idea & Innovation - 30%
+                  b) Relation to Category - 20%
+                  c) Practical Applicability / Usability - 20%
+                  d) Design - 20%
+                  e) Completeness & Implementation Value - 10%
+       5.6. Jury decisions are made by a simple majority vote. In the case of a tie, the decision of the jury
+                chairperson, selected by the jury members from among themselves prior to the Competition, is
+                binding.
+       5.7. Jury decisions are final and not subject to appeal.
+       5.8. After the designated submission time has elapsed, no changes or amendments to submitted
+                solutions are permitted. Any changes or amendments made after this time will not be
+                considered by the jury.
+
+6. Intellectual Property
+       6.1. Where solutions developed by Participants in Competitions are subject to intellectual property
+                rights, particularly copyright, each Participant declares that, with respect to their contribution to
+                the solution, they are the creator within the meaning of the Polish Copyright and Related Rights
+                Act and hold full economic copyright to their contribution.
+       6.2. The Participant declares that their contribution to the solution is free from legal defects, i.e., it
+                does not infringe any third-party rights, particularly economic or personal copyright.
+       6.3. The rules of individual Competitions may specify the terms under which the organizer of a
+                Competition acquires economic copyright to a solution created by a Participant, in particular
+                pursuant to Article 921 § 3 of the Polish Civil Code (public promise).
+       6.4. All persons participating in the Event acknowledge that the Organizer and Partners are entitled
+                to record and disseminate the course of the Event in photographic or audiovisual form,
+                including for documentation, promotion, and advertising purposes. Accordingly, each person
+                participating in the Event grants the Organizer and Partners permission to use their image free
+                of charge for the aforementioned purposes indefinitely, including via social media and other
+                promotional channels of the Organizer and Partners.
+
+7. Mentors and Speakers
+       7.1. To participate in the Event as a Speaker or Mentor, an individual must complete the respective
+                application form for Speakers or Mentors available on the Website.
+       7.2. The Organizer will send confirmation of receipt of the application to the email address provided
+                in the Speaker/Mentor application form.
+       7.3. Participation in the Event as a Speaker or Mentor is subject to the Organizer's decision, based
+                on the submitted application. The evaluation and selection of Speakers and Mentors are
+                conducted by the Event's program council appointed by the Organizer.
+       7.4. The Organizer will inform the applicant of the decision (positive or negative) via email. Upon a
+                positive evaluation, the Speaker/Mentor will receive a discount code enabling registration for
+                the Event via the Platform without payment (if the Event is fee-based). To participate as a
+                Speaker or Mentor, registration as a Participant is required.
+
+                                                                                                                                                    11
+ 7.5.  The exact date and time of a Speaker's presentation will be determined by the Organizer and
+ 7.6.  communicated to the Speaker via email no later than 14 days before the Event's start date.
+       In the case of a positive evaluation, the Speaker is obliged to:
+ 7.7.   a) prepare and send the presentation to the Organizer's email address no later than 14 days
+ 7.8.
+ 7.9.         before the Event's start date;
+7.10.   b) deliver the presentation in accordance with the assumptions outlined in the application
+
+7.11.         form on the date and time specified by the Organizer per point 7.5 above.
+7.12.  The Speaker bears sole responsibility for all content presented during the presentation or
+       submitted to the Organizer in connection with their participation in the Event (particularly
+       content included in the Speaker's presentation).
+       Upon acceptance of the Speaker's application by the Organizer, the Speaker grants the
+       Organizer a free, non-exclusive, territorially unlimited license to use all content (including, in
+       particular, the Speaker's presentation and selected excerpts thereof) submitted to the
+       Organizer in connection with the Speaker's participation in the Event.
+       The license referred to in point 7.8 is granted for the duration of the Event and indefinitely
+       thereafter.
+       The license referred to in point 7.8 is granted for the following fields of exploitation:
+        a) in terms of fixation and multiplication - fixation and multiplication of the Speaker's content
+
+              by any technique, including printing, reprographic, and digital techniques, on all types of
+              carriers, as well as introduction and transmission of content to the memory of
+              teleinformation systems;
+        b) in terms of original or copies on which the content has been fixed - introduction into
+              circulation, lending, or rental of the original or copies;
+        c) in terms of dissemination other than as specified in lit. b above - public performance,
+              exhibition, display, reproduction, broadcasting and rebroadcasting, as well as public
+              provision of content in such a way that everyone can access it at a place and time of their
+              choosing.
+       Speakers and Mentors perform their roles without remuneration.
+       The provisions of the Rules regarding Participants shall apply to Speakers and Mentors,
+       respectively.
+
+8. Orderly Conduct
+       8.1. During participation in the Event, Participants are obliged to behave in a manner that does not
+                endanger the safety of other Participants, comply with the law, safety regulations, and the
+                Rules, and immediately follow the instructions of security personnel. In particular, it is
+                prohibited to obstruct or block exits, evacuation routes, or other devices necessary for rescue
+                or firefighting operations during the Event.
+       8.2. Participants are required to respect the rights and personal dignity of other Participants.
+                Prohibited behaviors include, in particular: offensive verbal comments regarding gender,
+                gender identity, age, sexual orientation, disability, physical appearance, body size, race,
+                ethnicity, or religion, as well as intimidation, harassment, inappropriate physical contact, and
+                unwanted sexual attention.
+       8.3. Regardless of other provisions of this point 8, during the Event, the use of words and symbols
+                commonly recognized as unacceptable, including vulgarisms or terms that may offend religious
+                or ideological sentiments or indicate discrimination, is prohibited. It is also forbidden to destroy
+                any property at the Event venue, including signs, information boards, advertising media,
+                devices, and equipment, or to bring into the Event venue weapons or other dangerous objects,
+                explosive materials, pyrotechnic products, fire-hazardous materials, alcoholic beverages,
+                narcotics, or psychotropic substances.
+       8.4. Participants are obliged to use sanitary facilities solely for their intended purpose.
+       8.5. Participants are required to immediately report to the Organizer any instances of inappropriate
+                behavior (particularly those specified above) by other Participants.
+       8.6. Each Participant is obliged to wear the wristband and identifier issued by the Organizer upon
+                entry to the Event venue in a visible place and to present them upon request by the Organizer
+                throughout the duration of the Event. The absence of a wristband or identifier authorizes the
+                Organizer to remove the Participant from the Event venue. Participants may not transfer their
+
+       12
+                  identifier or wristband to another person. Each Participant at the Event venue must carry their
+                  ticket in paper or electronic form to present it to the Organizer upon request.
+        8.7. Participants who, despite a warning, violate the provisions of the Rules, fail to comply with the
+                  Organizer's instructions, and in particular endanger the safety of other Participants or disrupt
+                  the course of the Event, will be required to immediately leave the Event venue.
+
+ 9. Complaints
+        9.1. The Organizer undertakes to organize the Event with due care. A complaint regarding
+                  non-performance or improper performance of the agreement by the Organizer should be
+                  submitted in writing to the Organizer's postal address or via email to:
+                  rejestracja@proidea.org.pl, and must include:
+                    a) contact details enabling identification and communication with the person submitting the
+                          complaint;
+                    b) information about the event to which the complaint relates;
+                    c) a description of the circumstances justifying the complaint;
+                    d) requests related to the complaint.
+        9.2. The Organizer undertakes to consider properly submitted complaints within 14 days from the
+                  date of their submission. Within this period, the Organizer will respond to the complaint,
+                  indicating whether it accepts the complaint (and how it intends to remedy it) or does not accept
+                  the complaint (along with justification for its position).
+        9.3. If, within 14 days, the Organizer does not respond to the request of a Consumer or a natural
+                  person entering into an agreement directly related to their business activity, where the content
+                  of the agreement indicates that it does not have a professional character for that person, it
+                  shall be deemed that the Organizer has considered the request justified.
+        9.4. The Organizer reserves the right to extend the deadline referred to in points 9.2 and 9.3 above
+                  by 7 days if additional circumstances need to be clarified, particularly those related to services
+                  provided to the Organizer by third parties. These provisions do not apply to an agreement
+                  concluded with a Consumer or a natural person entering into an agreement directly related to
+                  their business activity, where the content of the agreement indicates that it does not have a
+                  professional character for that person.
+
+10. Dispute Resolution
+       10.1. Any disputes arising between the Organizer and a Participant who is a Consumer should first be
+                  settled amicably. Details regarding the methods and access to out-of-court dispute resolution
+                  mechanisms are available at: https://polubowne.uokik.gov.pl/.
+       10.2. Detailed information regarding the possibility of using out-of-court methods for resolving
+                  complaints and pursuing claims, dispute resolution, and access to these procedures is also
+                  available at the offices and websites of district (city) consumer ombudsmen
+                  (https://uokik.gov.pl/rzecznicy-konsumentow) and Voivodeship Inspectorates of Trade
+                  Inspection (https://uokik.gov.pl/inspekcja-handlowa).
+       10.3. Any legal disputes shall be subject to the jurisdiction of the court competent for the Organizer's
+                  registered office. This provision does not apply to an agreement concluded with a Consumer or
+                  a natural person entering into an agreement directly related to their business activity, where
+                  the content of the agreement indicates that it does not have a professional character for that
+                  person.
+
+11. Cancellation or Change of Event Date
+       11.1. The Organizer reserves the right to cancel or change the date of the Event, or to change the
+                  format of conducting the Event from in-person to virtual, in the event of significant reasons
+                  preventing or hindering the conduct of the Event.
+       11.2. Significant reasons, as referred to in point 11.1, include in particular: force majeure; failure to
+                  achieve a sufficient number of Participants; termination or withdrawal by third parties from
+                  agreements concluded with the Organizer necessary for conducting the Event; or withdrawal of
+                  Event sponsors or Partners.
+
+                                                                                                                                                      13
+11.3.  The term "force majeure," as referred to in point 11.2 above, shall mean any extraordinary
+       events that could not be prevented and remain beyond the Organizer's control, regardless of
+11.4.  whether they could have been predicted on the date of announcement of the Rules. Force
+11.5.  majeure includes, in particular, random events such as fire, hurricanes, or other natural
+11.6.  disasters, orders of state or governmental authorities (including those prohibiting business
+11.7.  activities or event organization), war, riots, acts of terrorism, uprisings, imposition of
+11.8.  embargoes, social unrest, pandemics, epidemics, states of epidemiological threat, export or
+11.9.  import bans, or general strikes.
+       The Organizer will inform Participants of the cancellation, change of date, or change of format
+       of the Event via email.
+       In the event of cancellation of the Event, the Organizer will refund the amount paid by the
+       Participant for tickets entitling participation in the Event within 90 days from the date of
+       informing the Participant of the cancellation. The refund of the paid amount will satisfy all
+       claims of a Participant who is not a Consumer against the Organizer.
+       In the event of a change of date or format of the Event, the Organizer will inform the Participant
+       via email about:
+        a) the new date or new format of conducting the Event;
+        b) the deadline for acceptance or rejection of the new date or format;
+        c) the consequences of not responding within the deadline referred to in item b above.
+       In the event of a change of date or format of the Event, the Participant is entitled to: (i) withdraw
+       from the agreement (which is tantamount to a request for a refund of the amount paid for
+       tickets entitling participation in the Event) or (ii) retain the tickets and accept the change of the
+       Event date.
+       The Participant is obliged to make the decision referred to in point 11.7 within the deadline
+       specified in the email referred to in point 11.6. Failure to respond within this deadline shall be
+       deemed a statement of withdrawal from the agreement (which is tantamount to a request for a
+       refund of the amount paid for tickets entitling participation in the Event).
+       The refund of the amount paid by the Participant for tickets entitling participation in the Event
+       will be made using the payment method used by the Participant.
+
+12. No Statutory Right of Withdrawal from the Contract by the Consumer
+       12.1. Pursuant to Article 38(1) point 12 of the Act of May 30, 2014, on Consumer Rights, a Participant
+                  who is a Consumer does not have the right to withdraw from the agreement concluded based
+                  on these Rules (i.e., the agreement regarding participation in the Event). This is due to the fact
+                  that the agreement is a contract for the provision of services related to entertainment or
+                  cultural events, the period of service provision is specified in the agreement (in the definition of
+                  the Event), the organization of the Event requires significant expenditure by the Organizer, and
+                  in the event of withdrawal by a Consumer, such services could not be offered to other clients.
+
+13. Final Provisions
+       13.1. Contact with the Organizer is possible via:
+                    a) traditional mail addressed to: Zakopiaska 9, 30-418 Kraków;
+                    b) email addressed to: biuro@proidea.org.pl;
+                    c) contact forms available on the Website.
+       13.2. If any provision of the Rules is deemed ineffective or invalid, this shall not affect the validity or
+                  effectiveness of the remaining provisions. The Organizer shall promptly replace ineffective or
+                  invalid provisions with valid and effective provisions that most fully reflect the original
+                  assumptions and objectives of the replaced provisions of the Rules.
+       13.3. The total liability of the Organizer towards the Participant for all titles (including contractual and
+                  tort liability) in connection with the performance of the agreement, with respect to both a single
+                  event and all events combined, is in each case limited to the value of tickets purchased by the
+                  Participant entitling participation in the Event. If participation in the Event is free of charge or
+                  payment has not been made by the Participant for any other reason, the Organizer's liability is
+                  limited to PLN 1. This provision does not apply to a Participant who is a Consumer.
+
+       14
+13.4.  The Organizer reserves the right to amend the Rules for significant reasons (such as changes in
+13.5.  the law, force majeure, withdrawal of Partners, or changes in the conditions of services
+       provided to the Organizer by third parties necessary for conducting the Event), following prior
+13.6.  notification of the Participant via email. Amendments to the provisions of the Rules shall take
+13.7.  effect on the date specified in the email, but not earlier than 14 days after informing
+13.8.  Participants via email of the new provisions.
+       A Participant who is a Consumer (or a natural person entering into an agreement directly
+       related to their business activity, where the content of the agreement indicates that it does not
+       have a professional character for that person) may object to the proposed amendments and
+       withdraw from the agreement with the Organizer within 14 days from the date of receiving the
+       email containing information about the amendment to the Rules. The deadline for submitting
+       an objection to the proposed amendments and terminating the agreement for a Participant
+       who is not a Consumer (or a natural person entering into an agreement directly related to their
+       business activity, where the content of the agreement indicates that it does not have a
+       professional character for that person) is 7 days from the date of receiving the email containing
+       information about the amendments to the Rules.
+       In the event of effective withdrawal from the agreement by the Participant in accordance with
+       point 13.5 above, the Organizer shall refund the amount paid by the Participant for tickets
+       entitling participation in the Event that has not yet taken place, within 14 days from the date of
+       receiving the Participant's statement of withdrawal from the agreement. The refund of the
+       amount referred to in the preceding sentence shall be made using the payment method used
+       by the Participant.
+       The Rules shall enter into force on April 21, 2026.
+       The Rules were last updated on 7 July, 2026.
+
+       15
+

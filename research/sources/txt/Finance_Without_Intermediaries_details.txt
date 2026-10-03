@@ -1,0 +1,484 @@
+ SUPERTEAM POLAND CHALLENGE
+
+ Finance Without Intermediaries
+
+Imagine a transaction with someone you don't know. No history, no reputation, no way
+to go after them if they disappear with your money. Blockchain makes this irrelevant:
+the terms execute themselves, regardless of what the other party wants. Put this
+capability to use in an application.
+
+1. Introduction: the organization, the context and the current state
+
+Superteam is a non-profit organization supporting developers, designers and entrepreneurs
+building on Solana. We operate in more than a dozen countries, and Superteam Poland
+brings together Polish builders creating products on open financial infrastructure. We are not
+a company commissioning a project, but a community that helps people enter the
+ecosystem: we connect people with grants, mentors and teams looking for support.
+
+Most of the financial systems we use every day rely on trust in an intermediary. When you
+make a bank transfer, you trust the bank to carry out your instruction. When you take out a
+loan, both parties trust the institution that assesses creditworthiness and enforces
+repayment. When you buy something online, you trust the payment operator to pass the
+money on to the seller. This model works, but it comes at a cost: the intermediary charges a
+fee, decides who gets served, can block or reverse a transaction, and when it fails, everyone
+stops.
+
+Blockchain technology changes this dependency. Instead of trusting an institution, you trust
+code that anyone can read, and a network in which no single party decides the outcome on
+its own. Solana is one such network, designed for high throughput and low fees. A
+transaction is confirmed in a fraction of a second and costs a fraction of a cent, which in
+practice means you can build things on it that were not economically viable before:
+micropayments, per-second settlements, automatic revenue sharing between many parties.
+
+The best example of what this shift enables is lending protocols. A traditional loan requires
+an institution that verifies creditworthiness, keeps a record of the obligation and collects the
+debt. In a lending protocol there is no such institution: the loan terms, the collateral and the
+liquidation point are written into a program running on the network, and they execute
+automatically, identically for every participant. The lender does not need to know or trust the
+borrower, because they rely not on the borrower's honesty, but on a rule that neither party
+can circumvent.
+
+This is the pattern that interests us most: take a financial relationship that today requires a
+trusted intermediary and redesign it so that the intermediary is no longer needed. Lending is
+just one example. The same pattern applies to escrow, settlements between freelancers and
+clients, fundraisers with conditional refunds, revenue sharing, parametric insurance, loyalty
+programs and business-to-business settlements.
+
+2. The challenge
+
+Design and build a solution on Solana that removes the need for trust from a financial
+transaction.
+
+The starting point is a question: where in your surroundings (at work, in business, in
+everyday life) do you have to trust someone for a transaction to go through? The other party,
+to keep to the terms? An intermediary who is supposed to guarantee this? Or perhaps both
+at once? Who profits from it, how much does it cost, and what happens when that trust turns
+out to be misplaced?
+Then redesign this relationship so that the terms of the transaction are written into a program
+running on the network and execute automatically, identically for every participant, with no
+possibility of unilateral change. Party A does not need to trust party B, because both rely on
+a rule that neither of them can circumvent. Nor do they need anyone to enforce that rule.
+
+The challenge is open: we do not impose a domain or a form. You can take a market you
+know from the inside and tackle a specific problem, or build a general-purpose tool that
+others will use. We care about the quality of the reasoning behind the project as much as
+about the code itself.
+
+3. Expected outcome
+
+We expect a working application: not a concept, not a mockup, but something that can be
+launched and clicked through. We do not expect a production-ready product. We expect the
+user to be able to go through the full flow from start to finish and see the result.
+
+We consider the application complete when:
+
+ it implements at least one full use case, from user input to a completed transaction;
+ it can demonstrate the moment at which the intermediary is no longer needed; this is
+
+ the heart of the project, and we want to see how it works in practice;
+ it works live during the presentation, not just in a recording.
+The interface can be rough. We prefer a simple application where everything works over a
+polished design with nothing happening underneath.
+
+Who you are building for. You define your target user, and we expect you to name them
+explicitly: "freelancers invoicing foreign clients", "fundraiser organizers", "developers building
+on Solana". This determines the language of the interface and how much of the technical
+layer is hidden from the user. A tool for developers and an app for people outside the crypto
+world are two different things. We value both equally, as long as the choice is deliberate.
+
+In addition to the application itself, we expect a short design rationale: which financial
+relationship was redesigned, who the intermediary in it was, and what specifically changes
+once they are removed.
+
+4. Submission requirements
+
+The project submitted for evaluation should include:
+
+ the project title and a detailed description, including the design rationale;
+ a presentation in PDF format (maximum 10 slides);
+ a video hosted in a publicly accessible location (link), no longer than 3 minutes,
+
+ presenting the project;
+ a code repository.
+It may additionally include:
+
+ screenshots;
+ links to demos;
+ graphics or other materials related to the project.
+5. Technical requirements
+
+The solution must run on Solana. Devnet is sufficient: we do not expect a mainnet
+deployment or the use of real funds. You can get test SOL from a public faucet.
+
+Environment. Setting up Rust, the Solana CLI and Anchor from scratch can take several
+hours. Our materials include a ready-made dev container: you launch it in VS Code or
+GitHub Codespaces and have the entire toolchain at hand, without installing anything locally.
+If you would rather skip even that, Solana Playground lets you compile and deploy a program
+straight from your browser.
+
+The logic that replaces the intermediary must live in the on-chain program. This is the
+essence of the challenge: if your backend enforces the transaction terms, the intermediary
+has not disappeared; it has simply become you.
+
+For the rest of the stack, you have a free hand:
+
+ On-chain program: Anchor (the easiest entry point), native Rust, Pinocchio, Steel or
+ anything else that compiles.
+
+ Frontend: any framework, any language. Communication with the network is typically
+ handled with @solana/kit or @solana/web3.js, and wallet handling with Wallet
+ Adapter.
+
+ Ready-made building blocks: it is worth using what the ecosystem already offers,
+ such as the SPL Token and Token-2022 standards, price oracles (Pyth,
+ Switchboard), and existing protocols and their SDKs. There is no need to write
+ everything from scratch.
+
+6. Testing and validation
+
+Evaluation takes place during a live presentation in front of the judges.
+
+What the demo looks like. You show the application in action, live, not from a recording.
+You walk through at least one full scenario from start to finish: the user arrives, connects a
+wallet, performs an operation and sees the result. We want to see a confirmed transaction on
+the network. Keep a block explorer (Solana Explorer, Solscan) at hand: the quickest way to
+prove that something really happened is to show the transaction on-chain.
+
+Prepare your environment in advance: wallets funded with test SOL, accounts in the right
+state, and ideally two wallets if your scenario involves two parties. A faucet outage or lack of
+internet will not disqualify your project, but it will make the conversation much harder, so
+have a recording ready as a backup.
+
+What we will ask about. We will not test you on blockchain theory. The questions concern
+what you have built:
+
+ Where exactly in the code does the intermediary disappear? Which part of the
+ program enforces the terms that neither party can circumvent?
+
+ What happens if one of the parties disappears halfway through the transaction?
+ Where are the funds then, and who can recover them?
+
+ Who has permission to perform which operations? Can you, as the author, change
+ anything after deployment?
+
+ Why blockchain and not a regular database? This question will definitely come up, so
+ have an answer ready.
+
+ What would you do next if you had another week?
+What we do not evaluate. We do not test resistance to attacks, we do not run an audit, and
+we will not nitpick design quality or test coverage. We do not require everything to work
+flawlessly: if something breaks during the demo, say plainly what went wrong and why. We
+value awareness of your project's limitations more highly than pretending they don't exist.
+
+Code. We look at the repository, both before and after the presentation. We don't read
+everything line by line, but we check whether the on-chain program does what the demo
+shows. Make sure you have a clear README describing what is where.
+
+7. Available resources
+
+Everything is publicly available; you don't need to download anything from us on site.
+
+Superteam Poland bootcamp "From Zero to Blockchain Developer": slides, a handbook
+and review questions. If you are starting from scratch, start here.
+
+ matzayonc.github.io/stpl-bootcamp: theoretical materials
+ github.com/matzayonc/solana-live-course-2026: examples and the dev container
+Solana documentation (available in Polish): solana.com/pl/docs. You will also find a
+browser quickstart and npx create-solana-dapp there.
+
+Anchor, the simplest path to an on-chain program: anchor-lang.com/docs, book.anchor-
+lang.com.
+
+On site: Solana Playground (deployment without a local environment), a devnet faucet, and
+Solana Explorer for showing transactions during the demo. Mentors will be at the booth
+throughout the entire hackathon, including when you don't yet know what to build.
+
+8. Evaluation criteria
+
+ Relevance to the challenge: 30%
+ Completeness and functionality: 25%
+ Idea and choice of problem: 20%
+ Implementation potential: 15%
+ Originality: 10%
+
+9. Additional notes and implementation context
+
+What happens after the hackathon. Superteam's involvement does not end with the
+announcement of the results. We invite the most interesting projects to continue
+development within the community: we help refine the idea, find co-founders and users, and
+prepare a grant application to the Solana ecosystem. For teams that want to keep going, the
+hackathon is a starting point, not the finish line.
+
+Grants and funding. The Solana Foundation and funds operating in the ecosystem regularly
+finance early-stage projects. We know these paths and will gladly advise which one suits
+your project, what the process looks like and what the reviewers expect. Taking part in the
+challenge does not guarantee funding, but it gives you access to people who have been
+through it.
+
+Jobs and paid work. Teams building on Solana are looking for developers, and Superteam
+is where the two sides meet. A strong performance at the hackathon is a real portfolio piece;
+several people from our community have joined projects this way. We also publish paid
+bounties for community members.
+The code remains yours. We claim no rights to anything you create. We only ask that the
+repository be public for the duration of the evaluation. What you do with the project
+afterwards is entirely up to you, even if that means nothing at all.
+
+If you don't know Solana. This challenge is not only for people with on-chain experience.
+Our mentors will be available throughout the hackathon and will help you go from first
+launching the environment to a working prototype. If you want to get started earlier, reach out
+to us before the event: we will send you materials and help you set up your environment so
+you don't lose time on it on Saturday morning.
+
+10. Contact
+
+We are available throughout the hackathon.
+
+ Superteam Poland booth: the fastest way to get answers.
+ Telegram: @matzayonc, @matjanisz (also before the event, if you want to set up
+
+ your environment early).
+ Email: pl@superteam.fun
+ Our channels: linktr.ee/superteampoland
+There are no stupid questions. If you are approaching something on-chain for the first time,
+just say so, and we will tailor the help to your level.
+ WYZWANIE SUPERTEAM POLAND
+
+ Finanse bez porednika
+
+ Wyobra sobie transakcj z kim, kogo nie znasz. Bez historii, bez reputacji,
+ bez moliwoci cigania go, gdy zniknie z Twoimi pienidzmi.
+
+ Blockchain sprawia, e to przestaje mie znaczenie - warunki wykonuj si
+ same, niezalenie od tego, czego chce druga strona.
+ Uyj tych moliwoci w aplikacji.
+
+1. Wprowadzenie - opis organizacji, sytuacji i stanu aktualnego
+
+Superteam to organizacja non-profit wspierajca deweloperw, projektantw i
+przedsibiorcw budujcych na Solanie. Dzialamy w kilkunastu krajach, a Superteam
+Poland zrzesza polskich builderw, ktrzy tworz produkty w otwartej infrastrukturze
+finansowej. Nie jestemy firm zlecajc projekt, a spolecznoci, ktra pomaga wej w
+ekosystem: lczymy ludzi z grantami, mentorami i zespolami szukajcymi wsparcia.
+
+Wikszo systemw finansowych, z ktrych korzystamy na co dzie, opiera si na zaufaniu
+do porednika. Robic przelew, ufasz bankowi, e wykona dyspozycj. Biorc kredyt, obie
+strony ufaj instytucji, ktra ocenia zdolno kredytow i egzekwuje splat. Kupujc co w
+internecie, ufasz operatorowi platnoci, e przekae pienidze sprzedawcy. Ten model
+dziala, ale ma koszt: porednik pobiera prowizj, decyduje kto zostanie obsluony, moe
+transakcj zablokowa lub cofn, a jego awaria zatrzymuje wszystkich.
+
+Technologia Blockchain zmienia t zaleno. Zamiast ufa instytucji, ufasz kodowi, ktry
+kady moe przeczyta, i sieci, w ktrej adna pojedyncza strona nie decyduje samodzielnie
+o wyniku. Solana jest jedn z takich sieci, zaprojektowan pod du przepustowo i niskie
+oplaty. Transakcja potwierdza si w ulamku sekundy i kosztuje ulamek grosza, co w
+praktyce oznacza, e da si na niej budowa rzeczy, ktre wczeniej nie byly ekonomicznie
+praktyczne - mikroplatnoci, rozliczenia sekundowe, automatyczne podzialy przychodu
+midzy wiele stron.
+
+Najlepszym przykladem tego, co daje ta zmiana, s protokoly lendingowe. Klasyczny kredyt
+wymaga instytucji, ktra sprawdza wiarygodno, prowadzi rejestr zobowizania i ciga
+naleno. W protokole lendingowym nie ma tej instytucji: warunki poyczki, zabezpieczenie
+i moment likwidacji s zapisane w programie dzialajcym w sieci i wykonuj si same,
+identycznie dla kadego uczestnika. Poyczkodawca nie musi zna ani ufa poyczkobiorcy,
+bo nie polega na jego uczciwoci, tylko na regule, ktrej adna ze stron nie moe obej.
+
+To jest wzorzec, ktry interesuje nas najbardziej: wzi relacj finansow, ktra dzi
+wymaga zaufanego porednika, i przeprojektowa j tak, eby porednik przestal by
+potrzebny. Lending jest tylko jednym przykladem. Ten sam schemat pasuje do escrow,
+rozlicze midzy freelancerem a klientem, zbirek z warunkowym zwrotem, podzialu
+przychodw, ubezpiecze parametrycznych, systemw lojalnociowych czy rozlicze
+midzy firmami.
+
+2. Wyzwanie
+
+Zaprojektuj i zbuduj na Solanie rozwizanie, ktre usuwa z transakcji finansowej
+konieczno zaufania.
+
+Punktem wyjcia jest pytanie: gdzie w Twoim otoczeniu (w pracy, w biznesie, w codziennym
+yciu) musisz komu zaufa, eby transakcja doszla do skutku? Drugiej stronie, e dotrzyma
+warunkw? Porednikowi, ktry ma to zagwarantowa? A moe obu naraz? Kto na tym
+zarabia, ile to kosztuje i co si dzieje, gdy zaufanie okae si nieuzasadnione.
+
+Nastpnie przeprojektuj t relacj tak, eby warunki transakcji byly zapisane w programie
+dzialajcym w sieci i wykonywaly si automatycznie - identycznie dla kadego uczestnika,
+bez moliwoci jednostronnej zmiany. Strona A nie musi ufa stronie B, bo obie polegaj na
+regule, ktrej adna z nich nie jest w stanie obej. Nie potrzebuj te nikogo, kto tej reguly
+dopilnuje.
+
+Wyzwanie jest otwarte: nie narzucamy obszaru ani formy. Moesz wzi rynek, ktry znasz
+od rodka, i zaatakowa konkretny problem, albo zbudowa narzdzie oglnego
+przeznaczenia, z ktrego skorzystaj inni. Interesuje nas jako rozumowania stojcego za
+projektem tak samo jak sam kod.
+
+3. Oczekiwany rezultat
+
+Oczekujemy dzialajcej aplikacji - nie koncepcji, nie makiety, tylko czego, co da si
+uruchomi i przeklika. Nie oczekujemy produktu gotowego do wdroenia. Oczekujemy, e
+uytkownik przejdzie peln ciek od pocztku do koca i zobaczy efekt.
+
+Aplikacj uznajemy za kompletn, gdy:
+
+ realizuje przynajmniej jeden pelny scenariusz uycia - od wejcia uytkownika do
+ zakoczonej transakcji,
+
+ da si w niej pokaza moment, w ktrym porednik przestaje by potrzebny; to serce
+ projektu i chcemy zobaczy, jak dziala w praktyce,
+
+ dziala na ywo podczas prezentacji, a nie tylko na nagraniu.
+
+Interfejs moe by surowy. Wolimy prost aplikacj, w ktrej wszystko dziala, ni
+dopracowany design, pod ktrym nic si nie dzieje.
+
+Dla kogo budujesz. To Ty definiujesz odbiorc i oczekujemy, e nazwiesz go wprost -
+"freelancerzy rozliczajcy si z klientami zagranicznymi", "organizatorzy zbirek",
+"deweloperzy budujcy na Solanie". Od tego zaley jzyk interfejsu i to, ile warstwy
+technicznej zostaje ukryte przed uytkownikiem. Narzdzie dla devw i aplikacja dla ludzi
+spoza wiata krypto to dwie rne rzeczy - obie s dla nas rwnie wartociowe, o ile wybr
+jest wiadomy.
+
+Poza sam aplikacj oczekujemy krtkiego uzasadnienia projektowego: jaka relacja
+finansowa zostala przeprojektowana, kto byl w niej porednikiem, co konkretnie zmienia jego
+usunicie.
+
+4. Wymagania formalne
+
+Projekt przesylany do oceny powinien zawiera:
+ tytul projektu i jego szczeglowy opis z uzasadnieniem projektowym,
+ prezentacj w formacie PDF (maksymalnie 10 slajdw),
+ film umieszczony w dostpnym, otwartym repozytorium (link), trwajcy
+ maksymalnie 3 minuty i prezentujcy projekt.
+ repozytorium kodu,
+
+Dodatkowo moe zawiera:
+ zrzuty ekranu,
+ linki do demonstracji,
+
+ materialy graficzne lub inne elementy zwizane z projektem.
+
+5. Wymagania techniczne
+Rozwizanie musi dziala na Solanie. Wystarczy devnet - nie oczekujemy wdroenia na
+mainnet ani operowania prawdziwymi rodkami. Testowe SOL pobierzesz z publicznego
+faucetu.
+rodowisko. Stawianie Rusta, Solana CLI i Anchora od zera potrafi zaj kilka godzin. W
+naszych materialach znajdziesz gotowy dev container - odpalasz go w VS Code albo w
+GitHub Codespaces i masz caly toolchain od rki, bez instalowania czegokolwiek lokalnie.
+Jeli wolisz obej si nawet bez tego, Solana Playground pozwala skompilowa i wdroy
+program prosto z przegldarki.
+Logika, ktra zastpuje porednika, musi znajdowa si w programie on-chain. To jest istota
+wyzwania: jeli warunki transakcji egzekwuje Twj backend, porednik nie zniknl - zmienil
+si w Ciebie.
+Co do reszty stosu masz woln rk:
+Program on-chain - Anchor (najprostsze wejcie), natywny Rust, Pinocchio, Steel lub
+cokolwiek innego, co si kompiluje.
+
+Frontend - dowolny framework, dowolny jzyk. Do komunikacji z sieci typowo @solana/kit
+lub @solana/web3.js, do obslugi portfela Wallet Adapter.
+
+Gotowe klocki - warto korzysta z tego, co ekosystem ju oferuje: standardu SPL Token i
+Token-2022, oracli cenowych (Pyth, Switchboard), istniejcych protokolw i ich SDK. Nie ma
+potrzeby pisa wszystkiego od zera.
+
+6. Sposb testowania i/lub walidacji
+
+Ocena odbywa si podczas prezentacji na ywo przed jurorami.
+
+Jak wyglda demo. Pokazujesz aplikacj w dzialaniu - na ywo, nie z nagrania.
+Przechodzisz przynajmniej jeden pelny scenariusz od pocztku do koca: uytkownik
+wchodzi, podlcza portfel, wykonuje operacj, widzi efekt. Chcemy zobaczy potwierdzon
+transakcj w sieci. Trzymaj pod rk eksplorator (Solana Explorer, Solscan) - najszybszy
+sposb udowodnienia, e co naprawd si wydarzylo, to pokazanie transakcji na lacuchu.
+
+Przygotuj rodowisko wczeniej: portfele z testowym SOL, konta w odpowiednim stanie, a
+najlepiej dwa portfele, jeli Twj scenariusz wymaga dwch stron. Awaria faucetu albo brak
+internetu nie zdyskwalifikuje projektu, ale znacznie utrudni rozmow - miej nagranie jako
+plan awaryjny.
+
+O co bdziemy pyta. Nie sprawdzamy Ci z teorii blockchaina. Pytania dotycz tego, co
+powstalo:
+
+ Gdzie dokladnie w kodzie znika porednik? Ktry fragment programu egzekwuje
+ warunki, ktrych adna ze stron nie moe obej?
+
+ Co si stanie, gdy jedna ze stron zniknie w polowie transakcji? Gdzie s wtedy rodki
+ i kto moe je odzyska?
+
+ Kto ma uprawnienia do jakich operacji? Czy Ty jako autor moesz co zmieni po
+ wdroeniu?
+
+ Dlaczego blockchain, a nie zwykla baza danych? To pytanie padnie na pewno -
+ przygotuj odpowied.
+
+ Co dalej, gdyby byl jeszcze tydzie na przygotowanie?
+Czego nie oceniamy. Nie testujemy odpornoci na ataki, nie robimy audytu, nie czepiamy si
+jakoci designu ani pokrycia testami. Nie wymagamy, eby wszystko dzialalo bezbldnie -
+jeli co si wysypie w trakcie demo, powiedz wprost, co poszlo nie tak i dlaczego.
+wiadomo ogranicze wlasnego projektu oceniamy wyej ni udawanie, e ich nie ma.
+Kod. Zagldamy do repozytorium - take przed prezentacj i po niej. Nie czytamy
+wszystkiego linijka po linijce, ale sprawdzamy, czy program on-chain robi to, co pokazuje
+demo. Zadbaj o czytelne README z opisem, co gdzie ley.
+
+7. Dostpne zasoby
+Wszystko jest publicznie dostpne - niczego nie trzeba od nas pobiera na miejscu.
+Bootcamp Superteam Poland ,,Od Zera do Blockchain Developera" - slajdy, podrcznik
+i pytania kontrolne. Jeli zaczynasz od zera, zacznij tutaj.
+
+ matzayonc.github.io/stpl-bootcamp - Materialy teoretyczne
+ https://github.com/matzayonc/solana-live-course-2026 - przyklady i Devcontainer
+Dokumentacja Solany (jest po polsku) - solana.com/pl/docs. Tam te quickstart w
+przegldarce i npx create-solana-dapp.
+Anchor - najprostsza droga do programu on-chain: anchor-lang.com/docs, book.anchor-
+lang.com.
+Na miejscu: Solana Playground (deploy bez lokalnego rodowiska), faucet devnetowy,
+Solana Explorer do pokazania transakcji na demie. Mentorzy przy stoisku przez caly
+hackathon - rwnie wtedy, gdy nie wiesz jeszcze, co budowa.
+
+8. Kryteria oceny
+
+ Zwizek z wyzwaniem - 30%
+ Kompletno i dzialanie - 25%
+ Pomysl i wybr problemu - 20%
+ Potencjal wdroeniowy - 15%
+ Oryginalno - 10%
+9. Dodatkowe uwagi / kontekst wdroeniowy
+
+Co dzieje si po hackathonie. Superteam nie koczy wsplpracy na ogloszeniu wynikw.
+Najciekawsze projekty zapraszamy do dalszego rozwoju w ramach spolecznoci -
+pomagamy dopracowa pomysl, znale wsplzaloycieli i uytkownikw, a take
+przygotowa aplikacj o grant z ekosystemu Solany. Dla zespolw, ktre chc cign
+temat dalej, hackathon jest punktem startowym, nie met.
+
+Granty i finansowanie. Fundacja Solany oraz dzialajce w ekosystemie fundusze regularnie
+finansuj projekty na wczesnym etapie. Znamy te cieki i chtnie podpowiemy, ktra pasuje
+do Twojego projektu, jak wyglda proces i czego oczekuj oceniajcy. Udzial w wyzwaniu
+nie gwarantuje finansowania, ale daje dostp do ludzi, ktrzy przez to przechodzili.
+
+Praca i zlecenia. Zespoly budujce na Solanie szukaj deweloperw, a Superteam jest
+miejscem, w ktrym te dwie strony si spotykaj. Dobre wykonanie na hackathonie jest
+realnym portfolio - kilka osb z naszej spolecznoci trafilo do projektw wlanie t drog.
+Publikujemy te platne zlecenia dla czlonkw spolecznoci.
+
+Kod zostaje Twj. Nie rocimy sobie adnych praw do tego, co powstanie. Prosimy jedynie o
+publiczne repozytorium na czas oceny. Co zrobisz z projektem dalej, zaley wylcznie od
+Ciebie - rwnie jeli to nic.
+
+Jeli nie znasz Solany. To nie jest wyzwanie tylko dla osb z dowiadczeniem on-chain.
+Nasi mentorzy bd dostpni przez caly hackathon i pomog przej od pierwszego
+uruchomienia rodowiska do dzialajcego prototypu. Jeli chcesz zacz wczeniej, odezwij
+si do nas przed wydarzeniem - podelemy materialy i pomoemy postawi rodowisko,
+eby nie traci na to czasu w sobot rano.
+
+10. Kontakt
+
+Jestemy dostpni przez caly hackathon.
+
+ Stoisko Superteam Poland - najszybsza droga do odpowiedzi.
+
+ Telegram: @matzayonc, @matjanisz - rwnie przed wydarzeniem, jeli chcesz
+ postawi rodowisko wczeniej.
+
+ Mailowo: pl@superteam.fun
+
+ Nasze kanaly: linktr.ee/superteampoland
+Nie ma glupich pyta - jeli podchodzisz do czego on-chain pierwszy raz, powiedz wprost,
+dobierzemy pomoc do poziomu.
+

@@ -1,0 +1,210 @@
+ Nazwa wyzwania
+ Krakw bez barier
+
+Krtki opis wyzwania
+Stwrz narzdzie, ktre pomoe mieszkacom i turystom oceni dostpno miejsc i tras
+zgodnie z ich indywidualnymi potrzebami, a jednoczenie bdzie rdlem informacji o
+dostpnoci oferty miasta. Rozwizanie powinno prezentowa konkretne informacje o
+barierach i udogodnieniach, a jednoczenie mie potencjal do dalszego rozwoju,
+komercjalizacji i skalowania na inne miasta.
+
+1. Wprowadzenie - opis organizacji, sytuacji i stanu aktualnego
+Krakw jest miastem odwiedzanym przez mieszkacw oraz turystw o bardzo rnych
+potrzebach i sposobach poruszania si. Dostpno przestrzeni, obiektw i tras moe mie
+istotne znaczenie dla osb poruszajcych si na wzkach, rodzicw z wzkami dziecicymi, a
+take innych uytkownikw, dla ktrych schody, progi, wskie wejcia czy okrelony rodzaj
+nawierzchni mog stanowi przeszkod.
+
+Problemem nie jest wylcznie brak informacji, ale rwnie sposb jej prezentowania. Proste
+oznaczenie miejsca jako ,,dostpnego" lub ,,niedostpnego" nie zawsze pozwala uytkownikowi
+oceni, czy dane miejsce lub trasa odpowiada jego indywidualnym potrzebom. Potrzebne s
+bardziej szczeglowe informacje, m.in. o schodach, progach, podjazdach, windach, szerokoci
+wejcia, rodzaju nawierzchni, dostpnoci toalety czy miejscach odpoczynku. Wane jest, aby
+dane te byly w miar moliwoci aktualne.
+
+Dane wykorzystane przez rozwizanie mog pochodzi z otwartych rdel, OpenStreetMap,
+informacji publikowanych przez wlacicieli obiektw oraz zglosze uytkownikw. Istotne jest
+wskazanie rdla danych, daty ich aktualizacji oraz poziomu ich wiarygodnoci. Informacje
+niepotwierdzone nie powinny by prezentowane jako formalne zapewnienie dostpnoci.
+
+Rozwizanie powinno by moliwe do rozwijania bez koniecznoci rcznego utrzymywania bazy
+danych przez Miasto oraz bez dostpu do wewntrznych systemw UMK lub MJO. Powinno by
+take proste w obsludze i latwe do wdroenia w podmiotach, ktre mog uzna je za uyteczne
+(np.hotele, organizatorzy wydarze). Jednoczenie powinno mie potencjal do zastosowania
+take poza Krakowem, np. przez inne miasta, wlacicieli obiektw, hotele, organizatorw
+wydarze, zarzdcw nieruchomoci, systemy rezerwacyjne oraz dostawcw map i aplikacji
+turystycznych.
+
+2. Wyzwanie
+Zaprojektuj i przygotuj prototyp narzdzia, ktre umoliwi mieszkacom i turystom uzyskanie
+informacji oraz ocen dostpnoci wybranych miejsc lub tras zgodnie z ich indywidualnymi
+potrzebami. Rozwizanie nie powinno ogranicza si do prostego komunikatu
+,,dostpne/niedostpne", lecz przedstawia szczeglowe informacje pozwalajce
+uytkownikowi samodzielnie oceni, czy dane miejsce lub trasa odpowiada jego potrzebom.
+
+Prototyp powinien zosta ograniczony do wybranej grupy uytkownikw lub okrelonego
+rodzaju potrzeb, np. osb poruszajcych si na wzkach oraz rodzicw z wzkami dziecicymi.
+
+3. Oczekiwany rezultat
+Oczekiwanym rezultatem jest dzialajcy prototyp rozwizania, ktre pozwala sprawdzi
+dostpno wybranego miejsca lub trasy i prezentuje szczeglowe informacje istotne dla
+okrelonej grupy uytkownikw.
+
+Prototyp powinien w szczeglnoci:
+
+ prezentowa jak najaktualniejsze informacje o konkretnych barierach i udogodnieniach, np.
+ schodach, progach, podjazdach, windach, szerokoci wejcia, nawierzchni, toalecie i
+ miejscach odpoczynku;
+
+ wskazywa rdlo informacji, dat jej aktualizacji oraz poziom wiarygodnoci;
+ wykorzystywa dane z dostpnych rdel, bez koniecznoci rcznego utrzymywania bazy
+
+ przez Miasto;
+ nie wymaga dostpu do wewntrznych systemw UMK lub MJO;
+ uwzgldnia potrzeby wybranej grupy uytkownikw;
+ by latwy w uytkowaniu oraz wdroeniu u potencjalnych odbiorcw;
+ pokazywa potencjal dalszego rozwoju, komercjalizacji i skalowania rozwizania na inne
+
+ miasta lub sektory.
+
+4. Wymagania formalne
+Projekt przesylany do oceny powinien zawiera:
+
+ opis rozwizania i wskazanie problemu, ktry rozwizuje;
+ prototyp lub demonstracj dzialania rozwizania;
+ informacj o grupie docelowej i sposobie wykorzystania rozwizania;
+ opis rdel danych oraz sposobu oceny ich aktualnoci i wiarygodnoci;
+ propozycj modelu biznesowego i moliwoci dalszego rozwoju rozwizania;
+ prezentacj projektu w formacie PDF (maksymalnie 10 slajdw);
+ film prezentujcy dzialanie projektu, umieszczony w dostpnym, otwartym repozytorium
+
+ (maksymalnie 3 minuty).
+Dodatkowo projekt moe zawiera repozytorium kodu, zrzuty ekranu, link do demonstracji oraz
+inne materialy zwizane z projektem.
+
+5. Wymagania techniczne i organizacyjne
+ Rozwizanie moe mie dowoln form techniczn, np. aplikacji internetowej lub
+ mobilnej, pod warunkiem e umoliwia demonstracj glwnego scenariusza:
+ wyszukania miejsca lub trasy i przedstawienia informacji o dostpnoci istotnych dla
+ wybranej grupy uytkownikw.
+
+ Architektura powinna oddziela pozyskiwanie i aktualizacj danych od sposobu ich
+ prezentacji. Zespl powinien wskaza glwne komponenty rozwizania, przeplyw
+ danych oraz sposb dodawania kolejnych rdel, kategorii miejsc i obszarw
+ geograficznych.
+
+ Naley korzysta z publicznie dostpnych danych i uslug na warunkach okrelonych
+ przez ich dostawcw. W przypadku danych miejskich naley wskaza konkretne zbiory
+ lub publiczne interfejsy API, sposb ich pobierania, czstotliwo aktualizacji i
+ postpowanie w razie niedostpnoci rdla. Rozwizanie nie moe zaklada dostpu
+ do wewntrznych systemw UMK lub miejskich jednostek organizacyjnych.
+
+ Przy kadej informacji o dostpnoci naley przewidzie moliwo wskazania jej
+ rdla, daty pozyskania lub ostatniego potwierdzenia oraz statusu wiarygodnoci. Dane
+ pochodzce ze zglosze uytkownikw lub innych niezweryfikowanych rdel musz
+ by wyranie odrnione od informacji potwierdzonych. Rozwizanie powinno
+ przewidywa sposb poprawiania bldnych i nieaktualnych danych.
+
+ Interfejs naley projektowa z uwzgldnieniem dostpnoci cyfrowej, przyjmujc WCAG
+ 2.2 na poziomie AA jako cel rozwoju rozwizania. Ju w prototypie naley zadba
+ zwlaszcza o obslug klawiatur i czytnikiem ekranu, czytelno treci, odpowiedni
+ kontrast oraz tekstow alternatyw dla informacji przedstawianych wylcznie na mapie.
+ Ocena prototypu powinna uwzgldnia wykaz funkcji ju dostpnych oraz elementw
+ wymagajcych dalszych prac.
+
+ Naley przedstawi propozycj uruchomienia i dalszego utrzymania rozwizania poza
+ infrastruktur UMK, w tym wskaza podmiot odpowiedzialny za hosting, aktualizacje,
+ bezpieczestwo, obslug zglosze i koszty dzialania. Prototyp nie musi by dostpny
+ jako stala usluga po hackathonie, ale przyjty model powinien umoliwia jego dalszy
+ rozwj.
+
+ Naley opisa podstawowe zasady ochrony danych i bezpieczestwa, w szczeglnoci
+ zakres zbieranych danych uytkownikw, sposb ochrony zglosze i kont, jeeli s
+ przewidziane, oraz korzystanie z bezpiecznych polcze. Projekt nie powinien wymaga
+ podawania informacji o niepelnosprawnoci, jeeli do dopasowania wynikw wystarcz
+ preferencje dotyczce barier i udogodnie.
+
+ Rozwizanie powinno nadawa si do rozwijania i wdraania przez inne podmioty.
+ Zespl powinien wskaza zalenoci od zewntrznych dostawcw, licencje
+ wykorzystywanych danych i komponentw, moliwo przeniesienia rozwizania na
+ inn infrastruktur oraz sposb dodania kolejnego miasta. Wybr konkretnych
+ technologii pozostaje po stronie zespolu.
+
+6. Sposb testowania i/lub walidacji
+ Podczas prezentacji zespl powinien przeprowadzi dzialajc demonstracj dla
+ wybranej grupy uytkownikw: okreli jej potrzeby, sprawdzi co najmniej jedno
+ miejsce lub tras i pokaza konkretne bariery oraz udogodnienia, ktre pozwalaj
+ samodzielnie oceni przydatno wyniku.
+
+ Naley pokaza, skd pochodz prezentowane informacje, kiedy zostaly pozyskane lub
+ potwierdzone oraz jak aplikacja oznacza dane niepelne, nieaktualne bd
+ niezweryfikowane. Jeeli demonstracja wykorzystuje dane przykladowe, trzeba je
+ jednoznacznie oznaczy.
+ Naley sprawdzi dzialanie rozwizania w co najmniej jednym przypadku, w ktrym
+ dane s sprzeczne, niepelne albo rdlo danych jest niedostpne, i wyjani, co
+ zobaczy wwczas uytkownik. Aplikacja nie powinna przedstawia braku informacji
+ jako potwierdzenia dostpnoci miejsca lub trasy.
+
+ Zespl powinien wykona podstawow kontrol dostpnoci glwnego scenariusza
+ uytkownika, obejmujc co najmniej obslug klawiatur, odczyt informacji przez
+ czytnik ekranu, kontrast oraz dostpno informacji z mapy w formie tekstowej. Naley
+ wskaza stwierdzone ograniczenia prototypu i plan ich usunicia.
+
+ W ramach prezentacji naley przedstawi krtki plan przejcia od prototypu do uslugi:
+ podmiot odpowiedzialny za produkt, model pozyskiwania i weryfikowania danych,
+ sposb finansowania hostingu i utrzymania, plan dalszych prac oraz warunki
+ uruchomienia rozwizania w kolejnym miecie.
+
+7. Dostpne zasoby
+
+Uczestnicy mog korzysta z poniszych rdel oraz z innych publicznie dostpnych danych
+przydatnych do rozwizania wyzwania:
+
+ Portal Otwarte Dane Miasta Krakowa - zbiory danych miejskich udostpniane m.in. w
+ formatach JSON, CSV i XLSX oraz przez interfejsy API, zalenie od zasobu.
+ otwartedane.um.krakow.pl
+
+ Miejski System Informacji Przestrzennej (MSIP) - katalog danych przestrzennych
+ Krakowa. Wybrane zasoby s dostpne do pobrania lub przez uslugi WMS i WFS. Zakres
+ danych i warunki ich wykorzystania naley sprawdzi dla konkretnego zasobu.
+ msip.krakow.pl
+
+ Portal Otwarte Dane (dane.gov.pl) - oglnopolski katalog danych publicznych, ktry
+ moe dostarczy danych uzupelniajcych oraz zasobw przydatnych przy rozwijaniu
+ rozwizania na inne miasta. dane.gov.pl
+
+ OpenStreetMap - spolecznociowe dane o obiektach i sieci drg, ktre mog stanowi
+ podstaw mapy i wyszukiwania tras. Wykorzystanie danych wymaga przestrzegania
+ warunkw licencji i oznaczenia rdla. openstreetmap.org
+Mona rwnie wykorzysta inne otwarte rdla oraz informacje udostpniane przez wlacicieli
+obiektw lub zglaszane przez uytkownikw. Samo opublikowanie informacji w internecie
+nie oznacza jednak, e wolno j automatycznie pobiera i wykorzystywa komercyjnie.
+Zespl powinien dla kadego uytego rdla wskaza jego pochodzenie, warunki wykorzystania,
+aktualno oraz sposb weryfikacji danych.
+
+8. Kryteria oceny
+Proponowane kryteria oceny:
+
+ Zwizek z wyzwaniem i uyteczno dla wskazanej grupy uytkownikw, w tym latwo
+ uytkowania -- 25%
+
+ Jako i kompletno prototypu -- 20%
+ Wiarygodno oraz sposb prezentacji i aktualizacji danych -- 15%
+ Potencjal wdroeniowy i moliwo skalowania -- 20%
+ Model biznesowy, potencjal komercjalizacji i rozwoju rynkowego -- 20%
+
+9. Dodatkowe uwagi / kontekst wdroeniowy
+Celem wyzwania jest nie tylko stworzenie rozwizania odpowiadajcego na konkretn potrzeb
+miasta, ale rwnie rozwj pomyslu z myl o jego dalszej komercjalizacji i skalowaniu -
+zarwno na rynku lokalnym, jak i krajowym.
+Dlatego w ocenie szczeglne znaczenie bdzie mial potencjal biznesowy projektu, w tym model
+biznesowy, moliwo uruchomienia i rozwoju aplikacji oraz jej potencjal rynkowy.
+Potencjalne kierunki komercjalizacji obejmuj uslugi dla wlacicieli obiektw, hoteli,
+organizatorw wydarze, zarzdcw nieruchomoci, systemw rezerwacyjnych oraz
+dostawcw map i aplikacji turystycznych.
+
+10. Kontakt
+Bartlomiej Wglarz- w strefie mentorskiej i na discord
+Karolina Grzanka- w strefie mentorskiej i na discord
+Michal Jana- w strefie mentorskiej i na discord
+
