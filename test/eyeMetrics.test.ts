@@ -119,3 +119,24 @@ test('mruganie raz na sekundę daje ok. 60/min', () => {
   const r = eyes.blinkRate(180)!;
   assert.ok(r > 55 && r < 65, `rate ${r}`);
 });
+
+test('dłuższe pochylenie głowy (garbienie) nie wyłącza liczenia mrugnięć – tylko krótkie zerknięcia', () => {
+  const eyes = new EyeAnalyzer(OPEN);
+  eyes.setCalibratedPitch(0);
+  run(eyes, 0, 60, blinkEvery(4, 0.15));
+  const before = eyes.debug(60).blinksTotal;
+  // potem 120 s z głową stale 20° niżej (garbienie / laptop niżej)
+  run(eyes, 60, 180, (t) => ({ ...blinkEvery(4, 0.15)(t), pitchDeg: 20 }));
+  const counted = eyes.debug(180).blinksTotal - before;
+  assert.ok(counted >= 25, `zliczone ${counted}/30`);
+});
+
+test('płytkie mrugnięcia (punkty powiek domykają się tylko do ok. 0,45) są liczone dzięki progowi dopasowanemu do osoby', () => {
+  const eyes = new EyeAnalyzer(OPEN);
+  // EAR 0,19 przy wzorcu 0,3 → zamknięcie ok. 0,56 na starcie, ale realnie model „domyka” mniej: 0,21 → ok. 0,46
+  run(eyes, 0, 180, (t) => ({ ear: t % 3 < 0.15 ? 0.21 : OPEN }));
+  const d = eyes.debug(180);
+  assert.ok(d.closeOn < 0.46, `próg ${d.closeOn}`);
+  const r = eyes.blinkRate(180)!;
+  assert.ok(r > 17 && r < 23, `rate ${r}`);
+});

@@ -315,7 +315,7 @@ function drawEyeDebug(canvas: HTMLCanvasElement, e: Frame['eyes']): void {
     : [
         `LICZNIK MRUGNIĘĆ: ${e.blinksTotal}    długie: ${e.longTotal}`,
         `śr. 3 min: ${e.rate == null ? '– (zbieram dane, min. 60 s)' : `${e.rate.toFixed(0)}/min`}`,
-        `zamknięcie ${n(e.closed)}   EAR ${n(e.ear, 3)} / wzorzec ${n(e.earRef, 3)}`,
+        `zamknięcie ${n(e.closed)} (próg ${n(e.closeOn)})   EAR ${n(e.ear, 3)} / wzorzec ${n(e.earRef, 3)}`,
         `eyeBlink surowy ${n(e.blend)} → względny ${n(e.blendRel)}`,
         `${e.reliable ? 'dane OK' : 'DANE NIEPEWNE'} · ${e.fps.toFixed(0)} kl./s${e.gazeDown ? ' · PATRZYSZ W DÓŁ' : ''}${e.talking ? ' · MÓWISZ' : ''}`,
       ];

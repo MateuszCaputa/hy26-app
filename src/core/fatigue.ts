@@ -70,6 +70,7 @@ export interface EyeDebug {
   blinksTotal: number; // licznik od startu – rośnie od razu po mrugnięciu
   longTotal: number;
   rate: number | null;
+  closeOn: number;
   reliable: boolean;
   fps: number;
   gazeDown: boolean;
@@ -109,6 +110,8 @@ export class EyeAnalyzer {
   private talking = false;
   private last: { closed: number | null; ear: number | null; blend: number | null } = { closed: null, ear: null, blend: null };
   private blinksTotal = 0;
+  /** Zamknięcie oka z ostatnich 60 s – do progu mrugnięcia dopasowanego do osoby. */
+  private closedHist: { t: number; v: number }[] = [];
   private longTotal = 0;
 
   constructor(private calibratedEarOpen: number | null = null) {}
@@ -137,11 +140,26 @@ export class EyeAnalyzer {
       blinksTotal: this.blinksTotal,
       longTotal: this.longTotal,
       rate: this.blinkRate(t),
+      closeOn: this.blinkThresholds().on,
       reliable: this.isReliable(t),
       fps: this.fps(t),
       gazeDown: this.gazeDown,
       talking: this.talking,
     };
+  }
+
+  /**
+   * Progi mrugnięcia: poziom „otwarte” (mediana) + typowa głębokość mrugnięcia (98. percentyl) z ostatnich 60 s.
+   * Próg „zamknięte” w połowie drogi, ale nie wyżej niż stałe 0,52 i nie niżej niż 0,3 (szum przy otwartym oku).
+   */
+  blinkThresholds(): { on: number; off: number } {
+    if (this.closedHist.length < 250) return { on: CLOSE_ON, off: CLOSE_OFF }; // ok. 10 s danych
+    const s = this.closedHist.map((x) => x.v).sort((a, b) => a - b);
+    const base = s[Math.floor(s.length * 0.5)];
+    const peak = s[Math.floor(s.length * 0.98)];
+    if (peak - base < 0.15) return { on: CLOSE_ON, off: CLOSE_OFF }; // brak wyraźnych mrugnięć – zostajemy przy stałym
+    const on = Math.min(CLOSE_ON, Math.max(0.3, base + 0.5 * (peak - base)));
+    return { on, off: Math.max(base + 0.05, on - 0.1) };
   }
 
   private countBlink(t: number): void {
@@ -216,12 +234,13 @@ export class EyeAnalyzer {
     }
 
     // Patrzenie w dół (klawiatura, telefon): powieka opada za wzrokiem – to nie mrugnięcie ani senność.
+    // Wzorzec = mediana z ostatnich 20 s ze WSZYSTKICH klatek: dłuższe pochylenie (garbienie, niżej ustawiony laptop)
+    // staje się nową normą, a odcinamy tylko krótkie zerknięcia w dół. Wcześniej wzorzec z kalibracji / sprzed
+    // pochylenia „zamrażał” bramkę i ignorowała prawie wszystkie mrugnięcia (test na żywo).
     if (f.pitchDeg != null) {
-      if (!this.gazeDown) {
-        this.pitchHist.push({ t, v: f.pitchDeg });
-        while (this.pitchHist.length && t - this.pitchHist[0].t > 60) this.pitchHist.shift();
-      }
-      const base = this.calibratedPitch ?? (this.pitchHist.length >= 30 ? median(this.pitchHist.map((x) => x.v)) : null);
+      this.pitchHist.push({ t, v: f.pitchDeg });
+      while (this.pitchHist.length && t - this.pitchHist[0].t > 20) this.pitchHist.shift(); // ~10 s na dopasowanie
+      const base = this.pitchHist.length >= 30 ? median(this.pitchHist.map((x) => x.v)) : this.calibratedPitch;
       this.gazeDown = base !== null && f.pitchDeg - base > GAZE_DOWN_DEG;
     } else this.gazeDown = false;
     if (this.gazeDown) {
@@ -244,10 +263,14 @@ export class EyeAnalyzer {
       while (this.blendOpenHist.length && t - this.blendOpenHist[0].t > 60) this.blendOpenHist.shift();
     }
 
-    // Mrugnięcia: histereza CLOSE_ON / CLOSE_OFF.
+    // Mrugnięcia: histereza CLOSE_ON / CLOSE_OFF, dopasowana do osoby. U części osób punkty powiek z MediaPipe
+    // przy mrugnięciu „domykają się” tylko do ~0,4–0,5 (wygładzanie modelu, okulary) – stały próg 0,52 je gubił.
+    this.closedHist.push({ t, v: c });
+    while (this.closedHist.length && t - this.closedHist[0].t > 60) this.closedHist.shift();
+    const { on: closeOn, off: closeOff } = this.blinkThresholds();
     const sample = { t, dt, closed: c >= PERCLOS_CLOSED };
     this.perclosSamples.push(sample);
-    if (this.closure === null && c >= CLOSE_ON) {
+    if (this.closure === null && c >= closeOn) {
       this.closure = { start: t, samples: [] };
     }
     if (this.closure) {
@@ -257,7 +280,7 @@ export class EyeAnalyzer {
         // Zamknięcia > 3 s traktujemy jak patrzenie w dół: nie trafiają do PERCLOS.
         for (const s of this.closure.samples) s.closed = false;
       }
-      if (c <= CLOSE_OFF) {
+      if (c <= closeOff) {
         const closedShare = this.closure.samples.filter((s) => s.closed).length / this.closure.samples.length;
         if (d >= BLINK_MIN && d <= BLINK_MAX) this.countBlink(t);
         else if (d > BLINK_MAX && d <= LONG_MAX) {
