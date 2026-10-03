@@ -159,7 +159,7 @@ function fatigueTab(st: StatsPayload, range: RangeId, select: HTMLElement): HTML
     );
     chart = dayChart(days, (d) => d.avgFatigue, lowFatigue, '%', `Zmęczenie, ${RANGES[range].toLowerCase()}`);
   }
-  return [h('section', { class: 'block' }, select, figs, chart), formSection(st)];
+  return [h('section', { class: 'block' }, select, figs, chart)];
 }
 
 /** Strzałka zmiany względem wczoraj (kolor = czy to dobrze); pełny opis w podpowiedzi. */
@@ -285,34 +285,6 @@ function dayChart(days: Day[], pick: (d: Day) => number | null, good: (v: number
     return { label, tip: i === last ? `dziś, ${date}` : date, value: v, tone: v === null ? 'mute' : good(v) ? 'good' : 'warn', strong: i === last };
   });
   return barChart(bars, unit, aria, !long);
-}
-
-/** Godziny formy: średnia forma w danej godzinie ze wszystkich dni (ważona minutami); najlepsze na zielono, najsłabsze na bursztynowo. */
-function formSection(st: StatsPayload): HTMLElement {
-  const sec = h('section', { class: 'block' }, h('h2', null, 'Godziny formy'));
-  const byHour = new Map<number, { sum: number; min: number }>();
-  for (const c of st.heatmap) {
-    const acc = byHour.get(c.hour) ?? { sum: 0, min: 0 };
-    acc.sum += c.form * c.minutes;
-    acc.min += c.minutes;
-    byHour.set(c.hour, acc);
-  }
-  const hours = [...byHour.entries()].filter(([, a]) => a.min > 0).sort((a, b) => a[0] - b[0]).map(([hr, a]) => ({ hr, v: a.sum / a.min }));
-  if (hours.length < 2) {
-    sec.append(h('p', { class: 'fine' }, 'Pojawi się po kilku godzinach pracy.'));
-    return sec;
-  }
-  const max = Math.max(...hours.map((x) => x.v));
-  const min = Math.min(...hours.map((x) => x.v));
-  const bars: Bar[] = hours.map((x) => ({
-    label: String(x.hr),
-    tip: `${x.hr}:00`,
-    value: x.v,
-    tone: max - x.v <= 5 ? 'good' : x.v - min <= 5 ? 'warn' : 'mute',
-  }));
-  if (st.bestHours) sec.append(h('p', { class: 'stat-hint' }, `Najlepiej ${st.bestHours}`));
-  sec.append(barChart(bars, '/100', 'Forma w kolejnych godzinach dnia', false));
-  return sec;
 }
 
 function issuesSection(st: StatsPayload): HTMLElement {

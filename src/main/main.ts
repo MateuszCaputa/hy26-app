@@ -522,7 +522,8 @@ app.on('before-quit', () => {
 
 void app.whenReady().then(async () => {
   store = new Store(path.join(app.getPath('userData'), 'postura.db'));
-  settings = store.getSettings();
+  // Te opcje zniknęły z Ustawień (C22); wcześniej włączone nie mogą działać po cichu, bez przełącznika.
+  settings = { ...store.getSettings(), onlyWorkHours: false, activityTracking: false };
   registerProtocol();
 
   session.defaultSession.setPermissionRequestHandler((_wc, permission, cb) => cb(permission === 'media' || permission === 'notifications'));

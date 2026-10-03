@@ -18,7 +18,7 @@
 - Stats: breaks/alerts on the day chart, norms and vs-yesterday under figures, 7-day bar charts for fatigue and good posture (C14, C15) → PR #83
 - Posture figure in the live panel that mirrors the top issue with a correction arrow (C16, mentor feedback F3) → PR #85
 - Side menu: camera/gear icons, „Kalibruj” button in place of „Wstrzymaj” (C17) → PR #88
-- Minimal Stats: Postawa / Zmęczenie tabs, range select (today, 3/7/30 days), bar charts only (C18) → PR #94
+- Minimal Stats: Postawa / Zmęczenie tabs, range select (today, 3/7/30 days), bar charts only (C20) → PR #94
 
 ## AI tools used
 - **Claude Code** (Anthropic): used by all developers for planning, implementation, tests, docs and review. Every module is understood and can be explained by the team.
