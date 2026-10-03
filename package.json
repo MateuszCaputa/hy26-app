@@ -1,59 +1,86 @@
 {
-  "name": "rytm",
+  "name": "postura",
+  "productName": "Postura",
+  "version": "1.0.0",
+  "description": "Analiza postawy siedzącej, zmęczenia i przerw z kamery – w pełni lokalnie.",
+  "main": "dist/main/main.js",
+  "author": "warpolek",
+  "license": "UNLICENSED",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "oxlint",
-    "preview": "vite preview",
-    "desktop": "vite build && electron .",
-    "desktop:dev": "electron . --dev",
-    "dist:win": "vite build && electron-builder --win portable",
-    "dist:mac": "vite build && electron-builder --mac dmg"
+    "build": "node build.mjs",
+    "start": "node build.mjs && electron .",
+    "dev": "node build.mjs --watch",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "tsx --test test/*.test.ts",
+    "dist": "node build.mjs --prod && electron-builder",
+    "dist:win": "node build.mjs --prod && electron-builder --win",
+    "dist:mac": "node build.mjs --prod && electron-builder --mac",
+    "demo": "node build.mjs && electron . --demo --data=demo-data",
+    "seed-demo": "node scripts/seed-demo.mjs demo-data",
+    "demo:stats": "node build.mjs && electron . --demo --data=demo-data --view=stats"
   },
   "dependencies": {
-    "@mediapipe/tasks-vision": "^1.0.1",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "garmin-connect": "^1.6.2",
+    "uiohook-napi": "^1.5.5"
   },
   "devDependencies": {
-    "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.7",
-    "@vitejs/plugin-react": "^6.1.1",
+    "@mediapipe/tasks-vision": "^1.0.1",
+    "@types/node": "^26.6.4",
     "electron": "^44.5.1",
     "electron-builder": "^26.15.3",
-    "oxlint": "^1.81.0",
-    "playwright-core": "^1.63.0",
-    "vite": "^8.3.0"
+    "esbuild": "^0.28.2",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
   },
-  "description": "Rytm – asystent zdrowia przy biurku",
-  "main": "electron/main.cjs",
   "build": {
-    "appId": "pl.hackyeah.rytm",
-    "productName": "Rytm",
+    "appId": "pl.postura.app",
+    "productName": "Postura",
     "directories": {
       "output": "release"
     },
     "files": [
-      "dist/**",
-      "electron/**"
+      "dist/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "assets",
+        "to": "assets"
+      }
     ],
     "win": {
-      "target": "portable"
+      "target": [
+        "nsis"
+      ],
+      "icon": "assets/icon.png"
     },
-    "portable": {
-      "artifactName": "Rytm-${version}.exe"
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
     },
-    "electronDist": "node_modules/electron/dist",
     "mac": {
-      "target": "dmg",
+      "target": [
+        "dmg"
+      ],
+      "icon": "assets/icon.png",
       "category": "public.app-category.healthcare-fitness",
-      "artifactName": "Rytm-${version}-${arch}.dmg",
       "extendInfo": {
-        "NSCameraUsageDescription": "Rytm analizuje obraz z kamery na tym komputerze, żeby ocenić postawę i oznaki zmęczenia. Obraz nie jest zapisywany ani wysyłany."
+        "NSCameraUsageDescription": "Postura analizuje postawę i mrugnięcia z obrazu kamery. Obraz nie opuszcza komputera i nie jest zapisywany."
       }
-    }
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "icon": "assets/icon.png"
+    },
+    "npmRebuild": false,
+    "asarUnpack": [
+      "node_modules/uiohook-napi/**"
+    ]
+  },
+  "engines": {
+    "node": ">=22.13"
   }
 }

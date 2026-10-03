@@ -1,40 +1,5 @@
-# deps / builds
 node_modules/
-.next/
 dist/
-build/
-out/
-.turbo/
-.vercel/
-coverage/
-__pycache__/
-*.pyc
-.venv/
-
-# env / secrets
-.env
-.env.*
-!.env.example
-
-# OS / editor
-.DS_Store
-.idea/
-.vscode/*
-!.vscode/extensions.json
-*.log
-
-# local Claude settings (shared settings in .claude/settings.json are committed)
-.claude/settings.local.json
-
-# Rytm: paczki Electrona i zrzuty z testów
 release/
-scripts/*.png
-
-# Prywatne eksporty zdrowotne z telefonów: nigdy do repozytorium
-eksporty/
-export.xml
-eksport.xml
-export_cda.xml
-eksport_cda.xml
-com.samsung.*.csv
-rytm-*.json
+demo-data/
+*.log
