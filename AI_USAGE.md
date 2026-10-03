@@ -12,6 +12,7 @@
 - Two mini-widget styles (card / pill), click to open, drag to move (C11) → PR #79
 - Smooth 60 fps overlay: rAF drawing + landmark following between pose measurements (MP9) → PR #80
 - No fatigue score on unreliable eye data; 2+ min away from the desk counts as a break (A13, A14) → PR #77
+- Whole-number posture score in widget/tray; widget text ellipsis (A15, C12) → PR #81
 
 ## AI tools used
 - **Claude Code** (Anthropic): used by all developers for planning, implementation, tests, docs and review. Every module is understood and can be explained by the team.

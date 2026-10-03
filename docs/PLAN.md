@@ -19,6 +19,7 @@
 - [x] A11 Calibration that survives bad posture: live checks during calibration, two-step (tall + usual slouch) with a personal range, a "you sat straighter than your calibration" hint. (@Kacper, branch `kacper/calibration-guard`; touches `overlays.ts` calibration dialog (C) and one toast in `app.ts`)
 - [x] A13 No fatigue score when eye data is unreliable (face < 70% of frames, < 12 fps, or no blink/PERCLOS yet): show "za mało danych z oczu" instead of a number built from posture + time only; smoothing resets. (@Marcin; touches `core/fatigue.ts`, `views/live.ts`)
 - [x] A14 2+ min away from the desk counts as a real break: logged as `break-done` (stats), resets the Bateria trend, stillness and fatigue, "Witaj z powrotem" toast. (@Marcin; touches `core/breakEngine.ts`, `analyzer.ts`, one callback in `app.ts`)
+- [x] A15 Posture score is always a whole number: during a brief pose loss (< 3 s) the tracker returned the raw smoothed value, so the widget/tray showed e.g. `89.18971503778276`. (@Marcin; `core/scoring.ts` + test)
 - [ ] A9 Document every formula in the README's "Jak liczona jest ocena" (how the score is computed), updated for A3–A7.
 
 ## Area MP: MediaPipe & camera (bugs first, then precision, then wow). One task at a time, in this order.
@@ -90,6 +91,7 @@
 - [ ] C8 A calm empty/error state for every view (no face, camera busy, no data yet).
 - [x] C10 Quick glance (@Mateusz): live posture score next to the tray icon (macOS), tray quick menu (state, Bateria + forecast, fatigue, time since break; break now, pause 30 min), widget remembers its position, dev auto-reload. **Next:** widget nudges (20-20-20 countdown, stretch [Start]/[Za 5 min], „Cofnij brodę”).
 - [x] C11 Two mini-widget styles (@Mateusz): **Karta** (score, state, fatigue) or **Pigułka** (dot + number, theme colours, fades when posture is good); chosen in Settings or tray → Mini-widget; click opens Postura, drag moves it (position remembered). Windows check pending (Marcin).
+- [x] C12 Card widget: long state/fatigue text ends with an ellipsis instead of overflowing. (@Marcin; 2 lines in `styles.css`)
 - [ ] C9 Screenshot pack at 1920×1080 for the slides + a 10 s clip of the neon overlay for the video intro.
 
 ## Area D: Pitch, video, submission & ops (owner: Bartłomiej, plus everyone for testing)

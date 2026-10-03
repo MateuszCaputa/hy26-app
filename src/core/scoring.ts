@@ -155,7 +155,7 @@ export class PostureTracker {
       }
       return {
         state: present ? stateFromScore(this.smoothed ?? 100) : 'absent',
-        score: present ? this.smoothed : null,
+        score: present && this.smoothed !== null ? Math.round(this.smoothed) : null,
         rawScore: null,
         present,
         topIssue: present ? this.topIssue() : null,

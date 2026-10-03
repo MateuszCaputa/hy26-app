@@ -112,6 +112,17 @@ test('nieobecność > 3 s = stan absent', () => {
   assert.equal(tr.update(5, null).state, 'absent');
 });
 
+test('wynik zawsze całkowity, także przy chwilowej utracie sylwetki', () => {
+  const cal = calFrom(body());
+  const tr = new PostureTracker(cal, { sensitivity: 1, alertDelaySec: 30, alertCooldownMin: 5 });
+  let t = 0;
+  for (; t < 5; t += 0.2) tr.update(t, computeMetrics(body(), W, H, t).metrics!);
+  for (; t < 6.3; t += 0.1) tr.update(t, computeMetrics(body({ headDrop: 40 }), W, H, t).metrics!); // wygładzanie w połowie drogi
+  const lost = tr.update(t + 0.5, null);
+  assert.notEqual(lost.score, null);
+  assert.ok(Number.isInteger(lost.score), `score ${lost.score}`);
+});
+
 /** Symulacja oczu: 30 kl./s, mrugnięcie co `every` s trwające `dur` s. */
 function simulateEyes(sec: number, every: number, dur: number, extra?: (t: number) => number | null) {
   const eyes = new EyeAnalyzer(0.3);
