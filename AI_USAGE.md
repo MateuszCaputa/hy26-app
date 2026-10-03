@@ -1,0 +1,16 @@
+# AI usage & provenance (HackYeah 2026 disclosure)
+
+## Pre-existing work (before 3 Oct 2026, 11:00)
+- `Postura` prototype by Kacper Smaga: the core posture/fatigue analysis and Electron shell (imported in commit `345cf6e`). *Kacper: describe exactly what existed before the event.*
+- Ideas ported from Marcin Pałys' `Rytm` prototype (tag `backup/rytm-marcin`).
+
+## Built during HackYeah
+- *(fill in as PRs merge: feature → PR #)*
+
+## AI tools used
+- **Claude Code** (Anthropic): used by all developers for planning, implementation, tests, docs and review. Every module is understood and can be explained by the team.
+- **MediaPipe Tasks Vision** (Google): on-device face and pose landmark models; video frames never leave the device.
+- **Claude API** *(only if the AI coach ships)*: receives aggregated numbers only (no images), opt-in.
+
+## How AI output was validated
+- Unit tests for all core logic (`npm test`), typecheck, manual verification with a real camera, scripted demo runs.
