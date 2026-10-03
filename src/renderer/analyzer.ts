@@ -7,6 +7,7 @@ import { PostureTracker, type TrackerOutput } from '../core/scoring';
 import { EyeAnalyzer, FatigueEstimator, LEFT_EYE, RIGHT_EYE, eyeAspectRatio, mouthAspectRatio, type FaceFrame } from '../core/fatigue';
 import { BreakEngine } from '../core/breakEngine';
 import { MinuteAggregator, postureAvg, postureSlope, topIssueOf } from '../core/aggregate';
+import { FrameGate } from '../core/frameGate';
 
 export interface Frame {
   t: number;
@@ -60,6 +61,8 @@ export class Analyzer {
   /** Bez WebGL MediaPipe nie przyjmuje <video>: wtedy podajemy klatki jako ImageData. */
   private cpuFrames = false;
   private frameCanvas: OffscreenCanvas | null = null;
+  /** Analizujemy tylko nowe klatki – zatrzymane wideo nie może podbijać oceny starym obrazem. */
+  private gate = new FrameGate();
 
   constructor(
     private settings: Settings,
@@ -165,7 +168,8 @@ export class Analyzer {
         return;
       }
       this.video.srcObject = this.stream;
-      await this.video.play().catch(() => undefined);
+      this.gate.reset();
+      await this.video.play().catch((e) => console.warn('Kamera: play() odrzucone:', (e as Error).name, (e as Error).message));
       this.stream.getVideoTracks()[0]?.addEventListener('ended', () => {
         this.stop();
         this.cb.onCameraState('busy');
@@ -227,6 +231,15 @@ export class Analyzer {
     const w = this.video.videoWidth || 640;
     const h = this.video.videoHeight || 480;
     if (!this.demo && (this.video.readyState < 2 || !this.pose)) return;
+    if (!this.demo && !this.gate.isFresh(this.video)) {
+      // Brak nowej klatki (wideo wstrzymane, np. po odpięciu od DOM): nie analizujemy, wznawiamy odtwarzanie.
+      this.resumeVideoIfPaused();
+      if (ms - this.lastStatusMs > 500) {
+        this.lastStatusMs = ms;
+        this.cb.onStatus(this.status(t));
+      }
+      return;
+    }
     const input = this.demo ? null : this.frameInput(w, h);
 
     // Twarz: każda klatka (mrugnięcia trwają 100–400 ms).
@@ -324,6 +337,13 @@ export class Analyzer {
       this.lastStatusMs = ms;
       this.cb.onStatus(this.status(t));
     }
+  }
+
+  /** Przeglądarka wstrzymuje <video> odpięte od dokumentu; dopóki analiza działa, wznawiamy je (co ~1 s). */
+  private resumeVideoIfPaused(): void {
+    if (!this.running || !this.video.paused || !this.video.srcObject) return;
+    if (this.gate.staleCount % 25 !== 1) return;
+    this.video.play().catch((e) => console.warn('Kamera: wznowienie play() nieudane:', (e as Error).name));
   }
 
   private frameInput(w: number, h: number): HTMLVideoElement | ImageData {
