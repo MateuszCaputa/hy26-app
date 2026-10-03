@@ -1,6 +1,7 @@
 // Rytm jako aplikacja desktopowa. Ładuje ten sam frontend co wersja webowa.
 // Zamknięcie okna chowa je do zasobnika, a pomiar trwa dalej.
-const { app, BrowserWindow, Tray, Menu, nativeImage, protocol, net, session, shell, systemPreferences } = require('electron')
+const { app, BrowserWindow, Tray, Menu, nativeImage, protocol, net, session, shell, systemPreferences, ipcMain, powerSaveBlocker } = require('electron')
+const fs = require('node:fs/promises')
 const path = require('node:path')
 const { pathToFileURL } = require('node:url')
 
@@ -14,6 +15,12 @@ protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { standard: t
 let win = null
 let tray = null
 let quitting = false
+
+// Testy dymne używają własnego folderu, żeby nigdy nie dotknąć prawdziwych pomiarów zespołu
+if (process.env.RYTM_TEST_DIR) app.setPath('userData', path.join(process.env.RYTM_TEST_DIR, 'userData'))
+
+// Kopie zapasowe pomiarów jako zwykłe pliki JSON w Dokumentach: przetrwają reinstalację i łatwo je przenieść
+const backupDir = () => (process.env.RYTM_TEST_DIR ? path.join(process.env.RYTM_TEST_DIR, 'backups') : path.join(app.getPath('documents'), 'Rytm'))
 
 if (!app.requestSingleInstanceLock()) {
   app.quit()
@@ -64,6 +71,7 @@ function createWindow() {
       backgroundThrottling: false,
       contextIsolation: true,
       sandbox: true,
+      preload: path.join(__dirname, 'preload.cjs'),
     },
   })
 
@@ -94,6 +102,7 @@ function createTray() {
   tray.setContextMenu(
     Menu.buildFromTemplate([
       { label: 'Pokaż Rytm', click: showWindow },
+      { label: 'Otwórz folder kopii zapasowych', click: () => shell.openPath(backupDir()) },
       {
         label: 'Uruchamiaj razem z Windows',
         type: 'checkbox',
@@ -130,6 +139,28 @@ app.whenReady().then(async () => {
   const ours = (url) => url.startsWith('app://rytm') || (DEV && url.startsWith(DEV_URL))
   session.defaultSession.setPermissionRequestHandler((wc, permission, cb) => cb(allowed.has(permission) && ours(wc.getURL())))
   session.defaultSession.setPermissionCheckHandler((wc, permission, origin) => allowed.has(permission) && ours(origin || ''))
+
+  // Najnowsza kopia nadpisuje rytm-latest.json, a co godzinę zostaje osobny plik (historia na wypadek błędu)
+  ipcMain.handle('rytm:backup', async (_e, json) => {
+    const dir = backupDir()
+    await fs.mkdir(dir, { recursive: true })
+    const d = new Date()
+    const pad = (n) => String(n).padStart(2, '0')
+    const hourly = `rytm-${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}_${pad(d.getHours())}.json`
+    const latest = path.join(dir, 'rytm-latest.json')
+    await fs.writeFile(latest + '.tmp', json)
+    await fs.rename(latest + '.tmp', latest)
+    await fs.writeFile(path.join(dir, hourly), json)
+    return { dir, file: latest, at: d.getTime() }
+  })
+  ipcMain.handle('rytm:open-backups', async () => {
+    await fs.mkdir(backupDir(), { recursive: true })
+    return shell.openPath(backupDir())
+  })
+  ipcMain.handle('rytm:backup-folder', () => backupDir())
+
+  // Komputer nie zaśnie, dopóki Rytm działa (zamknięcie klapy laptopa nadal go usypia)
+  powerSaveBlocker.start('prevent-app-suspension')
 
   createTray()
   createWindow()

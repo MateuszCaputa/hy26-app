@@ -1,6 +1,6 @@
 import { FaceLandmarker, PoseLandmarker, FilesetResolver } from '@mediapipe/tasks-vision'
 import { extractFeatures, assessPosture, buildBaseline, MinuteAggregator } from './metrics'
-import { db, logEvent } from './db'
+import { db, logEvent, backupNow } from './db'
 
 const TICK_MS = 66 // ok. 15 klatek/s: wystarcza do wykrycia mrugnięcia
 const POSE_EVERY = 3 // model sylwetki co 3. klatkę, żeby oszczędzać procesor
@@ -11,6 +11,7 @@ const POSTURE_COOLDOWN_MS = 15 * 60_000
 const DESK_BREAK_MIN = 55 // przepisy BHP: 5 min przerwy po każdej godzinie pracy przy monitorze
 const BREAK_COOLDOWN_MS = 30 * 60_000
 const AWAY_BREAK_MIN = 3 // tyle minut bez twarzy w kadrze liczymy jako przerwę
+const BACKUP_EVERY_MS = 10 * 60_000
 
 async function createTask(Task, fileset, options) {
   try {
@@ -175,6 +176,18 @@ class Monitor {
     const deskMinutes = this.continuousDeskMinutes()
     this.set({ lastMinute: rec, deskMinutes })
     this.checkBreakNudge(deskMinutes, Date.now())
+    if (Date.now() - (this.lastBackupAt || 0) >= BACKUP_EVERY_MS) await this.backup()
+  }
+
+  async backup() {
+    this.lastBackupAt = Date.now()
+    try {
+      const res = await backupNow()
+      if (res) this.set({ backup: { at: res.at, dir: res.dir, error: null } })
+    } catch (e) {
+      console.error(e)
+      this.set({ backup: { at: Date.now(), error: e?.message || String(e) } })
+    }
   }
 
   // Ile minut z rzędu użytkownik siedzi przy biurku (przerwa = co najmniej 3 min poza kadrem)

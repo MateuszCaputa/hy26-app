@@ -59,6 +59,17 @@ export const db = {
   set: (key, value) => tx('kv', 'readwrite', (s) => s.put(value, key)),
 }
 
+// Pełny zrzut pomiarów: ten sam format dla ręcznego eksportu, kopii zapasowej i scalania danych zespołu
+export async function exportAll() {
+  return { app: 'rytm', version: 1, exportedAt: Date.now(), minutes: await db.all('minutes'), events: await db.all('events') }
+}
+
+// Kopia do pliku w Dokumentach/Rytm (tylko w wersji desktopowej)
+export async function backupNow() {
+  if (!window.rytmDesktop) return null
+  return window.rytmDesktop.saveBackup(JSON.stringify(await exportAll()))
+}
+
 export async function logEvent(person, type, data = {}) {
   const t = Date.now()
   const ev = { id: `${person}|${t}|${type}`, person, t, type, ...data }
