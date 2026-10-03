@@ -25,3 +25,7 @@ __pycache__/
 
 # local Claude settings (shared settings in .claude/settings.json are committed)
 .claude/settings.local.json
+
+# Rytm: paczki Electrona i zrzuty z testów
+release/
+scripts/*.png

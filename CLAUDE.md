@@ -5,25 +5,28 @@
 
 ## Project
 
-> TODO (fill in as soon as the brief is known — keep it to ~5 lines)
-- **What we're building:**
-- **Who it's for / the one demo flow that must work:**
-- **Deadline / demo time:**
+- **What we're building:** **Rytm** — desktop health assistant for people who work at a computer. Webcam (posture, blinking/PERCLOS, yawns, time at desk) + imported phone data (Apple Health incl. Fitatu, Samsung Health) → in-the-moment decisions ("take a break now, because…"), a "what if" screen and a report for the doctor with the NFZ path. Category: HackYeah 2026 Sport & Healthcare.
+- **Who it's for / the one demo flow that must work:** desk workers; pitch opens with our own team's data measured during the hackathon. Flow: Start (interview + calibration) → Live → Day rhythm → Decision now → What if → Doctor report.
+- **Deadline / demo time:** submission on HackTribe by **Oct 4, 22:00** (hard limit 23:00) — PDF ≤10 slides.
+- **Non-negotiables:** camera frames never leave the device (only per-minute numbers are stored); no emotion recognition (EU AI Act art. 5); no diagnoses — "common causes matching your data" + red flags → 112 / NFZ TIP 800 190 590. UI language: Polish.
 
 Work split and task list live in `docs/PLAN.md` — read it before starting any task, update it when you finish one.
 Human workflow (git, worktrees, conflict handling, cadence) is in `docs/TEAM.md`; follow the same conventions.
 
 ## Stack & commands
 
-> TODO (fill in once the stack is chosen — exact commands, no prose)
+Electron 44 + React 19 + Vite 8 (plain JS) + `@mediapipe/tasks-vision` (face + pose, models/WASM served locally from `public/`) + IndexedDB. Node 20+.
 
 ```bash
-# install:
-# dev:        (port: )
-# build:
-# lint/types:
-# test:
+# install:    npm ci
+# dev:        npm run dev            (port: 5173, browser) · npm run desktop:dev (Electron window on the dev server)
+# desktop:    npm run desktop        (build + Electron)
+# build:      npx vite build · npm run dist:win (portable exe → release/) · npm run dist:mac (only on a Mac)
+# lint/types: npx oxlint src
+# test:       node scripts/desktop-smoke.mjs (after vite build; fake camera, checks models load + measuring while hidden)
 ```
+
+Layout: `src/lib/` measurement core (`monitor.js` camera loop, `metrics.js` posture/fatigue math, `db.js` IndexedDB) · `src/screens/` one file per screen · `electron/main.cjs` desktop shell (app:// protocol, tray, camera permission).
 
 ## Team & ownership
 
@@ -64,3 +67,8 @@ Builds, runs, feature works in the app, merged to `main`, task ticked in `docs/P
 ## Gotchas
 
 <!-- one line each, add as discovered -->
+- Electron binary downloads on first `npx electron` run (npm 11 allow-scripts skips postinstall) — run `npx electron --version` once after `npm ci`.
+- `dist:win` failed with EPERM rename (Defender lock) → `build.electronDist` points at `node_modules/electron/dist`; keep it.
+- Asset paths must be relative (`import.meta.env.BASE_URL`, vite `base: './'`) — the desktop app loads from `app://rytm/`, absolute `/x` paths break.
+- The worker ticker delivered ~2× ticks in Chromium; `monitor.tick()` has a hard rate limit — don't remove it.
+- Smoke tests write a "Test" person into `%APPDATA%/rytm` IndexedDB — delete `IndexedDB` and `Local Storage` there afterwards so it doesn't show up on demo charts.
