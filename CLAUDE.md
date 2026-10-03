@@ -71,4 +71,4 @@ Builds, runs, feature works in the app, merged to `main`, task ticked in `docs/P
 - `dist:win` failed with EPERM rename (Defender lock) → `build.electronDist` points at `node_modules/electron/dist`; keep it.
 - Asset paths must be relative (`import.meta.env.BASE_URL`, vite `base: './'`) — the desktop app loads from `app://rytm/`, absolute `/x` paths break.
 - The worker ticker delivered ~2× ticks in Chromium; `monitor.tick()` has a hard rate limit — don't remove it.
-- Smoke tests write a "Test" person into `%APPDATA%/rytm` IndexedDB — delete `IndexedDB` and `Local Storage` there afterwards so it doesn't show up on demo charts.
+- Real team data lives in `%APPDATA%/rytm` (IndexedDB) + auto-backups in `Documents/Rytm/` (every 10 min, `rytm-latest.json` + hourly files). **Never delete these.** Smoke tests set `RYTM_TEST_DIR` so they use a temp userData + backup dir — any new Electron test must do the same.

@@ -181,3 +181,4 @@ td.num { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }
 }
+.backup { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; border-left: 4px solid var(--good); }

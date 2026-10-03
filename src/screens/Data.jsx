@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react'
-import { db } from '../lib/db'
+import { db, exportAll as dumpAll } from '../lib/db'
+import { monitor } from '../lib/monitor'
+import { useMonitor } from '../lib/useMonitor'
+
+const hhmm = (t) => new Date(t).toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' })
 
 // Każdy członek zespołu mierzy się na swoim laptopie. Tutaj eksportujemy dane do pliku
 // i scalamy pliki od wszystkich na jednym komputerze, z którego robimy wykresy do pitchu.
@@ -7,6 +11,13 @@ export default function Data() {
   const [stats, setStats] = useState([])
   const [msg, setMsg] = useState('')
   const [confirmClear, setConfirmClear] = useState(false)
+  const [folder, setFolder] = useState('')
+  const { backup } = useMonitor()
+  const desktop = !!window.rytmDesktop
+
+  useEffect(() => {
+    window.rytmDesktop?.backupFolder().then(setFolder)
+  }, [])
 
   const refresh = async () => {
     const minutes = await db.all('minutes')
@@ -26,7 +37,7 @@ export default function Data() {
   }, [])
 
   const exportAll = async () => {
-    const data = { app: 'rytm', version: 1, exportedAt: Date.now(), minutes: await db.all('minutes'), events: await db.all('events') }
+    const data = await dumpAll()
     const blob = new Blob([JSON.stringify(data)], { type: 'application/json' })
     const a = document.createElement('a')
     a.href = URL.createObjectURL(blob)
@@ -72,6 +83,29 @@ export default function Data() {
       <p className="eyebrow">Dane zespołu</p>
       <h1>Pomiary na tym komputerze</h1>
       <p className="lede">Każda osoba mierzy się na swoim laptopie. Co kilka godzin wyeksportujcie dane i wczytajcie wszystkie pliki na jednym komputerze, żeby zobaczyć cały zespół.</p>
+
+      {desktop && (
+        <div className="card backup">
+          <div>
+            <strong>Kopia zapasowa co 10 minut</strong>
+            <p className="hint">
+              {backup?.error
+                ? `Ostatnia kopia nie powiodła się: ${backup.error}`
+                : backup?.at
+                  ? `Ostatnia kopia: ${hhmm(backup.at)} · ${folder}\\rytm-latest.json`
+                  : `Pierwsza kopia powstanie w ciągu minuty od startu pomiaru · ${folder}`}
+            </p>
+          </div>
+          <div className="actions">
+            <button className="btn" onClick={() => monitor.backup()}>
+              Zrób kopię teraz
+            </button>
+            <button className="btn ghost" onClick={() => window.rytmDesktop.openBackupFolder()}>
+              Otwórz folder
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="card table-wrap">
         <table>
