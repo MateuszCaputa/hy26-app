@@ -165,12 +165,15 @@ export class EyeAnalyzer {
     return clamp01((b - base) / (1 - base));
   }
 
-  /** Bieżący wzorzec „oko otwarte”: 90. percentyl EAR z ostatnich 30 s (albo kalibracja). */
+  /**
+   * Bieżący wzorzec „oko otwarte”: 90. percentyl EAR z ostatnich 30 s (mrugnięcia są krótkie, więc p90 ≈ oko otwarte).
+   * Kalibracja służy tylko na start. Wcześniej brała górę (max z kalibracją ×0,85): kalibracja z EAR 0,56 przy
+   * prawdziwym 0,29 robiła z otwartego oka „zamknięte” i licznik mrugnięć stał na zerze (test na żywo, 23:04).
+   */
   earOpenRef(): number | null {
     if (this.earHist.length < 30) return this.calibratedEarOpen;
     const s = this.earHist.map((e) => e.v).sort((a, b) => a - b);
-    const p90 = s[Math.floor(s.length * 0.9)];
-    return this.calibratedEarOpen ? Math.max(p90, this.calibratedEarOpen * 0.85) : p90;
+    return s[Math.floor(s.length * 0.9)];
   }
 
   /** Stopień zamknięcia oka 0 (otwarte) – 1 (zamknięte). */
@@ -229,7 +232,8 @@ export class EyeAnalyzer {
 
     const c = this.closedness(f) ?? 0;
     this.last = { closed: c, ear: f.ear, blend: f.blinkBlend };
-    if (f.ear !== null && c < 0.5) {
+    // Wszystkie próbki (nie tylko „otwarte”): wzorzec musi się sam poprawić, gdy startowy jest zły.
+    if (f.ear !== null) {
       this.earHist.push({ t, v: f.ear });
       while (this.earHist.length && t - this.earHist[0].t > 30) this.earHist.shift();
     }

@@ -103,3 +103,19 @@ test('prawdziwie zamknięte oczy przez 1 s to nadal długie mrugnięcie', () => 
   run(eyes, 0, 120, (t) => (t % 10 < 1 ? { ear: CLOSED } : {}));
   assert.ok(eyes.debug(120).longTotal >= 10);
 });
+
+test('zawyżona kalibracja (EAR 0,56 przy prawdziwym 0,29) sama się koryguje – licznik nie stoi na zerze', () => {
+  const eyes = new EyeAnalyzer(0.56); // zrzut z 23:04: wzorzec 0,479 = 0,56 × 0,85
+  run(eyes, 0, 120, (t) => ({ ear: t % 4 < 0.15 ? 0.06 : 0.29 }));
+  const d = eyes.debug(120);
+  assert.ok(Math.abs(d.earRef! - 0.29) < 0.02, `wzorzec ${d.earRef}`);
+  const r = eyes.blinkRate(120)!;
+  assert.ok(r > 13 && r < 17, `rate ${r}`);
+});
+
+test('mruganie raz na sekundę daje ok. 60/min', () => {
+  const eyes = new EyeAnalyzer(OPEN);
+  run(eyes, 0, 180, blinkEvery(1, 0.12));
+  const r = eyes.blinkRate(180)!;
+  assert.ok(r > 55 && r < 65, `rate ${r}`);
+});
