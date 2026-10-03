@@ -3,6 +3,21 @@
 3 developers + 1 pitch person, each dev running their own Claude Code, working in parallel on one repo under time pressure.
 **Optimize for: a working, beautiful demo, shipped fast, without stepping on each other.**
 
+## ⛔ BEFORE ANY TASK, read these (mandatory, every new session)
+
+1. **`docs/SCOPE.md`**: what we build, what's done vs missing, Must/Should/Won't. Never build a WON'T.
+2. **`docs/PLAN.md`**: the live task list. Work only on a task ID from here, in **your owner's area** (table below).
+3. **`docs/ENGINEERING.md`**: the quality bar and **definition of done**. "Done" without typecheck + tests + seeing it run is not done.
+
+If the user gives a task that isn't in `docs/PLAN.md`, add it under the right area first (one line, a new ID), then do it.
+If the user didn't say their area, **ask once**: "Which area are you: A Kacper, B Marcin, C Mateusz, D Bartłomiej?"
+
+**Workflow commands** (in `.claude/commands/`):
+- `/start <A|B|C|D>`: sync main, pick the next task, branch, plan
+- `/ship`: verify, tick PLAN, PR, merge
+- `/sync`: pull the latest main and re-verify
+- `/review`: a senior self-review of your diff
+
 ## Project
 
 - **What we're building:** **Postura**, a desktop app (Electron, Windows + macOS). The webcam measures posture, blinking/PERCLOS, yawns and head droop, fully on-device. It turns them into alerts, breaks, exercises, "best hours", plus Garmin sleep/stress/Body Battery. Full feature list: `README.md`.
@@ -87,10 +102,12 @@ Layout:
 
 ## Definition of done
 
-Builds, runs, feature works in the app, merged to `main`, task ticked in `docs/PLAN.md`.
+`npm run typecheck` ✅ · `npm test` ✅ (new core logic has tests) · `npm run build` ✅ · seen working in `npm start` and/or `npm run demo` · merged to `main` · task ticked in `docs/PLAN.md`. Full checklist: `docs/ENGINEERING.md` §5. Use `/ship`.
 
 ## Gotchas
 
 <!-- one line each, add as discovered -->
+- Verified 2026-10-03 14:xx on macOS / Node 22.19: `npm install`, typecheck, 17/17 tests and build are all green on main.
+- MediaPipe models currently download on first run (`src/main/models.ts`), which is a stage risk offline. Task A1 bundles them.
 - Electron binary downloads on first `npx electron` run (npm 11 allow-scripts skips postinstall) — run `npx electron --version` once after `npm install`.
 - **Never replace or delete the whole repo / other people's files.** Never delete `CLAUDE.md`, `docs/`, `research/` or `.claude/`. To swap a codebase, discuss it with the team first and do it in a PR.
