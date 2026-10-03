@@ -313,9 +313,10 @@ function drawEyeDebug(canvas: HTMLCanvasElement, e: Frame['eyes']): void {
   const lines = !e
     ? ['Oczy: analiza twarzy wyłączona']
     : [
+        `LICZNIK MRUGNIĘĆ: ${e.blinksTotal}    długie: ${e.longTotal}`,
+        `śr. 3 min: ${e.rate == null ? '– (zbieram dane, min. 60 s)' : `${e.rate.toFixed(0)}/min`}`,
         `zamknięcie ${n(e.closed)}   EAR ${n(e.ear, 3)} / wzorzec ${n(e.earRef, 3)}`,
         `eyeBlink surowy ${n(e.blend)} → względny ${n(e.blendRel)}`,
-        `MRUGNIĘCIA (licznik) ${e.blinksTotal}   długie ${e.longTotal}   śr. 3 min ${e.rate == null ? '– (zbieram dane, min. 60 s)' : `${e.rate.toFixed(0)}/min`}`,
         `${e.reliable ? 'dane OK' : 'DANE NIEPEWNE'} · ${e.fps.toFixed(0)} kl./s${e.gazeDown ? ' · PATRZYSZ W DÓŁ' : ''}${e.talking ? ' · MÓWISZ' : ''}`,
       ];
   const dpr = window.devicePixelRatio || 1;
@@ -324,15 +325,20 @@ function drawEyeDebug(canvas: HTMLCanvasElement, e: Frame['eyes']): void {
   ctx.font = '600 12px ui-monospace, Menlo, Consolas, monospace';
   const w = Math.max(...lines.map((l) => ctx.measureText(l).width)) + 20;
   const h = lines.length * 18 + 12;
+  // Na środku kadru: przy object-fit: cover brzegi płótna bywają poza widocznym obszarem.
+  const x0 = Math.max(12, (canvas.clientWidth - w) / 2);
   const y0 = canvas.clientHeight - h - 40;
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-  ctx.fillRect(12, y0, w, h);
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
+  ctx.fillRect(x0, y0, w, h);
   ctx.fillStyle = '#e8f0ec';
-  lines.forEach((l, i) => ctx.fillText(l, 22, y0 + 20 + i * 18));
+  lines.forEach((l, i) => {
+    ctx.font = i === 0 ? '700 15px ui-monospace, Menlo, Consolas, monospace' : '600 12px ui-monospace, Menlo, Consolas, monospace';
+    ctx.fillText(l, x0 + 10, y0 + 20 + i * 18);
+  });
   // pasek zamknięcia oka: od razu widać każde mrugnięcie
   if (e?.closed != null) {
     ctx.fillStyle = e.closed >= 0.6 ? '#ff6b6b' : '#7fd3a5';
-    ctx.fillRect(12, y0 - 8, (w * Math.min(1, e.closed)), 5);
+    ctx.fillRect(x0, y0 - 8, w * Math.min(1, e.closed), 5);
   }
   ctx.restore();
 }
