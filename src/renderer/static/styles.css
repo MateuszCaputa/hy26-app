@@ -162,8 +162,12 @@ button, input, select { font: inherit; color: inherit; }
 .details > summary::-webkit-details-marker { display: none; }
 .details > summary::before { content: "▸"; display: inline-block; width: 1.1em; transition: transform .15s ease; }
 .details[open] > summary::before { transform: rotate(90deg); }
-.details-body { display: grid; gap: 8px; padding-bottom: 12px; }
-.details-body h2 { margin-top: 8px; }
+.details-body { display: grid; gap: 10px; padding-bottom: 16px; }
+.details-body h2 { margin-top: 12px; }
+.details-body h2:first-child { margin-top: 0; }
+/* Przycisk kalibracji oddzielony od listy, na całą szerokość panelu – nie wisi pod ostatnim paskiem. */
+.details-foot { margin-top: 8px; padding-top: 14px; border-top: 1px solid var(--line); display: grid; }
+.details-foot .btn { justify-self: stretch; padding-block: 8px; }
 .adv > summary { cursor: pointer; font-weight: 600; color: var(--muted); padding: 6px 0; }
 .adv[open] > summary { margin-bottom: 8px; }
 .score-num { font-size: 72px; font-weight: 250; line-height: .95; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
@@ -192,6 +196,7 @@ button, input, select { font: inherit; color: inherit; }
 .metric-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
 .metric { display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto 4px; column-gap: 8px; row-gap: 3px; font-size: 14px; }
 .metric-val { font-variant-numeric: tabular-nums; color: var(--muted); }
+.metric.plain { grid-template-rows: auto; }
 .metric-bar { grid-column: 1 / -1; background: var(--spine-soft); border-radius: 2px; overflow: hidden; }
 .metric-bar-fill { display: block; height: 100%; width: 0; background: var(--muted); transition: width .4s ease; }
 .metric[data-level="warn"] .metric-bar-fill { background: var(--warn); }

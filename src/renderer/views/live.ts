@@ -51,7 +51,8 @@ export class LiveView {
   private tip: HTMLElement;
   private fatNum: HTMLElement;
   private fatBar: HTMLElement;
-  private eyeCounts: HTMLElement;
+  private blinkVal: HTMLElement;
+  private yawnVal: HTMLElement;
   private breakText: HTMLElement;
   private breakBtn: HTMLButtonElement;
   private metricRows = new Map<IssueId, { val: HTMLElement; bar: HTMLElement; row: HTMLElement }>();
@@ -77,7 +78,8 @@ export class LiveView {
 
     this.fatNum = h('span', { class: 'energy-pct' }, '–');
     this.fatBar = h('span', { class: 'meter-fill' });
-    this.eyeCounts = h('p', null, '–');
+    this.blinkVal = h('span', { class: 'metric-val' }, '–');
+    this.yawnVal = h('span', { class: 'metric-val' }, '–');
 
     this.scoreState = h('span', { class: 'score-state' }, 'Uruchamiam…');
     this.tip = h('p', { class: 'tip' });
@@ -121,10 +123,16 @@ export class LiveView {
         h('summary', null, 'Szczegóły pomiaru'),
         h('div', { class: 'details-body' },
           h('h2', null, 'Oczy'),
-          this.eyeCounts,
+          // Te same wiersze co odchylenia niżej (nazwa po lewej, liczba po prawej), żeby panel czytał się jak jedna lista.
+          h('ul', { class: 'metric-list' },
+            h('li', { class: 'metric plain' }, h('span', { class: 'metric-name' }, 'Mrugnięcia'), this.blinkVal),
+            h('li', { class: 'metric plain' }, h('span', { class: 'metric-name' }, 'Ziewnięcia'), this.yawnVal),
+          ),
           h('h2', null, 'Jak daleko jesteś od swojej prostej postawy'),
           metrics,
-          h('button', { class: 'btn ghost small', onclick: () => ctx.startCalibration() }, 'Skalibruj ponownie'),
+          h('div', { class: 'details-foot' },
+            h('button', { class: 'btn ghost small', onclick: () => ctx.startCalibration() }, 'Skalibruj ponownie'),
+          ),
         ),
       ),
     );
@@ -254,7 +262,8 @@ export class LiveView {
     // W „Szczegółach” tylko surowe liczby z oczu.
     const blinks = f?.blinkRate != null ? `${Math.round(f.blinkRate)}/min` : '–';
     const yawns = f ? `${f.yawns10m} w 10 min` : '–';
-    this.eyeCounts.textContent = `Mrugnięcia: ${blinks} · Ziewnięcia: ${yawns}`;
+    this.blinkVal.textContent = blinks;
+    this.yawnVal.textContent = yawns;
 
     const be = ctx.analyzer.breakEngine;
     const pending = be.pendingSuggestion;
