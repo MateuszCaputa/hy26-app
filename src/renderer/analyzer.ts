@@ -57,6 +57,7 @@ export class Analyzer {
   private shoulderGate = new ShoulderGate();
   /** Ostatnia twarz i ustawienie głowy (twarz liczymy co klatkę, sylwetkę rzadziej). */
   private lastFace: Landmark[] | null = null;
+  private lastReason: string | undefined;
   private lastHeadPose: HeadPose | null = null;
   private tracker: PostureTracker | null = null;
   private eyes = new EyeAnalyzer();
@@ -401,16 +402,20 @@ export class Analyzer {
         });
         if (sample) this.emitMinute(sample);
       }
-      this.cb.onFrame({
-        t,
-        pose: this.lastPose,
-        face: faceLm,
-        metrics: this.lastMetrics,
-        tracker: this.lastTracker,
-        fatigue: this.lastFatigue,
-        reason: res.reason,
-      });
+      this.lastReason = res.reason;
     }
+
+    // Klatka dla nakładki w tempie twarzy (~25/s), nie sylwetki (~8/s): kontur powiek musi pokazać mrugnięcie.
+    // (MP7, Mateusz; wcześniej onFrame był wysyłany tylko w bloku sylwetki.)
+    this.cb.onFrame({
+      t,
+      pose: this.lastPose,
+      face: faceLm,
+      metrics: this.lastMetrics,
+      tracker: this.lastTracker,
+      fatigue: this.lastFatigue,
+      reason: this.lastReason,
+    });
 
     if (ms - this.lastStatusMs > 500) {
       this.lastStatusMs = ms;
