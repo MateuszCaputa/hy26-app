@@ -4,3 +4,6 @@ release/
 demo-data/
 *.log
 .playwright-mcp/
+.DS_Store
+.env*
+!.env.example
