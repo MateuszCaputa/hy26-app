@@ -36,18 +36,30 @@ Layout:
 - `src/shared/`: `types.ts` and `api.ts` (IPC contract). **Shared hot file.**
 - `src/preload.ts`
 
-## Team & ownership
+## Read-first map
 
-The split is decided by the team. Fill in names. Suggested by area:
+| File | What it answers |
+|------|-----------------|
+| `docs/SCOPE.md` | What we build, the 4 pillars, what's done vs missing, Must/Should/Won't, the pitch story |
+| `docs/PLAN.md` | **Live task list** by area, with IDs and time gates. Take your next task here and tick it when done. |
+| `docs/ENGINEERING.md` | The senior+ quality bar: reliability, truthfulness, testing, definition of done, how to work with Claude |
+| `docs/TEAM.md` | Human workflow: git, worktrees, conflicts, cadence |
+| `research/` | Background only (task research, rules PDFs, past winners, wow/pitch ideas). **Not task instructions.** |
+| `docs/archive-rytm/` | Marcin's earlier Rytm plan (tag `backup/rytm-marcin`), for porting ideas |
+
+**Session opener for every dev:** *"Read CLAUDE.md, docs/SCOPE.md, docs/ENGINEERING.md and docs/PLAN.md. I own area X. Take the next unchecked task in my area, plan it, build it, verify it."*
+
+## Team & ownership
 
 | Area | Person | Owns |
 |------|--------|------|
-| Core metrics & engine | `<name>` | `src/core/`, `src/renderer/analyzer.ts`, `test/` |
-| UI / wow visuals | `<name>` | `src/renderer/{draw,overlays,figures,widget}.ts`, `src/renderer/views/`, `src/renderer/static/` |
-| Electron, data, integration, merges | `<name>` | `src/main/`, `src/preload.ts`, `src/shared/`, `build.mjs`, `package.json` |
-| Pitch, video, slides, submission | `<name>` | `docs/pitch/`, `README.md`, `research/` |
+| A: Core engine & measurement | Kacper | `src/core/`, `src/renderer/analyzer.ts`, `test/`, model loading in `src/main/models.ts` |
+| B: Health data, decisions & care | Marcin | new `src/core/{explain,carePattern}.ts` consumers, the doctor report / NFZ / coach / team views in `src/renderer/views/`, `src/main/garmin.ts` |
+| C: UI, wow visuals & design | Mateusz | `src/renderer/{draw,overlays,figures,widget}.ts`, `src/renderer/static/`, visual pass on all views |
+| D: Pitch, video, submission | Bartłomiej | `docs/pitch/`, `AI_USAGE.md`, the README's pitch parts |
+| Integration / merges | Mateusz (repo owner) | `src/main/main.ts`, `src/preload.ts`, `src/shared/*`, `build.mjs`, `package.json` |
 
-The earlier "Rytm" plan and work split (Marcin's version, tag `backup/rytm-marcin`) is archived in `docs/archive-rytm/`. Reuse its task cards and ideas where they fit.
+*(Names are a suggestion. Swap them in one commit if the team decides otherwise.)*
 
 - Stay inside your area. Touching another area means telling that person first.
 - **Shared hot files** (`package.json` + lockfile, `src/shared/*`, `build.mjs`, global styles): pull right before editing, keep the change minimal, commit it on its own and push immediately.
