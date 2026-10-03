@@ -109,7 +109,7 @@ button, input, select { font: inherit; color: inherit; }
   text-align: center; padding: 32px; color: rgba(233, 240, 238, .72); background: rgba(18, 19, 20, .82); font-size: 14px;
 }
 .stage-cta .btn { justify-self: center; }
-.stage-msg[hidden], .stage-cta[hidden], .stage-hint[hidden] { display: none; }
+.stage-msg[hidden], .stage-cta[hidden], .stage-hint[hidden], .stage-legend[hidden] { display: none; }
 .stage-hint {
   position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
   background: rgba(18, 19, 20, .78); color: #fff; padding: 6px 14px; border-radius: 999px; font-size: 13.5px;

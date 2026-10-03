@@ -224,16 +224,22 @@ export class LiveView {
 
   camera(state: string, detail?: string): void {
     const msg = CAMERA_MSG[state];
+    // Legenda kółka ma sens tylko przy działającej analizie.
+    this.stage.querySelector<HTMLElement>('.stage-legend')?.toggleAttribute('hidden', state !== 'running' && !!msg);
     if (state === 'running' || !msg) {
       this.camMsg.hidden = true;
       return;
     }
     this.camMsg.hidden = false;
     this.camMsg.textContent = detail && state === 'missing' ? `${msg} (${detail})` : msg;
-    if (state === 'stopped') {
-      const ctx = this.canvas.getContext('2d');
-      ctx?.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    }
+    // Kamera nie działa (pauza, zajęta, brak zgody): bez śladów ostatniej analizy. Samo czyszczenie płótna nie wystarczało –
+    // pętla rysowania w następnej klatce rysowała zapamiętaną klatkę od nowa.
+    this.lastFrame = null;
+    this.follower.setTarget(null);
+    this.canvas.getContext('2d')?.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.hint.hidden = true;
+    this.calibrateCta.hidden = true; // nie nakłada się na komunikat o kamerze; po wznowieniu wróci przy następnym statusie
+    this.figure.update({ state: 'paused', topIssue: null, severities: {}, headRollDeg: 0, shoulderRollDeg: 0 });
   }
 
   frame(f: Frame): void {
