@@ -6,8 +6,9 @@ import path from 'node:path';
 
 export const MODELS = [
   {
-    file: 'pose_landmarker_lite.task',
-    url: 'https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/latest/pose_landmarker_lite.task',
+    // „full” (MP5): stabilniejsze barki i uszy niż „lite”. Lite zostaje jako zapas w analizatorze.
+    file: 'pose_landmarker_full.task',
+    url: 'https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_full/float16/latest/pose_landmarker_full.task',
   },
   {
     file: 'face_landmarker.task',

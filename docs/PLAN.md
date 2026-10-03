@@ -13,6 +13,8 @@
 - [ ] A6 (S1) `core/energy.ts`: one fused 0–100 "energy/battery" from fatigue + posture + time since break + Garmin Body Battery if present; plus a linear prediction "minutes until < 30". Tests.
 - [ ] A7 (M5) `core/carePattern.ts`: detect a persistent pattern (e.g. 10 of the last 14 days with a dominant issue above threshold, or high eye strain) and produce the input for the doctor report.
 - [ ] A8 Record 2–3 landmark fixture clips (good posture, slouch, tired) for tests + demo mode.
+- [x] A10 Posture precision: nose/eyes from the face mesh instead of the pose model, `core/shoulderGate.ts` rejects guessed shoulders (visibility, width/tilt jumps, holds the last good ones), shoulder/head tilt judged vs level (calibration can shift zero by ≤ 3°). (@Kacper, branch `kacper/posture-precision`)
+- [ ] A11 Calibration that survives bad posture: live checks during calibration, two-step (tall + usual slouch) with a personal range, a "you sat straighter than your calibration" hint. (@Kacper, in progress)
 - [ ] A9 Document every formula in the README's "Jak liczona jest ocena" (how the score is computed), updated for A3–A7.
 
 ## Area MP: MediaPipe & camera (bugs first, then precision, then wow). One task at a time, in this order.
@@ -32,12 +34,12 @@
     2. Reproduce: pause on Live, resume on Live; pause on Live, switch to Stats, resume, return.
     3. Verify the MP1 fix covers it; otherwise fix the actual cause.
   - **Done when:** pause/resume in any view order brings back a live preview within 2 s.
-- [ ] **MP3 (precision, A) True head pose.**
+- [x] **MP3 (precision, A) True head pose.** (@Kacper, branch `kacper/posture-precision`: `core/headPose.ts`, pitch → head-forward, yaw gates distance/twist; roll verified on a 14°-rotated real photo)
   - Enable `outputFacialTransformationMatrixes: true` in FaceLandmarker and decompose the matrix into **pitch/yaw/roll in degrees**.
   - Use pitch for forward head and nodding (today it's an indirect nose-to-shoulder proxy), and yaw for "turned away / looking at a second screen".
   - Unit-test the decomposition with a known matrix.
 - [ ] **MP4 (precision, A) Higher camera resolution:** 1280×720 instead of 640×480 (eyes get ~2× the pixels, which helps blinks and glasses). Measure FPS on the M2 and keep the 25 fps face loop; fall back to 640 if slower.
-- [ ] **MP5 (precision, A) Better pose model:** `pose_landmarker_full` instead of `lite` (more stable shoulders and ears).
+- [x] **MP5 (precision, A) Better pose model:** `pose_landmarker_full` instead of `lite` (more stable shoulders and ears). (@Kacper, branch `kacper/posture-precision`; pose rate kept at 8 Hz until A2 FPS is measured on the demo laptop)
   - Bundle it per A1.
   - Tune `minPoseDetectionConfidence`, `minPosePresenceConfidence` and `minTrackingConfidence` (0.6).
   - If FPS allows, raise the pose rate from 8 Hz (`POSE_INTERVAL_MS = 125`) to ~15 Hz.

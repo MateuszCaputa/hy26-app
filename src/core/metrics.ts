@@ -1,6 +1,8 @@
 // Metryki postawy z punktów MediaPipe Pose (33 punkty, ujęcie z przodu).
 import type { PostureMetrics } from '../shared/types';
 import { PointSmoother } from './oneEuro';
+import type { HeadPose } from './headPose';
+import type { ShoulderGate } from './shoulderGate';
 
 export interface Landmark {
   x: number; // 0–1 względem szerokości obrazu
@@ -20,6 +22,13 @@ export const POSE = {
   rightShoulder: 12,
 } as const;
 
+/** Punkty siatki twarzy (478) – dokładniejsze niż kilka punktów twarzy z modelu sylwetki. */
+export const FACE = {
+  noseTip: 1,
+  leftIris: 473, // lewe oko osoby
+  rightIris: 468,
+} as const;
+
 const REQUIRED = [POSE.nose, POSE.leftEye, POSE.rightEye, POSE.leftShoulder, POSE.rightShoulder];
 const MIN_VISIBILITY = 0.5;
 
@@ -37,6 +46,18 @@ export interface MetricsResult {
   metrics: PostureMetrics | null;
   /** Powód braku metryk, do pokazania w UI. */
   reason?: 'no-person' | 'shoulders-hidden' | 'face-hidden';
+  /** Barki z tej klatki odrzucone przez bramkę – użyto ostatnich dobrych. */
+  shouldersHeld?: boolean;
+}
+
+export interface MetricsOptions {
+  smoother?: PointSmoother;
+  /** Punkty siatki twarzy z tej samej (lub ostatniej) klatki: nos i oczy biorę stąd. */
+  face?: Landmark[] | null;
+  /** Ustawienie głowy z macierzy twarzy. */
+  headPose?: HeadPose | null;
+  /** Odrzuca klatki z „zgadywanymi” barkami. */
+  shoulderGate?: ShoulderGate;
 }
 
 /**
@@ -48,31 +69,44 @@ export function computeMetrics(
   width: number,
   height: number,
   t: number,
-  smoother?: PointSmoother,
+  opts: MetricsOptions = {},
 ): MetricsResult {
   if (!lm || lm.length < 13) return { metrics: null, reason: 'no-person' };
   const vis = (i: number) => lm[i]?.visibility ?? 1;
+  const face = opts.face && opts.face.length > FACE.leftIris ? opts.face : null;
   if (vis(POSE.leftShoulder) < MIN_VISIBILITY || vis(POSE.rightShoulder) < MIN_VISIBILITY) {
-    return { metrics: null, reason: vis(POSE.nose) < MIN_VISIBILITY ? 'no-person' : 'shoulders-hidden' };
+    return { metrics: null, reason: vis(POSE.nose) < MIN_VISIBILITY && !face ? 'no-person' : 'shoulders-hidden' };
   }
-  if (REQUIRED.some((i) => vis(i) < MIN_VISIBILITY)) return { metrics: null, reason: 'face-hidden' };
+  if (!face && REQUIRED.some((i) => vis(i) < MIN_VISIBILITY)) return { metrics: null, reason: 'face-hidden' };
 
-  const p = (i: number): [number, number] => {
-    const x = lm[i].x * width;
-    const y = lm[i].y * height;
-    return smoother ? smoother.smooth(i, x, y, t) : [x, y];
-  };
+  const sm = opts.smoother;
+  const smooth = (key: number, x: number, y: number): [number, number] => (sm ? sm.smooth(key, x, y, t) : [x, y]);
+  const p = (i: number): [number, number] => smooth(i, lm[i].x * width, lm[i].y * height);
+  // Punkty twarzy dostają osobne klucze filtra (1000+), żeby nie mieszać się z punktami sylwetki.
+  const f = (i: number): [number, number] => smooth(1000 + i, face![i].x * width, face![i].y * height);
 
-  const [nx, ny] = p(POSE.nose);
-  const [lex, ley] = p(POSE.leftEye);
-  const [rex, rey] = p(POSE.rightEye);
-  const [lsx, lsy] = p(POSE.leftShoulder);
-  const [rsx, rsy] = p(POSE.rightShoulder);
+  const [nx, ny] = face ? f(FACE.noseTip) : p(POSE.nose);
+  const [lex, ley] = face ? f(FACE.leftIris) : p(POSE.leftEye);
+  const [rex, rey] = face ? f(FACE.rightIris) : p(POSE.rightEye);
+  const eyeDist = dist(lex, ley, rex, rey);
+  if (eyeDist < 3) return { metrics: null, reason: 'no-person' };
+
+  let [lsx, lsy] = p(POSE.leftShoulder);
+  let [rsx, rsy] = p(POSE.rightShoulder);
+  let shouldersHeld = false;
+  if (opts.shoulderGate) {
+    const g = opts.shoulderGate.update(t, {
+      lx: lsx, ly: lsy, rx: rsx, ry: rsy,
+      visibility: Math.min(vis(POSE.leftShoulder), vis(POSE.rightShoulder)),
+      eyeDist,
+    });
+    if (!g) return { metrics: null, reason: 'shoulders-hidden' };
+    ({ lx: lsx, ly: lsy, rx: rsx, ry: rsy } = g);
+    shouldersHeld = g.held;
+  }
 
   const shoulderW = dist(lsx, lsy, rsx, rsy);
-  const eyeDist = dist(lex, ley, rex, rey);
-  if (shoulderW < 10 || eyeDist < 3) return { metrics: null, reason: 'no-person' };
-
+  if (shoulderW < 10) return { metrics: null, reason: 'no-person' };
   const shoulderMidY = (lsy + rsy) / 2;
 
   // Uszy bywają zasłonięte (włosy, słuchawki): używamy widocznych, a w ostateczności oczu.
@@ -84,17 +118,26 @@ export function computeMetrics(
     earY = (ley + rey) / 2;
   }
 
+  const pose = opts.headPose ?? null;
+  // Obrót głowy zmniejsza widoczny rozstaw oczu: korygujemy, żeby nie udawał oddalenia od ekranu.
+  const yawCos = pose ? Math.max(0.5, Math.cos((pose.yawDeg * Math.PI) / 180)) : 1;
+  const eyeDistFrontal = eyeDist / yawCos;
+
   return {
     metrics: {
       neckRatio: (shoulderMidY - ny) / shoulderW,
       earRatio: (shoulderMidY - earY) / shoulderW,
-      headRollDeg: lineAngleDeg(rex, rey, lex, ley),
+      // Przechył z macierzy twarzy jest dokładniejszy niż z dwóch punktów oczu.
+      headRollDeg: pose ? pose.rollDeg : lineAngleDeg(rex, rey, lex, ley),
       shoulderTiltDeg: lineAngleDeg(rsx, rsy, lsx, lsy),
-      eyeDistPx: eyeDist,
-      shoulderToEye: shoulderW / eyeDist,
+      eyeDistPx: eyeDistFrontal,
+      shoulderToEye: shoulderW / eyeDistFrontal,
       noseX: nx,
       noseY: ny,
+      headPitchDeg: pose ? pose.pitchDeg : null,
+      headYawDeg: pose ? pose.yawDeg : null,
     },
+    shouldersHeld,
   };
 }
 

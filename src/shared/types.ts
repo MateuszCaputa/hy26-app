@@ -74,6 +74,10 @@ export interface PostureMetrics {
   /** Środek nosa w pikselach (do detekcji ruchu/bezruchu). */
   noseX: number;
   noseY: number;
+  /** Pochylenie głowy z macierzy twarzy (dodatnie = w dół), stopnie; null bez modelu twarzy. */
+  headPitchDeg?: number | null;
+  /** Obrót głowy w bok, stopnie; null bez modelu twarzy. */
+  headYawDeg?: number | null;
 }
 
 export interface Calibration {
@@ -86,6 +90,8 @@ export interface Calibration {
   shoulderToEye: number;
   /** Współczynnik otwarcia oka (EAR) przy otwartych oczach. */
   earOpen: number | null;
+  /** Pochylenie głowy przy prostej postawie (stare kalibracje go nie mają). */
+  headPitchDeg?: number | null;
 }
 
 export interface IssueReading {

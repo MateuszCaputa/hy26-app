@@ -160,7 +160,7 @@ export function openCalibration(ctx: AppCtx, onDone: (c: Calibration) => void): 
   });
 }
 
-/** Pierwsze uruchomienie: pobranie modeli MediaPipe (ok. 10 MB, jednorazowo). */
+/** Pierwsze uruchomienie: pobranie modeli MediaPipe (ok. 13 MB, jednorazowo). */
 export function showModelsScreen(): Promise<void> {
   return new Promise((resolve) => {
     const api = window.postura;
@@ -171,7 +171,7 @@ export function showModelsScreen(): Promise<void> {
       'Przygotowanie',
       h('div', { class: 'cal' },
         h('h1', null, 'Przygotowuję analizę'),
-        h('p', { class: 'fine' }, 'Pobieram modele rozpoznawania sylwetki i twarzy (ok. 10 MB). To jednorazowe – później Postura działa bez internetu, a obraz z kamery nigdy nie opuszcza komputera.'),
+        h('p', { class: 'fine' }, 'Pobieram modele rozpoznawania sylwetki i twarzy (ok. 13 MB). To jednorazowe – później Postura działa bez internetu, a obraz z kamery nigdy nie opuszcza komputera.'),
         h('span', { class: 'meter big' }, bar),
         text,
         retry,
