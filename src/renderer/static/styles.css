@@ -164,18 +164,22 @@ button, input, select { font: inherit; color: inherit; }
   display: flex; justify-content: space-between; align-items: center;
 }
 .details > summary::-webkit-details-marker { display: none; }
-.details > summary::after { content: "▸"; font-size: 13px; transition: transform .15s ease; }
+/* Strzałka narysowana obramowaniem, nie znakiem – czytnik ekranu jej nie przeczyta. */
+.details > summary::after {
+  content: ""; width: 6px; height: 6px; margin-right: 3px;
+  border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor;
+  transform: rotate(-45deg); transition: transform .15s ease;
+}
 .details[open] > summary { padding-bottom: 4px; }
-.details[open] > summary::after { transform: rotate(90deg); }
+.details[open] > summary::after { transform: rotate(45deg); }
 .details-body { display: grid; gap: 10px; padding-bottom: 16px; }
 /* Podtytuły mniejsze od „Szczegółów pomiaru”, żeby było widać, co jest czym. */
 .details-body h2 { margin-top: 12px; font-size: 13px; }
 .details-body h2:first-child { margin-top: 0; }
 /* Wiersze wcięte pod swoim podtytułem, żeby było widać, do której sekcji należą. */
 .details-body .metric-list { padding-left: 14px; }
-/* Przycisk kalibracji oddzielony od listy, na całą szerokość panelu – nie wisi pod ostatnim paskiem. */
+/* Kalibracja to rzadka akcja: mały przycisk w stopce, oddzielony linią od listy – nie przykrywa „Zrób przerwę”. */
 .details-foot { margin-top: 8px; padding-top: 14px; border-top: 1px solid var(--line); display: grid; }
-.details-foot .btn { justify-self: stretch; padding-block: 8px; }
 .adv > summary { cursor: pointer; font-weight: 600; color: var(--muted); padding: 6px 0; }
 .adv[open] > summary { margin-bottom: 8px; }
 .score-num { font-size: 72px; font-weight: 250; line-height: .95; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
