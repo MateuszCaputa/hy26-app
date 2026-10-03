@@ -6,14 +6,14 @@ import {
 import { existsSync, watch } from 'node:fs';
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import type { AppEvent, Calibration, LiveStatus, MinuteSample, Settings } from '../shared/types';
+import type { AppEvent, Calibration, LiveStatus, MinuteSample, Nudge, NudgeAction, Settings } from '../shared/types';
 import type { InitData } from '../shared/api';
 import { Store } from './db';
 import { ActivityCounter } from './activity';
 import { GarminSync } from './garmin';
 import { ensureModels, modelsReady } from './models';
 import { buildStats, localDate } from '../core/insights';
-import { ERGONOMIC_TIP, ISSUE_LABEL } from '../core/coach';
+import { ERGONOMIC_TIP, ISSUE_LABEL, ISSUE_TIP } from '../core/coach';
 
 const argv = process.argv.slice(1);
 const flag = (name: string) => argv.find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
@@ -57,6 +57,7 @@ let store: Store;
 let settings: Settings;
 let mainWin: BrowserWindow | null = null;
 let widgetWin: BrowserWindow | null = null;
+let nudgeWin: BrowserWindow | null = null;
 let tray: Tray | null = null;
 let quitting = false;
 let paused = false;
@@ -176,6 +177,23 @@ function updateTray(): void {
       { label: 'Pokaż okno', click: () => showMain('live') },
       { label: 'Statystyki', click: () => showMain('stats') },
       { label: 'Kalibracja', click: () => showMain('calibrate') },
+      // Tylko dewelopersko / w trybie demo: pokaż przypomnienie na żądanie (test i scena).
+      ...(!app.isPackaged || argv.includes('--demo')
+        ? [{
+            label: 'Pokaż przypomnienie (test)',
+            submenu: [
+              { label: 'Oczy 20-20-20', click: () => showNudge({ kind: 'eye', title: 'Spójrz w dal', body: 'Przez 20 s patrz na coś odległego (ok. 6 m).', seconds: 20 }) },
+              { label: 'Mikroprzerwa', click: () => showNudge({ kind: 'break', title: 'Mikroprzerwa', body: 'Krążenia barków' }) },
+              {
+                label: 'Postawa (Twój obecny największy problem)',
+                click: () => {
+                  const issue = lastStatus?.topIssue ?? 'headForward';
+                  showNudge({ kind: 'posture', title: ISSUE_LABEL[issue], body: ISSUE_TIP[issue] });
+                },
+              },
+            ],
+          }]
+        : []),
       {
         label: 'Mini-widget',
         submenu: [
@@ -323,13 +341,70 @@ function withinWorkHours(d = new Date()): boolean {
   return now >= hm(settings.workStart) && now < hm(settings.workEnd);
 }
 
-function notify(n: { title: string; body: string; kind: string; openBreak?: boolean }): void {
+const NUDGE_W = 340;
+const NUDGE_H = 120;
+
+/** Gdzie pokazać podpowiedź: tuż pod widgetem (albo nad nim, gdy brak miejsca), inaczej prawy górny róg. */
+function nudgeBounds(): Electron.Rectangle {
+  if (widgetWin?.isVisible()) {
+    const wb = widgetWin.getBounds();
+    const a = screen.getDisplayMatching(wb).workArea;
+    const rightSide = wb.x + wb.width / 2 > a.x + a.width / 2;
+    let x = rightSide ? wb.x + wb.width - NUDGE_W : wb.x;
+    x = Math.min(Math.max(x, a.x), a.x + a.width - NUDGE_W);
+    const below = wb.y + wb.height + NUDGE_H <= a.y + a.height;
+    const y = below ? wb.y + wb.height - 4 : wb.y - NUDGE_H + 4;
+    return { x, y, width: NUDGE_W, height: NUDGE_H };
+  }
+  const a = screen.getPrimaryDisplay().workArea;
+  return { x: a.x + a.width - NUDGE_W - 12, y: a.y + 12, width: NUDGE_W, height: NUDGE_H };
+}
+
+/** Podpowiedź obok widgetu lub w rogu: nie kradnie fokusu, sama znika (logika w nudge.ts). */
+function showNudge(n: Nudge): void {
+  if (!nudgeWin) {
+    nudgeWin = new BrowserWindow({
+      ...nudgeBounds(),
+      width: NUDGE_W,
+      height: NUDGE_H,
+      frame: false,
+      resizable: false,
+      movable: false,
+      alwaysOnTop: true,
+      skipTaskbar: true,
+      focusable: false,
+      transparent: true,
+      hasShadow: false,
+      show: false,
+      webPreferences: { preload: path.join(__dirname, '..', 'preload.js'), contextIsolation: true, sandbox: true },
+    });
+    nudgeWin.setAlwaysOnTop(true, 'floating');
+    nudgeWin.setVisibleOnAllWorkspaces(true);
+    const win = nudgeWin;
+    win.on('closed', () => {
+      if (nudgeWin === win) nudgeWin = null;
+    });
+    void win.loadURL('app://local/nudge.html');
+    win.webContents.once('did-finish-load', () => {
+      win.showInactive();
+      win.webContents.send('nudge', n);
+      if (lastStatus) win.webContents.send('status', lastStatus);
+    });
+    return;
+  }
+  nudgeWin.setBounds(nudgeBounds()); // widget mógł zostać przesunięty
+  nudgeWin.showInactive();
+  nudgeWin.webContents.send('nudge', n);
+}
+
+function notify(n: { title: string; body: string; kind: string; openBreak?: boolean; nudge?: Nudge }): void {
   if (settings.doNotDisturb || paused) return;
   if (settings.onlyWorkHours && !withinWorkHours()) return;
   // Maksymalnie jedno powiadomienie o postawie na `alertCooldownMin`; przerwy mają osobny limit 1 min.
   const now = Date.now();
   if (n.kind === 'posture' && now - lastNotifyAt < settings.alertCooldownMin * 60e3) return;
   if (n.kind === 'posture') lastNotifyAt = now;
+  if (n.nudge && settings.nudges === 'corner') return showNudge(n.nudge);
   if (!Notification.isSupported()) return;
   const notif = new Notification({ title: n.title, body: n.body, silent: !settings.soundAlerts, icon: path.join(ASSETS_DIR, 'icon.png') });
   notif.on('click', () => {
@@ -409,12 +484,18 @@ function registerIpc(): void {
     lastStatus = s;
     updateTray(); // tani: menu przebudowuje się tylko przy zmianie treści
     widgetWin?.webContents.send('status', s);
+    nudgeWin?.webContents.send('status', s); // podpowiedź o postawie znika, gdy się poprawisz
   });
   ipcMain.on('notify', (_e, n) => notify(n));
   ipcMain.on('event', (_e, ev: AppEvent) => store.addEvent(ev.type, ev.detail));
   ipcMain.handle('get-stats', () => statsNow());
   ipcMain.on('set-paused', (_e, p: boolean) => setPaused(p));
   ipcMain.on('open-main', (_e, view?: string) => showMain(view));
+  ipcMain.on('nudge-action', (_e, a: NudgeAction) => {
+    nudgeWin?.hide();
+    if (a === 'start') showMain('live');
+    mainWin?.webContents.send('nudge-action', a);
+  });
   // Przeciąganie widgetu robi renderer (region „drag” zjadałby kliknięcia); tu tylko przesuwamy okno.
   ipcMain.on('widget-move', (_e, x: number, y: number, done: boolean) => {
     if (!widgetWin) return;

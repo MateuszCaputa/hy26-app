@@ -95,6 +95,13 @@ export async function renderSettings(view: HTMLElement, ctx: AppCtx): Promise<vo
         time('workStart', 'Początek pracy'),
         time('workEnd', 'Koniec pracy (podsumowanie dnia)'),
         toggle('soundAlerts', 'Dźwięk powiadomień'),
+        h('div', { class: 'field' },
+          h('label', { for: 's-nudges' }, 'Przypomnienia o przerwach i postawie'),
+          h('select', { id: 's-nudges', onchange: (e: Event) => set('nudges', (e.target as HTMLSelectElement).value as Settings['nudges']) },
+            h('option', { value: 'corner', selected: ctx.settings.nudges === 'corner' }, 'Dyskretnie w rogu ekranu'),
+            h('option', { value: 'system', selected: ctx.settings.nudges === 'system' }, 'Powiadomienia systemowe'),
+          ),
+        ),
       ]),
       group('Aplikacja', [
         toggle('miniWidget', 'Mini-widget z wynikiem na ekranie'),

@@ -11,6 +11,7 @@
 - MediaPipe-style overlay (eyelid/iris contours showing blinks, glowing skeleton) + Windows tray score (MP7) → PR #78
 - Two mini-widget styles (card / pill), click to open, drag to move (C11) → PR #79
 - Smooth 60 fps overlay: rAF drawing + landmark following between pose measurements (MP9) → PR #80
+- Calm nudges next to the widget: 20-20-20 countdown, break Start/snooze, posture tip (C13) → PR #82
 - No fatigue score on unreliable eye data; 2+ min away from the desk counts as a break (A13, A14) → PR #77
 - Whole-number posture score in widget/tray; widget text ellipsis (A15, C12) → PR #81
 

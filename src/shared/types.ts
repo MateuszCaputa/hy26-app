@@ -30,6 +30,8 @@ export interface Settings {
   faceAnalysis: boolean;
   activityTracking: boolean;
   miniWidget: boolean;
+  /** Gdzie pokazywać przypomnienia: dyskretnie w rogu ekranu albo jako powiadomienia systemowe. */
+  nudges: 'corner' | 'system';
   /** Wygląd mini-widgetu: karta (wynik + stan + zmęczenie) albo mała pigułka z samą liczbą. */
   widgetStyle: 'card' | 'pill';
   autostart: boolean;
@@ -54,6 +56,7 @@ export const DEFAULT_SETTINGS: Settings = {
   // Domyślnie wyłączone: na macOS wymaga uprawnienia Dostępności, co myli przy pierwszym uruchomieniu.
   activityTracking: false,
   miniWidget: false,
+  nudges: 'corner',
   widgetStyle: 'card',
   autostart: false,
   soundAlerts: false,
@@ -144,6 +147,17 @@ export interface MinuteSample {
 }
 
 export type BreakKind = 'eye' | 'micro' | 'move';
+
+/** Dyskretna podpowiedź w rogu ekranu (zamiast powiadomienia systemowego). */
+export interface Nudge {
+  kind: 'eye' | 'break' | 'posture';
+  title: string;
+  body: string;
+  /** Odliczanie (np. 20 s patrzenia w dal); bez niego podpowiedź sama znika po chwili. */
+  seconds?: number;
+}
+
+export type NudgeAction = 'start' | 'snooze' | 'dismiss' | 'eye-done';
 
 export interface BreakSuggestion {
   kind: BreakKind;

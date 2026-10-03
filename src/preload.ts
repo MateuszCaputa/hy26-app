@@ -26,6 +26,9 @@ const api: PosturaApi = {
   setTrayBadge: (png) => ipcRenderer.send('tray-badge', png),
   openMain: (view) => ipcRenderer.send('open-main', view),
   moveWidget: (x, y, done) => ipcRenderer.send('widget-move', x, y, done),
+  onNudge: (cb) => ipcRenderer.on('nudge', (_e, n) => cb(n)),
+  nudgeAction: (a) => ipcRenderer.send('nudge-action', a),
+  onNudgeAction: (cb) => ipcRenderer.on('nudge-action', (_e, a) => cb(a)),
 };
 
 contextBridge.exposeInMainWorld('postura', api);
