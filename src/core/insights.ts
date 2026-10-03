@@ -167,6 +167,22 @@ export function buildStats(i: InsightInput): StatsPayload {
   const todays = i.samples.filter((s) => localDate(s.ts) === today);
   const yesterdayDate = localDate(new Date(i.now).setHours(0, 0, 0, 0) - 12 * 3600e3);
   const yAvg = dayAverages(i.samples.filter((s) => localDate(s.ts) === yesterdayDate));
+
+  // Ostatnie 7 dni kalendarzowych (z dziś), od najstarszego; dzień bez pracy = null.
+  const last7 = Array.from({ length: 7 }, (_, k) => {
+    const noon = new Date(i.now);
+    noon.setHours(12, 0, 0, 0);
+    noon.setDate(noon.getDate() - (6 - k));
+    const date = localDate(noon.getTime());
+    const a = dayAverages(i.samples.filter((s) => localDate(s.ts) === date));
+    return {
+      date,
+      weekday: weekdayMon0(noon.getTime()),
+      avgFatigue: a.presentMinutes ? a.avgFatigue : null,
+      goodPercent: a.presentMinutes ? a.goodPercent : null,
+      presentMinutes: a.presentMinutes,
+    };
+  });
   const actRef = activityReference(i.samples);
 
   // Mapa: dzień tygodnia × godzina.
@@ -212,6 +228,7 @@ export function buildStats(i: InsightInput): StatsPayload {
       alertTimes: i.alertTimes ?? [],
     },
     yesterday: yAvg.presentMinutes > 0 ? { ...yAvg, breaksTaken: i.breaksYesterday ?? 0 } : null,
+    last7,
     heatmap,
     bestHours: best,
     dipText: dip,

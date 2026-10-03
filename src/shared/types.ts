@@ -211,6 +211,8 @@ export interface StatsPayload {
     breaksTaken: number;
     presentMinutes: number;
   } | null;
+  /** Ostatnie 7 dni (z dziś, od najstarszego) do wykresów słupkowych; null = brak danych tego dnia. */
+  last7: { date: string; weekday: number; avgFatigue: number | null; goodPercent: number | null; presentMinutes: number }[];
   heatmap: { weekday: number; hour: number; form: number; minutes: number }[];
   bestHours: string | null;
   dipText: string | null;

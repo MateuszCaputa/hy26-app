@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildStats } from '../src/core/insights';
+import { buildStats, localDate } from '../src/core/insights';
 import type { MinuteSample } from '../src/shared/types';
 
 const sample = (ts: number, posture: number, fatigue: number | null, blinkRate: number | null, present = 1): MinuteSample => ({
@@ -37,6 +37,18 @@ test('wczoraj bez pracy → null; minuty poza biurkiem się nie liczą', () => {
   assert.equal(buildStats({ ...base, samples: minutes(NOW, 0, 9, 30, 85, 25, 15) }).yesterday, null);
   const away = minutes(NOW, -1, 9, 30, 85, 25, 15).map((s) => ({ ...s, present: 0.2 }));
   assert.equal(buildStats({ ...base, samples: away }).yesterday, null);
+});
+
+test('ostatnie 7 dni: od najstarszego do dziś, dni bez pracy puste', () => {
+  const samples = [...minutes(NOW, -6, 9, 30, 90, 30, 15), ...minutes(NOW, -1, 9, 30, 70, 60, 12), ...minutes(NOW, 0, 9, 30, 85, 20, 16)];
+  const w = buildStats({ ...base, samples }).last7;
+  assert.equal(w.length, 7);
+  assert.equal(w[6].date, localDate(NOW));
+  assert.deepEqual(w.map((d) => d.avgFatigue), [30, null, null, null, null, 60, 20]);
+  assert.deepEqual(w.map((d) => d.goodPercent), [100, null, null, null, null, 0, 100]);
+  assert.equal(w[0].presentMinutes, 30);
+  assert.equal(w[2].presentMinutes, 0);
+  assert.equal(w[6].weekday, (new Date(NOW).getDay() + 6) % 7); // dziś
 });
 
 test('znaczniki przerw i alertów trafiają do dzisiejszych statystyk', () => {

@@ -25,7 +25,7 @@ export async function renderStats(view: HTMLElement, ctx: AppCtx): Promise<void>
     );
     return;
   }
-  page.append(todaySection(st), formSection(st), issuesSection(st), garminSection(st, ctx));
+  page.append(todaySection(st), weekSection(st), formSection(st), issuesSection(st), garminSection(st, ctx));
 }
 
 function figure(value: string, label: string, ...notes: (HTMLElement | null)[]): HTMLElement {
@@ -161,6 +161,122 @@ function dayChart(mins: MinuteSample[], breakTimes: number[], alertTimes: number
       'Średnia z 5 minut. Dziury w obu liniach to czas poza biurkiem; dziura tylko w linii zmęczenia to za mało danych z oczu (np. słabe światło) – wtedy nie zgadujemy.'),
   );
   return el;
+}
+
+interface ColumnSpec {
+  title: string;
+  values: (number | null)[];
+  labels: string[];
+  /** Klasa koloru serii (`col-fat` / `col-post`), spójna z liniami na wykresie dnia. */
+  tone: string;
+  threshold: number;
+  thresholdLabel: string;
+  /** Który dzień jest „najgorszy” do podpisania: najwyższe zmęczenie albo najniższy % dobrej postawy. */
+  worst: 'max' | 'min';
+}
+
+/** Wykres kolumnowy 0–100 % dla 7 dni: jedna seria, podpis tylko dziś i najgorszy dzień, etykieta po najechaniu/focusie. */
+function columnChart(c: ColumnSpec): HTMLElement {
+  const W = 360, H = 176, L = 30, R = 6, T = 18, B = 24;
+  const n = c.values.length;
+  const band = (W - L - R) / n;
+  const bw = Math.min(16, band * 0.6); // ok. 24 px po przeskalowaniu SVG do szerokości kolumny
+  const base = H - B;
+  const Y = (v: number) => T + (1 - v / 100) * (base - T);
+  const today = n - 1;
+  const present = c.values.map((v, i) => ({ v, i })).filter((x): x is { v: number; i: number } => x.v !== null);
+  const worst = present.length > 1
+    ? present.reduce((a, b) => (c.worst === 'max' ? (b.v > a.v ? b : a) : (b.v < a.v ? b : a))).i
+    : -1;
+
+  let svg = '';
+  for (const v of [0, 50, 100]) {
+    svg += `<line x1="${L}" x2="${W - R}" y1="${Y(v)}" y2="${Y(v)}" class="grid"/><text x="${L - 6}" y="${Y(v) + 4}" text-anchor="end" class="axis">${v}</text>`;
+  }
+  svg += `<line x1="${L}" x2="${W - R}" y1="${Y(c.threshold)}" y2="${Y(c.threshold)}" class="col-thr"/>`;
+  c.values.forEach((v, i) => {
+    const x = L + band * i + (band - bw) / 2;
+    const cx = (x + bw / 2).toFixed(1);
+    svg += `<text x="${cx}" y="${H - 6}" text-anchor="middle" class="axis${i === today ? ' axis-today' : ''}">${c.labels[i]}</text>`;
+    if (v === null) return;
+    const top = Y(v);
+    const r = Math.min(4, base - top);
+    const d = `M${x} ${base} V${top + r} Q${x} ${top} ${x + r} ${top} H${x + bw - r} Q${x + bw} ${top} ${x + bw} ${top + r} V${base} Z`;
+    svg += `<path d="${d}" class="col ${c.tone}${i === today ? ' col-today' : ''}" data-i="${i}"/>`;
+    if (i === today || i === worst) svg += `<text x="${cx}" y="${top - 5}" text-anchor="middle" class="col-val">${Math.round(v)}%</text>`;
+  });
+
+  const fig = h('figure', { class: 'chart col-chart' },
+    h('figcaption', { class: 'col-title' }, c.title, h('span', { class: 'col-sub' }, h('span', { class: 'lg-thr' }), c.thresholdLabel)),
+  );
+  const holder = h('div', { class: 'col-plot' });
+  holder.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${c.title}, ostatnie 7 dni">${svg}</svg>`;
+  const svgEl = holder.querySelector('svg')!;
+
+  // Etykieta: najechanie albo Tab na kolumnę dnia (obszar trafienia = cały pas dnia, nie tylko słupek).
+  const tip = h('div', { class: 'col-tip', role: 'status' });
+  const showTip = (i: number, x: number) => {
+    const v = c.values[i];
+    tip.replaceChildren(h('strong', null, v === null ? 'brak danych' : `${Math.round(v)}%`), h('span', null, c.labels[i]));
+    tip.style.left = `${(x / W) * 100}%`;
+    tip.classList.add('on');
+    svgEl.querySelectorAll('.col').forEach((p) => p.classList.toggle('hover', p.getAttribute('data-i') === String(i)));
+  };
+  const hideTip = () => {
+    tip.classList.remove('on');
+    svgEl.querySelectorAll('.col.hover').forEach((p) => p.classList.remove('hover'));
+  };
+  c.values.forEach((_, i) => {
+    const x = L + band * i;
+    svgEl.insertAdjacentHTML('beforeend', `<rect x="${x}" y="${T}" width="${band}" height="${base - T}" class="col-hit" tabindex="0" data-i="${i}" aria-label="${c.labels[i]}: ${c.values[i] === null ? 'brak danych' : `${Math.round(c.values[i]!)}%`}"/>`);
+  });
+  svgEl.querySelectorAll<SVGRectElement>('.col-hit').forEach((hit) => {
+    const i = Number(hit.dataset.i);
+    const cx = L + band * i + band / 2;
+    hit.addEventListener('pointerenter', () => showTip(i, cx));
+    hit.addEventListener('focus', () => showTip(i, cx));
+    hit.addEventListener('pointerleave', hideTip);
+    hit.addEventListener('blur', hideTip);
+  });
+  holder.append(tip);
+  fig.append(holder);
+  return fig;
+}
+
+function weekSection(st: StatsPayload): HTMLElement {
+  const w = st.last7;
+  const sec = h('section', { class: 'block' }, h('h2', null, 'Ostatnie 7 dni'));
+  if (w.filter((d) => d.presentMinutes > 0).length < 2) {
+    sec.append(h('p', { class: 'fine' }, 'Wykresy dzień po dniu pojawią się, gdy zbierzemy pomiary z co najmniej dwóch dni.'));
+    return sec;
+  }
+  const labels = w.map((d, i) => (i === w.length - 1 ? 'dziś' : DAYS[d.weekday]));
+  sec.append(
+    h('div', { class: 'col-charts' },
+      columnChart({ title: 'Średnie zmęczenie', values: w.map((d) => d.avgFatigue), labels, tone: 'col-fat', threshold: 40, thresholdLabel: 'świeży < 40%', worst: 'max' }),
+      columnChart({ title: 'Czas w dobrej postawie', values: w.map((d) => d.goodPercent), labels, tone: 'col-post', threshold: 80, thresholdLabel: 'cel 80%', worst: 'min' }),
+    ),
+  );
+  // Wniosek: najbardziej zmęczony dzień.
+  const fat = w.map((d, i) => ({ v: d.avgFatigue, i })).filter((x): x is { v: number; i: number } => x.v !== null);
+  if (fat.length > 1) {
+    const top = fat.reduce((a, b) => (b.v > a.v ? b : a));
+    const name = top.i === w.length - 1 ? 'dziś' : ['poniedziałek', 'wtorek', 'środa', 'czwartek', 'piątek', 'sobota', 'niedziela'][w[top.i].weekday];
+    sec.append(h('p', { class: 'lead' }, `Najwyższe zmęczenie: ${name} (średnio ${top.v}%).`));
+  }
+  // Ta sama treść jako tabela dla czytników ekranu.
+  sec.append(
+    h('table', { class: 'sr-only' },
+      h('caption', null, 'Ostatnie 7 dni'),
+      h('tr', null, h('th', null, 'Dzień'), h('th', null, 'Średnie zmęczenie'), h('th', null, 'Czas w dobrej postawie')),
+      ...w.map((d, i) => h('tr', null,
+        h('td', null, labels[i]),
+        h('td', null, d.avgFatigue === null ? '–' : `${d.avgFatigue}%`),
+        h('td', null, d.goodPercent === null ? '–' : `${d.goodPercent}%`),
+      )),
+    ),
+  );
+  return sec;
 }
 
 function formSection(st: StatsPayload): HTMLElement {
