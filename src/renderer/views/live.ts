@@ -6,6 +6,7 @@ import { drawOverlay } from '../draw';
 import { h, fmtMin, plural } from '../dom';
 import { BREAK_TITLE, FATIGUE_LABEL, ISSUE_LABEL, ISSUE_TIP, fatigueAdvice } from '../../core/coach';
 import { ISSUE_DEFS } from '../../core/scoring';
+import { LandmarkFollower } from '../../core/landmarkFollower';
 
 const STATE_WORD: Record<string, string> = {
   good: 'Siedzisz prosto',
@@ -25,6 +26,11 @@ const CAMERA_MSG: Record<string, string> = {
 
 export class LiveView {
   private root: HTMLElement;
+  // MP9: rysowanie w tempie ekranu (rAF), sylwetka wygładzana między pomiarami.
+  private follower = new LandmarkFollower(70);
+  private lastFrame: Frame | null = null;
+  private raf = 0;
+  private lastDraw = 0;
   private stage: HTMLElement;
   private canvas: HTMLCanvasElement;
   private camMsg: HTMLElement;
@@ -128,6 +134,7 @@ export class LiveView {
   mount(container: HTMLElement): void {
     container.append(this.root);
     this.mounted = true;
+    this.startDrawLoop();
     // Odpięcie od DOM wstrzymało <video>; po powrocie na „Na żywo” wznawiamy podgląd od razu.
     const v = this.ctx.analyzer.video;
     if (this.ctx.analyzer.isRunning && v.paused && v.srcObject) void v.play().catch(() => undefined);
@@ -138,6 +145,32 @@ export class LiveView {
   detach(): void {
     if (this.mounted) this.root.remove();
     this.mounted = false;
+    cancelAnimationFrame(this.raf);
+    this.raf = 0;
+  }
+
+  private startDrawLoop(): void {
+    cancelAnimationFrame(this.raf);
+    this.lastDraw = performance.now();
+    const loop = (now: number) => {
+      if (!this.mounted) return;
+      const dt = Math.min(100, now - this.lastDraw);
+      this.lastDraw = now;
+      const f = this.lastFrame;
+      if (f) {
+        try {
+          const pose = this.follower.step(dt);
+          drawOverlay(this.canvas, this.ctx.analyzer.video.videoWidth ? this.ctx.analyzer.video : { videoWidth: 640, videoHeight: 480 }, pose === f.pose ? f : { ...f, pose }, {
+            mirror: this.ctx.settings.mirror,
+            calibration: this.ctx.calibration,
+          });
+        } catch (e) {
+          console.warn('Nakładka:', e); // nigdy nie zatrzymujemy podglądu przez błąd rysowania
+        }
+      }
+      this.raf = requestAnimationFrame(loop);
+    };
+    this.raf = requestAnimationFrame(loop);
   }
 
   applySettings(s: Settings): void {
@@ -164,10 +197,9 @@ export class LiveView {
 
   frame(f: Frame): void {
     if (!this.mounted) return;
-    drawOverlay(this.canvas, this.ctx.analyzer.video.videoWidth ? this.ctx.analyzer.video : { videoWidth: 640, videoHeight: 480 }, f, {
-      mirror: this.ctx.settings.mirror,
-      calibration: this.ctx.calibration,
-    });
+    // Rysuje pętla rAF (startDrawLoop); tu tylko nowy cel dla wygładzania sylwetki.
+    if (f.pose !== this.lastFrame?.pose) this.follower.setTarget(f.pose);
+    this.lastFrame = f;
     const hints: Record<string, string> = {
       'shoulders-hidden': 'Nie widzę barków – odsuń się trochę albo obniż kamerę.',
       'face-hidden': 'Twarz jest zasłonięta – wyniki chwilowo wstrzymane.',
