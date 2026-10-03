@@ -128,6 +128,14 @@ button, input, select { font: inherit; color: inherit; }
 .score-small { display: block; color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
 .score-small[hidden] { display: none; }
 .energy-word { margin-left: 10px; font-size: 16px; font-weight: 600; }
+.hero { padding-top: 4px; gap: 6px; }
+.hero .score-state { font-size: 28px; line-height: 1.15; }
+.hero .tip:empty { display: none; }
+.energy-row { gap: 6px; }
+.energy-head { display: flex; justify-content: space-between; align-items: baseline; color: var(--muted); font-weight: 600; font-size: 14px; }
+.energy-pct { color: var(--ink); font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.energy-row .fine[hidden] { display: none; }
+.break-block .btn { justify-self: start; }
 .details { padding: 0; border-bottom: 0; }
 .details > summary { cursor: pointer; padding: 13px 0; color: var(--muted); font-weight: 600; font-size: 15px; list-style: none; }
 .details > summary::-webkit-details-marker { display: none; }

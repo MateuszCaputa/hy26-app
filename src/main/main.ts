@@ -145,7 +145,7 @@ function updateTray(): void {
     info.push(`Postawa: ${STATE_WORD[s.state] ?? ''}`);
     if (s.energy) {
       const low = s.energy.minutesToLow !== null ? ` · spadek <30% za ~${s.energy.minutesToLow} min` : '';
-      info.push(`Bateria: ${s.energy.percent}%${low}`);
+      info.push(`Energia do pracy: ${s.energy.percent}%${low}`);
     }
     if (s.fatigue) info.push(`Zmęczenie: ${s.fatigue.percent}%`);
     info.push(`Od przerwy: ${Math.round(s.minutesSinceBreak)} min`);
