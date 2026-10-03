@@ -7,6 +7,9 @@ const NS = 'http://www.w3.org/2000/svg';
 const FRONT: IssueId[] = ['headTilt', 'shoulderTilt', 'twist'];
 /** Od tej siły problemu (0–1) rysujemy strzałkę poprawy. */
 const ARROW_FROM = 0.33;
+/** Spokojniej na ekranie: poza dochodzi do celu w ok. 1 s, a widok i strzałka zmieniają się dopiero, gdy problem trzyma się 2 s. */
+const POSE_TAU_MS = 900;
+const HOLD_MS = 2000;
 
 export interface FigureInput {
   state: PostureState;
@@ -35,6 +38,8 @@ export class PostureFigure {
   private cur: Pose = { ...ZERO };
   private view: 'side' | 'front' = 'side';
   private arrowFor: IssueId | null = null;
+  private pendingTop: IssueId | null = null;
+  private pendingSince = 0;
   // Widok z boku
   private side: SVGGElement;
   private upper: SVGGElement;
@@ -116,8 +121,15 @@ export class PostureFigure {
         }
       : { ...ZERO };
     const top = on ? i.topIssue : null;
-    this.view = top && FRONT.includes(top) ? 'front' : 'side';
-    this.arrowFor = top && (s[top] ?? (top === 'stillness' ? 1 : 0)) >= ARROW_FROM ? top : null;
+    const now = performance.now();
+    if (top !== this.pendingTop) {
+      this.pendingTop = top;
+      this.pendingSince = now;
+    }
+    if (now - this.pendingSince >= HOLD_MS || !on) {
+      this.view = top && FRONT.includes(top) ? 'front' : 'side';
+      this.arrowFor = top && (s[top] ?? (top === 'stillness' ? 1 : 0)) >= ARROW_FROM ? top : null;
+    }
     this.el.dataset.state = on ? i.state : 'idle';
     this.el.dataset.view = this.view;
     // Strzałka przechyłu głowy: w stronę wyprostowania (przeciwnie do przechyłu).
@@ -131,7 +143,7 @@ export class PostureFigure {
 
   /** Płynne dojście do docelowej pozy; wołane z pętli rysowania (dt w ms). */
   tick(dt: number): void {
-    const a = 1 - Math.exp(-dt / 160);
+    const a = 1 - Math.exp(-dt / POSE_TAU_MS);
     let moved = false;
     for (const k of Object.keys(this.cur) as (keyof Pose)[]) {
       const d = this.target[k] - this.cur[k];

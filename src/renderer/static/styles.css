@@ -103,7 +103,7 @@ button, input, select { font: inherit; color: inherit; }
 .stage-video.mirror { transform: scaleX(-1); }
 .stage-msg, .stage-cta {
   position: absolute; inset: 0; display: grid; place-content: center; gap: 16px;
-  text-align: center; padding: 32px; color: #e9f0ee; background: rgba(18, 19, 20, .82); font-size: 16px;
+  text-align: center; padding: 32px; color: rgba(233, 240, 238, .72); background: rgba(18, 19, 20, .82); font-size: 14px;
 }
 .stage-cta .btn { justify-self: center; }
 .stage-msg[hidden], .stage-cta[hidden], .stage-hint[hidden] { display: none; }
@@ -129,13 +129,34 @@ button, input, select { font: inherit; color: inherit; }
 .score-small[hidden] { display: none; }
 .energy-word { margin-left: 10px; font-size: 16px; font-weight: 600; }
 .hero { padding-top: 4px; gap: 6px; }
-.hero .score-state { font-size: 28px; line-height: 1.15; }
+.hero-row { display: flex; align-items: center; gap: 14px; }
+.hero-text { display: grid; gap: 6px; min-width: 0; }
+/* C16: ludzik postawy (kolor = stan, strzałka = jak poprawić). Mały i spokojny: bez pulsowania. */
+.pfig { width: 120px; flex: none; height: auto; --pf: var(--muted); }
+.pfig[data-state="good"] { --pf: var(--good); }
+.pfig[data-state="warn"] { --pf: var(--warn); }
+.pfig[data-state="bad"] { --pf: var(--bad); }
+.pfig .pfig-body { fill: none; stroke: var(--pf); stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; transition: stroke 1s ease; }
+.pfig .pfig-thin { stroke-width: 5; }
+.pfig .pfig-head { fill: var(--pf); transition: fill 1s ease; }
+.pfig .pfig-face { fill: none; stroke: var(--surface); stroke-width: 2; stroke-linecap: round; }
+.pfig .pfig-prop { fill: none; stroke: var(--line); stroke-width: 3; stroke-linecap: round; }
+.pfig .pfig-screen { fill: var(--line); }
+.pfig[data-view="side"] .pfig-front, .pfig[data-view="front"] .pfig-side { display: none; }
+.pfig .pfig-arrow { opacity: 0; transition: opacity .8s ease; }
+.pfig .pfig-arrow.on { opacity: 1; }
+.pfig .pfig-arrow path { fill: none; stroke: var(--spine); stroke-width: 5; stroke-linecap: round; }
+.pfig .pfig-arrowhead { fill: var(--spine); }
+.break-line { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.break-line .break-text { margin: 0; font-size: 14px; font-weight: 500; }
+/* Minimalistycznie: stan jest krótki i średniej wagi, rada cicha (szary, mniejszy tekst). */
+.hero .score-state { font-size: 17px; font-weight: 550; line-height: 1.25; letter-spacing: 0; }
+.hero .tip { font-size: 13.5px; line-height: 1.4; color: var(--muted); min-height: 0; }
 .hero .tip:empty { display: none; }
 .energy-row { gap: 6px; }
 .energy-head { display: flex; justify-content: space-between; align-items: baseline; color: var(--muted); font-weight: 600; font-size: 14px; }
-.energy-pct { color: var(--ink); font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.energy-pct { color: var(--ink); font-size: 15px; font-weight: 500; font-variant-numeric: tabular-nums; }
 .energy-row .fine[hidden] { display: none; }
-.break-block .btn { justify-self: start; }
 .details { padding: 0; border-bottom: 0; }
 .details > summary { cursor: pointer; padding: 13px 0; color: var(--muted); font-weight: 600; font-size: 15px; list-style: none; }
 .details > summary::-webkit-details-marker { display: none; }
@@ -153,25 +174,6 @@ button, input, select { font: inherit; color: inherit; }
 .live[data-state="bad"] .score-state { color: var(--bad); }
 .tip { font-size: 16px; min-height: 1.5em; }
 
-/* C16: ludzik postawy w panelu (kolor = stan, strzałka = jak poprawić) */
-.pfig { width: 100%; max-width: 320px; height: auto; justify-self: center; --pf: var(--muted); }
-.pfig[data-state="good"] { --pf: var(--good); }
-.pfig[data-state="warn"] { --pf: var(--warn); }
-.pfig[data-state="bad"] { --pf: var(--bad); }
-.pfig .pfig-body { fill: none; stroke: var(--pf); stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; transition: stroke .4s ease; }
-.pfig .pfig-thin { stroke-width: 5; }
-.pfig .pfig-head { fill: var(--pf); transition: fill .4s ease; }
-.pfig .pfig-face { fill: none; stroke: var(--surface); stroke-width: 2; stroke-linecap: round; }
-.pfig .pfig-prop { fill: none; stroke: var(--line); stroke-width: 3; stroke-linecap: round; }
-.pfig .pfig-screen { fill: var(--line); }
-.pfig[data-view="side"] .pfig-front, .pfig[data-view="front"] .pfig-side { display: none; }
-.pfig .pfig-arrow { opacity: 0; transition: opacity .3s ease; }
-.pfig .pfig-arrow.on { opacity: 1; animation: pfig-pulse 1.6s ease-in-out infinite; }
-.pfig .pfig-arrow path { fill: none; stroke: var(--spine); stroke-width: 4; stroke-linecap: round; }
-.pfig .pfig-arrowhead { fill: var(--spine); }
-@keyframes pfig-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
-.break-line { grid-template-columns: 1fr auto; align-items: center; }
-.break-line .break-text { margin: 0; }
 
 .fat-line { display: flex; align-items: baseline; gap: 10px; }
 .fat-num { font-size: 30px; font-weight: 300; font-variant-numeric: tabular-nums; }
