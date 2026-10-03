@@ -6,6 +6,7 @@
 
 ## Built during HackYeah
 - *(fill in as PRs merge: feature → PR #)*
+- Camera freeze fix: analyse only fresh frames, resume preview after view switch (MP1) → PR #71
 
 ## AI tools used
 - **Claude Code** (Anthropic): used by all developers for planning, implementation, tests, docs and review. Every module is understood and can be explained by the team.

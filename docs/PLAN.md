@@ -18,7 +18,7 @@
 ## Area MP: MediaPipe & camera (bugs first, then precision, then wow). One task at a time, in this order.
 > Investigated 2026-10-03 against `src/renderer/{analyzer,app,draw}.ts` and `views/live.ts`. Root causes below are from the code plus the HTML media spec. **Reproduce first** (`/start`), then fix.
 
-- [ ] **MP1 (BUG, A, highest priority) Camera freezes after switching tabs (Na żywo → Statystyki → Na żywo).** (@Mateusz, in progress: PR #71 awaiting a real-camera check)
+- [x] **MP1 (BUG, A, highest priority) Camera freezes after switching tabs (Na żywo → Statystyki → Na żywo).** (@Mateusz, PR #71, verified with real camera)
   - **Root cause:** `LiveView.detach()` removes `root` from the DOM, and the shared `<video>` (`analyzer.video`) lives inside it. Per the HTML spec, a media element removed from the document is **paused**. `LiveView.mount()` re-inserts it but **never calls `video.play()`**, so the picture stays frozen.
   - **Worse:** the analyzer loop keeps running `detectForVideo()` on the paused video, i.e. the **same stale frame** (`readyState` stays ≥ 2). Posture score, alerts and minute samples are computed on a frozen image. That's data corruption, not just a visual glitch.
   - **Fix:**

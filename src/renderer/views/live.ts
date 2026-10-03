@@ -113,6 +113,9 @@ export class LiveView {
   mount(container: HTMLElement): void {
     container.append(this.root);
     this.mounted = true;
+    // Odpięcie od DOM wstrzymało <video>; po powrocie na „Na żywo” wznawiamy podgląd od razu.
+    const v = this.ctx.analyzer.video;
+    if (this.ctx.analyzer.isRunning && v.paused && v.srcObject) void v.play().catch(() => undefined);
     if (this.ctx.status) this.status(this.ctx.status);
     if (this.ctx.paused) this.camera('stopped');
   }
