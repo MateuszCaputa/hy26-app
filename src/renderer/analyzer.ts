@@ -171,6 +171,7 @@ export class Analyzer {
     if (this.tracker) this.tracker.setCalibration(c);
     else this.tracker = new PostureTracker(c, this.settings);
     this.eyes.setCalibratedEarOpen(c.earOpen);
+    this.eyes.setCalibratedPitch(c.headPitchDeg ?? null);
     this.faceScaleHist = [];
     if (this.drift) this.drift.reset(c.neckRatio);
     else this.drift = new BaselineDrift(c.neckRatio);
@@ -342,6 +343,7 @@ export class Analyzer {
             ear: (eyeAspectRatio(faceLm, LEFT_EYE, w, h) + eyeAspectRatio(faceLm, RIGHT_EYE, w, h)) / 2,
             blinkBlend: bl !== null && br !== null ? (bl + br) / 2 : null,
             jawOpen: jaw ?? Math.min(1, mouthAspectRatio(faceLm, w, h) * 1.2),
+            pitchDeg: this.lastHeadPose?.pitchDeg ?? null,
           };
         }
       }

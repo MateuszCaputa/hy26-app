@@ -31,9 +31,12 @@ export interface FaceFrame {
   blinkBlend: number | null;
   /** Otwarcie żuchwy z blendshapes (0–1) albo MAR, jeśli brak blendshapes. */
   jawOpen: number | null;
+  /** Pochylenie głowy w stopniach z macierzy twarzy (dodatnie = w dół), jeśli dostępne. */
+  pitchDeg?: number | null;
 }
 
-const BLINK_MIN = 0.05;
+// Przy 25 kl./s mrugnięcie widziane w jednej klatce trwa 0,04 s – próg 0,05 s je gubił (BADANIE-OCZU #3).
+const BLINK_MIN = 0.02;
 const BLINK_MAX = 0.4; // dłużej = długie mrugnięcie
 const LONG_MAX = 3.0; // dłużej = raczej patrzenie w dół (klawiatura), nie liczymy
 const CLOSE_ON = 0.6;
@@ -41,9 +44,22 @@ const CLOSE_OFF = 0.4;
 const PERCLOS_CLOSED = 0.8; // oko zamknięte w co najmniej 80%
 const YAWN_JAW = 0.55;
 const YAWN_MIN_SEC = 1.5;
+const YAWN_MAX_SEC = 6; // dłużej otwarte usta = jedzenie, picie, śmiech – nie ziewnięcie
 const MIN_FPS_FOR_BLINKS = 12;
+/** Głowa pochylona o tyle w dół względem wzorca = patrzenie na klawiaturę: nie oceniamy powiek. */
+export const GAZE_DOWN_DEG = 12;
+/** Okno liczby mrugnięć: mruganie zmienia się 4–5× z czynnością, 60 s to za mało (BADANIE-OCZU #6). */
+const BLINK_WINDOW_SEC = 180;
+const BLINK_MIN_SPAN_SEC = 60;
+/** Mówienie: żuchwa „pracuje” (odchylenie jawOpen w 2 s), ale nie jest otwarta jak przy ziewaniu. */
+const TALK_JAW_STD = 0.08;
 
 interface PerclosSample { t: number; dt: number; closed: boolean }
+
+const median = (v: number[]): number => {
+  const s = [...v].sort((a, b) => a - b);
+  return s[Math.floor(s.length / 2)];
+};
 interface Closure { start: number; samples: PerclosSample[] }
 
 /** Analiza oczu i ust klatka po klatce. Czas w sekundach. */
@@ -61,11 +77,46 @@ export class EyeAnalyzer {
   private frames: { t: number; face: boolean }[] = [];
   private lastT: number | null = null;
   private firstReliableT: number | null = null;
+  /** Surowy eyeBlink z MediaPipe przy otwartych oczach (osobista „zerowa” wartość). */
+  private blendOpenHist: { t: number; v: number }[] = [];
+  private pitchHist: { t: number; v: number }[] = [];
+  private calibratedPitch: number | null = null;
+  private jawHist: { t: number; v: number }[] = [];
+  /** Odcinki czasu z mówieniem (do wyłączenia z liczby mrugnięć). */
+  private talkSamples: { t: number; dt: number }[] = [];
+  private blinkTalking: boolean[] = [];
+  private gazeDown = false;
+  private talking = false;
 
   constructor(private calibratedEarOpen: number | null = null) {}
 
   setCalibratedEarOpen(v: number | null): void {
     this.calibratedEarOpen = v;
+  }
+
+  /** Pochylenie głowy z kalibracji: wzorzec dla „patrzę w dół”. */
+  setCalibratedPitch(v: number | null): void {
+    this.calibratedPitch = v;
+  }
+
+  /** Czy w ostatniej klatce głowa była pochylona w dół (klawiatura, notatki). */
+  isGazeDown(): boolean {
+    return this.gazeDown;
+  }
+
+  /** Czy w ostatnich ~2 s użytkownik mówił. */
+  isTalking(): boolean {
+    return this.talking;
+  }
+
+  /**
+   * eyeBlink z MediaPipe względem osobistej normy: u części osób (oczy wąskie, opadające powieki, okulary)
+   * ma 0,3–0,7 przy OTWARTYCH oczach. Odejmujemy medianę z chwil, gdy EAR mówi „otwarte” (BADANIE-OCZU #2).
+   */
+  private blendRelative(b: number): number {
+    if (this.blendOpenHist.length < 30) return b <= 0.85 ? 0 : b; // zanim poznamy normę: tylko pewne zamknięcia
+    const base = Math.min(0.9, median(this.blendOpenHist.map((x) => x.v)));
+    return clamp01((b - base) / (1 - base));
   }
 
   /** Bieżący wzorzec „oko otwarte”: 90. percentyl EAR z ostatnich 30 s (albo kalibracja). */
@@ -84,7 +135,10 @@ export class EyeAnalyzer {
       const closedEar = ref * 0.35;
       c = 1 - clamp01((f.ear - closedEar) / (ref - closedEar));
     }
-    if (f.blinkBlend !== null) c = c === null ? f.blinkBlend : Math.max(c, f.blinkBlend);
+    if (f.blinkBlend !== null) {
+      const rel = this.blendRelative(f.blinkBlend);
+      c = c === null ? rel : Math.max(c, rel);
+    }
     return c;
   }
 
@@ -101,10 +155,42 @@ export class EyeAnalyzer {
       return;
     }
 
+    // Mówienie: zmienność otwarcia żuchwy w ostatnich 2 s.
+    if (f.jawOpen !== null) {
+      this.jawHist.push({ t, v: f.jawOpen });
+      while (this.jawHist.length && t - this.jawHist[0].t > 2) this.jawHist.shift();
+      const v = this.jawHist.map((x) => x.v);
+      const mean = v.reduce((a, b) => a + b, 0) / v.length;
+      const std = Math.sqrt(v.reduce((a, b) => a + (b - mean) ** 2, 0) / v.length);
+      this.talking = v.length >= 10 && std >= TALK_JAW_STD && mean < YAWN_JAW;
+      if (this.talking) this.talkSamples.push({ t, dt });
+    }
+
+    // Patrzenie w dół (klawiatura, telefon): powieka opada za wzrokiem – to nie mrugnięcie ani senność.
+    if (f.pitchDeg != null) {
+      if (!this.gazeDown) {
+        this.pitchHist.push({ t, v: f.pitchDeg });
+        while (this.pitchHist.length && t - this.pitchHist[0].t > 60) this.pitchHist.shift();
+      }
+      const base = this.calibratedPitch ?? (this.pitchHist.length >= 30 ? median(this.pitchHist.map((x) => x.v)) : null);
+      this.gazeDown = base !== null && f.pitchDeg - base > GAZE_DOWN_DEG;
+    } else this.gazeDown = false;
+    if (this.gazeDown) {
+      this.closure = null; // zamknięcie w trakcie patrzenia w dół nie liczy się ani jako mrugnięcie, ani długie
+      this.prune(t);
+      return;
+    }
+
     const c = this.closedness(f) ?? 0;
     if (f.ear !== null && c < 0.5) {
       this.earHist.push({ t, v: f.ear });
       while (this.earHist.length && t - this.earHist[0].t > 30) this.earHist.shift();
+    }
+    // Norma eyeBlink: tylko gdy EAR pewnie mówi „otwarte” (żeby norma nie uczyła się z mrugnięć).
+    const ref = this.earOpenRef();
+    if (f.blinkBlend !== null && f.ear !== null && ref && f.ear >= ref * 0.8) {
+      this.blendOpenHist.push({ t, v: f.blinkBlend });
+      while (this.blendOpenHist.length && t - this.blendOpenHist[0].t > 60) this.blendOpenHist.shift();
     }
 
     // Mrugnięcia: histereza CLOSE_ON / CLOSE_OFF.
@@ -121,22 +207,27 @@ export class EyeAnalyzer {
         for (const s of this.closure.samples) s.closed = false;
       }
       if (c <= CLOSE_OFF) {
-        if (d >= BLINK_MIN && d <= BLINK_MAX) this.blinks.push(t);
+        if (d >= BLINK_MIN && d <= BLINK_MAX) {
+          this.blinks.push(t);
+          this.blinkTalking.push(this.talking);
+        }
         else if (d > BLINK_MAX && d <= LONG_MAX) this.longBlinks.push(t);
         this.closure = null;
       }
     }
 
-    // Ziewanie.
+    // Ziewanie: usta szeroko otwarte 1,5–6 s i zamknięte z powrotem (dłużej = jedzenie, picie, śmiech).
     if (f.jawOpen !== null && f.jawOpen >= YAWN_JAW) {
       if (this.yawnStart === null) {
         this.yawnStart = t;
         this.yawnCounted = false;
-      } else if (!this.yawnCounted && t - this.yawnStart >= YAWN_MIN_SEC) {
+      }
+    } else if (this.yawnStart !== null) {
+      const d = t - this.yawnStart;
+      if (d >= YAWN_MIN_SEC && d <= YAWN_MAX_SEC && !this.yawnCounted) {
         this.yawns.push(t);
         this.yawnCounted = true;
       }
-    } else {
       this.yawnStart = null;
     }
 
@@ -180,20 +271,37 @@ export class EyeAnalyzer {
     const keep = (arr: number[], sec: number) => {
       while (arr.length && t - arr[0] > sec) arr.shift();
     };
-    keep(this.blinks, 300);
+    while (this.blinks.length && t - this.blinks[0] > 300) {
+      this.blinks.shift();
+      this.blinkTalking.shift();
+    }
+    while (this.talkSamples.length && t - this.talkSamples[0].t > BLINK_WINDOW_SEC) this.talkSamples.shift();
     keep(this.longBlinks, 300);
     keep(this.yawns, 600);
     keep(this.nods, 600);
     while (this.perclosSamples.length && t - this.perclosSamples[0].t > 60) this.perclosSamples.shift();
   }
 
-  /** Mrugnięcia na minutę z ostatniej minuty (null, gdy za mało wiarygodnych danych). */
+  /**
+   * Mrugnięcia na minutę z ostatnich 3 min, bez odcinków z mówieniem (mówienie podwaja mruganie).
+   * null, gdy za mało wiarygodnych danych (min. 60 s bez mówienia).
+   */
   blinkRate(t: number): number | null {
     if (!this.isReliable(t) || this.firstReliableT === null) return null;
-    const span = Math.min(60, t - this.firstReliableT);
-    if (span < 20) return null;
-    const n = this.blinks.filter((b) => t - b <= span).length;
-    return (n / span) * 60;
+    const span = Math.min(BLINK_WINDOW_SEC, t - this.firstReliableT);
+    let talkSec = 0;
+    for (const s of this.talkSamples) if (t - s.t <= span) talkSec += s.dt;
+    const quietSpan = span - talkSec;
+    if (quietSpan < BLINK_MIN_SPAN_SEC) return null;
+    let n = 0;
+    for (let i = 0; i < this.blinks.length; i++) if (t - this.blinks[i] <= span && !this.blinkTalking[i]) n++;
+    return (n / quietSpan) * 60;
+  }
+
+  /** Zmęczenie OCZU (suche oko), nie senność: przy ekranie mruga się ok. 7/min zamiast ~17 (Tsubota 1993). */
+  eyeStrain(t: number): boolean {
+    const r = this.blinkRate(t);
+    return r !== null && r < 8;
   }
 
   perclos(t: number): number | null {
@@ -251,12 +359,15 @@ export const FATIGUE_WEIGHTS = {
 export function fatigueComponents(i: FatigueInputs): Record<keyof typeof FATIGUE_WEIGHTS, number | null> {
   return {
     perclos: i.perclos === null ? null : clamp01((i.perclos - 0.05) / 0.15),
+    // Przy ekranie ok. 7/min to norma (to „zmęczenie oczu”, nie senność), mówienie jest już wyłączone z liczby.
+    // Senność podnosi wynik dopiero przy bardzo rzadkim (< 4/min, „gapienie się”) albo bardzo częstym mruganiu.
     blink:
       i.blinkRate === null
         ? null
-        : Math.max(clamp01((10 - i.blinkRate) / 7), clamp01((i.blinkRate - 25) / 15)),
+        : Math.max(clamp01((4 - i.blinkRate) / 3), clamp01((i.blinkRate - 28) / 15)),
     long: i.longBlinksPerMin === null ? null : clamp01(i.longBlinksPerMin / 3),
-    yawn: clamp01((i.yawns10m + i.nods10m) / 3),
+    // „Skinienia” to prawie zawsze zerknięcia na klawiaturę – pokazujemy je, ale nie liczymy (BADANIE-OCZU #4).
+    yawn: clamp01(i.yawns10m / 2),
     posture: i.postureAvg15 === null ? null : clamp01((80 - i.postureAvg15) / 40),
     time: clamp01((i.minutesSinceBreak - 20) / 70),
   };
