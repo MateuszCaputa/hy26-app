@@ -65,7 +65,7 @@
   - Use the upper-body `PoseLandmarker.POSE_CONNECTIONS` (face, shoulders, arms, torso): each chain gets its own colour (e.g. face cyan, left arm magenta, right arm lime, torso violet), with gradient strokes, glowing joint dots, and thickness by depth (z).
   - Fewer strands than the hand demo, but vivid.
   - The posture-state colour still drives the spine line. Keep the existing angle labels and the ideal-head ring.
-- [ ] **MP9 (wow + feel, C) Smooth overlay.**
+- [x] **MP9 (wow + feel, C) Smooth overlay.** (@Mateusz, PR #80: overlay drawn on rAF at display rate; skeleton follows pose via `core/landmarkFollower.ts`, tau 70 ms; eyes unsmoothed)
   - Today the overlay redraws only on pose ticks (8 Hz), so it looks choppy.
   - Draw on `requestAnimationFrame`, interpolating between the last two landmark sets (or One-Euro smoothing per point, see `core/oneEuro.ts`), so strands move fluidly at 60 fps while detection stays at 8–15 Hz.
 - [ ] MP10 (WON'T unless time) Hand landmarker (e.g. phone in hand or hand on face). It costs FPS and isn't in the pitch story.
