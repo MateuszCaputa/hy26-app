@@ -51,7 +51,7 @@ export const DEFAULT_SETTINGS: Settings = {
   faceAnalysis: true,
   // Domyślnie wyłączone: na macOS wymaga uprawnienia Dostępności, co myli przy pierwszym uruchomieniu.
   activityTracking: false,
-  miniWidget: false,
+  miniWidget: true,
   autostart: false,
   soundAlerts: false,
   cameraId: '',
