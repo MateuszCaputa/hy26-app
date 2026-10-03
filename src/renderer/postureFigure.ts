@@ -57,6 +57,9 @@ export class PostureFigure {
 
   constructor() {
     this.el = el('svg', { viewBox: '0 0 260 200', class: 'pfig', role: 'img', 'aria-label': 'Ludzik pokazujący Twoją postawę' });
+    // Od startu jeden widok (z boku) i szary stan „czekam” – bez tego przed pierwszym pomiarem oba widoki rysowały się naraz.
+    this.el.dataset.view = 'side';
+    this.el.dataset.state = 'idle';
     const defs = el('defs', {}, this.el);
     const marker = el('marker', { id: 'pfig-head', viewBox: '0 0 10 10', refX: 6, refY: 5, markerWidth: 5, markerHeight: 5, orient: 'auto-start-reverse' }, defs);
     el('path', { d: 'M0 0 L10 5 L0 10 Z', class: 'pfig-arrowhead' }, marker);

@@ -484,3 +484,17 @@ button, input, select { font: inherit; color: inherit; }
   .calib { grid-template-columns: 1fr; grid-template-rows: 55vh auto; }
   .calib-panel { border-left: 0; }
 }
+
+/* Własny dymek zamiast `title`: pojawia się płynnie po 0,15 s (systemowy czekał ok. 1 s i wyskakiwał nagle). Nad elementem, żeby nie wpadał pod przypięty przycisk kalibracji. */
+[data-tip] { position: relative; cursor: help; }
+[data-tip]::after {
+  content: attr(data-tip); position: absolute; right: 0; bottom: calc(100% + 6px); z-index: 10;
+  width: max-content; max-width: 260px; padding: 8px 10px; border-radius: var(--radius-sm);
+  background: var(--ink); color: var(--bg); box-shadow: 0 6px 18px rgba(0, 0, 0, .25);
+  font-size: 12.5px; font-weight: 400; line-height: 1.4; letter-spacing: 0; text-align: left; white-space: normal;
+  opacity: 0; transform: translateY(4px); pointer-events: none;
+  transition: opacity .15s ease, transform .15s ease;
+}
+[data-tip]:hover::after { opacity: 1; transform: none; transition-delay: .15s; }
+@media (prefers-reduced-motion: reduce) { [data-tip]::after { transform: none; } }
+

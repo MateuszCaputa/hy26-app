@@ -17,16 +17,16 @@ const STATE_WORD: Record<string, string> = {
   paused: 'Analiza wstrzymana',
 };
 
-/** Co znaczy liczba przy każdym odchyleniu – pokazywane po najechaniu na wiersz w „Szczegółach”. */
+/** Dymek przy wartości: prostymi słowami, co znaczy liczba (kiedy się poprawić, mówią komunikaty o postawie). */
 const ISSUE_HELP: Record<Exclude<IssueId, 'stillness'>, string> = {
-  headForward: 'O ile krótszy niż przy kalibracji jest odcinek od barków do nosa (albo o ile mocniej pochylasz głowę). 0% = tak jak przy kalibracji.',
-  headBack: 'O ile stopni broda jest uniesiona wyżej niż przy kalibracji. 0° = tak jak przy kalibracji.',
-  slouch: 'O ile krótszy niż przy kalibracji jest odcinek od barków do uszu – tak z przodu widać zgarbione plecy.',
-  shrug: 'Ta część skrócenia szyi, którą zrobiły barki uniesione w stronę uszu.',
-  shoulderTilt: 'Kąt linii barków względem poziomu. 0° = barki równo.',
-  tooClose: 'O ile większa jest Twoja twarz w kadrze niż przy kalibracji, czyli o ile bliżej ekranu siedzisz.',
-  headTilt: 'Kąt przechyłu głowy na bok względem poziomu. 0° = głowa prosto.',
-  twist: 'O ile węższe są barki w kadrze niż przy kalibracji – tak widać obrót tułowia w bok.',
+  headForward: '0% = głowa tak jak przy kalibracji. Im więcej, tym bardziej wysunięta.',
+  headBack: 'O ile stopni broda jest wyżej niż przy kalibracji. 0° = tak jak wtedy.',
+  slouch: '0% = plecy tak proste jak przy kalibracji. Im więcej, tym mocniej się garbisz.',
+  shrug: '0% = barki rozluźnione. Im więcej, tym wyżej je unosisz.',
+  shoulderTilt: 'O ile stopni jeden bark jest niżej od drugiego. 0° = równo.',
+  tooClose: '0% = ta sama odległość od ekranu co przy kalibracji. Im więcej, tym bliżej siedzisz.',
+  headTilt: 'O ile stopni głowa jest przechylona na bok. 0° = prosto.',
+  twist: '0% = siedzisz przodem do ekranu. Im więcej, tym bardziej obrócony tułów.',
 };
 
 const CAMERA_MSG: Record<string, string> = {
@@ -83,7 +83,7 @@ export class LiveView {
       h('p', { class: 'stage-legend' }, h('span', { class: 'legend-ring' }), 'przerywane kółko: gdzie powinna być głowa'),
     );
 
-    this.fatNum = h('span', { class: 'energy-pct' }, '–');
+    this.fatNum = h('span', { class: 'energy-pct', 'data-tip': '0% = wypoczęty, 100% = bardzo zmęczony. Liczę z mrugania, przymykania oczu i ziewania.' }, '–');
     this.fatBar = h('span', { class: 'meter-fill' });
     this.blinkVal = h('span', { class: 'metric-val' }, '–');
     this.yawnVal = h('span', { class: 'metric-val' }, '–');
@@ -97,10 +97,10 @@ export class LiveView {
 
     const metrics = h('ul', { class: 'metric-list' },
       ISSUE_DEFS.map((d) => {
-        const val = h('span', { class: 'metric-val' }, '–');
+        // Opis po najechaniu na samą wartość (procent / stopnie).
+        const val = h('span', { class: 'metric-val', 'data-tip': ISSUE_HELP[d.id] }, '–');
         const bar = h('span', { class: 'metric-bar-fill' });
-        const warnAt = d.unit === '%' ? `${Math.round(d.threshold * 100)}%` : `${d.threshold}°`;
-        const row = h('li', { class: 'metric', title: `${ISSUE_HELP[d.id]} Ostrzegam od ok. ${warnAt}.` },
+        const row = h('li', { class: 'metric' },
           h('span', { class: 'metric-name' }, ISSUE_LABEL[d.id]), val, h('span', { class: 'metric-bar' }, bar));
         this.metricRows.set(d.id, { val, bar, row });
         return row;
@@ -113,7 +113,7 @@ export class LiveView {
       h('section', { class: 'r-block hero', 'aria-live': 'polite' },
         h('div', { class: 'hero-row' }, this.figure.el, h('div', { class: 'hero-text' }, this.scoreState, this.tip)),
       ),
-      h('section', { class: 'r-block energy-row', title: 'Z mrugania, przymykania oczu, ziewania i czasu od przerwy. Im mniej, tym lepiej.' },
+      h('section', { class: 'r-block energy-row' },
         h('div', { class: 'energy-head' }, h('span', null, 'Zmęczenie'), this.fatNum),
         h('span', { class: 'meter', role: 'presentation' }, this.fatBar),
       ),
@@ -121,8 +121,19 @@ export class LiveView {
       h('section', { class: 'r-block break-line' }, this.breakText, this.breakBtn),
       h('details', {
         class: 'r-block details',
-        // Bez automatycznego przewijania: przewinięcie do „Szczegółów” ucinało górę panelu (ludzik, stan) w przypadkowym miejscu.
-        // Szczegóły rozwijają się w dół, a panel przewija się sam (kamera i tak stoi w miejscu).
+        // Po rozwinięciu przewijamy panel tylko tyle, by ostatni wiersz (np. „Skręt tułowia”) był widoczny nad przyciskiem
+        // kalibracji – i nigdy dalej niż do nagłówka „Szczegóły pomiaru”, żeby nie ucinać go u góry.
+        ontoggle: (e: Event) => {
+          const d = e.currentTarget as HTMLDetailsElement;
+          const panel = d.closest('.readout') as HTMLElement | null;
+          if (!d.open || !panel) return;
+          requestAnimationFrame(() => {
+            const toEnd = panel.scrollHeight - panel.clientHeight;
+            const toSummary = d.offsetTop - panel.offsetTop - 8;
+            const top = Math.max(0, Math.min(toEnd, toSummary));
+            if (top > panel.scrollTop) panel.scrollTo({ top, behavior: 'smooth' });
+          });
+        },
       },
         h('summary', null, 'Szczegóły pomiaru'),
         h('div', { class: 'details-body' },
@@ -277,7 +288,7 @@ export class LiveView {
     const next = be.nextDueInMin(t);
     const dueKind = pending ? pending.kind : next.min <= 0 ? next.kind : null;
     this.breakText.textContent = dueKind ? 'Pora na przerwę' : `Przerwa za ${fmtMin(next.min)}`;
-    this.breakText.title = `${BREAK_TITLE[dueKind ?? next.kind]}. Pracujesz bez przerwy od ${fmtMin(s.minutesSinceBreak)}.`;
+    this.breakText.dataset.tip = `${BREAK_TITLE[dueKind ?? next.kind]}. Pracujesz bez przerwy od ${fmtMin(s.minutesSinceBreak)}.`;
     // Gdy jest pora na przerwę, przycisk wyróżnia się – na co dzień jest spokojny.
     this.breakBtn.className = dueKind ? 'btn primary small' : 'btn small';
   }
