@@ -338,30 +338,33 @@ function withinWorkHours(d = new Date()): boolean {
   return now >= hm(settings.workStart) && now < hm(settings.workEnd);
 }
 
-const NUDGE_W = 340;
-const NUDGE_H = 120;
+// Okienko przypomnienia: trochę szersze od widgetu-karty (230 px), z marginesem na cień.
+const NUDGE_W = 272;
+const NUDGE_H = 116;
+let lastNudge: Nudge | null = null;
 
-/** Gdzie pokazać podpowiedź: tuż pod widgetem (albo nad nim, gdy brak miejsca), inaczej prawy górny róg. */
-function nudgeBounds(): Electron.Rectangle {
+/** Gdzie pokazać okienko: wyśrodkowane pod widgetem (albo nad nim, gdy brak miejsca), inaczej prawy górny róg. */
+function nudgeBounds(): Electron.Rectangle & { from: 'below' | 'above' } {
   if (widgetWin?.isVisible()) {
     const wb = widgetWin.getBounds();
     const a = screen.getDisplayMatching(wb).workArea;
-    const rightSide = wb.x + wb.width / 2 > a.x + a.width / 2;
-    let x = rightSide ? wb.x + wb.width - NUDGE_W : wb.x;
-    x = Math.min(Math.max(x, a.x), a.x + a.width - NUDGE_W);
+    const x = Math.min(Math.max(Math.round(wb.x + wb.width / 2 - NUDGE_W / 2), a.x), a.x + a.width - NUDGE_W);
     const below = wb.y + wb.height + NUDGE_H <= a.y + a.height;
-    const y = below ? wb.y + wb.height - 4 : wb.y - NUDGE_H + 4;
-    return { x, y, width: NUDGE_W, height: NUDGE_H };
+    const y = below ? wb.y + wb.height - 6 : wb.y - NUDGE_H + 6;
+    return { x, y, width: NUDGE_W, height: NUDGE_H, from: below ? 'below' : 'above' };
   }
   const a = screen.getPrimaryDisplay().workArea;
-  return { x: a.x + a.width - NUDGE_W - 12, y: a.y + 12, width: NUDGE_W, height: NUDGE_H };
+  return { x: a.x + a.width - NUDGE_W - 12, y: a.y + 12, width: NUDGE_W, height: NUDGE_H, from: 'below' };
 }
 
 /** Podpowiedź obok widgetu lub w rogu: nie kradnie fokusu, sama znika (logika w nudge.ts). */
-function showNudge(n: Nudge): void {
+function showNudge(nudge: Nudge): void {
+  const { from, ...bounds } = nudgeBounds();
+  const n: Nudge = { ...nudge, from };
+  lastNudge = n;
   if (!nudgeWin) {
     nudgeWin = new BrowserWindow({
-      ...nudgeBounds(),
+      ...bounds,
       width: NUDGE_W,
       height: NUDGE_H,
       frame: false,
@@ -389,7 +392,7 @@ function showNudge(n: Nudge): void {
     });
     return;
   }
-  nudgeWin.setBounds(nudgeBounds()); // widget mógł zostać przesunięty
+  nudgeWin.setBounds(bounds); // widget mógł zostać przesunięty
   nudgeWin.showInactive();
   nudgeWin.webContents.send('nudge', n);
 }
@@ -401,8 +404,9 @@ function notify(n: { title: string; body: string; kind: string; openBreak?: bool
   const now = Date.now();
   if (n.kind === 'posture' && now - lastNotifyAt < settings.alertCooldownMin * 60e3) return;
   if (n.kind === 'posture') lastNotifyAt = now;
-  if (n.nudge && settings.nudges === 'corner') return showNudge(n.nudge);
-  if (!Notification.isSupported()) return;
+  // Z widgetem: tylko okienko pod nim. Bez widgetu: powiadomienie systemowe (można wyłączyć w Ustawieniach).
+  if (n.nudge && widgetWin?.isVisible()) return showNudge(n.nudge);
+  if (!settings.systemNotifications || !Notification.isSupported()) return;
   const notif = new Notification({ title: n.title, body: n.body, silent: !settings.soundAlerts, icon: path.join(ASSETS_DIR, 'icon.png') });
   notif.on('click', () => {
     showMain(n.openBreak ? undefined : 'live');
@@ -480,10 +484,16 @@ function registerIpc(): void {
   ipcMain.handle('get-stats', () => statsNow());
   ipcMain.on('set-paused', (_e, p: boolean) => setPaused(p));
   ipcMain.on('open-main', (_e, view?: string) => showMain(view));
+  // Podgląd z Ustawień: od razu, z pominięciem limitów z `notify()`.
+  ipcMain.on('test-notify', (_e, t: { target: 'corner' | 'system'; nudge: Nudge }) => {
+    if (t.target === 'corner') return showNudge(t.nudge);
+    if (!Notification.isSupported()) return;
+    new Notification({ title: t.nudge.title, body: t.nudge.body, silent: !settings.soundAlerts, icon: path.join(ASSETS_DIR, 'icon.png') }).show();
+  });
   ipcMain.on('nudge-action', (_e, a: NudgeAction) => {
     nudgeWin?.hide();
     if (a === 'start') showMain('live');
-    mainWin?.webContents.send('nudge-action', a);
+    mainWin?.webContents.send('nudge-action', a, lastNudge?.exerciseId);
   });
   // Przeciąganie widgetu robi renderer (region „drag” zjadałby kliknięcia); tu tylko przesuwamy okno.
   ipcMain.on('widget-move', (_e, x: number, y: number, done: boolean) => {

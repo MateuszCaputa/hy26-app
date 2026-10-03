@@ -130,11 +130,16 @@ export const EXERCISES: Exercise[] = [
 export const exerciseById = (id: string): Exercise => EXERCISES.find((e) => e.id === id) ?? EXERCISES[0];
 
 /** Dobiera ćwiczenie: najpierw pasujące do problemu, potem rotacja (seed = minuta). */
-export function pickExercise(kind: BreakKind, issue: IssueId | null, seed = 0): string {
+/**
+ * Wybór ćwiczenia: po równo ze wszystkich ćwiczeń danego rodzaju (mikroprzerwa = wszystkie poza 20-20-20 i „Przejdź się”).
+ * `_issue` zostaje w podpisie dla wywołujących, ale nie zawęża wyboru – zawężanie dawało w kółko te same dwa ćwiczenia.
+ * `avoid` – ćwiczenie pokazane ostatnio, pomijamy je, o ile jest z czego wybrać.
+ */
+export function pickExercise(kind: BreakKind, _issue: IssueId | null, seed = 0, avoid?: string | null): string {
   const pool = EXERCISES.filter((e) => e.kinds.includes(kind));
-  const matching = issue ? pool.filter((e) => e.forIssues.includes(issue)) : [];
-  const list = matching.length ? matching : pool;
-  return list[Math.abs(seed) % list.length].id;
+  const fresh = avoid ? pool.filter((e) => e.id !== avoid) : pool;
+  const list = fresh.length ? fresh : pool;
+  return list[Math.floor(Math.abs(seed)) % list.length].id;
 }
 
 export const BREAK_TITLE: Record<BreakKind, string> = {

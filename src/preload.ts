@@ -25,7 +25,8 @@ const api: PosturaApi = {
   moveWidget: (x, y, done) => ipcRenderer.send('widget-move', x, y, done),
   onNudge: (cb) => ipcRenderer.on('nudge', (_e, n) => cb(n)),
   nudgeAction: (a) => ipcRenderer.send('nudge-action', a),
-  onNudgeAction: (cb) => ipcRenderer.on('nudge-action', (_e, a) => cb(a)),
+  testNotify: (t) => ipcRenderer.send('test-notify', t),
+  onNudgeAction: (cb) => ipcRenderer.on('nudge-action', (_e, a, exerciseId) => cb(a, exerciseId)),
 };
 
 contextBridge.exposeInMainWorld('postura', api);

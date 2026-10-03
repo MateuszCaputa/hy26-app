@@ -73,6 +73,7 @@ window.postura.onNudge((n: Nudge) => {
   cancelAnimationFrame(raf);
   current = n;
   box.dataset.kind = n.kind;
+  box.dataset.from = n.from ?? 'below';
   el('n-title').textContent = n.title;
   el('n-body').textContent = n.body;
   const actions = el('n-actions');
