@@ -12,6 +12,7 @@
 - [ ] **Decyzja: wideo, slajdy czy hybryda.** Wymagane na HackTribe jest **PDF, maks. 10 slajdów**. Wideo jest dodatkiem, ale w 1. rundzie (ocena przez mentorów na platformie) często to ono „opowiada” projekt. Rekomendacja: **PDF (obowiązkowy) + krótkie wideo ≤ 3 min**. — kto: ___
 - [ ] **Story na pierwszym miejscu** – w 1. rundzie liczy się historia, nie lista funkcji. Szkielet: problem (ból szyi, zmęczone oczy, ludzie zauważają za późno) → my w trakcie hackathonu → moment „wow” (kontur powiek, szkielet świecący przy problemie) → decyzja („przerwa teraz, bo…”) → ścieżka do specjalisty / NFZ → prywatność → co dalej.
 - [ ] **Nie zalać jury funkcjami** (uwaga mentora). Pokazać **3–4 rzeczy dobrze**, resztę zostawić na pytania. Lista funkcji do wyboru: `docs/FEATURES.md`; czego NIE obiecywać: tamże „Known gaps / don't claim yet”.
+- [ ] **Pokazać interaktywne ćwiczenie – warto!** Kamera sama liczy powtórzenia (Marcin, #99): **cofanie brody**, **unoszenie barków** i **przechylanie głowy uchem do barku**. To najmocniejszy „żywy” moment: robisz ćwiczenie, licznik rośnie, na końcu Bateria idzie w górę. Przećwiczyć wcześniej to, które działa najpewniej (2–3 próby), i tylko je pokazać. — kto: ___
 - [ ] **Sekcja „Co dalej – implikacje na przyszłość”** (obowiązkowo) – gotowe punkty w `docs/pitch/IDEAS.md`.
 - [ ] **Uczciwie o pomiarach** – gotowe zdania i liczby w `docs/BADANIE-OCZU.md` („wskaźnik, nie diagnoza”, „porównujemy Cię tylko z Tobą”). Wpisać zmierzony wynik mrugnięć (np. „X/20 wykrytych”) – tylko prawdziwe liczby.
 - [ ] **Nagranie wideo** (jeśli robimy): tryb demo + czyste konto, bez powiadomień systemowych (Focus/Nie przeszkadzać), 1080p, plan z sekcji wyżej. — kto: ___
@@ -26,6 +27,8 @@ Mentorzy mówili wprost, że źle oceniają prace, które wyglądają na zrobion
 ## 3. Aplikacja – ostatnie rzeczy
 - [ ] **Opcja języka angielskiego w aplikacji** (przełącznik PL/EN w Ustawieniach). Uwaga: dużo tekstów jest rozsianych po kodzie (`src/core/coach.ts`, widoki, zasobnik, przypomnienia) – realnie 2–3 h. Jeśli brakuje czasu: minimum = EN na ekranach pokazywanych w prezentacji/wideo. — kto: ___
 - [ ] **Merge PR #105** (ziewnięcie ≠ mówienie) po 2-minutowym teście: 3 udawane ziewnięcia z włączoną diagnostyką (klawisz D) → „Ziewnięcia” +3. — kto: Mateusz
+- [ ] **Test powiadomień z Ustawień** (nie tylko testowe z zasobnika): Ustawienia → włączyć **„Tryb prezentacji”** → dopiero wtedy pokazuje się **„Podgląd powiadomień”** → kliknąć każde (20-20-20, przerwa, postawa) i sprawdzić, czy wyglądają dobrze i pokazują się pod widgetem / w rogu. Nie jesteśmy pewni, czy wszystkie działają. — kto: ___
+- [ ] **(Opcjonalnie) Weryfikacja poprawek mrugania** – działają po testach na żywo; dla pewności i liczby na slajd: diagnostyka (klawisz D) → licznik przed/po 20 mrugnięciach. Jeśli brak czasu – pominąć. — kto: ___
 - [ ] **Test mrugnięć dla slajdu**: licznik przed/po 20 mrugnięciach, w okularach i bez (diagnostyka – klawisz D). — kto: Mateusz
 - [ ] **Zamrożenie funkcji o 07:00** – po tej godzinie tylko poprawki błędów.
 - [ ] **Próba generalna**: świeży start aplikacji bez internetu (modele są w paczce) + pełna ścieżka demo 2× bez błędu.
