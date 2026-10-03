@@ -18,14 +18,14 @@
 ## Area MP: MediaPipe & camera (bugs first, then precision, then wow). One task at a time, in this order.
 > Investigated 2026-10-03 against `src/renderer/{analyzer,app,draw}.ts` and `views/live.ts`. Root causes below are from the code plus the HTML media spec. **Reproduce first** (`/start`), then fix.
 
-- [ ] **MP1 (BUG, A, highest priority) Camera freezes after switching tabs (Na żywo → Statystyki → Na żywo).**
+- [ ] **MP1 (BUG, A, highest priority) Camera freezes after switching tabs (Na żywo → Statystyki → Na żywo).** (@Mateusz, in progress: PR #71 awaiting a real-camera check)
   - **Root cause:** `LiveView.detach()` removes `root` from the DOM, and the shared `<video>` (`analyzer.video`) lives inside it. Per the HTML spec, a media element removed from the document is **paused**. `LiveView.mount()` re-inserts it but **never calls `video.play()`**, so the picture stays frozen.
   - **Worse:** the analyzer loop keeps running `detectForVideo()` on the paused video, i.e. the **same stale frame** (`readyState` stays ≥ 2). Posture score, alerts and minute samples are computed on a frozen image. That's data corruption, not just a visual glitch.
   - **Fix:**
     - (a) Keep the `<video>` always attached: a hidden host element outside `#view`; LiveView only shows it, e.g. by moving it with `stage.prepend(video)` and calling `video.play()`. Or call `play()` on every mount **and** re-`play()` on the `pause` event while `analyzer.isRunning`.
     - (b) In `Analyzer.tick()`, skip detection when there's no new frame: `video.paused`, or `video.currentTime === lastVideoTime`. Better: drive the loop with `video.requestVideoFrameCallback`.
   - **Done when:** after 10× switching views the preview is live; no frames are analysed while the video is paused (log or test); score updates only from fresh frames.
-- [ ] **MP2 (BUG, A) Freeze after Wstrzymaj → Wznów (pause/resume).**
+- [ ] **MP2 (BUG, A) Freeze after Wstrzymaj → Wznów (pause/resume).** (@Mateusz, in progress: logging added in PR #71; verify there)
   - Likely the same root cause as MP1 when pause/resume happens while another view is mounted. Plus `await this.video.play().catch(() => undefined)` in `Analyzer.start()` **swallows the play error**, so we're blind.
   - **Steps:**
     1. Log `play()` rejections, plus `video.paused` and `readyState` after start.
