@@ -1,5 +1,5 @@
 // Kontrakt API wystawianego przez preload (window.postura).
-import type { AppEvent, Calibration, LiveStatus, MinuteSample, Settings, StatsPayload } from './types';
+import type { AppEvent, Calibration, LiveStatus, MinuteSample, Nudge, NudgeAction, Settings, StatsPayload } from './types';
 
 export interface InitData {
   settings: Settings;
@@ -18,7 +18,7 @@ export interface PosturaApi {
   onModelsProgress(cb: (p: number, file: string) => void): void;
   sendMinute(s: MinuteSample): void;
   sendStatus(s: LiveStatus): void;
-  notify(n: { title: string; body: string; kind: 'posture' | 'break' | 'info'; openBreak?: boolean }): void;
+  notify(n: { title: string; body: string; kind: 'posture' | 'break' | 'info'; openBreak?: boolean; nudge?: Nudge }): void;
   logEvent(e: AppEvent): void;
   getStats(): Promise<StatsPayload>;
   setPaused(p: boolean): void;
@@ -37,6 +37,11 @@ export interface PosturaApi {
   /** Mini-widget: kliknięcie otwiera główne okno; przeciąganie przesuwa widget (x, y ekranu; `done` zapisuje). */
   openMain(view?: string): void;
   moveWidget(x: number, y: number, done: boolean): void;
+  /** Okno podpowiedzi: nowa podpowiedź / akcja użytkownika (Start, Za 5 min, Pomiń, koniec odliczania). */
+  onNudge(cb: (n: Nudge) => void): void;
+  nudgeAction(a: NudgeAction): void;
+  /** Główne okno: akcja z podpowiedzi do wykonania w analizatorze. */
+  onNudgeAction(cb: (a: NudgeAction) => void): void;
 }
 
 declare global {

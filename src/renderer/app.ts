@@ -3,7 +3,7 @@ import '../shared/api';
 import type { InitData } from '../shared/api';
 import type { BreakSuggestion, Calibration, IssueId, LiveStatus, Settings } from '../shared/types';
 import { Analyzer, type Frame } from './analyzer';
-import { BREAK_TITLE, ISSUE_LABEL, ISSUE_TIP } from '../core/coach';
+import { BREAK_TITLE, ISSUE_LABEL, ISSUE_TIP, exerciseById } from '../core/coach';
 import { localDate } from '../core/insights';
 import { $, clear, h } from './dom';
 import { LiveView } from './views/live';
@@ -76,14 +76,18 @@ async function main(): Promise<void> {
     },
     onAlert: (issue: IssueId) => {
       api?.logEvent({ type: 'alert', detail: issue });
-      api?.notify({ title: ISSUE_LABEL[issue], body: ISSUE_TIP[issue], kind: 'posture' });
+      api?.notify({ title: ISSUE_LABEL[issue], body: ISSUE_TIP[issue], kind: 'posture', nudge: { kind: 'posture', title: ISSUE_LABEL[issue], body: ISSUE_TIP[issue] } });
       if (document.hasFocus()) ctx.toast(`${ISSUE_LABEL[issue]}. ${ISSUE_TIP[issue]}`);
     },
     onBreak: (s) => {
       ctx.pendingBreak = s;
       api?.logEvent({ type: 'break-suggested', detail: `${s.kind}:${s.reason}` });
       const title = BREAK_TITLE[s.kind];
-      api?.notify({ title, body: s.kind === 'eye' ? 'Spójrz na 20 s w dal.' : 'Kliknij, aby zobaczyć ćwiczenie.', kind: 'break', openBreak: true });
+      const nudge =
+        s.kind === 'eye'
+          ? { kind: 'eye' as const, title: 'Spójrz w dal', body: 'Przez 20 s patrz na coś odległego (ok. 6 m).', seconds: 20 }
+          : { kind: 'break' as const, title, body: exerciseById(s.exerciseId).name };
+      api?.notify({ title, body: s.kind === 'eye' ? 'Spójrz na 20 s w dal.' : 'Kliknij, aby zobaczyć ćwiczenie.', kind: 'break', openBreak: true, nudge });
       ctx.toast(`${title}: czas na chwilę odpoczynku.`, { label: 'Zacznij przerwę', run: () => ctx.startBreak(s) });
       live?.status(analyzer.status());
     },
@@ -161,6 +165,20 @@ async function main(): Promise<void> {
   });
   api?.onNavigate((v) => (v === 'calibrate' ? ctx.startCalibration() : navigate(ctx, v as ViewId)));
   api?.onShowBreak(() => ctx.startBreak());
+  // Akcje z podpowiedzi w rogu ekranu.
+  api?.onNudgeAction((a) => {
+    const s = ctx.pendingBreak;
+    if (a === 'start') ctx.startBreak(s ?? undefined);
+    else if (a === 'snooze') {
+      analyzer.breakSnoozed();
+      api.logEvent({ type: 'break-snoozed', detail: s?.kind ?? 'micro' });
+      ctx.pendingBreak = null;
+    } else if (a === 'eye-done') {
+      analyzer.breakDone('eye');
+      api.logEvent({ type: 'break-done', detail: 'eye:20-20-20' });
+      ctx.pendingBreak = null;
+    }
+  });
 
   const startView = (params.get('view') as ViewId | null) ?? 'live';
   if (!init.modelsReady && !DEMO) {

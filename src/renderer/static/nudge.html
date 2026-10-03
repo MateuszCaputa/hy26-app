@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'" />
+    <title>Postura – przypomnienie</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="nudge-body">
+    <div class="nudge" id="nudge" role="status" aria-live="polite">
+      <div class="n-ring" id="n-ring" hidden>
+        <svg viewBox="0 0 40 40" aria-hidden="true"><circle class="n-track" cx="20" cy="20" r="17" /><circle class="n-fill" id="n-fill" cx="20" cy="20" r="17" /></svg>
+        <span id="n-sec"></span>
+      </div>
+      <div class="n-text">
+        <strong id="n-title"></strong>
+        <span id="n-body"></span>
+        <div class="n-actions" id="n-actions"></div>
+      </div>
+      <button class="n-close" id="n-close" type="button" title="Pomiń" aria-label="Pomiń">×</button>
+      <span class="n-timeline" id="n-timeline"></span>
+    </div>
+    <script type="module" src="nudge.js"></script>
+  </body>
+</html>

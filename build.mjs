@@ -32,7 +32,7 @@ const configs = [
   },
   {
     ...common,
-    entryPoints: { app: 'src/renderer/app.ts', widget: 'src/renderer/widget.ts' },
+    entryPoints: { app: 'src/renderer/app.ts', widget: 'src/renderer/widget.ts', nudge: 'src/renderer/nudge.ts' },
     outdir: 'dist/renderer',
     platform: 'browser',
     format: 'esm',
