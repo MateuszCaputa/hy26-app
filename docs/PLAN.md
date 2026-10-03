@@ -91,6 +91,7 @@
 - [ ] C8 A calm empty/error state for every view (no face, camera busy, no data yet).
 - [x] C10 Quick glance (@Mateusz): live posture score next to the tray icon (macOS), tray quick menu (state, Bateria + forecast, fatigue, time since break; break now, pause 30 min), widget remembers its position, dev auto-reload. **Next:** widget nudges (20-20-20 countdown, stretch [Start]/[Za 5 min], „Cofnij brodę”).
 - [x] C11 Two mini-widget styles (@Mateusz): **Karta** (score, state, fatigue) or **Pigułka** (dot + number, theme colours, fades when posture is good); chosen in Settings or tray → Mini-widget; click opens Postura, drag moves it (position remembered). Windows check pending (Marcin).
+- [x] C13 Calm nudges (@Mateusz): break and posture reminders as a small panel next to the widget (or top-right): 20-20-20 with a 20 s countdown (counts as an eye break), micro/move break with [Start] / [Za 5 min], posture tip that hides once posture is good; thin timeline instead of blinking, small „×”; doesn't steal focus. Settings: corner vs system notifications. Dev/demo tray trigger „Pokaż przypomnienie (test)”.
 - [x] C12 Card widget: long state/fatigue text ends with an ellipsis instead of overflowing. (@Marcin; 2 lines in `styles.css`)
 - [ ] C9 Screenshot pack at 1920×1080 for the slides + a 10 s clip of the neon overlay for the video intro.
 
