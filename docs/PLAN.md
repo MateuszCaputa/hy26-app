@@ -6,7 +6,7 @@
 > **Gates:** 16:00 everyone has a branch running · **19:00 the demo path works end to end with M2 + M3** · 23:00 all MUSTs merged · 03:00 polish only · **07:00 FEATURE FREEZE** · 10:00 submitted.
 
 ## Area A: Core engine & measurement (owner: Kacper, the Postura author)
-- [ ] **A22 Eye metrics fixes from `docs/BADANIE-OCZU.md` (#1–#6): gaze-down gate, per-person eyeBlink baseline, BLINK_MIN, nods out of score, 3-min blink window + low rate = eye strain, talking excluded; + yawn fixes.** (@Mateusz, in progress; Kacper FYI — touches `core/fatigue.ts`, `analyzer.ts`)
+- [x] **A26 Eye metrics fixes** (@Mateusz, PR #97): gaze-down gate (adaptive 20 s pitch baseline), per-person eyeBlink baseline, self-correcting open-eye reference, per-person blink threshold, 1-frame blinks, talking excluded, 3-min blink window + low rate = eye strain, nods out of score, yawn 1.5–6 s, flutter ≠ long blink; hidden eye diagnostics (key D). Live-tested by Mateusz with and without glasses.
 - [x] A1 (M7) Models bundled in `assets/models/` (face + pose full + lite, 19 MB, shipped via extraResources); loaded first, the userData download is only a fallback; `modelsReady` accepts full OR lite (fixes N1). Tested with an empty data dir: no download screen, "Modele wczytane (GPU)". (@Mateusz, PR #87)
 - [ ] A2 (M1) Measure FPS on the demo laptop with the overlay ON; keep it at 24+ (pose every 2nd frame if needed).
 - [ ] A3 (M3) `core/explain.ts`: for each alert/break, produce `{reason, evidence[]}` from the current metrics ("PERCLOS 18% (norm < 10%)", "52 min without a break"). Unit tests.

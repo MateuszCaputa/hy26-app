@@ -227,7 +227,8 @@ test('patrzenie w dół > 3 s nie zawyża PERCLOS', () => {
 
 test('wskaźnik zmęczenia: świeży vs zmęczony', () => {
   const fresh = fatiguePercent({ blinkRate: 16, perclos: 0.03, longBlinksPerMin: 0, yawns10m: 0, nods10m: 0, postureAvg15: 90, minutesSinceBreak: 10 });
-  const tired = fatiguePercent({ blinkRate: 5, perclos: 0.18, longBlinksPerMin: 2, yawns10m: 2, nods10m: 1, postureAvg15: 55, minutesSinceBreak: 80 });
+  // 3/min = „gapienie się” (5–7/min przy ekranie to norma, nie senność – BADANIE-OCZU).
+  const tired = fatiguePercent({ blinkRate: 3, perclos: 0.18, longBlinksPerMin: 2, yawns10m: 2, nods10m: 1, postureAvg15: 55, minutesSinceBreak: 80 });
   assert.ok(fresh < 10, `fresh ${fresh}`);
   assert.ok(tired > 70, `tired ${tired}`);
   // Bez danych z twarzy wagi rozkładają się na resztę.

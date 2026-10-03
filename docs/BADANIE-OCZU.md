@@ -3,6 +3,16 @@
 > Sob. 03.10, ok. 21:30. Źródła: przegląd literatury + przegląd kodu (`src/core/fatigue.ts`, `analyzer.ts`, karty modeli MediaPipe).
 > Wnioski z kodu i literatury. **Testów na ludziach jeszcze nie było** – protokół niżej.
 
+## Wyniki testu na żywo (sob. 03.10, 22:50–23:40, Mateusz, MacBook, w okularach i bez)
+Narzędzie: ukryta diagnostyka oczu w widoku „Na żywo” (klawisz **D**: licznik mrugnięć, zamknięcie i próg, EAR vs wzorzec, „patrzysz w dół”, „mówisz”).
+- **Znalezione i naprawione w trakcie testu (PR #97):**
+  1. Wzorzec „oko otwarte” zablokowany na zawyżonej kalibracji (EAR 0,56 przy prawdziwym 0,29) → otwarte oko liczone jako zamknięte, **licznik stał na 0**. Teraz wzorzec uczy się z ostatnich 30 s, kalibracja tylko na start.
+  2. Bramka „patrzysz w dół” zamrażała się przy dłuższym pochyleniu (garbienie) → **liczył co ~8. mrugnięcie**. Teraz wzorzec pochylenia to mediana z 20 s; odcinamy tylko krótkie zerknięcia.
+  3. Płytkie mrugnięcia w okularach (zamknięcie ~0,59 przy progu 0,60) → próg dopasowany do osoby (połowa drogi między okiem otwartym a typowym mrugnięciem).
+  4. Mrużenie / trzepotanie liczone jako „długie mrugnięcie” → „długie” wymaga oka naprawdę zamkniętego.
+  5. Podpis „Mrugnięcia” bez informacji, że to średnia z 3 min → „Mrugnięcia (śr. 3 min)” + opis.
+- **Po poprawkach:** liczy „w miarę dobrze” w okularach i bez, bez zaniku po kilku minutach (ocena jakościowa). **Do zrobienia:** pomiar ilościowy – licznik przed/po 20 mrugnięciach, w okularach i bez → liczba na slajd.
+
 ## TL;DR
 - **Postawa** jest naszym solidnym rdzeniem: wszystko liczone względem osobistej kalibracji.
 - **Wskaźnik zmęczenia** ma sensowną konstrukcję, ale progi mierzą głównie **co robisz** (czytasz, mówisz, patrzysz na klawiaturę), a nie **czy jesteś zmęczony**. Stąd „losowe” liczby.

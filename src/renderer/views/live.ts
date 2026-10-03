@@ -48,6 +48,9 @@ export class LiveView {
   // MP9: rysowanie w tempie ekranu (rAF), sylwetka wygładzana między pomiarami.
   private follower = new LandmarkFollower(70);
   private lastFrame: Frame | null = null;
+  /** Klawisz D: podgląd diagnostyczny oczu na kamerze (do testów mrugania). */
+  private eyeDebug = false;
+  private keyBound = false;
   private raf = 0;
   private lastDraw = 0;
   private stage: HTMLElement;
@@ -140,7 +143,7 @@ export class LiveView {
           h('h2', null, 'Oczy'),
           // Te same wiersze co odchylenia niżej (nazwa po lewej, liczba po prawej), żeby panel czytał się jak jedna lista.
           h('ul', { class: 'metric-list' },
-            h('li', { class: 'metric plain' }, h('span', { class: 'metric-name' }, 'Mrugnięcia'), this.blinkVal),
+            h('li', { class: 'metric plain' }, h('span', { class: 'metric-name', 'data-tip': 'Średnio z ostatnich 3 minut, bez chwil, gdy mówisz. Przy pracy przy ekranie 5–10/min to norma (w spoczynku ok. 15–20).' }, 'Mrugnięcia (śr. 3 min)'), this.blinkVal),
             h('li', { class: 'metric plain' }, h('span', { class: 'metric-name' }, 'Ziewnięcia'), this.yawnVal),
           ),
           h('h2', null, 'Jak daleko jesteś od swojej prostej postawy'),
@@ -159,6 +162,13 @@ export class LiveView {
   mount(container: HTMLElement): void {
     container.append(this.root);
     this.mounted = true;
+    if (!this.keyBound) {
+      this.keyBound = true;
+      document.addEventListener('keydown', (e) => {
+        if (!this.mounted || e.repeat || (e.target as HTMLElement)?.closest?.('input, textarea, select')) return;
+        if (e.key === 'd' || e.key === 'D') this.eyeDebug = !this.eyeDebug;
+      });
+    }
     this.startDrawLoop();
     // Odpięcie od DOM wstrzymało <video>; po powrocie na „Na żywo” wznawiamy podgląd od razu.
     const v = this.ctx.analyzer.video;
@@ -190,6 +200,7 @@ export class LiveView {
             mirror: this.ctx.settings.mirror,
             calibration: this.ctx.calibration,
           });
+          if (this.eyeDebug) drawEyeDebug(this.canvas, f.eyes);
         } catch (e) {
           console.warn('Nakładka:', e); // nigdy nie zatrzymujemy podglądu przez błąd rysowania
         }
@@ -292,4 +303,42 @@ export class LiveView {
     // Gdy jest pora na przerwę, przycisk wyróżnia się – na co dzień jest spokojny.
     this.breakBtn.className = dueKind ? 'btn primary small' : 'btn small';
   }
+}
+
+/** Podgląd diagnostyczny oczu w lewym dolnym rogu kamery (klawisz D). Tylko liczby, bez obrazu. */
+function drawEyeDebug(canvas: HTMLCanvasElement, e: Frame['eyes']): void {
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+  const n = (v: number | null | undefined, d = 2) => (v == null ? '–' : v.toFixed(d));
+  const lines = !e
+    ? ['Oczy: analiza twarzy wyłączona']
+    : [
+        `LICZNIK MRUGNIĘĆ: ${e.blinksTotal}    długie: ${e.longTotal}`,
+        `śr. 3 min: ${e.rate == null ? '– (zbieram dane, min. 60 s)' : `${e.rate.toFixed(0)}/min`}`,
+        `zamknięcie ${n(e.closed)} (próg ${n(e.closeOn)})   EAR ${n(e.ear, 3)} / wzorzec ${n(e.earRef, 3)}`,
+        `eyeBlink surowy ${n(e.blend)} → względny ${n(e.blendRel)}`,
+        `${e.reliable ? 'dane OK' : 'DANE NIEPEWNE'} · ${e.fps.toFixed(0)} kl./s${e.gazeDown ? ' · PATRZYSZ W DÓŁ' : ''}${e.talking ? ' · MÓWISZ' : ''}`,
+      ];
+  const dpr = window.devicePixelRatio || 1;
+  ctx.save();
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.font = '600 12px ui-monospace, Menlo, Consolas, monospace';
+  const w = Math.max(...lines.map((l) => ctx.measureText(l).width)) + 20;
+  const h = lines.length * 18 + 12;
+  // Na środku kadru: przy object-fit: cover brzegi płótna bywają poza widocznym obszarem.
+  const x0 = Math.max(12, (canvas.clientWidth - w) / 2);
+  const y0 = canvas.clientHeight - h - 40;
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
+  ctx.fillRect(x0, y0, w, h);
+  ctx.fillStyle = '#e8f0ec';
+  lines.forEach((l, i) => {
+    ctx.font = i === 0 ? '700 15px ui-monospace, Menlo, Consolas, monospace' : '600 12px ui-monospace, Menlo, Consolas, monospace';
+    ctx.fillText(l, x0 + 10, y0 + 20 + i * 18);
+  });
+  // pasek zamknięcia oka: od razu widać każde mrugnięcie
+  if (e?.closed != null) {
+    ctx.fillStyle = e.closed >= 0.6 ? '#ff6b6b' : '#7fd3a5';
+    ctx.fillRect(x0, y0 - 8, w * Math.min(1, e.closed), 5);
+  }
+  ctx.restore();
 }
