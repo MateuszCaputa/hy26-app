@@ -62,16 +62,54 @@ export async function renderStats(view: HTMLElement, ctx: AppCtx): Promise<void>
   let range = load<RangeId>('postura.stats.range', ['today', '3', '7', '30'], 'today');
   const body = h('div', { class: 'stats-body' });
 
-  // Zakres zamiast nagłówka „Dziś”: select wygląda jak nagłówek sekcji.
-  const select = h('select', {
-    class: 'range-select',
-    'aria-label': 'Zakres',
-    onchange: (e: Event) => {
-      range = (e.target as HTMLSelectElement).value as RangeId;
-      save('postura.stats.range', range);
-      draw();
+  // Zakres zamiast nagłówka „Dziś”. Własna lista zamiast <select>: natywna na macOS otwierała się nad przyciskiem
+  // (system ustawia wybraną opcję na przycisku). Ta zawsze rozwija się pod nim.
+  const label = h('span', null, RANGES[range]);
+  const btn = h('button', { class: 'range-select', type: 'button', 'aria-haspopup': 'listbox', 'aria-expanded': 'false', 'aria-label': 'Zakres' }, label);
+  const menu = h('ul', { class: 'range-menu', role: 'listbox', hidden: true });
+  const outside = (e: Event) => {
+    if (!select.contains(e.target as Node)) close();
+  };
+  const close = () => {
+    menu.hidden = true;
+    btn.setAttribute('aria-expanded', 'false');
+    document.removeEventListener('pointerdown', outside);
+  };
+  const open = () => {
+    menu.hidden = false;
+    btn.setAttribute('aria-expanded', 'true');
+    document.addEventListener('pointerdown', outside);
+    menu.querySelector<HTMLElement>('[aria-selected="true"]')?.focus();
+  };
+  btn.addEventListener('click', () => (menu.hidden ? open() : close()));
+  // Kolejność wprost: klucze '3', '7', '30' wyglądają jak liczby, więc Object.keys stawiał „Dziś” na końcu.
+  const ORDER: RangeId[] = ['today', '3', '7', '30'];
+  for (const id of ORDER) {
+    menu.append(h('li', null, h('button', {
+      type: 'button',
+      role: 'option',
+      'data-id': id,
+      'aria-selected': String(id === range),
+      onclick: () => {
+        range = id;
+        save('postura.stats.range', range);
+        label.textContent = RANGES[id];
+        menu.querySelectorAll<HTMLElement>('[role="option"]').forEach((o) => o.setAttribute('aria-selected', String(o.dataset.id === id)));
+        close();
+        btn.focus();
+        draw();
+      },
+    }, RANGES[id])));
+  }
+  const select = h('div', {
+    class: 'range',
+    onkeydown: (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && !menu.hidden) {
+        close();
+        btn.focus();
+      }
     },
-  }, (Object.keys(RANGES) as RangeId[]).map((id) => h('option', { value: id, selected: id === range }, RANGES[id])));
+  }, btn, menu);
 
   const draw = () => body.replaceChildren(...(tab === 'posture' ? postureTab(data, range, select) : fatigueTab(data, range, select)));
   const seg = h('div', { class: 'seg', role: 'tablist', 'aria-label': 'Statystyki' },
@@ -147,8 +185,7 @@ function fatigueTab(st: StatsPayload, range: RangeId, select: HTMLElement): HTML
       breaksFig(t.breaksTaken, Math.floor(t.presentMinutes / 60)),
       fig(fmtDesk(t.presentMinutes), 'przy biurku', null),
     );
-    const pts = hourBars(st, 'fatigue', lowFatigue);
-    chart = pts ? lineChart(pts, '%', 'Zmęczenie dziś, godzina po godzinie') : h('p', { class: 'fine' }, 'Dziś jeszcze brak pomiarów.');
+    chart = hourChart(st, 'fatigue', lowFatigue, '%', 'Zmęczenie dziś, godzina po godzinie');
   } else {
     const days = daysOf(st, range);
     const present = days.reduce((a, d) => a + d.presentMinutes, 0);
@@ -158,11 +195,9 @@ function fatigueTab(st: StatsPayload, range: RangeId, select: HTMLElement): HTML
       breaksFig(days.reduce((a, d) => a + d.breaks, 0), days.reduce((a, d) => a + Math.floor(d.presentMinutes / 60), 0)),
       fig(fmtDesk(present), 'przy biurku', null),
     );
-    const pts = dayBars(days, (d) => d.avgFatigue, lowFatigue);
-    chart = pts ? lineChart(pts, '%', `Zmęczenie, ${RANGES[range].toLowerCase()}`) : h('p', { class: 'fine' }, 'Brak pomiarów w tym okresie.');
+    chart = dayChart(days, (d) => d.avgFatigue, lowFatigue, '%', `Zmęczenie, ${RANGES[range].toLowerCase()}`);
   }
-  // Jeden wykres + jedno zdanie o godzinach formy (drugi wykres pokazywał to samo odwrócone).
-  return [h('section', { class: 'block' }, select, figs, chart, formLine(st))];
+  return [h('section', { class: 'block' }, select, figs, chart)];
 }
 
 /** Strzałka zmiany względem wczoraj (kolor = czy to dobrze); pełny opis w podpowiedzi. */
@@ -257,11 +292,6 @@ function barChart(bars: Bar[], unit: string, aria: string, showValues = true): H
 
 /** Dziś: średnia metryki w każdej godzinie pracy (min. 5 min obecności). */
 function hourChart(st: StatsPayload, key: 'posture' | 'fatigue', good: (v: number) => boolean, unit: string, aria: string): HTMLElement {
-  const bars = hourBars(st, key, good);
-  return bars ? barChart(bars, unit, aria) : h('p', { class: 'fine' }, 'Dziś jeszcze brak pomiarów.');
-}
-
-function hourBars(st: StatsPayload, key: 'posture' | 'fatigue', good: (v: number) => boolean): Bar[] | null {
   const byHour = new Map<number, { sum: number; n: number }>();
   for (const s of st.today.minutes) {
     const v = s[key];
@@ -273,21 +303,17 @@ function hourBars(st: StatsPayload, key: 'posture' | 'fatigue', good: (v: number
     byHour.set(hr, acc);
   }
   const hours = [...byHour.entries()].filter(([, a]) => a.n >= 5).sort((a, b) => a[0] - b[0]);
-  if (!hours.length) return null;
-  return hours.map(([hr, a]) => {
+  if (!hours.length) return h('p', { class: 'fine' }, 'Dziś jeszcze brak pomiarów.');
+  const bars: Bar[] = hours.map(([hr, a]) => {
     const v = a.sum / a.n;
     return { label: `${hr}:00`, value: v, tone: good(v) ? 'good' : 'warn' };
   });
+  return barChart(bars, unit, aria);
 }
 
 /** Zakres dni: jeden słupek na dzień. Przy miesiącu podpis co kilka dni, wartości tylko w podpowiedzi. */
 function dayChart(days: Day[], pick: (d: Day) => number | null, good: (v: number) => boolean, unit: string, aria: string): HTMLElement {
-  const bars = dayBars(days, pick, good);
-  return bars ? barChart(bars, unit, aria, days.length <= 7) : h('p', { class: 'fine' }, 'Brak pomiarów w tym okresie.');
-}
-
-function dayBars(days: Day[], pick: (d: Day) => number | null, good: (v: number) => boolean): Bar[] | null {
-  if (days.filter((d) => d.presentMinutes > 0).length === 0) return null;
+  if (days.filter((d) => d.presentMinutes > 0).length === 0) return h('p', { class: 'fine' }, 'Brak pomiarów w tym okresie.');
   const long = days.length > 7;
   const last = days.length - 1;
   const bars: Bar[] = days.map((d, i) => {
@@ -296,99 +322,7 @@ function dayBars(days: Day[], pick: (d: Day) => number | null, good: (v: number)
     const label = i === last ? 'dziś' : long ? ((last - i) % 5 === 0 ? String(d.day) : '') : DAYS[d.weekday];
     return { label, tip: i === last ? `dziś, ${date}` : date, value: v, tone: v === null ? 'mute' : good(v) ? 'good' : 'warn', strong: i === last };
   });
-  return bars;
-}
-
-/** Próg „zmęczony” (ten sam co w `core/fatigue.ts`): przerywana linia odniesienia na wykresie zmęczenia. */
-const FATIGUE_LINE = 40;
-
-/**
- * Zmęczenie jako jedna cienka linia 0–100 z przerywanym progiem – spokojniej niż słupki.
- * Bez siatki i osi Y; po najechaniu: pionowa linia, kropka i dymek z wartością.
- */
-function lineChart(points: Bar[], unit: string, aria: string): HTMLElement {
-  const n = Math.max(points.length, 1);
-  const W = 560, H = 132, T = 8, B = 24;
-  const band = W / n;
-  const base = H - B;
-  const X = (i: number) => band * i + band / 2;
-  const Y = (v: number) => T + (1 - Math.max(0, Math.min(100, v)) / 100) * (base - T);
-
-  // Linia przerwana tam, gdzie brak danych (np. dzień bez pracy).
-  let d = '';
-  let area = '';
-  let run: [number, number][] = [];
-  const flush = () => {
-    if (run.length > 1) {
-      d += `M${run.map(([x, y]) => `${x.toFixed(1)} ${y.toFixed(1)}`).join(' L')} `;
-      area += `M${run[0][0].toFixed(1)} ${base} L${run.map(([x, y]) => `${x.toFixed(1)} ${y.toFixed(1)}`).join(' L')} L${run[run.length - 1][0].toFixed(1)} ${base} Z `;
-    }
-    run = [];
-  };
-  points.forEach((p, i) => (p.value === null ? flush() : run.push([X(i), Y(p.value)])));
-  flush();
-
-  const yLine = Y(FATIGUE_LINE).toFixed(1);
-  let svg = `<line x1="0" x2="${W}" y1="${base}" y2="${base}" class="base"/>`;
-  svg += `<line x1="0" x2="${W}" y1="${yLine}" y2="${yLine}" class="ref"/>`;
-  svg += `<text x="0" y="${Number(yLine) - 5}" text-anchor="start" class="axis">${FATIGUE_LINE}%</text>`;
-  svg += `<path d="${area}" class="line-area"/><path d="${d}" class="line"/>`;
-  // Pojedynczy punkt (np. jedna godzina) – bez linii, sama kropka.
-  points.forEach((p, i) => {
-    if (p.value !== null && (points[i - 1]?.value ?? null) === null && (points[i + 1]?.value ?? null) === null) {
-      svg += `<circle cx="${X(i).toFixed(1)}" cy="${Y(p.value).toFixed(1)}" r="3" class="line-dot-static"/>`;
-    }
-  });
-  points.forEach((p, i) => {
-    if (p.label) svg += `<text x="${X(i).toFixed(1)}" y="${H - 6}" text-anchor="middle" class="axis${p.strong ? ' axis-today' : ''}">${p.label}</text>`;
-  });
-  svg += `<line class="cross" y1="${T}" y2="${base}" x1="0" x2="0"/><circle class="line-dot" r="4" cx="0" cy="0"/>`;
-
-  const holder = h('div', { class: 'col-plot' });
-  holder.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${aria}">${svg}</svg>`;
-  const svgEl = holder.querySelector('svg')!;
-  const cross = svgEl.querySelector('.cross')!;
-  const dot = svgEl.querySelector('.line-dot')!;
-  const tip = h('div', { class: 'col-tip', role: 'status' });
-  const valueText = (p: Bar) => (p.value === null ? 'brak danych' : `${Math.round(p.value)}${unit}`);
-  const show = (i: number) => {
-    const p = points[i];
-    tip.replaceChildren(h('strong', null, valueText(p)), h('span', null, p.tip ?? p.label));
-    tip.style.left = `${(X(i) / W) * 100}%`;
-    tip.classList.add('on');
-    const x = X(i).toFixed(1);
-    cross.setAttribute('x1', x);
-    cross.setAttribute('x2', x);
-    svgEl.classList.add('hovering');
-    if (p.value !== null) {
-      dot.setAttribute('cx', x);
-      dot.setAttribute('cy', Y(p.value).toFixed(1));
-    }
-    svgEl.classList.toggle('no-dot', p.value === null);
-  };
-  const hide = () => {
-    tip.classList.remove('on');
-    svgEl.classList.remove('hovering');
-  };
-  points.forEach((p, i) => {
-    svgEl.insertAdjacentHTML('beforeend', `<rect x="${band * i}" y="0" width="${band}" height="${base}" class="col-hit" tabindex="0" data-i="${i}" aria-label="${p.tip ?? p.label}: ${valueText(p)}"/>`);
-  });
-  svgEl.querySelectorAll<SVGRectElement>('.col-hit').forEach((hit) => {
-    const i = Number(hit.dataset.i);
-    hit.addEventListener('pointerenter', () => show(i));
-    hit.addEventListener('focus', () => show(i));
-    hit.addEventListener('pointerleave', hide);
-    hit.addEventListener('blur', hide);
-  });
-  holder.append(tip);
-  return h('figure', { class: 'chart line-chart' }, holder);
-}
-
-/** Godziny formy jednym zdaniem zamiast drugiego wykresu, np. „Najlepiej 9–11 · spadek ok. 14:00”. */
-function formLine(st: StatsPayload): HTMLElement | null {
-  const dip = st.dipText?.match(/ok\. (\d{1,2}:00)/)?.[1];
-  const parts = [st.bestHours ? `Najlepiej ${st.bestHours}` : null, dip ? `spadek ok. ${dip}` : null].filter(Boolean);
-  return parts.length ? h('p', { class: 'stat-hint' }, parts.join(' · ')) : null;
+  return barChart(bars, unit, aria, !long);
 }
 
 function issuesSection(st: StatsPayload): HTMLElement {
