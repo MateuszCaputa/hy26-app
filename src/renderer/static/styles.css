@@ -233,14 +233,26 @@ button, input, select { font: inherit; color: inherit; }
 .stats-body { display: grid; gap: 26px; }
 /* Zakres zamiast nagłówka „Dziś”: select wygląda jak nagłówek sekcji ze strzałką. */
 .range-select {
-  justify-self: start; appearance: none; -webkit-appearance: none; cursor: pointer;
+  appearance: none; -webkit-appearance: none; cursor: pointer;
   font: inherit; font-size: 15px; font-weight: 600; color: var(--ink);
   background: var(--spine-soft) url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2712%27 height=%2712%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%23888%27 stroke-width=%273%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3E%3Cpath d=%27M6 9l6 6 6-6%27/%3E%3C/svg%3E") no-repeat right 12px center;
   border: 0; border-radius: 999px; padding: 7px 34px 7px 14px;
 }
 .range-select:hover { color: var(--ink); filter: brightness(1.08); }
 .range-select:focus-visible { outline: 2px solid var(--spine); outline-offset: 1px; }
-.range-select option { background: var(--surface); color: var(--ink); font-weight: 400; }
+.range { position: relative; justify-self: start; }
+.range-select { text-align: left; }
+.range-menu {
+  position: absolute; top: calc(100% + 6px); left: 0; z-index: 20; min-width: 100%; margin: 0; padding: 4px; list-style: none;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 8px 24px rgba(0, 0, 0, .18);
+}
+.range-menu[hidden] { display: none; }
+.range-menu button {
+  width: 100%; text-align: left; border: 0; background: transparent; color: var(--ink); font: inherit; font-size: 14px;
+  padding: 7px 12px; border-radius: 8px; cursor: pointer; white-space: nowrap;
+}
+.range-menu button:hover, .range-menu button:focus-visible { background: var(--spine-soft); outline: none; }
+.range-menu button[aria-selected="true"] { font-weight: 600; }
 .seg { margin-left: auto; display: inline-flex; gap: 2px; padding: 3px; border-radius: 999px; background: var(--spine-soft); }
 .seg button { border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 14px; padding: 6px 16px; border-radius: 999px; cursor: pointer; transition: background .15s ease, color .15s ease; }
 .seg button:hover { color: var(--ink); }
@@ -259,15 +271,6 @@ button, input, select { font: inherit; color: inherit; }
 .chart { margin: 0; display: grid; gap: 6px; }
 .chart svg { width: 100%; height: auto; overflow: visible; }
 .bar-chart { max-width: 640px; }
-/* Zmęczenie: jedna cienka linia, delikatne wypełnienie, przerywany próg; kropka i pionowa linia tylko po najechaniu. */
-.line-chart { max-width: 640px; }
-.chart .line { fill: none; stroke: var(--spine); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
-.chart .line-area { fill: var(--spine); opacity: .08; }
-.chart .ref { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 5; opacity: .6; }
-.chart .line-dot-static { fill: var(--spine); }
-.chart .cross { stroke: var(--line); stroke-width: 1; opacity: 0; }
-.chart .line-dot { fill: var(--spine); stroke: var(--bg); stroke-width: 2; opacity: 0; }
-.chart svg.hovering .cross, .chart svg.hovering:not(.no-dot) .line-dot { opacity: 1; }
 .chart .base { stroke: var(--line); stroke-width: 1; }
 .chart .axis { fill: var(--muted); font-size: 11.5px; }
 .chart .axis-today { fill: var(--ink); font-weight: 600; }
