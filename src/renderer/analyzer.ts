@@ -300,7 +300,8 @@ export class Analyzer {
     } catch (e) {
       console.error((e as Error).stack ?? e);
     }
-    const faceFps = !this.settings.faceAnalysis ? 8 : this.onBattery ? 15 : 25;
+    // 30/s = pełne tempo kamery: przy 25/s najgłębszy moment szybkiego mrugnięcia (30–60 ms) często wypadał między klatkami.
+    const faceFps = !this.settings.faceAnalysis ? 8 : this.onBattery ? 15 : 30;
     const wait = Math.max(5, 1000 / faceFps - (performance.now() - started));
     this.timer = window.setTimeout(this.loop, wait);
   };
