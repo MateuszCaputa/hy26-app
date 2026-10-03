@@ -307,7 +307,8 @@ button, input, select { font: inherit; color: inherit; }
 .widget[data-state="warn"] { border-left-color: var(--warn); }
 .widget[data-state="bad"] { border-left-color: var(--bad); }
 .w-score { font-size: 30px; font-weight: 300; font-variant-numeric: tabular-nums; min-width: 2ch; }
-.w-text { display: grid; line-height: 1.25; font-weight: 600; font-size: 14px; }
+.w-text { display: grid; line-height: 1.25; font-weight: 600; font-size: 14px; min-width: 0; white-space: nowrap; }
+.w-text > span { overflow: hidden; text-overflow: ellipsis; }
 .w-sub { color: var(--muted); font-weight: 400; font-size: 12.5px; }
 
 @media (max-width: 1000px) {
