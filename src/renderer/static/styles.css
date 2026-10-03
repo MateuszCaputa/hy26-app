@@ -281,10 +281,10 @@ button, input, select { font: inherit; color: inherit; }
 .toast-x { background: none; border: 0; color: inherit; font-size: 20px; cursor: pointer; padding: 0 6px; }
 
 /* ——— Mini-widget: mała pigułka z wynikiem ——— */
-.widget-body { background: transparent; -webkit-app-region: drag; user-select: none; overflow: hidden; }
+.widget-body { background: transparent; user-select: none; overflow: hidden; }
 .widget {
   --w-col: #8b9a9e;
-  margin: 6px; height: 32px; width: max-content; display: flex; align-items: center; gap: 2px; padding: 0 10px 0 4px;
+  margin: 6px; height: 32px; width: max-content; display: flex; align-items: center; gap: 7px; padding: 0 12px 0 10px; cursor: pointer;
   background: rgba(10, 14, 18, .82); border: 1px solid color-mix(in srgb, var(--w-col) 55%, transparent); border-radius: 16px;
   box-shadow: 0 0 10px color-mix(in srgb, var(--w-col) 45%, transparent);
   color: #e9f0ee; font: 600 14px/1 var(--font); transition: opacity .6s ease, border-color .4s ease, box-shadow .4s ease;
@@ -293,15 +293,11 @@ button, input, select { font: inherit; color: inherit; }
 .widget[data-state="warn"] { --w-col: #ffb020; }
 .widget[data-state="bad"] { --w-col: #ff3b5c; animation: w-pulse 1.6s ease-in-out infinite; }
 .widget:hover { opacity: 1; }
-.w-open {
-  -webkit-app-region: no-drag; display: flex; align-items: center; gap: 7px; padding: 4px 6px; border: 0; border-radius: 12px;
-  background: transparent; color: inherit; font: inherit; cursor: pointer;
-}
-.w-open:hover { background: rgba(255, 255, 255, .08); }
+.widget.dragging { cursor: grabbing; opacity: 1; }
 .w-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--w-col); box-shadow: 0 0 8px var(--w-col); }
 .w-score { font-size: 16px; font-variant-numeric: tabular-nums; min-width: 2ch; text-align: right; }
 .w-more { max-width: 0; overflow: hidden; white-space: nowrap; color: #9fb0b4; font-weight: 500; font-size: 12px; transition: max-width .3s ease; }
-.widget:hover .w-more:not(:empty) { max-width: 80px; padding-left: 4px; }
+.widget:hover .w-more:not(:empty) { max-width: 120px; }
 @keyframes w-pulse { 50% { box-shadow: 0 0 18px var(--w-col); } }
 @media (prefers-reduced-motion: reduce) { .widget[data-state="bad"] { animation: none; } }
 

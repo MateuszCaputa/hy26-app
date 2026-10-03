@@ -3,7 +3,7 @@ import {
   app, BrowserWindow, ipcMain, Menu, nativeImage, Notification, powerMonitor, protocol, screen, session,
   shell, systemPreferences, Tray,
 } from 'electron';
-import { existsSync } from 'node:fs';
+import { existsSync, watch } from 'node:fs';
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import type { AppEvent, Calibration, LiveStatus, MinuteSample, Settings } from '../shared/types';
@@ -225,7 +225,7 @@ function createMainWindow(): void {
   });
 }
 
-const WIDGET_W = 150;
+const WIDGET_W = 200;
 const WIDGET_H = 44;
 
 /** Zapamiętana pozycja widgetu, jeśli nadal leży na którymś ekranie; inaczej prawy górny róg. */
@@ -237,6 +237,22 @@ function widgetPosition(): { x: number; y: number } {
   })) return saved;
   const a = screen.getPrimaryDisplay().workArea;
   return { x: a.x + a.width - WIDGET_W - 16, y: a.y + 16 };
+}
+
+/** Tylko w trybie deweloperskim: przeładuj okna, gdy `npm run dev` przebuduje interfejs (bez restartu Electrona). */
+function watchRendererForReload(): void {
+  if (app.isPackaged || DEBUG_SHOT) return;
+  let t: NodeJS.Timeout | null = null;
+  try {
+    watch(RENDERER_DIR, { recursive: true }, () => {
+      if (t) clearTimeout(t);
+      t = setTimeout(() => {
+        for (const w of [mainWin, widgetWin]) w?.webContents.reloadIgnoringCache();
+      }, 300);
+    });
+  } catch (e) {
+    console.warn('Auto-przeładowanie niedostępne:', (e as Error).message);
+  }
 }
 
 function toggleWidget(on: boolean): void {
@@ -257,10 +273,6 @@ function toggleWidget(on: boolean): void {
     widgetWin.setAlwaysOnTop(true, 'floating');
     void widgetWin.loadURL('app://local/widget.html');
     widgetWin.on('closed', () => (widgetWin = null));
-    widgetWin.on('moved', () => {
-      const b = widgetWin?.getBounds();
-      if (b) store.setMeta('widgetPos', { x: b.x, y: b.y });
-    });
     if (lastStatus) widgetWin.webContents.once('did-finish-load', () => widgetWin?.webContents.send('status', lastStatus));
   } else if (!on && widgetWin) {
     widgetWin.close();
@@ -380,6 +392,11 @@ function registerIpc(): void {
   ipcMain.handle('get-stats', () => statsNow());
   ipcMain.on('set-paused', (_e, p: boolean) => setPaused(p));
   ipcMain.on('open-main', (_e, view?: string) => showMain(view));
+  ipcMain.on('widget-move', (_e, x: number, y: number, done: boolean) => {
+    if (!widgetWin) return;
+    widgetWin.setBounds({ x: Math.round(x), y: Math.round(y), width: WIDGET_W, height: WIDGET_H });
+    if (done) store.setMeta('widgetPos', { x: Math.round(x), y: Math.round(y) });
+  });
   ipcMain.handle('garmin-connect', async (_e, email: string, password: string) => {
     try {
       await garmin.connect(email, password);
@@ -437,6 +454,7 @@ void app.whenReady().then(async () => {
 
   registerIpc();
   createMainWindow();
+  watchRendererForReload();
   tray = new Tray(trayIcon('idle'));
   tray.on('click', () => showMain());
   applySettings(settings);
