@@ -285,19 +285,19 @@ button, input, select { font: inherit; color: inherit; }
 .widget { cursor: pointer; }
 .widget.dragging { cursor: grabbing; }
 .w-dot { display: none; }
-/* Pigułka: sama liczba + kropka w kolorze stanu; przy dobrej postawie przygasa. */
+/* Pigułka: sama liczba + kropka w kolorze stanu, w barwach motywu (jasny/ciemny jak aplikacja); przy dobrej postawie przygasa. */
 .widget-body.pill .widget {
-  --w-col: #8b9a9e;
+  --w-col: var(--muted);
   width: max-content; height: 32px; gap: 7px; padding: 0 12px 0 10px; border-radius: 16px; border-left-width: 1px;
-  background: rgba(10, 14, 18, .82); border-color: color-mix(in srgb, var(--w-col) 55%, transparent); color: #e9f0ee;
-  box-shadow: 0 0 10px color-mix(in srgb, var(--w-col) 45%, transparent); transition: opacity .6s ease, box-shadow .4s ease;
+  background: var(--surface); border-color: color-mix(in srgb, var(--w-col) 50%, var(--line)); color: var(--ink);
+  box-shadow: 0 1px 6px color-mix(in srgb, var(--w-col) 30%, transparent); transition: opacity .6s ease, box-shadow .4s ease;
 }
 .widget-body.pill .w-text { display: none; }
-.widget-body.pill .w-dot { display: block; width: 10px; height: 10px; border-radius: 50%; background: var(--w-col); box-shadow: 0 0 8px var(--w-col); }
+.widget-body.pill .w-dot { display: block; width: 10px; height: 10px; border-radius: 50%; background: var(--w-col); box-shadow: 0 0 6px var(--w-col); }
 .widget-body.pill .w-score { font-size: 16px; font-weight: 600; min-width: 2ch; text-align: right; }
-.widget-body.pill .widget[data-state="good"] { --w-col: #b6ff3b; opacity: .45; }
-.widget-body.pill .widget[data-state="warn"] { --w-col: #ffb020; }
-.widget-body.pill .widget[data-state="bad"] { --w-col: #ff3b5c; }
+.widget-body.pill .widget[data-state="good"] { --w-col: var(--good); opacity: .55; }
+.widget-body.pill .widget[data-state="warn"] { --w-col: var(--warn); }
+.widget-body.pill .widget[data-state="bad"] { --w-col: var(--bad); }
 .widget-body.pill .widget:hover, .widget-body.pill .widget.dragging { opacity: 1; }
 .widget {
   margin: 6px; height: 62px; display: flex; align-items: center; gap: 12px; padding: 0 16px;
