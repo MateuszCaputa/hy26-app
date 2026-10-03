@@ -61,6 +61,7 @@ let tray: Tray | null = null;
 let quitting = false;
 let paused = false;
 let lastStatus: LiveStatus | null = null;
+let trayBadge: Electron.NativeImage | null = null; // Windows: ikona z wynikiem (rysowana w rendererze)
 let lastNotifyAt = 0;
 const activity = new ActivityCounter();
 let garmin: GarminSync;
@@ -127,7 +128,7 @@ function updateTray(): void {
   const s = lastStatus;
   const state = paused ? 'paused' : s?.state ?? 'absent';
   const present = !paused && !!s && s.state !== 'absent' && s.state !== 'paused';
-  tray.setImage(trayIcon(state));
+  tray.setImage(process.platform === 'win32' && present && trayBadge ? trayBadge : trayIcon(state));
   // macOS: wynik postawy w pasku menu obok kolorowej ikony (Windows nie pokazuje tekstu w zasobniku).
   if (process.platform === 'darwin') tray.setTitle(present && s.score !== null ? ` ${s.score}` : '', { fontType: 'monospacedDigit' });
 
@@ -401,6 +402,11 @@ function registerIpc(): void {
   ipcMain.on('event', (_e, ev: AppEvent) => store.addEvent(ev.type, ev.detail));
   ipcMain.handle('get-stats', () => statsNow());
   ipcMain.on('set-paused', (_e, p: boolean) => setPaused(p));
+  ipcMain.on('tray-badge', (_e, png: string | null) => {
+    if (process.platform !== 'win32') return;
+    trayBadge = png ? nativeImage.createFromBuffer(Buffer.from(png.split(',')[1], 'base64'), { scaleFactor: 2 }) : null;
+    updateTray();
+  });
   ipcMain.handle('garmin-connect', async (_e, email: string, password: string) => {
     try {
       await garmin.connect(email, password);

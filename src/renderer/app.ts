@@ -11,6 +11,7 @@ import { renderStats } from './views/stats';
 import { renderExercises } from './views/exercises';
 import { renderSettings } from './views/settings';
 import { openBreakOverlay, openCalibration, showModelsScreen } from './overlays';
+import { updateTrayBadge } from './trayBadge';
 
 export type ViewId = 'live' | 'stats' | 'exercises' | 'settings';
 
@@ -71,6 +72,7 @@ async function main(): Promise<void> {
       live?.status(s);
       updateRail(ctx);
       api?.sendStatus(s);
+      if (api && init.platform === 'win32') updateTrayBadge(s, (png) => api.setTrayBadge(png));
     },
     onAlert: (issue: IssueId) => {
       api?.logEvent({ type: 'alert', detail: issue });
