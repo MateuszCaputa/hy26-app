@@ -2,6 +2,7 @@
 import type { AppCtx } from './app';
 import type { BreakSuggestion, Calibration } from '../shared/types';
 import { BREAK_REASON, BREAK_TITLE, exerciseById, pickExercise } from '../core/coach';
+import { ExerciseVerifier, VERIFY_SPECS, type VerifyProgress } from '../core/exerciseVerify';
 import { openCalibrator } from './calibrator';
 import { $, clear, h, svg } from './dom';
 import { FIGURES } from './figures';
@@ -47,6 +48,34 @@ function ring(): { el: HTMLElement; set: (fraction: number, text: string) => voi
   };
 }
 
+/** Licznik ćwiczenia sprawdzanego kamerą (A4/C6): powtórzenia albo sekundy na stronę, ✓ po wykonaniu. */
+function verifyPanel(spec: (typeof VERIFY_SPECS)[string]): { el: HTMLElement; set: (p: VerifyProgress) => void } {
+  const count = h('span', { class: 'verify-count' });
+  const bar = h('span', { class: 'meter-fill', style: 'width:0%' });
+  const note = h('span', { class: 'verify-note', 'aria-live': 'polite' }, 'Kliknij Start – kamera policzy ruchy.');
+  const el = h('div', { class: 'verify', 'data-state': 'idle' },
+    h('div', { class: 'verify-head' }, h('span', { class: 'verify-label' }, 'Kamera sprawdza'), count),
+    h('span', { class: 'meter' }, bar),
+    note,
+  );
+  const unit = spec.mode === 'reps' ? `/${spec.target}` : ` s`;
+  count.textContent = `0${unit}`;
+  return {
+    el,
+    set: (p) => {
+      el.dataset.state = p.phase === 'done' ? 'done' : p.inMove ? 'move' : 'active';
+      bar.style.width = `${Math.round(p.fraction * 100)}%`;
+      count.textContent = p.phase === 'done' ? '✓' : p.sides ? `${p.sides.left} s | ${p.sides.right} s` : `${p.count}${unit}`;
+      note.textContent =
+        p.phase === 'done' ? 'Wykonane!'
+          : p.lost ? 'Nie widzę Cię – usiądź przed kamerą.'
+            : p.phase === 'baseline' ? 'Usiądź swobodnie, mierzę pozycję wyjściową…'
+              : p.sides ? `${spec.cue}: po ${spec.target} s na każdą stronę.`
+                : `${spec.cue}.`;
+    },
+  };
+}
+
 export function openBreakOverlay(ctx: AppCtx, sug?: BreakSuggestion, exerciseId?: string): void {
   const kind = sug?.kind ?? (exerciseId ? exerciseById(exerciseId).kinds[0] : 'micro');
   const ex = exerciseById(exerciseId ?? sug?.exerciseId ?? pickExercise(kind, ctx.status?.topIssue ?? null, Date.now() / 6e4));
@@ -61,6 +90,28 @@ export function openBreakOverlay(ctx: AppCtx, sug?: BreakSuggestion, exerciseId?
   const startBtn = h('button', { class: 'btn primary' }, 'Start');
   const doneBtn = h('button', { class: 'btn' }, 'Zrobione');
   const snoozeBtn = h('button', { class: 'btn ghost' }, 'Odłóż o 5 min');
+
+  // Weryfikacja kamerą tylko dla ćwiczeń z pewnym sygnałem i przy działającej analizie (bez podglądu wideo:
+  // czytamy metryki z analizatora, wspólnego <video> nie ruszamy).
+  const spec = VERIFY_SPECS[ex.id];
+  const panel = spec && !ctx.paused && ctx.analyzer.isRunning ? verifyPanel(spec) : null;
+  let verifier: ExerciseVerifier | null = null;
+  let verifyRaf = 0;
+  let verified = false;
+  const verifyTick = () => {
+    // Okno zamknięte (np. Escape): przestajemy liczyć i niczego nie zaliczamy.
+    if (!verifier || !panel || !panel.el.isConnected) return;
+    const p = verifier.update(performance.now(), ctx.analyzer.currentMetrics);
+    panel.set(p);
+    if (p.phase === 'done') {
+      verified = true;
+      doneBtn.classList.add('primary');
+      // Chwila na ✓, potem przerwa zalicza się sama.
+      window.setTimeout(() => panel.el.isConnected && finish(true), 1400);
+      return;
+    }
+    verifyRaf = requestAnimationFrame(verifyTick);
+  };
 
   const tick = () => {
     const el = (performance.now() - started) / 1000;
@@ -77,6 +128,10 @@ export function openBreakOverlay(ctx: AppCtx, sug?: BreakSuggestion, exerciseId?
     startBtn.hidden = true;
     sheet.classList.add('running');
     tick();
+    if (panel) {
+      verifier = new ExerciseVerifier(spec);
+      verifyTick();
+    }
   });
 
   const { el: wrap, close } = overlay(
@@ -88,19 +143,27 @@ export function openBreakOverlay(ctx: AppCtx, sug?: BreakSuggestion, exerciseId?
         sug ? h('p', { class: 'fine' }, BREAK_REASON[sug.reason]) : null,
         h('h2', null, ex.name),
         h('ol', { class: 'steps' }, ex.steps.map((s) => h('li', null, s))),
-        h('div', { class: 'break-timer' }, rg.el),
+        h('div', { class: 'break-timer' }, rg.el, panel?.el ?? null),
         h('div', { class: 'row' }, startBtn, doneBtn, snoozeBtn),
       ),
     ),
   );
   const sheet = wrap.querySelector('.sheet') as HTMLElement;
   sheet.classList.add('sheet-wide');
+  let finished = false;
   const finish = (done: boolean) => {
+    if (finished) return;
+    finished = true;
     cancelAnimationFrame(raf);
+    cancelAnimationFrame(verifyRaf);
     if (done) {
+      // Bateria przed i po: zaliczona przerwa zeruje czas od przerwy i trend zmęczenia, więc wynik realnie rośnie.
+      const before = ctx.analyzer.status().energy?.percent ?? null;
       ctx.analyzer.breakDone(kind);
-      window.postura?.logEvent({ type: 'break-done', detail: `${kind}:${ex.id}` });
-      ctx.toast('Przerwa zaliczona. Wracam do obserwacji postawy.');
+      const after = ctx.analyzer.status().energy?.percent ?? null;
+      window.postura?.logEvent({ type: 'break-done', detail: `${kind}:${ex.id}${verified ? ':verified' : ''}` });
+      const gain = before !== null && after !== null && after > before ? ` Bateria ${before}% → ${after}%.` : '';
+      ctx.toast(`${verified ? 'Ćwiczenie wykonane – kamera to potwierdziła.' : 'Przerwa zaliczona.'}${gain}`);
     } else {
       ctx.analyzer.breakSnoozed();
       window.postura?.logEvent({ type: 'break-snoozed', detail: kind });
