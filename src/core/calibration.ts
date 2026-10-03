@@ -120,3 +120,26 @@ export class BaselineDrift {
     return p90 > this.calNeck * 1.08;
   }
 }
+
+/** Szyja w granicach ±5% kalibracji: głowa i barki są względem siebie tam, gdzie powinny. */
+const UPRIGHT_NECK = 0.05;
+const POSITION_TAU_SEC = 10;
+
+/**
+ * Położenie nosa i barków w kadrze przy prostej postawie (odróżnia uniesienie barków od opadania głowy).
+ * Uzupełnia się samo, gdy kalibracja go nie ma (stare kalibracje), i nadąża za przesunięciem na krześle –
+ * ale tylko, gdy szyja ma długość z kalibracji, więc uniesione barki ani opuszczona głowa go nie przestawią.
+ * Zmienia `c` w miejscu (ten sam obiekt ma tracker postawy).
+ */
+export function followPositionRef(c: Calibration, m: PostureMetrics, dtSec: number): void {
+  if (m.shoulderY == null || c.neckRatio === 0) return;
+  if (Math.abs(m.neckRatio - c.neckRatio) / Math.abs(c.neckRatio) > UPRIGHT_NECK) return;
+  if (c.noseY == null || c.shoulderY == null) {
+    c.noseY = m.noseY;
+    c.shoulderY = m.shoulderY;
+    return;
+  }
+  const a = 1 - Math.exp(-Math.max(0, dtSec) / POSITION_TAU_SEC);
+  c.noseY += (m.noseY - c.noseY) * a;
+  c.shoulderY += (m.shoulderY - c.shoulderY) * a;
+}

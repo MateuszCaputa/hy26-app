@@ -4,7 +4,7 @@
 > Task list: `docs/PLAN.md` · Quality bar: `docs/ENGINEERING.md` · Workflow: `docs/TEAM.md` · Background research: `research/`
 
 ## 1. Product in one breath
-**Postura**: a desktop app for people who work at a computer. The webcam, analysed **fully on-device** with MediaPipe, watches posture, blinking/PERCLOS, yawns and head droop. Keyboard/mouse tempo and Garmin sleep/stress add context. Together they become **decisions in the moment**: "fix this now", "take this break now, because…". It also finds your best and worst hours. Nothing visual ever leaves the machine.
+**Postura**: a desktop app for people who work at a computer. The webcam, analysed **fully on-device** with MediaPipe, watches posture, blinking/PERCLOS, yawns and head droop. Keyboard/mouse tempo adds context. Together they become **decisions in the moment**: "fix this now", "take this break now, because…". It also finds your best and worst hours. Nothing visual ever leaves the machine.
 
 **Codebase:** Kacper's Postura (current `main`). It absorbs the best ideas of Marcin's Rytm (tag `backup/rytm-marcin`, archived plan in `docs/archive-rytm/`).
 
@@ -29,7 +29,7 @@
 |---|---|---|
 | **Sport / movement** | 8 exercises picked for your top issue, break engine (20-20-20, micro, movement, adaptive) | **Camera-verified exercises** (the rep counter sees you do it, then your score recovers) |
 | **Physical health** | Posture score 0–100 vs calibration, 7 issues, alerts with hysteresis, distance to screen | The **visible wow overlay** (neon face mesh + skeleton), see §5 |
-| **Mental wellbeing** | Fatigue index (PERCLOS, blinks, long blinks, yawns, head droop, time since break), best hours, Garmin sleep/stress/Body Battery/HRV | **Prediction:** "your energy will drop in ~40 min", plus one fused "battery" number people instantly get |
+| **Mental wellbeing** | Fatigue index (PERCLOS, blinks, long blinks, yawns, head droop, time since break), best hours | **Prediction:** "your energy will drop in ~40 min", plus one fused "battery" number people instantly get |
 | **Access to healthcare** | – | **"Report for the doctor" + NFZ path:** after a persistent pattern (e.g. 14 days of neck strain or eye strain), a 1-page summary to show a GP/physio, with links to NFZ / TIP 800 190 590. Red flags → 112. **No diagnoses.** (From Rytm.) |
 | *Decisions (the brief's core verb)* | "One tip right now", ergonomic tip of the week | **"Why now" explanations** on every nudge ("break now: blinks −40%, PERCLOS 18%, 52 min without a break"), plus an optional **AI coach** summary (numbers only) |
 
@@ -37,7 +37,7 @@
 1. **Hook:** "We measured our own team for the 24 hours of this hackathon." Show real team data. (Rytm idea: our data is the proof.)
 2. **Wow shot:** the presenter sits down, and a **neon face mesh + skeleton** lights up on the projector. Then a slouch: the score drops, the fatigue rises, the widget turns amber.
 3. **Decision:** "Break now, because…" → a 60 s exercise the **camera verifies** → the score visibly recovers.
-4. **Prediction & rhythm:** the heat map of best hours. "You crash at 14:00 every day", plus the Garmin sleep effect.
+4. **Prediction & rhythm:** the heat map of best hours. "You crash at 14:00 every day".
 5. **Access to care:** the 14-day pattern → the doctor report PDF + NFZ path. "We don't diagnose; we get you to the right person sooner."
 6. **Privacy:** "0 bytes of video left this laptop." Plus the business case: the Polish BHP rules on screen-work breaks give a B2B, anonymous team view.
 7. **Close:** one line on why we're different from posture apps and eye apps.
@@ -63,7 +63,7 @@ Full pitch beats, judge Q&A and the wow visual spec: `research/BATERIA-vision.md
 
 **COULD:** a "what if" screen (Rytm), particles/celebration on recovery, a web build for the jury link (Electron-only is acceptable if the video is great).
 
-**WON'T (explicitly):** emotion recognition (EU AI Act art. 5), diagnoses, cloud video, accounts/login, mobile app, a rewrite of the core, new frameworks.
+**WON'T (explicitly):** emotion recognition (EU AI Act art. 5), diagnoses, cloud video, accounts/login, Garmin/wearable integration (removed 2026-10-03), mobile app, a rewrite of the core, new frameworks.
 
 ## 6. Definition of "ready to submit"
 - [ ] Fresh clone → `npm install && npm start` works on macOS (and the Windows exe if possible)

@@ -19,7 +19,7 @@ const configs = [
     platform: 'node',
     format: 'cjs',
     target: 'node22',
-    external: ['electron', 'uiohook-napi', 'garmin-connect', 'node:sqlite'],
+    external: ['electron', 'uiohook-napi', 'node:sqlite'],
   },
   {
     ...common,

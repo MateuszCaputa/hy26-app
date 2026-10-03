@@ -1,4 +1,4 @@
-// Widok „Na żywo”: podgląd z nakładką kręgosłupa, wynik, zmęczenie, najbliższa przerwa.
+// Widok „Na żywo”: podgląd z nakładką; na wierzchu stan postawy, energia do pracy i przerwy, reszta w „Szczegółach”.
 import type { AppCtx } from '../app';
 import type { Frame } from '../analyzer';
 import type { IssueId, LiveStatus, Settings } from '../../shared/types';
@@ -16,6 +16,16 @@ const STATE_WORD: Record<string, string> = {
   absent: 'Nie widzę Cię w kadrze',
   paused: 'Analiza wstrzymana',
 };
+
+/** Ocena postawy słowami, żeby „68/100” coś znaczyło. */
+const scoreWord = (score: number): string => (score >= 85 ? 'dobra' : score >= 65 ? 'do poprawy' : 'słaba');
+
+/** Bateria słowami: co ta liczba znaczy dla pracy teraz. */
+function energyMeaning(percent: number): { word: string; hint: string } {
+  if (percent >= 60) return { word: 'Dużo energii', hint: 'Dobry moment na zadania wymagające skupienia.' };
+  if (percent >= 30) return { word: 'Energia spada', hint: 'Lżejsze zadania pójdą dobrze; przerwa wkrótce pomoże.' };
+  return { word: 'Mało energii', hint: 'Zrób przerwę ruchową – wstań, napij się wody.' };
+}
 
 const CAMERA_MSG: Record<string, string> = {
   starting: 'Włączam kamerę…',
@@ -46,8 +56,10 @@ export class LiveView {
   private energyNum: HTMLElement;
   private energyBar: HTMLElement;
   private energyNote: HTMLElement;
+  private energyWord: HTMLElement;
   private breakText: HTMLElement;
   private breakSub: HTMLElement;
+  private breakBtn: HTMLButtonElement;
   private metricRows = new Map<IssueId, { val: HTMLElement; bar: HTMLElement; row: HTMLElement }>();
   private figure = new PostureFigure();
   private calibrateCta: HTMLElement;
@@ -68,11 +80,12 @@ export class LiveView {
       h('p', { class: 'stage-legend' }, h('span', { class: 'legend-ring' }), 'przerywane kółko: gdzie powinna być głowa'),
     );
 
-    this.energyNum = h('span', { class: 'energy-num' }, '–');
+    this.energyNum = h('span', { class: 'energy-pct' }, '–');
     this.energyBar = h('span', { class: 'meter-fill' });
-    this.energyNote = h('p', { class: 'fine' });
+    this.energyNote = h('p', { class: 'fine', hidden: true });
+    this.energyWord = h('p', { class: 'fine' });
 
-    this.scoreNum = h('span', { class: 'score-small' }, '–');
+    this.scoreNum = h('span', { class: 'score-small' }, '');
     this.scoreState = h('span', { class: 'score-state' }, 'Uruchamiam…');
     this.tip = h('p', { class: 'tip' });
 
@@ -84,6 +97,7 @@ export class LiveView {
 
     this.breakText = h('p', { class: 'break-text' }, '–');
     this.breakSub = h('p', { class: 'fine' });
+    this.breakBtn = h('button', { class: 'btn small', onclick: () => ctx.startBreak() }, 'Zrób przerwę teraz');
 
     const metrics = h('ul', { class: 'metric-list' },
       ISSUE_DEFS.map((d) => {
@@ -95,35 +109,48 @@ export class LiveView {
       }),
     );
 
-    // Na pierwszym planie trzy rzeczy: bateria, co poprawić teraz i kiedy przerwa.
-    // Pomiary szczegółowe są jedno kliknięcie dalej (prosty ekran dla kogoś, kto widzi aplikację pierwszy raz).
+    // Na wierzchu tylko to, co ważne teraz: jak siedzę (i co poprawić, gdy coś jest nie tak), ile mam energii i kiedy przerwa.
+    // Ocena, przerwy, zmęczenie i odchylenia są jedno kliknięcie dalej (FEEDBACK F1).
     const panel = h('aside', { class: 'readout' },
-      h('section', { class: 'r-block energy-block', 'aria-live': 'polite' },
-        h('h2', null, 'Bateria'),
-        h('div', { class: 'score-line' }, this.energyNum, h('span', { class: 'score-of' }, '%')),
-        h('span', { class: 'meter big', role: 'presentation' }, this.energyBar),
-        this.energyNote,
-      ),
-      // C16 (uwaga mentora F3): ludzik pokazuje problem i strzałką, jak go poprawić; obok jedno zdanie.
-      h('section', { class: 'r-block score-block' },
-        h('div', { class: 'state-line' }, this.scoreState, h('span', { class: 'fine' }, 'postawa ', this.scoreNum, '/100')),
+      h('section', { class: 'r-block hero', 'aria-live': 'polite' },
+        this.scoreState,
+        // C16 (uwaga mentora F3): ludzik pokazuje problem i strzałką, jak go poprawić; obok jedno zdanie.
         this.figure.el,
         this.tip,
       ),
-      h('section', { class: 'r-block break-line' },
-        this.breakText,
-        h('button', { class: 'btn small ghost', onclick: () => ctx.startBreak() }, 'Przerwa teraz'),
+      h('section', { class: 'r-block energy-row' },
+        h('div', { class: 'energy-head' }, h('span', null, 'Energia do pracy'), this.energyNum),
+        h('span', { class: 'meter', role: 'presentation' }, this.energyBar),
+        this.energyNote,
       ),
-      h('details', { class: 'r-block details' },
+      h('section', { class: 'r-block break-block' },
+        h('h2', null, 'Przerwy'),
+        this.breakText,
+        this.breakSub,
+        this.breakBtn,
+      ),
+      h('details', {
+        class: 'r-block details',
+        // Po rozwinięciu przewiń sam panel do szczegółów – kamera zostaje na miejscu.
+        ontoggle: (e: Event) => {
+          const d = e.currentTarget as HTMLDetailsElement;
+          if (d.open) requestAnimationFrame(() => d.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+        },
+      },
         h('summary', null, 'Szczegóły pomiaru'),
         h('div', { class: 'details-body' },
-          this.breakSub,
-          h('h2', null, 'Zmęczenie'),
+          h('h2', null, 'Ocena postawy'),
+          this.scoreNum,
+          h('h2', null, 'Energia do pracy'),
+          this.energyWord,
+          h('h2', null, 'Zmęczenie oczu'),
+          h('p', { class: 'fine' }, 'Z mrugania, przymykania oczu i ziewania. Im mniej, tym lepiej.'),
           h('div', { class: 'fat-line' }, this.fatNum, this.fatWord),
           h('span', { class: 'meter', role: 'presentation' }, this.fatBar, h('span', { class: 'meter-tick t40' }), h('span', { class: 'meter-tick t70' })),
           this.fatDetail,
           this.fatAdvice,
-          h('h2', null, 'Odchylenia od Twojej prostej postawy'),
+          h('h2', null, 'Jak daleko jesteś od swojej prostej postawy'),
+          h('p', { class: 'fine' }, 'Porównanie z kalibracją. Pusty pasek = tak jak wtedy, pełny = wyraźne odchylenie.'),
           metrics,
           h('button', { class: 'btn ghost small', onclick: () => ctx.startCalibration() }, 'Skalibruj ponownie'),
         ),
@@ -241,23 +268,31 @@ export class LiveView {
     const noCal = !ctx.calibration;
     this.calibrateCta.hidden = !noCal || ctx.paused;
     this.root.dataset.state = ctx.paused ? 'paused' : s.state;
-    this.scoreNum.textContent = s.score === null || noCal ? '–' : String(s.score);
+    const showScore = s.score !== null && !noCal && !ctx.paused && s.state !== 'absent';
+    this.scoreNum.textContent = showScore ? `${s.score}/100 – ${scoreWord(s.score!)}. 100 = tak prosto jak przy kalibracji.` : 'Pojawi się, gdy będziesz w kadrze.';
     this.scoreState.textContent = noCal ? 'Czekam na kalibrację' : STATE_WORD[ctx.paused ? 'paused' : s.state] ?? '';
-    this.tip.textContent = s.topIssue && !noCal && s.state !== 'absent' ? ISSUE_TIP[s.topIssue] : s.state === 'good' ? 'Tak trzymaj.' : '';
+    this.tip.textContent = noCal ? 'Pokaż mi raz prostą postawę – od niej liczę resztę.'
+      : s.issues?.length && s.state !== 'absent' ? s.issues.map((id) => ISSUE_TIP[id]).join(' ') // do dwóch wskazówek naraz
+      : s.topIssue && s.state !== 'absent' ? ISSUE_TIP[s.topIssue]
+      : s.state === 'absent' ? 'Usiądź przed kamerą, a pomiar wróci sam.' : '';
 
     const e = s.energy;
     if (e && !noCal && !ctx.paused) {
-      this.energyNum.textContent = String(e.percent);
       this.energyBar.style.width = `${e.percent}%`;
       this.energyBar.dataset.level = e.percent < 30 ? 'veryTired' : e.percent < 60 ? 'tired' : 'fresh';
-      this.energyNote.textContent =
-        e.minutesToLow !== null ? `Za ok. ${fmtMin(e.minutesToLow)} spadnie poniżej 30% – zaplanuj przerwę wcześniej.`
-        : e.percent < 30 ? 'Niski poziom – zrób przerwę ruchową.'
-        : 'Stabilnie. Bateria łączy zmęczenie, postawę i czas od przerwy.';
+      this.energyNum.textContent = `${e.percent}%`;
+      const meaning = energyMeaning(e.percent);
+      this.energyWord.textContent = `${meaning.word}. ${meaning.hint} Liczę ją ze zmęczenia oczu, postawy i czasu od ostatniej przerwy.`;
+      // Pod paskiem tylko ostrzeżenie: spada albo już jest nisko. Gdy wszystko w porządku – cisza.
+      const note = e.minutesToLow !== null ? `Za ok. ${fmtMin(e.minutesToLow)} spadnie poniżej 30% – zaplanuj przerwę.`
+        : e.percent < 30 ? meaning.hint : '';
+      this.energyNote.textContent = note;
+      this.energyNote.hidden = !note;
     } else {
+      this.energyWord.textContent = noCal ? 'Pojawi się po kalibracji.' : 'Pojawi się, gdy będziesz w kadrze.';
       this.energyNum.textContent = '–';
       this.energyBar.style.width = '0';
-      this.energyNote.textContent = noCal ? 'Pojawi się po kalibracji.' : 'Pojawi się, gdy będziesz w kadrze.';
+      this.energyNote.hidden = true;
     }
 
     const f = s.fatigue;
@@ -289,12 +324,11 @@ export class LiveView {
     const be = ctx.analyzer.breakEngine;
     const pending = be.pendingSuggestion;
     const t = performance.now() / 1000;
-    if (pending) {
-      this.breakText.textContent = `${BREAK_TITLE[pending.kind]} – teraz`;
-    } else {
-      const next = be.nextDueInMin(t);
-      this.breakText.textContent = next.min <= 0 ? `${BREAK_TITLE[next.kind]} – teraz` : `${BREAK_TITLE[next.kind]} za ${fmtMin(next.min)}`;
-    }
-    this.breakSub.textContent = `Od ostatniej przerwy: ${fmtMin(s.minutesSinceBreak)}`;
+    const next = be.nextDueInMin(t);
+    const dueKind = pending ? pending.kind : next.min <= 0 ? next.kind : null;
+    this.breakText.textContent = dueKind ? `${BREAK_TITLE[dueKind]} – teraz` : `${BREAK_TITLE[next.kind]} za ${fmtMin(next.min)}`;
+    // Gdy jest pora na przerwę, przycisk wyróżnia się – na co dzień jest spokojny.
+    this.breakBtn.className = dueKind ? 'btn primary small' : 'btn small';
+    this.breakSub.textContent = `Pracujesz bez przerwy od ${fmtMin(s.minutesSinceBreak)}.`;
   }
 }

@@ -21,7 +21,6 @@
     "demo:stats": "node build.mjs && electron . --demo --data=demo-data --view=stats"
   },
   "dependencies": {
-    "garmin-connect": "^1.6.2",
     "uiohook-napi": "^1.5.5"
   },
   "devDependencies": {

@@ -107,16 +107,23 @@ export function computeMetrics(
 
   const shoulderW = dist(lsx, lsy, rsx, rsy);
   if (shoulderW < 10) return { metrics: null, reason: 'no-person' };
+  const shoulderMidX = (lsx + rsx) / 2;
   const shoulderMidY = (lsy + rsy) / 2;
 
   // Uszy bywają zasłonięte (włosy, słuchawki): używamy widocznych, a w ostateczności oczu.
   const earsVisible = [POSE.leftEar, POSE.rightEar].filter((i) => vis(i) >= MIN_VISIBILITY);
+  let earX: number;
   let earY: number;
   if (earsVisible.length > 0) {
+    earX = earsVisible.map((i) => p(i)[0]).reduce((a, b) => a + b, 0) / earsVisible.length;
     earY = earsVisible.map((i) => p(i)[1]).reduce((a, b) => a + b, 0) / earsVisible.length;
   } else {
+    earX = (lex + rex) / 2;
     earY = (ley + rey) / 2;
   }
+  // Odległość od środka barków, a nie sama różnica wysokości: przy odchyleniu tułowia w bok
+  // pionowa odległość maleje (cos kąta) i udawała wysuniętą głowę. Znak zostaje z osi pionowej.
+  const fromShoulders = (x: number, y: number) => Math.sign(shoulderMidY - y) * dist(x, y, shoulderMidX, shoulderMidY);
 
   const pose = opts.headPose ?? null;
   // Obrót głowy zmniejsza widoczny rozstaw oczu: korygujemy, żeby nie udawał oddalenia od ekranu.
@@ -125,8 +132,8 @@ export function computeMetrics(
 
   return {
     metrics: {
-      neckRatio: (shoulderMidY - ny) / shoulderW,
-      earRatio: (shoulderMidY - earY) / shoulderW,
+      neckRatio: fromShoulders(nx, ny) / shoulderW,
+      earRatio: fromShoulders(earX, earY) / shoulderW,
       // Przechył z macierzy twarzy jest dokładniejszy niż z dwóch punktów oczu.
       headRollDeg: pose ? pose.rollDeg : lineAngleDeg(rex, rey, lex, ley),
       shoulderTiltDeg: lineAngleDeg(rsx, rsy, lsx, lsy),
@@ -134,6 +141,7 @@ export function computeMetrics(
       shoulderToEye: shoulderW / eyeDistFrontal,
       noseX: nx,
       noseY: ny,
+      shoulderY: shoulderMidY,
       headPitchDeg: pose ? pose.pitchDeg : null,
       headYawDeg: pose ? pose.yawDeg : null,
     },

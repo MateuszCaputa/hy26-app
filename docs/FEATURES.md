@@ -56,7 +56,7 @@
 | Feature | What the user sees | Status | Where | Pitch |
 |---|---|---|---|---|
 | "Bateria" one number | Big "73%" at the top of the live panel with a coloured meter | ✅ | `core/energy.ts` (A6), `views/live.ts` | ★ |
-| Fused inputs | Fatigue 50%, posture 25%, time since break 15%, Garmin morning Body Battery 10% | ✅ | `core/energy.ts` | · |
+| Fused inputs | Fatigue 50%, posture 25%, time since break 15% | ✅ | `core/energy.ts` | · |
 | Forecast | "Za ok. 40 min spadnie poniżej 30% – zaplanuj przerwę wcześniej." | ✅ | `core/energy.ts` `minutesUntilLow`, `views/live.ts` | ★ |
 | Sparkline + prediction badge (live + widget) | Small trend line next to Bateria | 📋 C5 | PLAN C5 | · |
 | Bateria recharges after a verified exercise | Number visibly goes up after chin tucks | 📋 A5 + C6 | PLAN A5, C6 | ★ |
@@ -108,15 +108,6 @@
 | AI coach summary | Daily summary from numbers only | 📋 B4 (only if AI dual entry) | PLAN B4 | |
 | "What if" screen, phone health import | — | ✂️ B7, B6 | PLAN | |
 
-## Garmin & context
-| Feature | What the user sees | Status | Where | Pitch |
-|---|---|---|---|---|
-| Garmin Connect login | Settings card: e-mail + password, "Pobierz dane teraz", "Rozłącz" | ✅ | `main/garmin.ts`, `views/settings.ts` | · |
-| Sleep / stress / Body Battery / HRV | Stats block "Sen i regeneracja (Garmin)" with figures | ✅ | `views/stats.ts` | · |
-| Sleep → form insight | After 5 days: sentence on how sleep affects your next-day form | ✅ | `core/insights.ts` `sleepInsight` | ★ |
-| Auto sync | 14 days on connect, then every 6 h | ✅ | `main/main.ts` `maybeSyncGarmin` | |
-| Credentials encrypted | OS keychain via `safeStorage` | ✅ | `main/garmin.ts` | |
-
 ## Care path (doctor report, NFZ)
 | Feature | What the user sees | Status | Where | Pitch |
 |---|---|---|---|---|
@@ -129,7 +120,7 @@
 | Feature | What the user sees | Status | Where | Pitch |
 |---|---|---|---|---|
 | Frames never saved or sent | Privacy note in Settings; DB holds numbers only | ✅ | `main/db.ts`, `views/settings.ts` | ★ |
-| "Usuń moje dane" | Two-click wipe of history, calibration, Garmin | ✅ | `main/db.ts` `wipe`, `views/settings.ts` | · |
+| "Usuń moje dane" | Two-click wipe of history, calibration | ✅ | `main/db.ts` `wipe`, `views/settings.ts` | · |
 | Auto-pause when camera busy / screen locked | Teams/Zoom takes the camera → pauses and resumes alone | ✅ | `renderer/analyzer.ts`, `main/main.ts` (`powerMonitor`) | · |
 | Wstrzymaj turns the camera off | Pause from the app or tray | ✅ | `renderer/app.ts`, `main/main.ts` | |
 | Models bundled (works with wifi off) | No download on first run | 📋 A1 (Kacper) | PLAN A1 | |
@@ -173,6 +164,5 @@
 - **"Why now"** today is only a generic reason line on the break overlay (`BREAK_REASON`); posture alerts show issue + tip without evidence numbers. A3/B3 add the evidence.
 - **Camera-verified exercises, Bateria recharge, doctor report, NFZ card, Team view**: not in main yet.
 - **Pause → resume freeze** (MP2) not yet verified fixed; avoid pausing on stage.
-- **Garmin**: unofficial library; accounts with 2FA may fail. Have seeded data ready.
 - **Keyboard/mouse tempo** is off by default (needs macOS Accessibility), so "form" uses fatigue + posture unless enabled.
 - **Medical claims**: habit tool, not a diagnosis. Never say "diagnoses" or "detects disease".

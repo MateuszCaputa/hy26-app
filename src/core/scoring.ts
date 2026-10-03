@@ -28,21 +28,54 @@ const yawTooLarge = (m: PostureMetrics) => m.headYawDeg != null && Math.abs(m.he
 /** 15° dodatkowego pochylenia głowy liczymy jak 15% spadku „szyi” (ten sam próg ostrzeżenia). */
 const PITCH_DEG_TO_RATIO = 0.15 / 15;
 
+/**
+ * Szyja skraca się z dwóch powodów: głowa opada/wysuwa się (nos w dół) albo barki idą w górę.
+ * Z ujęcia z przodu oba wyglądają tak samo, więc patrzymy, co przesunęło się w kadrze względem kalibracji.
+ * Zwraca udział barków (0–1) w skróceniu szyi; 0, gdy kalibracja nie ma położeń.
+ */
+export function shrugShare(m: PostureMetrics, c: Calibration): number {
+  if (m.shoulderY == null || c.shoulderY == null || c.noseY == null) return 0;
+  const up = Math.max(0, c.shoulderY - m.shoulderY);
+  const down = Math.max(0, m.noseY - c.noseY);
+  return up + down > 0 ? up / (up + down) : 0;
+}
+
 /** Wysunięcie głowy: większe z dwóch niezależnych pomiarów – opadania szyi i pochylenia głowy. */
 function headForwardDeviation(m: PostureMetrics, c: Calibration): number {
-  const neck = relDrop(m.neckRatio, c.neckRatio);
+  const neck = relDrop(m.neckRatio, c.neckRatio) * (1 - shrugShare(m, c));
   if (m.headPitchDeg == null || c.headPitchDeg == null) return neck;
   return Math.max(neck, (m.headPitchDeg - c.headPitchDeg) * PITCH_DEG_TO_RATIO);
 }
 
 export const ISSUE_DEFS: IssueDef[] = [
   { id: 'headForward', weight: 0.3, threshold: 0.15, unit: '%', deviation: headForwardDeviation },
-  { id: 'slouch', weight: 0.25, threshold: 0.1, unit: '%', deviation: (m, c) => relDrop(m.earRatio, c.earRatio) },
+  // Broda w górę (np. monitor za wysoko): tylko z kąta głowy, bez siatki twarzy nie oceniamy.
+  { id: 'headBack', weight: 0.15, threshold: 15, unit: '°', deviation: (m, c) => (m.headPitchDeg == null || c.headPitchDeg == null ? 0 : c.headPitchDeg - m.headPitchDeg) },
+  { id: 'slouch', weight: 0.25, threshold: 0.1, unit: '%', deviation: (m, c) => relDrop(m.earRatio, c.earRatio) * (1 - shrugShare(m, c)) },
+  // Barki uniesione do uszu: ta część skrócenia szyi, którą zrobiły barki, nie głowa.
+  { id: 'shrug', weight: 0.15, threshold: 0.15, unit: '%', deviation: (m, c) => relDrop(m.neckRatio, c.neckRatio) * shrugShare(m, c) },
   { id: 'shoulderTilt', weight: 0.15, threshold: 5, unit: '°', deviation: (m, c) => Math.abs(m.shoulderTiltDeg - levelBaseline(c.shoulderTiltDeg)) },
   { id: 'tooClose', weight: 0.15, threshold: 0.15, unit: '%', deviation: (m, c) => (yawTooLarge(m) ? 0 : m.eyeDistPx / c.eyeDistPx - 1) },
   { id: 'headTilt', weight: 0.1, threshold: 10, unit: '°', deviation: (m, c) => Math.abs(m.headRollDeg - levelBaseline(c.headRollDeg)) },
   { id: 'twist', weight: 0.05, threshold: 0.15, unit: '%', deviation: (m, c) => (yawTooLarge(m) ? 0 : relDrop(m.shoulderToEye, c.shoulderToEye)) },
 ];
+
+/** Część ciała, której dotyczy problem: dwa komunikaty naraz mają mówić o dwóch różnych rzeczach. */
+const REGION: Record<Exclude<IssueId, 'stillness'>, 'head' | 'roll' | 'shoulders'> = {
+  headForward: 'head', headBack: 'head', slouch: 'head', tooClose: 'head',
+  headTilt: 'roll',
+  shoulderTilt: 'shoulders', twist: 'shoulders', shrug: 'shoulders',
+};
+
+/** Bieżące problemy od najważniejszego (waga × kara), najwyżej jeden na część ciała; drobne (< 0,25) pomijamy. */
+export function rankIssues(sev: Partial<Record<IssueId, number>>, max = 2): IssueId[] {
+  const seen = new Set<string>();
+  return ISSUE_DEFS.filter((d) => (sev[d.id] ?? 0) >= 0.25)
+    .sort((a, b) => (sev[b.id] ?? 0) * b.weight - (sev[a.id] ?? 0) * a.weight)
+    .filter((d) => !seen.has(REGION[d.id]) && !!seen.add(REGION[d.id]))
+    .slice(0, max)
+    .map((d) => d.id);
+}
 
 /** Suma ważonych kar, przy której wynik spada do zera. */
 const PENALTY_FOR_ZERO = 0.6;
@@ -98,6 +131,8 @@ export interface TrackerOutput {
   rawScore: number | null;
   present: boolean;
   topIssue: IssueId | null;
+  /** Do dwóch bieżących problemów, najważniejszy pierwszy (puste przy dobrej postawie). */
+  issues: IssueId[];
   /** Wygładzone kary (0–1) per problem. */
   severities: Partial<Record<IssueId, number>>;
   /** Ustawione tylko w momencie wyzwolenia alertu. */
@@ -159,6 +194,7 @@ export class PostureTracker {
         rawScore: null,
         present,
         topIssue: present ? this.topIssue() : null,
+        issues: present ? rankIssues(this.sev) : [],
         severities: { ...this.sev },
         alert: null,
         absentSec: Number.isFinite(absentSec) ? absentSec : 0,
@@ -217,6 +253,7 @@ export class PostureTracker {
       rawScore: raw,
       present: true,
       topIssue: state === 'good' ? null : this.topIssue(),
+      issues: state === 'good' ? [] : rankIssues(this.sev),
       severities: { ...this.sev },
       alert,
       absentSec: 0,
@@ -226,17 +263,7 @@ export class PostureTracker {
 
   /** Problem z największą ważoną karą: o nim mówi komunikat. */
   topIssue(): IssueId | null {
-    let best: IssueId | null = null;
-    let bestVal = 0;
-    for (const d of ISSUE_DEFS) {
-      const s = this.sev[d.id] ?? 0;
-      if (s < 0.25) continue; // pomijamy drobne odchylenia
-      const v = s * d.weight;
-      if (v > bestVal) {
-        bestVal = v;
-        best = d.id;
-      }
-    }
+    const best = rankIssues(this.sev, 1)[0] ?? null;
     if (!best && (this.sev.stillness ?? 0) > 0) return 'stillness';
     return best;
   }

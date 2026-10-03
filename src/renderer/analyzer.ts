@@ -10,7 +10,7 @@ import { MinuteAggregator, postureAvg, postureSlope, topIssueOf } from '../core/
 import { FrameGate } from '../core/frameGate';
 import { headPoseFromMatrix, type HeadPose } from '../core/headPose';
 import { ShoulderGate } from '../core/shoulderGate';
-import { BaselineDrift, checkCalibrationPose, type CalibrationCheck } from '../core/calibration';
+import { BaselineDrift, checkCalibrationPose, followPositionRef, type CalibrationCheck } from '../core/calibration';
 import type { SlouchReference } from '../shared/types';
 import { energyPercent, minutesUntilLow, type EnergyPoint } from '../core/energy';
 
@@ -81,9 +81,9 @@ export class Analyzer {
     resolve: (c: Calibration | SlouchReference | null) => void;
   } | null = null;
   private drift: BaselineDrift | null = null;
-  /** Bateria z kolejnych minut (do prognozy) i Body Battery z zegarka rano. */
+  private lastPositionT = 0;
+  /** Bateria z kolejnych minut (do prognozy). */
   private energyHistory: EnergyPoint[] = [];
-  private morningBodyBattery: number | null = null;
   private driftHintDay = '';
   demo = false;
   /** Bez WebGL MediaPipe nie przyjmuje <video>: wtedy podajemy klatki jako ImageData. */
@@ -377,6 +377,8 @@ export class Analyzer {
           this.eyes.updateHead(t, res.metrics.neckRatio / this.calibration.neckRatio);
           this.trackFaceScale(res.metrics.eyeDistPx / this.calibration.eyeDistPx);
           this.trackDrift(t, res.metrics);
+          followPositionRef(this.calibration, res.metrics, t - this.lastPositionT);
+          this.lastPositionT = t;
         }
         if (out.alert) {
           this.breaks.registerAlert(t);
@@ -448,10 +450,6 @@ export class Analyzer {
     return c.getImageData(0, 0, w, h);
   }
 
-  setMorningBodyBattery(v: number | null): void {
-    this.morningBodyBattery = v;
-  }
-
   private energyNow(t: number): number | null {
     const tr = this.lastTracker;
     if (!this.calibration || !tr?.present) return null;
@@ -459,7 +457,6 @@ export class Analyzer {
       fatiguePercent: this.lastFatigue?.percent ?? null,
       postureAvg15: postureAvg(this.recent.slice(-15)) ?? tr.score,
       minutesSinceBreak: this.breaks.minutesSinceBreak(t),
-      morningBodyBattery: this.morningBodyBattery,
     });
   }
 
@@ -472,6 +469,7 @@ export class Analyzer {
       score: tr?.score ?? null,
       fatigue: tr?.present ? this.lastFatigue : null,
       topIssue: tr?.topIssue ?? null,
+      issues: tr?.issues ?? [],
       minutesSinceBreak: Math.round(this.breaks.minutesSinceBreak(t)),
       note: !this.calibration ? 'Wymagana kalibracja' : undefined,
     };
@@ -579,6 +577,11 @@ export class Analyzer {
       headPitchDeg: (() => {
         const v = c.samples.map((m) => m.headPitchDeg).filter((x): x is number => x != null);
         return v.length >= c.samples.length / 2 ? median(v) : null;
+      })(),
+      noseY: median(c.samples.map((m) => m.noseY)),
+      shoulderY: (() => {
+        const v = c.samples.map((m) => m.shoulderY).filter((x): x is number => x != null);
+        return v.length ? median(v) : undefined;
       })(),
     };
     this.setCalibration(cal);

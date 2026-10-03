@@ -3,6 +3,8 @@ import type { BreakKind, FatigueLevel, IssueId } from '../shared/types';
 
 export const ISSUE_LABEL: Record<IssueId, string> = {
   headForward: 'Głowa wysunięta do przodu',
+  headBack: 'Głowa odchylona do tyłu',
+  shrug: 'Barki uniesione',
   slouch: 'Garbienie',
   headTilt: 'Przechył głowy',
   shoulderTilt: 'Przechył barków',
@@ -14,6 +16,8 @@ export const ISSUE_LABEL: Record<IssueId, string> = {
 /** Jedna, konkretna wskazówka „na teraz”. */
 export const ISSUE_TIP: Record<IssueId, string> = {
   headForward: 'Cofnij brodę, jakbyś robił „podwójny podbródek”.',
+  headBack: 'Opuść lekko brodę – patrz prosto przed siebie.',
+  shrug: 'Opuść barki – rozluźnij je w dół, z dala od uszu.',
   slouch: 'Oprzyj plecy i unieś mostek.',
   headTilt: 'Ustaw głowę prosto nad barkami.',
   shoulderTilt: 'Wyrównaj barki i sprawdź podłokietniki.',
@@ -24,6 +28,8 @@ export const ISSUE_TIP: Record<IssueId, string> = {
 
 /** Co poprawić na stałe: rada ergonomiczna do najczęstszego problemu tygodnia. */
 export const ERGONOMIC_TIP: Record<IssueId, string> = {
+  shrug: 'Obniż biurko lub podłokietniki, żeby przedramiona leżały swobodnie, a barki nie musiały się unosić.',
+  headBack: 'Obniż monitor: górna krawędź na wysokości oczu lub trochę niżej, żeby nie zadzierać głowy.',
   headForward: 'Podnieś monitor tak, by jego górna krawędź była na wysokości oczu; laptop postaw na podstawce z osobną klawiaturą.',
   slouch: 'Wsuń się głębiej w krzesło i użyj podparcia lędźwi (np. zwinięty ręcznik); stopy płasko na podłodze.',
   headTilt: 'Sprawdź, czy monitor stoi na wprost, a dokumenty nie leżą z boku; trzymając telefon, nie dociskaj go barkiem.',
@@ -80,7 +86,7 @@ export const EXERCISES: Exercise[] = [
     seconds: 45,
     steps: ['Unieś barki do uszu i opuść – 10 razy.', 'Zrób 10 krążeń barkami do tyłu.', 'Rozluźnij ręce wzdłuż tułowia.'],
     kinds: ['micro'],
-    forIssues: ['shoulderTilt', 'stillness'],
+    forIssues: ['shrug', 'shoulderTilt', 'stillness'],
     figure: 'shrug',
   },
   {
@@ -89,7 +95,7 @@ export const EXERCISES: Exercise[] = [
     seconds: 45,
     steps: ['Przechyl głowę uchem do barku.', 'Przytrzymaj 20 s, oddychając spokojnie.', 'Zmień stronę.'],
     kinds: ['micro'],
-    forIssues: ['headTilt', 'shoulderTilt'],
+    forIssues: ['headTilt', 'shoulderTilt', 'headBack'],
     figure: 'neck-side',
   },
   {

@@ -46,5 +46,5 @@ window.postura.onStatus((s: LiveStatus) => {
   el('w-score').textContent = away ? '–' : String(s.score);
   el('w-state').textContent = WORD[s.state] ?? '';
   el('w-sub').textContent = s.fatigue ? `zmęczenie ${s.fatigue.percent}%` : '';
-  box.title = `Postawa ${away ? '–' : `${s.score}/100`} · ${WORD[s.state] ?? ''}${s.energy ? ` · Bateria ${s.energy.percent}%` : ''}\nKliknij: otwórz Posturę · przeciągnij: przesuń`;
+  box.title = `Postawa ${away ? '–' : `${s.score}/100`} · ${WORD[s.state] ?? ''}${s.energy ? ` · Energia do pracy ${s.energy.percent}%` : ''}\nKliknij: otwórz Posturę · przeciągnij: przesuń`;
 });

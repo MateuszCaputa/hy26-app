@@ -11,7 +11,6 @@ Aplikacja desktopowa (Windows i macOS) analizująca postawę siedzącą, zmęcze
 - **Ćwiczenia.** 8 ćwiczeń (cofanie brody, ściąganie łopatek, krążenia barków, rozciąganie szyi, skręt tułowia, otwarcie klatki, 20-20-20, spacer) dobieranych do najczęstszego problemu, z licznikiem czasu.
 - **Mrugnięcia i zmęczenie.** MediaPipe Face Landmarker (478 punktów + współczynniki mrugnięcia): częstość mrugnięć, długie mrugnięcia, PERCLOS, ziewanie, opadanie głowy → wskaźnik zmęczenia 0–100%.
 - **Godziny formy.** Wskaźnik formy dla każdej minuty (45% brak zmęczenia, 35% postawa, 20% tempo pracy z klawiatury i myszy), mapa dzień tygodnia × godzina i wniosek „Najlepsze godziny: 9–11; spadek ok. 14:00”.
-- **Garmin Connect.** Sen, ocena snu, stres, Body Battery i HRV; po 5 dniach wniosek o wpływie snu na formę.
 - **Zasobnik systemowy** z kolorem stanu, mini-widget na wierzchu, podsumowanie dnia o końcu pracy, tryb „Nie przeszkadzać”, autostart.
 
 ## Uruchomienie
@@ -70,17 +69,13 @@ Wskaźnik zmęczenia = ważona suma składowych 0–1 (PERCLOS 30%, częstość 
 
 Wszystkie progi to wartości startowe do strojenia, a wynik jest narzędziem nawykowym, nie diagnozą medyczną.
 
-## Garmin
-
-Połączenie używa nieoficjalnej biblioteki `garmin-connect` z logowaniem na Twoje konto (oficjalne API Garmina jest tylko dla zatwierdzonych firm). Hasło i tokeny są szyfrowane systemowym pękiem kluczy (Electron `safeStorage`). Konta z weryfikacją dwuetapową mogą nie działać. Dane są pobierane przy połączeniu (14 dni), potem automatycznie co 6 h.
-
 ## Prywatność
 
 - Klatki z kamery są analizowane w pamięci i od razu odrzucane.
-- Baza SQLite (`postura.db` w katalogu danych aplikacji) zawiera: wyniki co minutę, zdarzenia (alerty, przerwy), kalibrację, ustawienia i dane z Garmina.
+- Baza SQLite (`postura.db` w katalogu danych aplikacji) zawiera: wyniki co minutę, zdarzenia (alerty, przerwy), kalibrację i ustawienia.
 - Klawiatura i mysz: tylko liczba zdarzeń na minutę – nigdy klawisze, treść ani nazwy okien.
 - „Wstrzymaj” wyłącza kamerę. Gdy kamerę zajmie inna aplikacja (Teams, Zoom), analiza wstrzymuje się sama i wraca, gdy kamera się zwolni.
-- „Usuń moje dane” w ustawieniach czyści historię, kalibrację i dane Garmina.
+- „Usuń moje dane” w ustawieniach czyści historię i kalibrację.
 
 ## Rozwój
 
@@ -101,7 +96,7 @@ src/core/       czysta logika (bez Electrona, w pełni testowana)
   coach.ts        komunikaty, ćwiczenia, porady ergonomiczne
   aggregate.ts    próbki minutowe, trend postawy
   insights.ts     wskaźnik formy, mapa godzin, wpływ snu
-src/main/       proces główny: okno, zasobnik, SQLite (node:sqlite), klawiatura/mysz, Garmin, modele
+src/main/       proces główny: okno, zasobnik, SQLite (node:sqlite), klawiatura/mysz, modele
 src/renderer/   interfejs i analizator (kamera + MediaPipe)
 test/           testy jednostkowe
 ```

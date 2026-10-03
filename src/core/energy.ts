@@ -5,18 +5,15 @@
 //  - zmęczenie z twarzy (wskaźnik zmęczenia 0–100)       waga 0,50
 //  - postawa: ile średni wynik z 15 min jest poniżej 90    waga 0,25
 //  - czas od ostatniej przerwy (od 20 do 90 min)           waga 0,15
-//  - Body Battery z zegarka rano (Garmin), jeśli jest      waga 0,10
 // Brak składowej = jej waga rozkłada się na pozostałe.
 
 export interface EnergyInputs {
   fatiguePercent: number | null;
   postureAvg15: number | null;
   minutesSinceBreak: number;
-  /** Body Battery rano (0–100) z Garmina; null bez zegarka. */
-  morningBodyBattery: number | null;
 }
 
-export const ENERGY_WEIGHTS = { fatigue: 0.5, posture: 0.25, time: 0.15, body: 0.1 } as const;
+export const ENERGY_WEIGHTS = { fatigue: 0.5, posture: 0.25, time: 0.15 } as const;
 export const ENERGY_LOW = 30;
 
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
@@ -26,7 +23,6 @@ export function energyPercent(i: EnergyInputs): number {
     { w: ENERGY_WEIGHTS.fatigue, c: i.fatiguePercent === null ? null : clamp(i.fatiguePercent, 0, 100) },
     { w: ENERGY_WEIGHTS.posture, c: i.postureAvg15 === null ? null : clamp(((90 - i.postureAvg15) / 60) * 100, 0, 100) },
     { w: ENERGY_WEIGHTS.time, c: clamp(((i.minutesSinceBreak - 20) / 70) * 100, 0, 100) },
-    { w: ENERGY_WEIGHTS.body, c: i.morningBodyBattery === null ? null : clamp(100 - i.morningBodyBattery, 0, 100) },
   ];
   let sum = 0;
   let w = 0;

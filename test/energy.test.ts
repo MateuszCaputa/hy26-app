@@ -3,26 +3,24 @@ import assert from 'node:assert/strict';
 import { energyPercent, minutesUntilLow, type EnergyPoint } from '../src/core/energy';
 
 test('świeża osoba w dobrej postawie, tuż po przerwie = pełna bateria', () => {
-  assert.equal(energyPercent({ fatiguePercent: 0, postureAvg15: 95, minutesSinceBreak: 5, morningBodyBattery: null }), 100);
+  assert.equal(energyPercent({ fatiguePercent: 0, postureAvg15: 95, minutesSinceBreak: 5 }), 100);
 });
 
 test('zmęczenie, słaba postawa i długo bez przerwy = niska bateria', () => {
-  const e = energyPercent({ fatiguePercent: 80, postureAvg15: 50, minutesSinceBreak: 90, morningBodyBattery: 20 });
+  const e = energyPercent({ fatiguePercent: 80, postureAvg15: 50, minutesSinceBreak: 90 });
   assert.ok(e < 30, `bateria ${e}`);
 });
 
-test('każda składowa obniża baterię, a brak zegarka nie zaniża wyniku', () => {
-  const base = { fatiguePercent: 20, postureAvg15: 85, minutesSinceBreak: 10, morningBodyBattery: null };
+test('każda składowa obniża baterię', () => {
+  const base = { fatiguePercent: 20, postureAvg15: 85, minutesSinceBreak: 10 };
   const b = energyPercent(base);
   assert.ok(energyPercent({ ...base, fatiguePercent: 60 }) < b);
   assert.ok(energyPercent({ ...base, postureAvg15: 60 }) < b);
   assert.ok(energyPercent({ ...base, minutesSinceBreak: 70 }) < b);
-  assert.ok(energyPercent({ ...base, morningBodyBattery: 100 }) >= b - 1);
-  assert.ok(energyPercent({ ...base, morningBodyBattery: 10 }) < b);
 });
 
 test('bez danych z twarzy bateria liczy się z postawy i czasu', () => {
-  const e = energyPercent({ fatiguePercent: null, postureAvg15: 90, minutesSinceBreak: 0, morningBodyBattery: null });
+  const e = energyPercent({ fatiguePercent: null, postureAvg15: 90, minutesSinceBreak: 0 });
   assert.equal(e, 100);
 });
 

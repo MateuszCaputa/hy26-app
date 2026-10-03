@@ -1,5 +1,5 @@
-// Statystyki i wnioski: wskaźnik formy, mapa godzin, najlepsze godziny, wpływ snu (Garmin).
-import type { GarminDay, IssueId, MinuteSample, StatsPayload } from '../shared/types';
+// Statystyki i wnioski: wskaźnik formy, mapa godzin, najlepsze godziny.
+import type { IssueId, MinuteSample, StatsPayload } from '../shared/types';
 import { topIssueOf } from './aggregate';
 
 const FORM_W = { fatigue: 0.45, posture: 0.35, activity: 0.2 };
@@ -96,49 +96,9 @@ export function bestHoursText(profile: HourProfile[]): { best: string | null; di
   return { best: hoursToRanges(best), dip };
 }
 
-/** Wpływ snu na formę: dni po krótkiej vs długiej nocy (min. 5 dni z danymi). */
-export function sleepInsight(samples: MinuteSample[], garmin: GarminDay[], actRef: number | null): string | null {
-  const daily = new Map<string, number[]>();
-  for (const s of samples) {
-    const f = formScore(s, actRef);
-    if (f === null) continue;
-    const d = localDate(s.ts);
-    if (!daily.has(d)) daily.set(d, []);
-    daily.get(d)!.push(f);
-  }
-  const pairs = garmin
-    .filter((g) => g.sleepHours !== null && (daily.get(g.date)?.length ?? 0) >= 60)
-    .map((g) => ({ sleep: g.sleepHours as number, bb: g.bodyBatteryHigh, form: avg(daily.get(g.date)!)! }));
-  if (pairs.length < 5) return null;
-  const short = pairs.filter((p) => p.sleep < 6.5).map((p) => p.form);
-  const long = pairs.filter((p) => p.sleep >= 7).map((p) => p.form);
-  if (short.length >= 2 && long.length >= 2) {
-    const a = avg(short)!;
-    const b = avg(long)!;
-    const diff = Math.round(((b - a) / b) * 100);
-    if (Math.abs(diff) >= 3) {
-      return diff > 0
-        ? `Po nocach krótszych niż 6,5 h Twoja forma przy biurku była średnio o ${diff}% niższa niż po co najmniej 7 h snu.`
-        : `Długość snu nie obniża wyraźnie Twojej formy (różnica ${Math.abs(diff)}%).`;
-    }
-  }
-  const withBB = pairs.filter((p) => p.bb !== null);
-  if (withBB.length >= 5) {
-    const sorted = [...withBB].sort((x, y) => (x.bb as number) - (y.bb as number));
-    const half = Math.floor(sorted.length / 2);
-    const lo = avg(sorted.slice(0, half).map((p) => p.form))!;
-    const hi = avg(sorted.slice(half).map((p) => p.form))!;
-    const diff = Math.round(((hi - lo) / hi) * 100);
-    if (diff >= 3) return `W dni z niższym Body Battery rano forma była średnio o ${diff}% niższa.`;
-  }
-  return 'Na razie sen nie wpływa wyraźnie na Twoją formę przy biurku.';
-}
-
 export interface InsightInput {
   now: number;
   samples: MinuteSample[]; // np. ostatnie 28 dni
-  garmin: GarminDay[];
-  garminConnected: boolean;
   breaksToday: number;
   alertsToday: number;
   /** Czasy (ms) dzisiejszych przerw i alertów, do znaczników na wykresie. */
@@ -215,8 +175,6 @@ export function buildStats(i: InsightInput): StatsPayload {
   const weekIssueShare: Partial<Record<IssueId, number>> = {};
   if (total > 0) for (const [k, v] of Object.entries(sums) as [IssueId, number][]) weekIssueShare[k] = Math.round((v / total) * 100);
 
-  const sortedG = [...i.garmin].sort((a, b) => b.date.localeCompare(a.date));
-
   return {
     today: {
       minutes: todays,
@@ -235,10 +193,5 @@ export function buildStats(i: InsightInput): StatsPayload {
     daysOfData: days.size,
     weekTopIssue: topIssueOf(week),
     weekIssueShare,
-    garmin: {
-      connected: i.garminConnected,
-      lastNight: sortedG.find((g) => g.date === today) ?? sortedG[0] ?? null,
-      insight: i.garminConnected ? sleepInsight(i.samples, i.garmin, actRef) : null,
-    },
   };
 }

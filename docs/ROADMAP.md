@@ -21,7 +21,7 @@
 ┌ Przerwa / ćwiczenie ─────────┐ ┌ Statystyki ──────────────────────────┐
 │ „Przerwa teraz, bo:          │ │ Day rhythm + best hours heat map     │
 │  • PERCLOS 18% (norma <10%)  │ │ „Spadek ok. 14:00, najlepsze 9–11"   │
-│  • 52 min bez przerwy"       │ │ Garmin: sleep vs next-day form       │
+│  • 52 min bez przerwy"       │ │ Najczęstszy problem + co poprawić    │
 │ Chin tuck  ▓▓▓▓▓░ 5/8 ✓      │ │ ZESPÓŁ: our 4 people's 24 h (hook)   │
 │ camera counts → Bateria ↑    │ └──────────────────────────────────────┘
 └──────────────────────────────┘

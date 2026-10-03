@@ -1,4 +1,4 @@
-// Proces główny: okna, zasobnik, protokół app://, baza, powiadomienia, klawiatura/mysz, Garmin.
+// Proces główny: okna, zasobnik, protokół app://, baza, powiadomienia, klawiatura/mysz.
 import {
   app, BrowserWindow, ipcMain, Menu, nativeImage, Notification, powerMonitor, protocol, screen, session,
   shell, systemPreferences, Tray,
@@ -10,7 +10,6 @@ import type { AppEvent, Calibration, LiveStatus, MinuteSample, Nudge, NudgeActio
 import type { InitData } from '../shared/api';
 import { Store } from './db';
 import { ActivityCounter } from './activity';
-import { GarminSync } from './garmin';
 import { ensureModels, modelsReady } from './models';
 import { buildStats, localDate } from '../core/insights';
 import { ERGONOMIC_TIP, ISSUE_LABEL, ISSUE_TIP } from '../core/coach';
@@ -65,7 +64,6 @@ let lastStatus: LiveStatus | null = null;
 let trayBadge: Electron.NativeImage | null = null; // Windows: ikona z wynikiem (rysowana w rendererze)
 let lastNotifyAt = 0;
 const activity = new ActivityCounter();
-let garmin: GarminSync;
 
 function resolveAppUrl(url: string): string | null {
   const u = new URL(url);
@@ -147,7 +145,7 @@ function updateTray(): void {
     info.push(`Postawa: ${STATE_WORD[s.state] ?? ''}`);
     if (s.energy) {
       const low = s.energy.minutesToLow !== null ? ` · spadek <30% za ~${s.energy.minutesToLow} min` : '';
-      info.push(`Bateria: ${s.energy.percent}%${low}`);
+      info.push(`Energia do pracy: ${s.energy.percent}%${low}`);
     }
     if (s.fatigue) info.push(`Zmęczenie: ${s.fatigue.percent}%`);
     info.push(`Od przerwy: ${Math.round(s.minutesSinceBreak)} min`);
@@ -421,8 +419,6 @@ function statsNow() {
   return buildStats({
     now,
     samples: store.minutesSince(since),
-    garmin: store.garminDays(localDate(since)),
-    garminConnected: garmin.connected,
     breaksToday: store.countEvents('break-done', dayStart),
     alertsToday: store.countEvents('alert', dayStart),
     breakTimes: store.eventTimes('break-done', dayStart),
@@ -446,17 +442,6 @@ function maybeEndOfDay(): void {
   notify({ title: 'Podsumowanie dnia', body: `${head}${issue}. ${tip}`, kind: 'info' });
 }
 
-async function maybeSyncGarmin(): Promise<void> {
-  if (!garmin.connected) return;
-  const last = store.getMeta<number>('garminLastSync') ?? 0;
-  if (Date.now() - last < 6 * 3600e3) return;
-  try {
-    await garmin.sync(last ? 2 : 14);
-  } catch {
-    /* błąd widoczny w ustawieniach */
-  }
-}
-
 function registerIpc(): void {
   ipcMain.handle('init', (): InitData => ({
     settings,
@@ -464,7 +449,6 @@ function registerIpc(): void {
     modelsReady: modelsReady(MODELS_DIR),
     paused,
     platform: process.platform,
-    garmin: { connected: garmin.connected, email: garmin.email },
   }));
   ipcMain.handle('save-settings', (_e, s: Settings) => applySettings(s));
   ipcMain.handle('save-calibration', (_e, c: Calibration) => {
@@ -511,24 +495,6 @@ function registerIpc(): void {
     trayBadge = png ? nativeImage.createFromBuffer(Buffer.from(png.split(',')[1], 'base64'), { scaleFactor: 2 }) : null;
     updateTray();
   });
-  ipcMain.handle('garmin-connect', async (_e, email: string, password: string) => {
-    try {
-      await garmin.connect(email, password);
-      await garmin.sync(14).catch(() => undefined);
-      return { ok: true };
-    } catch (err) {
-      return { ok: false, error: err instanceof Error ? err.message : String(err) };
-    }
-  });
-  ipcMain.handle('garmin-disconnect', () => garmin.disconnect());
-  ipcMain.handle('garmin-sync', async () => {
-    try {
-      const d = await garmin.sync(14);
-      return { ok: true, days: d.length };
-    } catch (err) {
-      return { ok: false, error: err instanceof Error ? err.message : String(err) };
-    }
-  });
   ipcMain.handle('activity-status', () => ({ running: activity.isRunning, error: activity.error }));
   ipcMain.handle('wipe-data', () => store.wipe());
   ipcMain.on('open-external', (_e, url: string) => {
@@ -555,7 +521,6 @@ app.on('before-quit', () => {
 void app.whenReady().then(async () => {
   store = new Store(path.join(app.getPath('userData'), 'postura.db'));
   settings = store.getSettings();
-  garmin = new GarminSync(store);
   registerProtocol();
 
   session.defaultSession.setPermissionRequestHandler((_wc, permission, cb) => cb(permission === 'media' || permission === 'notifications'));
@@ -574,8 +539,6 @@ void app.whenReady().then(async () => {
   applySettings(settings);
 
   setInterval(maybeEndOfDay, 60e3);
-  setInterval(() => void maybeSyncGarmin(), 30 * 60e3);
-  setTimeout(() => void maybeSyncGarmin(), 15e3);
   powerMonitor.on('lock-screen', () => mainWin?.webContents.send('paused', true));
   powerMonitor.on('unlock-screen', () => mainWin?.webContents.send('paused', paused));
   void debugScreenshot();

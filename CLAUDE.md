@@ -21,7 +21,7 @@ If the user didn't say their area, **ask once**: "Which area are you: A Kacper, 
 
 ## Project
 
-- **What we're building:** **Postura**, a desktop app (Electron, Windows + macOS). The webcam measures posture, blinking/PERCLOS, yawns and head droop, fully on-device. It turns them into alerts, breaks, exercises, "best hours", plus Garmin sleep/stress/Body Battery. Full feature list: `README.md`.
+- **What we're building:** **Postura**, a desktop app (Electron, Windows + macOS). The webcam measures posture, blinking/PERCLOS, yawns and head droop, fully on-device. It turns them into alerts, breaks, exercises, "best hours". Full feature list: `README.md`.
 - **Category:** HackYeah 2026 **Sport & Healthcare** (open task, 8,000 PLN, 1 winner). Scoring: Idea 30%, Relation to category 20%, Usability 20%, **Design 20%**, Completeness 10%. Phase 1 is a paper review (PDF of up to 10 slides + description + repo/demo/video), and you need at least 50% of the points. Phase 2 is a live pitch.
 - **Deadline:** ⚠️ **UNCONFIRMED. Treat it as Sunday 4 Oct 11:00** until Discord says otherwise. The Polish general rules §4.3 say "od 11:00 3.10 do 11:00 4.10"; the English text says "11:00 PM". Submission goes through HackTribe.
 - **Non-negotiables:**
@@ -34,7 +34,7 @@ If the user didn't say their area, **ask once**: "Which area are you: A Kacper, 
 
 ## Stack & commands
 
-Electron 44 + TypeScript (esbuild via `build.mjs`) + `@mediapipe/tasks-vision` (face + pose) + `uiohook-napi` (keyboard/mouse activity) + `garmin-connect`. Node 22.13+.
+Electron 44 + TypeScript (esbuild via `build.mjs`) + `@mediapipe/tasks-vision` (face + pose) + `uiohook-napi` (keyboard/mouse activity). Node 22.13+.
 
 ```bash
 # install:    npm install
@@ -47,7 +47,7 @@ Electron 44 + TypeScript (esbuild via `build.mjs`) + `@mediapipe/tasks-vision` (
 
 Layout:
 - `src/core/`: pure logic with no Electron (`metrics`, `fatigue`, `scoring`, `breakEngine`, `insights`, `coach`, `aggregate`, `oneEuro` filter). Unit-testable.
-- `src/main/`: Electron main (`main.ts`, `db.ts`, `activity.ts` input tracking, `garmin.ts`, `models.ts` model download).
+- `src/main/`: Electron main (`main.ts`, `db.ts`, `activity.ts` input tracking, `models.ts` model download).
 - `src/renderer/`: UI (`analyzer.ts` MediaPipe loop, `draw.ts`/`overlays.ts`/`figures.ts` canvas drawing, `views/` live/stats/exercises/settings, `widget.ts`, `static/` HTML+CSS).
 - `src/shared/`: `types.ts` and `api.ts` (IPC contract). **Shared hot file.**
 - `src/preload.ts`
@@ -70,7 +70,7 @@ Layout:
 | Area | Person | Owns |
 |------|--------|------|
 | A: Core engine & measurement | Kacper | `src/core/`, `src/renderer/analyzer.ts`, `test/`, model loading in `src/main/models.ts` |
-| B: Health data, decisions & care | Marcin | new `src/core/{explain,carePattern}.ts` consumers, the doctor report / NFZ / coach / team views in `src/renderer/views/`, `src/main/garmin.ts` |
+| B: Health data, decisions & care | Marcin | new `src/core/{explain,carePattern}.ts` consumers, the doctor report / NFZ / coach / team views in `src/renderer/views/` |
 | C: UI, wow visuals & design | Mateusz | `src/renderer/{draw,overlays,figures,widget}.ts`, `src/renderer/static/`, visual pass on all views |
 | D: Pitch, video, submission | Bartłomiej | `docs/pitch/`, `AI_USAGE.md`, the README's pitch parts |
 | Integration / merges | Mateusz (repo owner) | `src/main/main.ts`, `src/preload.ts`, `src/shared/*`, `build.mjs`, `package.json` |

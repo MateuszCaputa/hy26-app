@@ -19,7 +19,7 @@
 - No new dependency if ~20 lines will do. New deps go through the integrator (they're a shared hot file).
 
 ## 3. Reliability rules (stage-proof)
-- **Offline-first:** models, fonts and assets are bundled. No network on the demo path. Garmin and AI are optional and degrade silently to cached or canned data.
+- **Offline-first:** models, fonts and assets are bundled. No network on the demo path. AI is optional and degrade silently to cached or canned data.
 - **Never crash the live view:** guard every frame loop, catch per-panel errors, and show a calm fallback state ("no face, check the light") instead of a blank screen.
 - **Performance budget:** at least 24 FPS on the demo laptop with the overlay ON. Measure after every visual change. Reuse arrays in hot loops; no allocations per landmark per frame.
 - **Deterministic demo mode:** seeded data and scripted events, so the same story plays every time.

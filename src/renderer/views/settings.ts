@@ -132,9 +132,8 @@ export async function renderSettings(view: HTMLElement, ctx: AppCtx): Promise<vo
           ),
         ),
       ),
-      garminGroup(ctx),
       group('Dane', [
-        h('p', { class: 'fine' }, 'Obraz z kamery nie jest zapisywany ani wysyłany. Baza zawiera tylko liczby: wyniki co minutę, zdarzenia i dane z Garmina.'),
+        h('p', { class: 'fine' }, 'Obraz z kamery nie jest zapisywany ani wysyłany. Baza zawiera tylko liczby: wyniki co minutę i zdarzenia.'),
         h('button', { class: 'btn danger small', onclick: async (e: Event) => {
           const b = e.currentTarget as HTMLButtonElement;
           if (b.dataset.confirm !== '1') {
@@ -156,61 +155,4 @@ export async function renderSettings(view: HTMLElement, ctx: AppCtx): Promise<vo
 
 function group(title: string, children: (HTMLElement | null)[]): HTMLElement {
   return h('section', { class: 'block group' }, h('h2', null, title), h('div', { class: 'fields' }, children));
-}
-
-function garminGroup(ctx: AppCtx): HTMLElement {
-  const api = window.postura;
-  const body = h('div', { class: 'fields' });
-  const msg = h('p', { class: 'fine', 'aria-live': 'polite' });
-
-  const renderConnected = (email: string | null) => {
-    body.replaceChildren(
-      h('p', null, `Połączono${email ? ` jako ${email}` : ''}.`),
-      h('div', { class: 'row' },
-        h('button', { class: 'btn small', onclick: async () => {
-          msg.textContent = 'Pobieram dane…';
-          const r = await api?.garminSync();
-          msg.textContent = r?.ok ? `Pobrano dane z ${r.days} dni.` : `Nie udało się: ${r?.error ?? 'brak połączenia'}.`;
-        } }, 'Pobierz dane teraz'),
-        h('button', { class: 'btn ghost small', onclick: async () => {
-          await api?.garminDisconnect();
-          ctx.init.garmin = { connected: false, email: null };
-          renderForm();
-          msg.textContent = 'Rozłączono. Dane logowania usunięte.';
-        } }, 'Rozłącz'),
-      ),
-      msg,
-    );
-  };
-  const renderForm = () => {
-    const email = h('input', { type: 'email', id: 'g-email', autocomplete: 'username', placeholder: 'adres e-mail konta Garmin' });
-    const pass = h('input', { type: 'password', id: 'g-pass', autocomplete: 'current-password', placeholder: 'hasło' });
-    const btn = h('button', { class: 'btn small', type: 'submit' }, 'Połącz');
-    const form = h('form', { class: 'garmin-form', onsubmit: async (e: Event) => {
-      e.preventDefault();
-      btn.disabled = true;
-      msg.textContent = 'Łączę z Garmin Connect…';
-      const r = await api?.garminConnect(email.value.trim(), pass.value);
-      btn.disabled = false;
-      if (r?.ok) {
-        ctx.init.garmin = { connected: true, email: email.value.trim() };
-        renderConnected(email.value.trim());
-        msg.textContent = 'Połączono i pobrano dane z ostatnich 14 dni.';
-      } else {
-        msg.textContent = `Nie udało się połączyć: ${r?.error ?? 'nieznany błąd'}. Sprawdź dane; konta z weryfikacją dwuetapową mogą nie działać.`;
-      }
-    } },
-      h('label', { for: 'g-email' }, 'E-mail'), email,
-      h('label', { for: 'g-pass' }, 'Hasło'), pass,
-      btn,
-    );
-    body.replaceChildren(
-      h('p', { class: 'fine' }, 'Sen, stres i Body Battery pomagają wyjaśnić słabsze dni. Hasło jest szyfrowane w systemowym pęku kluczy i używane tylko do logowania w Garmin Connect.'),
-      form,
-      msg,
-    );
-  };
-  if (ctx.init.garmin.connected) renderConnected(ctx.init.garmin.email);
-  else renderForm();
-  return h('section', { class: 'block group' }, h('h2', null, 'Garmin Connect'), body);
 }

@@ -1,7 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { computeMetrics, lineAngleDeg, type Landmark } from '../src/core/metrics';
-import { evaluateIssues, PostureTracker, scoreFromIssues } from '../src/core/scoring';
+import { followPositionRef } from '../src/core/calibration';
+import { evaluateIssues, PostureTracker, rankIssues, scoreFromIssues } from '../src/core/scoring';
 import { EyeAnalyzer, FatigueEstimator, fatiguePercent } from '../src/core/fatigue';
 import { BreakEngine } from '../src/core/breakEngine';
 import { MinuteAggregator, postureSlope } from '../src/core/aggregate';
@@ -69,6 +70,74 @@ test('przechył barków i głowy oraz zbyt bliska twarz', () => {
   assert.ok(close.find((i) => i.id === 'tooClose')!.severity >= 1);
   // Zbliżenie się do kamery nie powinno udawać garbienia (metryki są względne).
   assert.ok(close.find((i) => i.id === 'headForward')!.severity < 0.2);
+});
+
+test('odchylenie tułowia w bok to przechył barków, nie wysunięta głowa', () => {
+  const cal = calFrom(body());
+  // Cała górna część ciała obrócona o 25° wokół bioder (ok. 200 px pod barkami).
+  const lean = (deg: number): Landmark[] => {
+    const a = (deg * Math.PI) / 180;
+    const px = 320 / W, py = 580 / H;
+    return body().map((l) => {
+      const dx = (l.x - px) * W, dy = (l.y - py) * H;
+      return { ...l, x: px + (dx * Math.cos(a) - dy * Math.sin(a)) / W, y: py + (dx * Math.sin(a) + dy * Math.cos(a)) / H };
+    });
+  };
+  const issues = evaluateIssues(computeMetrics(lean(25), W, H, 0).metrics!, cal);
+  const sev = (id: string) => issues.find((i) => i.id === id)!.severity;
+  assert.equal(sev('headForward'), 0);
+  assert.equal(sev('slouch'), 0);
+  assert.ok(sev('shoulderTilt') > 0.5);
+});
+
+test('odchylenie głowy do tyłu (broda w górę) to osobny problem, nie wysunięcie', () => {
+  const cal = { ...calFrom(body()), headPitchDeg: 0 };
+  const m = { ...computeMetrics(body(), W, H, 0).metrics!, headPitchDeg: -22 };
+  const issues = evaluateIssues(m, cal);
+  const sev = (id: string) => issues.find((i) => i.id === id)!.severity;
+  assert.ok(sev('headBack') > 0.5);
+  assert.equal(sev('headForward'), 0);
+  // Pochylenie w dół nie jest odchyleniem do tyłu.
+  assert.equal(evaluateIssues({ ...m, headPitchDeg: 20 }, cal).find((i) => i.id === 'headBack')!.severity, 0);
+});
+
+test('uniesione barki to nie wysunięta głowa; oba problemy naraz są widoczne', () => {
+  const cal = calFrom(body());
+  // Barki w górę o 30 px, głowa w miejscu.
+  const shrugLm = body();
+  for (const i of [11, 12]) shrugLm[i] = { ...shrugLm[i], y: shrugLm[i].y - 30 / H };
+  const shrug = evaluateIssues(computeMetrics(shrugLm, W, H, 0).metrics!, cal);
+  const sev = (r: typeof shrug, id: string) => r.find((i) => i.id === id)!.severity;
+  assert.ok(sev(shrug, 'shrug') > 0.5);
+  assert.equal(sev(shrug, 'headForward'), 0);
+  assert.equal(sev(shrug, 'slouch'), 0);
+
+  // Głowa w dół o 45 px, barki w miejscu: wysunięta głowa, nie barki.
+  const head = evaluateIssues(computeMetrics(body({ headDrop: 45 }), W, H, 0).metrics!, cal);
+  assert.ok(sev(head, 'headForward') > 0.5);
+  assert.equal(sev(head, 'shrug'), 0);
+
+  // Barki w górę i głowa w dół jednocześnie: ranking zwraca oba problemy.
+  const both = body({ headDrop: 40 });
+  for (const i of [11, 12]) both[i] = { ...both[i], y: both[i].y - 30 / H };
+  const r = evaluateIssues(computeMetrics(both, W, H, 0).metrics!, cal);
+  const ranked = rankIssues(Object.fromEntries(r.map((i) => [i.id, i.severity])));
+  assert.ok(ranked.includes('shrug') && ranked.includes('headForward'), ranked.join(','));
+});
+
+test('stara kalibracja bez położeń uzupełnia je sama przy prostej postawie i rozróżnia uniesione barki', () => {
+  const { noseY: _n, shoulderY: _s, ...old } = calFrom(body());
+  const cal: Calibration = old;
+  const up = (lm: Landmark[], px: number) => lm.map((l, i) => (i === 11 || i === 12 ? { ...l, y: l.y - px / H } : l));
+  // Uniesione barki nie mogą ustawić punktu odniesienia (szyja skrócona).
+  followPositionRef(cal, computeMetrics(up(body(), 30), W, H, 0).metrics!, 0.1);
+  assert.equal(cal.noseY, undefined);
+  // Prosta postawa: uzupełnia.
+  followPositionRef(cal, computeMetrics(body(), W, H, 0).metrics!, 0.1);
+  assert.ok(cal.noseY != null && cal.shoulderY != null);
+  const sev = evaluateIssues(computeMetrics(up(body(), 30), W, H, 0).metrics!, cal);
+  assert.ok(sev.find((i) => i.id === 'shrug')!.severity > 0.5);
+  assert.equal(sev.find((i) => i.id === 'headForward')!.severity, 0);
 });
 
 test('alert dopiero po 30 s złej postawy, z odstępem i histerezą', () => {
@@ -255,18 +324,11 @@ test('zakresy godzin i statystyki', () => {
       }
     }
   }
-  const garmin = Array.from({ length: 5 }, (_, d) => {
-    const ms = base + d * 864e5;
-    const dt = new Date(ms);
-    const date = `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
-    return { date, sleepHours: 7.5, sleepScore: 80, stressAvg: 25, bodyBatteryHigh: 80, bodyBatteryLow: 20, restingHr: 55, hrv: 60 };
-  });
-  const st = buildStats({ now: base + 4 * 864e5 + 17 * 3600e3, samples, garmin, garminConnected: true, breaksToday: 3, alertsToday: 2 });
+  const st = buildStats({ now: base + 4 * 864e5 + 17 * 3600e3, samples, breaksToday: 3, alertsToday: 2 });
   assert.equal(st.bestHours, '9–11');
   assert.match(st.dipText!, /13:00/);
   assert.equal(st.daysOfData, 5);
   assert.equal(st.weekTopIssue, 'slouch');
   assert.ok(st.heatmap.length > 0);
   assert.equal(st.today.presentMinutes, 540);
-  assert.ok(st.garmin.insight);
 });

@@ -2,6 +2,8 @@
 
 export type IssueId =
   | 'headForward'
+  | 'headBack'
+  | 'shrug'
   | 'slouch'
   | 'headTilt'
   | 'shoulderTilt'
@@ -81,6 +83,8 @@ export interface PostureMetrics {
   /** Środek nosa w pikselach (do detekcji ruchu/bezruchu). */
   noseX: number;
   noseY: number;
+  /** Środek linii barków (y) w pikselach: odróżnia uniesienie barków od opadania głowy. */
+  shoulderY?: number;
   /** Pochylenie głowy z macierzy twarzy (dodatnie = w dół), stopnie; null bez modelu twarzy. */
   headPitchDeg?: number | null;
   /** Obrót głowy w bok, stopnie; null bez modelu twarzy. */
@@ -99,6 +103,9 @@ export interface Calibration {
   earOpen: number | null;
   /** Pochylenie głowy przy prostej postawie (stare kalibracje go nie mają). */
   headPitchDeg?: number | null;
+  /** Położenie nosa i barków (y, piksele) przy prostej postawie (stare kalibracje ich nie mają). */
+  noseY?: number;
+  shoulderY?: number;
   /** Drugi krok kalibracji: zwykła (zgarbiona) pozycja – osobisty zakres progów. */
   slouch?: SlouchReference;
 }
@@ -170,21 +177,12 @@ export interface LiveStatus {
   score: number | null;
   fatigue: FatigueSnapshot | null;
   topIssue: IssueId | null;
+  /** Do dwóch bieżących problemów, najważniejszy pierwszy. */
+  issues?: IssueId[];
   minutesSinceBreak: number;
   note?: string;
   /** „Bateria” 0–100 i prognoza spadku poniżej 30% (null = nie spada / za mało danych). */
   energy?: { percent: number; minutesToLow: number | null } | null;
-}
-
-export interface GarminDay {
-  date: string; // YYYY-MM-DD
-  sleepHours: number | null;
-  sleepScore: number | null;
-  stressAvg: number | null;
-  bodyBatteryHigh: number | null;
-  bodyBatteryLow: number | null;
-  restingHr: number | null;
-  hrv: number | null;
 }
 
 export interface StatsPayload {
@@ -219,7 +217,6 @@ export interface StatsPayload {
   daysOfData: number;
   weekTopIssue: IssueId | null;
   weekIssueShare: Partial<Record<IssueId, number>>;
-  garmin: { lastNight: GarminDay | null; insight: string | null; connected: boolean };
 }
 
 export interface AppEvent {
