@@ -30,6 +30,8 @@ export interface Settings {
   faceAnalysis: boolean;
   activityTracking: boolean;
   miniWidget: boolean;
+  /** Wygląd mini-widgetu: karta (wynik + stan + zmęczenie) albo mała pigułka z samą liczbą. */
+  widgetStyle: 'card' | 'pill';
   autostart: boolean;
   soundAlerts: boolean;
   cameraId: string;
@@ -52,6 +54,7 @@ export const DEFAULT_SETTINGS: Settings = {
   // Domyślnie wyłączone: na macOS wymaga uprawnienia Dostępności, co myli przy pierwszym uruchomieniu.
   activityTracking: false,
   miniWidget: false,
+  widgetStyle: 'card',
   autostart: false,
   soundAlerts: false,
   cameraId: '',

@@ -153,7 +153,7 @@ function updateTray(): void {
   } else info.push(label.replace('Postura – ', ''));
 
   // Menu przebudowujemy tylko, gdy zmienia się jego treść (status przychodzi kilka razy na sekundę).
-  const key = [...info, paused, settings.miniWidget].join('|');
+  const key = [...info, paused, settings.miniWidget, settings.widgetStyle].join('|');
   if (key === trayMenuKey) return;
   trayMenuKey = key;
   tray.setContextMenu(
@@ -176,7 +176,14 @@ function updateTray(): void {
       { label: 'Pokaż okno', click: () => showMain('live') },
       { label: 'Statystyki', click: () => showMain('stats') },
       { label: 'Kalibracja', click: () => showMain('calibrate') },
-      { label: 'Mini-widget', type: 'checkbox', checked: settings.miniWidget, click: (i) => applySettings({ ...settings, miniWidget: i.checked }) },
+      {
+        label: 'Mini-widget',
+        submenu: [
+          { label: 'Wyłączony', type: 'radio', checked: !settings.miniWidget, click: () => applySettings({ ...settings, miniWidget: false }) },
+          { label: 'Karta (wynik, stan, zmęczenie)', type: 'radio', checked: settings.miniWidget && settings.widgetStyle === 'card', click: () => applySettings({ ...settings, miniWidget: true, widgetStyle: 'card' }) },
+          { label: 'Pigułka (sama liczba)', type: 'radio', checked: settings.miniWidget && settings.widgetStyle === 'pill', click: () => applySettings({ ...settings, miniWidget: true, widgetStyle: 'pill' }) },
+        ],
+      },
       { type: 'separator' },
       { label: 'Zakończ', click: () => { quitting = true; app.quit(); } },
     ]),
@@ -227,18 +234,18 @@ function createMainWindow(): void {
   });
 }
 
-const WIDGET_W = 230;
-const WIDGET_H = 74;
+const WIDGET_SIZE = { card: { width: 230, height: 74 }, pill: { width: 96, height: 44 } } as const;
+let widgetStyleShown: Settings['widgetStyle'] | null = null;
 
 /** Zapamiętana pozycja widgetu, jeśli nadal leży na którymś ekranie; inaczej prawy górny róg. */
-function widgetPosition(): { x: number; y: number } {
+function widgetPosition(w: number, h: number): { x: number; y: number } {
   const saved = store.getMeta<{ x: number; y: number }>('widgetPos');
   if (saved && screen.getAllDisplays().some((d) => {
     const a = d.workArea;
-    return saved.x >= a.x && saved.y >= a.y && saved.x + WIDGET_W <= a.x + a.width && saved.y + WIDGET_H <= a.y + a.height;
+    return saved.x >= a.x && saved.y >= a.y && saved.x + w <= a.x + a.width && saved.y + h <= a.y + a.height;
   })) return saved;
   const a = screen.getPrimaryDisplay().workArea;
-  return { x: a.x + a.width - WIDGET_W - 16, y: a.y + 16 };
+  return { x: a.x + a.width - w - 16, y: a.y + 16 };
 }
 
 /** Tylko w trybie deweloperskim: przeładuj okna, gdy `npm run dev` przebuduje interfejs (bez restartu Electrona). */
@@ -258,12 +265,17 @@ function watchRendererForReload(): void {
 }
 
 function toggleWidget(on: boolean): void {
+  // Zmiana wyglądu = nowe okno w innym rozmiarze.
+  if (on && widgetWin && widgetStyleShown !== settings.widgetStyle) {
+    widgetWin.close();
+    widgetWin = null;
+  }
   if (on && !widgetWin) {
-    const pos = widgetPosition();
+    const size = WIDGET_SIZE[settings.widgetStyle] ?? WIDGET_SIZE.card;
+    widgetStyleShown = settings.widgetStyle;
     widgetWin = new BrowserWindow({
-      ...pos,
-      width: WIDGET_W,
-      height: WIDGET_H,
+      ...widgetPosition(size.width, size.height),
+      ...size,
       frame: false,
       resizable: false,
       alwaysOnTop: true,
@@ -273,11 +285,11 @@ function toggleWidget(on: boolean): void {
       webPreferences: { preload: path.join(__dirname, '..', 'preload.js'), contextIsolation: true, sandbox: true },
     });
     widgetWin.setAlwaysOnTop(true, 'floating');
-    void widgetWin.loadURL('app://local/widget.html');
-    widgetWin.on('closed', () => (widgetWin = null));
-    widgetWin.on('moved', () => {
-      const b = widgetWin?.getBounds();
-      if (b) store.setMeta('widgetPos', { x: b.x, y: b.y });
+    void widgetWin.loadURL(`app://local/widget.html?style=${settings.widgetStyle}`);
+    // Przy zmianie wyglądu stare okno zamyka się asynchronicznie – nie wolno mu wyzerować referencji do nowego.
+    const win = widgetWin;
+    win.on('closed', () => {
+      if (widgetWin === win) widgetWin = null;
     });
     if (lastStatus) widgetWin.webContents.once('did-finish-load', () => widgetWin?.webContents.send('status', lastStatus));
   } else if (!on && widgetWin) {
@@ -402,6 +414,14 @@ function registerIpc(): void {
   ipcMain.on('event', (_e, ev: AppEvent) => store.addEvent(ev.type, ev.detail));
   ipcMain.handle('get-stats', () => statsNow());
   ipcMain.on('set-paused', (_e, p: boolean) => setPaused(p));
+  ipcMain.on('open-main', (_e, view?: string) => showMain(view));
+  // Przeciąganie widgetu robi renderer (region „drag” zjadałby kliknięcia); tu tylko przesuwamy okno.
+  ipcMain.on('widget-move', (_e, x: number, y: number, done: boolean) => {
+    if (!widgetWin) return;
+    const [w, h] = widgetWin.getSize();
+    widgetWin.setBounds({ x: Math.round(x), y: Math.round(y), width: w, height: h });
+    if (done) store.setMeta('widgetPos', { x: Math.round(x), y: Math.round(y) });
+  });
   ipcMain.on('tray-badge', (_e, png: string | null) => {
     if (process.platform !== 'win32') return;
     trayBadge = png ? nativeImage.createFromBuffer(Buffer.from(png.split(',')[1], 'base64'), { scaleFactor: 2 }) : null;

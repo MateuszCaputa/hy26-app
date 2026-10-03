@@ -89,6 +89,7 @@
 - [ ] C7 Visual pass on all views (live, stats, exercises, settings) against ENGINEERING §8: one palette, typography, the projector test.
 - [ ] C8 A calm empty/error state for every view (no face, camera busy, no data yet).
 - [x] C10 Quick glance (@Mateusz): live posture score next to the tray icon (macOS), tray quick menu (state, Bateria + forecast, fatigue, time since break; break now, pause 30 min), widget remembers its position, dev auto-reload. **Next:** widget nudges (20-20-20 countdown, stretch [Start]/[Za 5 min], „Cofnij brodę”).
+- [x] C11 Two mini-widget styles (@Mateusz): **Karta** (score, state, fatigue) or **Pigułka** (dot + number, theme colours, fades when posture is good); chosen in Settings or tray → Mini-widget; click opens Postura, drag moves it (position remembered). Windows check pending (Marcin).
 - [ ] C9 Screenshot pack at 1920×1080 for the slides + a 10 s clip of the neon overlay for the video intro.
 
 ## Area D: Pitch, video, submission & ops (owner: Bartłomiej, plus everyone for testing)
