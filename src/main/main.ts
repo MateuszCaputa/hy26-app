@@ -141,7 +141,8 @@ function updateTray(): void {
   // Szybki podgląd bez otwierania okna: liczby + najczęstsze akcje.
   const info: string[] = [];
   if (present) {
-    info.push(`Postawa: ${s.score ?? '–'}/100 · ${STATE_WORD[s.state] ?? ''}`);
+    // Bez liczby: macOS zamraża treść otwartego menu, a liczba obok ikony odświeża się na żywo.
+    info.push(`Postawa: ${STATE_WORD[s.state] ?? ''}`);
     if (s.energy) {
       const low = s.energy.minutesToLow !== null ? ` · spadek <30% za ~${s.energy.minutesToLow} min` : '';
       info.push(`Bateria: ${s.energy.percent}%${low}`);
