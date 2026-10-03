@@ -181,7 +181,7 @@ export function openCalibrator(ctx: AppCtx, onDone: (c: Calibration) => void): v
     progress = 0;
     stepLabel.textContent = 'Krok 2 z 2';
     title.textContent = 'Teraz usiądź tak, jak zwykle przy pracy';
-    lead.textContent = 'Nie poprawiaj się – nawet jeśli zwykle się garbisz. Z różnicy między krokami Postura dopasuje czułość do Ciebie.';
+    lead.textContent = 'Nie poprawiaj się – nawet jeśli zwykle się garbisz. Z różnicy między krokami Upright dopasuje czułość do Ciebie.';
     list.hidden = true;
     extra.replaceChildren(h('div', { class: 'slouch-demo', html: SLOUCH_FIGURE }));
     setButtons('Zacznij teraz', 'Pomiń');

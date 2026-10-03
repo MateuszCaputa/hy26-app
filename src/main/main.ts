@@ -21,6 +21,8 @@ const DEBUG_VIEW = flag('view');
 // Osobny katalog danych (np. demo): --data=katalog albo zmienna POSTURA_DATA.
 const DATA_DIR = flag('data') ?? process.env.POSTURA_DATA;
 if (DATA_DIR) app.setPath('userData', path.resolve(DATA_DIR));
+// Nazwa zmieniła się z „Postura” na „Upright”: dane (kalibracja, historia, modele) zostają w dotychczasowym folderze.
+else app.setPath('userData', path.join(app.getPath('appData'), 'Postura'));
 
 // MediaPipe potrzebuje WebGL także w trybie CPU (wgrywanie klatek). Gdy sterownik GPU jest
 // na czarnej liście Chromium, pozwalamy na programowy WebGL (SwiftShader) – wolniej, ale działa.
@@ -132,9 +134,9 @@ function updateTray(): void {
 
   const resumeAt = pausedUntil ? new Date(pausedUntil).toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' }) : '';
   const label =
-    paused ? (resumeAt ? `Postura – pauza do ${resumeAt}` : 'Postura – pauza')
-    : !present ? 'Postura – brak osoby w kadrze'
-    : `Postura – postawa ${s.score ?? '–'}/100${s.fatigue ? `, zmęczenie ${s.fatigue.percent}%` : ''}`;
+    paused ? (resumeAt ? `Upright – pauza do ${resumeAt}` : 'Upright – pauza')
+    : !present ? 'Upright – brak osoby w kadrze'
+    : `Upright – postawa ${s.score ?? '–'}/100${s.fatigue ? `, zmęczenie ${s.fatigue.percent}%` : ''}`;
   tray.setToolTip(label);
 
   // Szybki podgląd bez otwierania okna: liczby + najczęstsze akcje.
@@ -148,7 +150,7 @@ function updateTray(): void {
     }
     if (s.fatigue) info.push(`Zmęczenie: ${s.fatigue.percent}%`);
     info.push(`Od przerwy: ${Math.round(s.minutesSinceBreak)} min`);
-  } else info.push(label.replace('Postura – ', ''));
+  } else info.push(label.replace('Upright – ', ''));
 
   // Menu przebudowujemy tylko, gdy zmienia się jego treść (status przychodzi kilka razy na sekundę).
   const key = [...info, paused, settings.miniWidget, settings.widgetStyle].join('|');
@@ -212,7 +214,7 @@ function createMainWindow(): void {
     minWidth: 900,
     minHeight: 640,
     show: false,
-    title: 'Postura',
+    title: 'Upright',
     backgroundColor: '#0f1115',
     icon: path.join(ASSETS_DIR, 'icon.png'),
     autoHideMenuBar: true,

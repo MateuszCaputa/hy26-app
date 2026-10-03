@@ -1,4 +1,4 @@
-/* Postura – paleta neutralna: ciepłe szarości, jeden spokojny akcent, stonowane kolory stanu. */
+/* Upright – paleta neutralna: ciepłe szarości, jeden spokojny akcent, stonowane kolory stanu. */
 :root {
   --bg: #f3f3f1;
   --surface: #ffffff;
@@ -6,6 +6,7 @@
   --muted: #6b6d72;
   --line: #e1e1de;
   --spine: #4b5d70;
+  --brand: #2d6878;
   --spine-soft: #e7e9ec;
   --good: #4f8a63;
   --warn: #a97f35;
@@ -25,6 +26,7 @@
     --muted: #94969b;
     --line: #2d2e31;
     --spine: #9aaabb;
+    --brand: #6fb0c0;
     --spine-soft: #2a2d31;
     --good: #82b593;
     --warn: #cfae6b;
@@ -56,7 +58,8 @@ button, input, select { font: inherit; color: inherit; }
   padding: 22px 14px 18px; border-right: 1px solid var(--line);
 }
 .brand { display: flex; align-items: center; gap: 10px; font-size: 19px; font-weight: 650; padding: 0 8px; }
-.brand-mark svg { width: 26px; height: 26px; fill: none; stroke: var(--spine); stroke-width: 2.4; stroke-linecap: round; }
+/* Znak Upright (kręgosłup ze strzałką) jako maska: kolor z motywu, ostry w każdym rozmiarze ekranu. */
+.brand-mark { width: 13px; height: 40px; flex: none; background: var(--brand); -webkit-mask: url(logo-mark.png) center / contain no-repeat; mask: url(logo-mark.png) center / contain no-repeat; }
 .rail ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
 .nav-btn {
   width: 100%; display: flex; align-items: center; gap: 12px;
