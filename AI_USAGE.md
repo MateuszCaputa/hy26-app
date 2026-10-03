@@ -9,6 +9,7 @@
 - Camera freeze fix: analyse only fresh frames, resume preview after view switch (MP1) → PR #71
 - Quick glance: live posture score next to the tray icon, tray quick menu with actions, dev auto-reload, FEATURES.md (C10) → PR #76
 - MediaPipe-style overlay (eyelid/iris contours showing blinks, glowing skeleton) + Windows tray score (MP7) → PR #78
+- Two mini-widget styles (card / pill), click to open, drag to move (C11) → PR #79
 - No fatigue score on unreliable eye data; 2+ min away from the desk counts as a break (A13, A14) → PR #77
 
 ## AI tools used
