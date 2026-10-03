@@ -12,13 +12,35 @@ interface IssueDef {
 
 const relDrop = (now: number, base: number) => (base === 0 ? 0 : (base - now) / Math.abs(base));
 
+/**
+ * Przechyły barków i głowy oceniamy względem poziomu, nie względem kalibracji:
+ * prosto znaczy 0° u każdego. Kalibracja może przesunąć zero najwyżej o 3°
+ * (lekko krzywo stojąca kamera), więc krzywa postawa przy kalibracji nie staje się normą.
+ */
+export const MAX_TILT_BASELINE_DEG = 3;
+const levelBaseline = (calDeg: number) => Math.max(-MAX_TILT_BASELINE_DEG, Math.min(MAX_TILT_BASELINE_DEG, calDeg));
+
+/** Powyżej tego obrotu głowy rozstaw oczu przestaje mówić o odległości i skręcie tułowia. */
+export const MAX_YAW_FOR_DISTANCE_DEG = 25;
+const yawTooLarge = (m: PostureMetrics) => m.headYawDeg != null && Math.abs(m.headYawDeg) > MAX_YAW_FOR_DISTANCE_DEG;
+
+/** 15° dodatkowego pochylenia głowy liczymy jak 15% spadku „szyi” (ten sam próg ostrzeżenia). */
+const PITCH_DEG_TO_RATIO = 0.15 / 15;
+
+/** Wysunięcie głowy: większe z dwóch niezależnych pomiarów – opadania szyi i pochylenia głowy. */
+function headForwardDeviation(m: PostureMetrics, c: Calibration): number {
+  const neck = relDrop(m.neckRatio, c.neckRatio);
+  if (m.headPitchDeg == null || c.headPitchDeg == null) return neck;
+  return Math.max(neck, (m.headPitchDeg - c.headPitchDeg) * PITCH_DEG_TO_RATIO);
+}
+
 export const ISSUE_DEFS: IssueDef[] = [
-  { id: 'headForward', weight: 0.3, threshold: 0.15, unit: '%', deviation: (m, c) => relDrop(m.neckRatio, c.neckRatio) },
+  { id: 'headForward', weight: 0.3, threshold: 0.15, unit: '%', deviation: headForwardDeviation },
   { id: 'slouch', weight: 0.25, threshold: 0.1, unit: '%', deviation: (m, c) => relDrop(m.earRatio, c.earRatio) },
-  { id: 'shoulderTilt', weight: 0.15, threshold: 5, unit: '°', deviation: (m, c) => Math.abs(m.shoulderTiltDeg - c.shoulderTiltDeg) },
-  { id: 'tooClose', weight: 0.15, threshold: 0.15, unit: '%', deviation: (m, c) => m.eyeDistPx / c.eyeDistPx - 1 },
-  { id: 'headTilt', weight: 0.1, threshold: 10, unit: '°', deviation: (m, c) => Math.abs(m.headRollDeg - c.headRollDeg) },
-  { id: 'twist', weight: 0.05, threshold: 0.15, unit: '%', deviation: (m, c) => relDrop(m.shoulderToEye, c.shoulderToEye) },
+  { id: 'shoulderTilt', weight: 0.15, threshold: 5, unit: '°', deviation: (m, c) => Math.abs(m.shoulderTiltDeg - levelBaseline(c.shoulderTiltDeg)) },
+  { id: 'tooClose', weight: 0.15, threshold: 0.15, unit: '%', deviation: (m, c) => (yawTooLarge(m) ? 0 : m.eyeDistPx / c.eyeDistPx - 1) },
+  { id: 'headTilt', weight: 0.1, threshold: 10, unit: '°', deviation: (m, c) => Math.abs(m.headRollDeg - levelBaseline(c.headRollDeg)) },
+  { id: 'twist', weight: 0.05, threshold: 0.15, unit: '%', deviation: (m, c) => (yawTooLarge(m) ? 0 : relDrop(m.shoulderToEye, c.shoulderToEye)) },
 ];
 
 /** Suma ważonych kar, przy której wynik spada do zera. */

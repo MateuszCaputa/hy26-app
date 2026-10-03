@@ -8,6 +8,8 @@ import { EyeAnalyzer, FatigueEstimator, LEFT_EYE, RIGHT_EYE, eyeAspectRatio, mou
 import { BreakEngine } from '../core/breakEngine';
 import { MinuteAggregator, postureAvg, postureSlope, topIssueOf } from '../core/aggregate';
 import { FrameGate } from '../core/frameGate';
+import { headPoseFromMatrix, type HeadPose } from '../core/headPose';
+import { ShoulderGate } from '../core/shoulderGate';
 
 export interface Frame {
   t: number;
@@ -46,6 +48,10 @@ export class Analyzer {
   private lastFatigue: FatigueSnapshot | null = null;
   private lastStatusMs = 0;
   private smoother = new PointSmoother();
+  private shoulderGate = new ShoulderGate();
+  /** Ostatnia twarz i ustawienie głowy (twarz liczymy co klatkę, sylwetkę rzadziej). */
+  private lastFace: Landmark[] | null = null;
+  private lastHeadPose: HeadPose | null = null;
   private tracker: PostureTracker | null = null;
   private eyes = new EyeAnalyzer();
   private fatigue = new FatigueEstimator();
@@ -88,17 +94,32 @@ export class Analyzer {
   async loadModels(): Promise<void> {
     if (this.demo) return;
     const fileset = await FilesetResolver.forVisionTasks('app://local/wasm');
-    const make = async (delegate: 'GPU' | 'CPU') => {
-      this.pose = await PoseLandmarker.createFromOptions(fileset, {
-        baseOptions: { modelAssetPath: 'app://local/models/pose_landmarker_lite.task', delegate },
+    const makePose = (delegate: 'GPU' | 'CPU', file: string) =>
+      PoseLandmarker.createFromOptions(fileset, {
+        baseOptions: { modelAssetPath: `app://local/models/${file}`, delegate },
         runningMode: 'VIDEO',
         numPoses: 1,
+        // Wyższe progi: lepiej chwilę nie mieć barków niż wliczać zgadywane.
+        minPoseDetectionConfidence: 0.6,
+        minPosePresenceConfidence: 0.6,
+        minTrackingConfidence: 0.6,
       });
+    const make = async (delegate: 'GPU' | 'CPU') => {
+      try {
+        // Model „full” trzyma barki i uszy stabilniej niż „lite” (MP5).
+        this.pose = await makePose(delegate, 'pose_landmarker_full.task');
+      } catch (e) {
+        if (delegate === 'GPU' && /kGpuService|webgl/i.test((e as Error).message)) throw e;
+        console.warn('Brak modelu full, używam lite:', (e as Error).message);
+        this.pose = await makePose(delegate, 'pose_landmarker_lite.task');
+      }
       this.face = await FaceLandmarker.createFromOptions(fileset, {
         baseOptions: { modelAssetPath: 'app://local/models/face_landmarker.task', delegate },
         runningMode: 'VIDEO',
         numFaces: 1,
         outputFaceBlendshapes: true,
+        // Macierz ustawienia głowy: prawdziwe pochylenie/obrót/przechył w stopniach (MP3).
+        outputFacialTransformationMatrixes: true,
       });
     };
     try {
@@ -251,6 +272,8 @@ export class Analyzer {
       } else if (this.face) {
         const r = this.face.detectForVideo(input!, ms);
         faceLm = (r.faceLandmarks?.[0] as Landmark[] | undefined) ?? null;
+        this.lastFace = faceLm;
+        this.lastHeadPose = faceLm ? headPoseFromMatrix(r.facialTransformationMatrixes?.[0]?.data) : null;
         if (faceLm) {
           const cats = r.faceBlendshapes?.[0]?.categories ?? [];
           const bs = (n: string) => cats.find((c) => c.categoryName === n)?.score ?? null;
@@ -275,9 +298,17 @@ export class Analyzer {
       if (this.demo) lm = demoPose(t);
       else lm = this.pose!.detectForVideo(input!, ms).landmarks?.[0] as Landmark[] | undefined;
       this.lastPose = lm ?? null;
-      const res = computeMetrics(lm, w, h, t, this.smoother);
+      const res = computeMetrics(lm, w, h, t, {
+        smoother: this.smoother,
+        face: this.settings.faceAnalysis && !this.demo ? this.lastFace : null,
+        headPose: this.settings.faceAnalysis && !this.demo ? this.lastHeadPose : null,
+        shoulderGate: this.shoulderGate,
+      });
       this.lastMetrics = res.metrics;
-      if (!res.metrics) this.smoother.reset();
+      if (!res.metrics && res.reason === 'no-person') {
+        this.smoother.reset();
+        this.shoulderGate.reset();
+      }
 
       if (this.calibrating) {
         if (res.metrics) this.calibrating.samples.push(res.metrics);
@@ -405,7 +436,8 @@ export class Analyzer {
       c.resolve(null);
       return;
     }
-    const pick = (k: keyof PostureMetrics) => median(c.samples.map((s) => s[k]));
+    const pick = (k: 'neckRatio' | 'earRatio' | 'headRollDeg' | 'shoulderTiltDeg' | 'eyeDistPx' | 'shoulderToEye') =>
+      median(c.samples.map((s) => s[k]));
     const cal: Calibration = {
       createdAt: Date.now(),
       neckRatio: pick('neckRatio'),
@@ -415,6 +447,10 @@ export class Analyzer {
       eyeDistPx: pick('eyeDistPx'),
       shoulderToEye: pick('shoulderToEye'),
       earOpen: c.ears.length >= 30 ? median(c.ears) : null,
+      headPitchDeg: (() => {
+        const v = c.samples.map((m) => m.headPitchDeg).filter((x): x is number => x != null);
+        return v.length >= c.samples.length / 2 ? median(v) : null;
+      })(),
     };
     this.setCalibration(cal);
     c.resolve(cal);
