@@ -234,8 +234,7 @@ function buildShell(ctx: AppCtx): void {
     ),
     h('div', { class: 'rail-foot' },
       h('div', { class: 'rail-state', id: 'rail-state' }),
-      // Wstrzymanie analizy zostaje w menu zasobnika; tu szybki dostęp do kalibracji.
-      h('button', { class: 'btn ghost small', id: 'calibrate-btn', onclick: () => { if (ctx.paused) ctx.setPaused(false); ctx.startCalibration(); } }, 'Kalibruj'),
+      h('button', { class: 'btn ghost small', id: 'pause-btn', onclick: () => ctx.setPaused(!ctx.paused) }, 'Wstrzymaj'),
     ),
   );
   const view = h('main', { id: 'view', class: 'view', tabindex: '-1' });
@@ -259,6 +258,8 @@ function navigate(ctx: AppCtx, v: ViewId): void {
 
 function updateRail(ctx: AppCtx): void {
   const el = document.getElementById('rail-state');
+  const btn = document.getElementById('pause-btn');
+  if (btn) btn.textContent = ctx.paused ? 'Wznów analizę' : 'Wstrzymaj';
   if (!el) return;
   const s = ctx.status;
   const state = ctx.paused ? 'paused' : s?.state ?? 'absent';
