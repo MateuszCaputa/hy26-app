@@ -36,6 +36,9 @@ export class LiveView {
   private fatWord: HTMLElement;
   private fatDetail: HTMLElement;
   private fatAdvice: HTMLElement;
+  private energyNum: HTMLElement;
+  private energyBar: HTMLElement;
+  private energyNote: HTMLElement;
   private breakText: HTMLElement;
   private breakSub: HTMLElement;
   private metricRows = new Map<IssueId, { val: HTMLElement; bar: HTMLElement; row: HTMLElement }>();
@@ -57,7 +60,11 @@ export class LiveView {
       h('p', { class: 'stage-legend' }, h('span', { class: 'legend-ring' }), 'przerywane kółko: gdzie powinna być głowa'),
     );
 
-    this.scoreNum = h('span', { class: 'score-num' }, '–');
+    this.energyNum = h('span', { class: 'energy-num' }, '–');
+    this.energyBar = h('span', { class: 'meter-fill' });
+    this.energyNote = h('p', { class: 'fine' });
+
+    this.scoreNum = h('span', { class: 'score-small' }, '–');
     this.scoreState = h('span', { class: 'score-state' }, 'Uruchamiam…');
     this.tip = h('p', { class: 'tip' });
 
@@ -80,18 +87,18 @@ export class LiveView {
       }),
     );
 
+    // Na pierwszym planie trzy rzeczy: bateria, co poprawić teraz i kiedy przerwa.
+    // Pomiary szczegółowe są jedno kliknięcie dalej (prosty ekran dla kogoś, kto widzi aplikację pierwszy raz).
     const panel = h('aside', { class: 'readout' },
-      h('section', { class: 'r-block score-block', 'aria-live': 'polite' },
-        h('div', { class: 'score-line' }, this.scoreNum, h('span', { class: 'score-of' }, '/100')),
-        this.scoreState,
-        this.tip,
+      h('section', { class: 'r-block energy-block', 'aria-live': 'polite' },
+        h('h2', null, 'Bateria'),
+        h('div', { class: 'score-line' }, this.energyNum, h('span', { class: 'score-of' }, '%')),
+        h('span', { class: 'meter big', role: 'presentation' }, this.energyBar),
+        this.energyNote,
       ),
-      h('section', { class: 'r-block' },
-        h('h2', null, 'Zmęczenie'),
-        h('div', { class: 'fat-line' }, this.fatNum, this.fatWord),
-        h('span', { class: 'meter', role: 'presentation' }, this.fatBar, h('span', { class: 'meter-tick t40' }), h('span', { class: 'meter-tick t70' })),
-        this.fatDetail,
-        this.fatAdvice,
+      h('section', { class: 'r-block score-block' },
+        h('div', { class: 'state-line' }, this.scoreState, h('span', { class: 'fine' }, 'postawa ', this.scoreNum, '/100')),
+        this.tip,
       ),
       h('section', { class: 'r-block' },
         h('h2', null, 'Przerwy'),
@@ -99,10 +106,18 @@ export class LiveView {
         this.breakSub,
         h('button', { class: 'btn', onclick: () => ctx.startBreak() }, 'Zrób przerwę teraz'),
       ),
-      h('section', { class: 'r-block' },
-        h('h2', null, 'Odchylenia od Twojej prostej postawy'),
-        metrics,
-        h('button', { class: 'btn ghost small', onclick: () => ctx.startCalibration() }, 'Skalibruj ponownie'),
+      h('details', { class: 'r-block details' },
+        h('summary', null, 'Szczegóły pomiaru'),
+        h('div', { class: 'details-body' },
+          h('h2', null, 'Zmęczenie'),
+          h('div', { class: 'fat-line' }, this.fatNum, this.fatWord),
+          h('span', { class: 'meter', role: 'presentation' }, this.fatBar, h('span', { class: 'meter-tick t40' }), h('span', { class: 'meter-tick t70' })),
+          this.fatDetail,
+          this.fatAdvice,
+          h('h2', null, 'Odchylenia od Twojej prostej postawy'),
+          metrics,
+          h('button', { class: 'btn ghost small', onclick: () => ctx.startCalibration() }, 'Skalibruj ponownie'),
+        ),
       ),
     );
 
@@ -184,6 +199,21 @@ export class LiveView {
     this.scoreNum.textContent = s.score === null || noCal ? '–' : String(s.score);
     this.scoreState.textContent = noCal ? 'Czekam na kalibrację' : STATE_WORD[ctx.paused ? 'paused' : s.state] ?? '';
     this.tip.textContent = s.topIssue && !noCal && s.state !== 'absent' ? ISSUE_TIP[s.topIssue] : s.state === 'good' ? 'Tak trzymaj.' : '';
+
+    const e = s.energy;
+    if (e && !noCal && !ctx.paused) {
+      this.energyNum.textContent = String(e.percent);
+      this.energyBar.style.width = `${e.percent}%`;
+      this.energyBar.dataset.level = e.percent < 30 ? 'veryTired' : e.percent < 60 ? 'tired' : 'fresh';
+      this.energyNote.textContent =
+        e.minutesToLow !== null ? `Za ok. ${fmtMin(e.minutesToLow)} spadnie poniżej 30% – zaplanuj przerwę wcześniej.`
+        : e.percent < 30 ? 'Niski poziom – zrób przerwę ruchową.'
+        : 'Stabilnie. Bateria łączy zmęczenie, postawę i czas od przerwy.';
+    } else {
+      this.energyNum.textContent = '–';
+      this.energyBar.style.width = '0';
+      this.energyNote.textContent = noCal ? 'Pojawi się po kalibracji.' : 'Pojawi się, gdy będziesz w kadrze.';
+    }
 
     const f = s.fatigue;
     if (f) {

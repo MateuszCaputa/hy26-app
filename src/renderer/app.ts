@@ -4,6 +4,7 @@ import type { InitData } from '../shared/api';
 import type { BreakSuggestion, Calibration, IssueId, LiveStatus, Settings } from '../shared/types';
 import { Analyzer, type Frame } from './analyzer';
 import { BREAK_TITLE, ISSUE_LABEL, ISSUE_TIP } from '../core/coach';
+import { localDate } from '../core/insights';
 import { $, clear, h } from './dom';
 import { LiveView } from './views/live';
 import { renderStats } from './views/stats';
@@ -132,6 +133,14 @@ async function main(): Promise<void> {
   });
 
   buildShell(ctx);
+
+  // Body Battery z rana (Garmin) do „Baterii” – tylko gdy zegarek jest połączony i jest dzisiejszy wpis.
+  if (api && init.garmin.connected) {
+    void api.getStats().then((st) => {
+      const g = st.garmin.lastNight;
+      if (g && g.date === localDate(Date.now())) analyzer.setMorningBodyBattery(g.bodyBatteryHigh);
+    }).catch(() => undefined);
+  }
 
   api?.onPaused((p) => {
     if (p !== ctx.paused) {

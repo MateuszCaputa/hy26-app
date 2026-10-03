@@ -10,10 +10,11 @@
 - [ ] A3 (M3) `core/explain.ts`: for each alert/break, produce `{reason, evidence[]}` from the current metrics ("PERCLOS 18% (norm < 10%)", "52 min without a break"). Unit tests.
 - [ ] A4 (M4) `core/exerciseVerify.ts`: rep detection for chin tuck (nose–shoulder distance) and shoulder-blade squeeze (shoulder width); min duration and refractory period. Unit tests with recorded landmark fixtures.
 - [ ] A5 (M4) A score recovery bonus after a verified exercise (visible in the score/fatigue trend).
-- [ ] A6 (S1) `core/energy.ts`: one fused 0–100 "energy/battery" from fatigue + posture + time since break + Garmin Body Battery if present; plus a linear prediction "minutes until < 30". Tests.
+- [x] A6 (S1) `core/energy.ts`: one fused 0–100 "energy/battery" from fatigue + posture + time since break + Garmin Body Battery if present; plus a linear prediction "minutes until < 30". Tests. (@Kacper, branch `kacper/energy-simple-ui`: `core/energy.ts` + tests; Garmin Body Battery used when today's entry exists)
 - [ ] A7 (M5) `core/carePattern.ts`: detect a persistent pattern (e.g. 10 of the last 14 days with a dominant issue above threshold, or high eye strain) and produce the input for the doctor report.
 - [ ] A8 Record 2–3 landmark fixture clips (good posture, slouch, tired) for tests + demo mode.
 - [x] A10 Posture precision: nose/eyes from the face mesh instead of the pose model, `core/shoulderGate.ts` rejects guessed shoulders (visibility, width/tilt jumps, holds the last good ones), shoulder/head tilt judged vs level (calibration can shift zero by ≤ 3°). (@Kacper, branch `kacper/posture-precision`)
+- [x] A12 Simpler first screen (usability): the live view leads with Bateria + one tip + next break, measurements under "Szczegóły pomiaru"; settings split into basic + "Zaawansowane"; keyboard tracking off by default (macOS Accessibility prompt confused new users). (@Kacper, branch `kacper/energy-simple-ui`; touches `views/live.ts`, `views/settings.ts`, `styles.css` (C) and `DEFAULT_SETTINGS` (shared) — Mateusz please review)
 - [x] A11 Calibration that survives bad posture: live checks during calibration, two-step (tall + usual slouch) with a personal range, a "you sat straighter than your calibration" hint. (@Kacper, branch `kacper/calibration-guard`; touches `overlays.ts` calibration dialog (C) and one toast in `app.ts`)
 - [ ] A9 Document every formula in the README's "Jak liczona jest ocena" (how the score is computed), updated for A3–A7.
 

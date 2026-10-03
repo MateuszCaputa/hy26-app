@@ -124,6 +124,18 @@ button, input, select { font: inherit; color: inherit; }
 .r-block:last-child { border-bottom: 0; }
 .score-block { padding-top: 6px; }
 .score-line { display: flex; align-items: baseline; gap: 6px; }
+.energy-num { font-size: 72px; font-weight: 250; line-height: .95; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+.state-line { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.score-small { font-variant-numeric: tabular-nums; }
+.details { padding: 0; border-bottom: 0; }
+.details > summary { cursor: pointer; padding: 13px 0; color: var(--muted); font-weight: 600; font-size: 15px; list-style: none; }
+.details > summary::-webkit-details-marker { display: none; }
+.details > summary::before { content: "▸"; display: inline-block; width: 1.1em; transition: transform .15s ease; }
+.details[open] > summary::before { transform: rotate(90deg); }
+.details-body { display: grid; gap: 8px; padding-bottom: 12px; }
+.details-body h2 { margin-top: 8px; }
+.adv > summary { cursor: pointer; font-weight: 600; color: var(--muted); padding: 6px 0; }
+.adv[open] > summary { margin-bottom: 8px; }
 .score-num { font-size: 72px; font-weight: 250; line-height: .95; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
 .score-of { color: var(--muted); font-size: 18px; }
 .score-state { font-size: 18px; font-weight: 600; }

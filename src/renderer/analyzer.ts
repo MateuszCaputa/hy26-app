@@ -12,6 +12,7 @@ import { headPoseFromMatrix, type HeadPose } from '../core/headPose';
 import { ShoulderGate } from '../core/shoulderGate';
 import { BaselineDrift, checkCalibrationPose, type CalibrationCheck } from '../core/calibration';
 import type { SlouchReference } from '../shared/types';
+import { energyPercent, minutesUntilLow, type EnergyPoint } from '../core/energy';
 
 export interface Frame {
   t: number;
@@ -77,6 +78,9 @@ export class Analyzer {
     resolve: (c: Calibration | SlouchReference | null) => void;
   } | null = null;
   private drift: BaselineDrift | null = null;
+  /** Bateria z kolejnych minut (do prognozy) i Body Battery z zegarka rano. */
+  private energyHistory: EnergyPoint[] = [];
+  private morningBodyBattery: number | null = null;
   private driftHintDay = '';
   demo = false;
   /** Bez WebGL MediaPipe nie przyjmuje <video>: wtedy podajemy klatki jako ImageData. */
@@ -422,9 +426,26 @@ export class Analyzer {
     return c.getImageData(0, 0, w, h);
   }
 
+  setMorningBodyBattery(v: number | null): void {
+    this.morningBodyBattery = v;
+  }
+
+  private energyNow(t: number): number | null {
+    const tr = this.lastTracker;
+    if (!this.calibration || !tr?.present) return null;
+    return energyPercent({
+      fatiguePercent: this.lastFatigue?.percent ?? null,
+      postureAvg15: postureAvg(this.recent.slice(-15)) ?? tr.score,
+      minutesSinceBreak: this.breaks.minutesSinceBreak(t),
+      morningBodyBattery: this.morningBodyBattery,
+    });
+  }
+
   status(t = this.now()): LiveStatus {
     const tr = this.lastTracker;
+    const energy = this.energyNow(t);
     return {
+      energy: energy === null ? null : { percent: energy, minutesToLow: minutesUntilLow(this.energyHistory) },
       state: !this.calibration ? 'paused' : tr?.state ?? 'absent',
       score: tr?.score ?? null,
       fatigue: tr?.present ? this.lastFatigue : null,
@@ -439,6 +460,7 @@ export class Analyzer {
     const t = this.now();
     this.breaks.done(kind, t);
     if (kind !== 'eye') {
+      this.energyHistory = []; // po przerwie trend liczymy od nowa
       this.fatigue.reset();
       this.tracker?.resetStillness();
     }
@@ -451,6 +473,11 @@ export class Analyzer {
   private emitMinute(s: MinuteSample): void {
     this.recent.push(s);
     if (this.recent.length > 30) this.recent.shift();
+    const e = this.energyNow(this.now());
+    if (e !== null) {
+      this.energyHistory.push({ min: s.ts / 60000, energy: e });
+      if (this.energyHistory.length > 60) this.energyHistory.shift();
+    }
     this.cb.onMinute(s);
   }
 
