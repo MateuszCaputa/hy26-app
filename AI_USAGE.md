@@ -13,7 +13,7 @@
 - Smooth 60 fps overlay: rAF drawing + landmark following between pose measurements (MP9) → PR #80
 - Calm nudges next to the widget: 20-20-20 countdown, break Start/snooze, posture tip (C13) → PR #82
 - Models bundled for offline start (A1) → PR #87
-- Eye metrics measured honestly (blinks, PERCLOS, yawns) + eye diagnostics, found via live testing (A22) → PR #97
+- Eye metrics measured honestly (blinks, PERCLOS, yawns) + eye diagnostics, found via live testing (A26) → PR #97
 - No fatigue score on unreliable eye data; 2+ min away from the desk counts as a break (A13, A14) → PR #77
 - Whole-number posture score in widget/tray; widget text ellipsis (A15, C12) → PR #81
 - Stats: breaks/alerts on the day chart, norms and vs-yesterday under figures, 7-day bar charts for fatigue and good posture (C14, C15) → PR #83
