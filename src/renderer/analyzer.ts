@@ -10,7 +10,7 @@ import { MinuteAggregator, postureAvg, postureSlope, topIssueOf } from '../core/
 import { FrameGate } from '../core/frameGate';
 import { headPoseFromMatrix, type HeadPose } from '../core/headPose';
 import { ShoulderGate } from '../core/shoulderGate';
-import { BaselineDrift, checkCalibrationPose, type CalibrationCheck } from '../core/calibration';
+import { BaselineDrift, checkCalibrationPose, followPositionRef, type CalibrationCheck } from '../core/calibration';
 import type { SlouchReference } from '../shared/types';
 import { energyPercent, minutesUntilLow, type EnergyPoint } from '../core/energy';
 
@@ -81,6 +81,7 @@ export class Analyzer {
     resolve: (c: Calibration | SlouchReference | null) => void;
   } | null = null;
   private drift: BaselineDrift | null = null;
+  private lastPositionT = 0;
   /** Bateria z kolejnych minut (do prognozy) i Body Battery z zegarka rano. */
   private energyHistory: EnergyPoint[] = [];
   private morningBodyBattery: number | null = null;
@@ -377,6 +378,8 @@ export class Analyzer {
           this.eyes.updateHead(t, res.metrics.neckRatio / this.calibration.neckRatio);
           this.trackFaceScale(res.metrics.eyeDistPx / this.calibration.eyeDistPx);
           this.trackDrift(t, res.metrics);
+          followPositionRef(this.calibration, res.metrics, t - this.lastPositionT);
+          this.lastPositionT = t;
         }
         if (out.alert) {
           this.breaks.registerAlert(t);

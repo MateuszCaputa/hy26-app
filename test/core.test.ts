@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { computeMetrics, lineAngleDeg, type Landmark } from '../src/core/metrics';
+import { followPositionRef } from '../src/core/calibration';
 import { evaluateIssues, PostureTracker, rankIssues, scoreFromIssues } from '../src/core/scoring';
 import { EyeAnalyzer, FatigueEstimator, fatiguePercent } from '../src/core/fatigue';
 import { BreakEngine } from '../src/core/breakEngine';
@@ -122,6 +123,21 @@ test('uniesione barki to nie wysunięta głowa; oba problemy naraz są widoczne'
   const r = evaluateIssues(computeMetrics(both, W, H, 0).metrics!, cal);
   const ranked = rankIssues(Object.fromEntries(r.map((i) => [i.id, i.severity])));
   assert.ok(ranked.includes('shrug') && ranked.includes('headForward'), ranked.join(','));
+});
+
+test('stara kalibracja bez położeń uzupełnia je sama przy prostej postawie i rozróżnia uniesione barki', () => {
+  const { noseY: _n, shoulderY: _s, ...old } = calFrom(body());
+  const cal: Calibration = old;
+  const up = (lm: Landmark[], px: number) => lm.map((l, i) => (i === 11 || i === 12 ? { ...l, y: l.y - px / H } : l));
+  // Uniesione barki nie mogą ustawić punktu odniesienia (szyja skrócona).
+  followPositionRef(cal, computeMetrics(up(body(), 30), W, H, 0).metrics!, 0.1);
+  assert.equal(cal.noseY, undefined);
+  // Prosta postawa: uzupełnia.
+  followPositionRef(cal, computeMetrics(body(), W, H, 0).metrics!, 0.1);
+  assert.ok(cal.noseY != null && cal.shoulderY != null);
+  const sev = evaluateIssues(computeMetrics(up(body(), 30), W, H, 0).metrics!, cal);
+  assert.ok(sev.find((i) => i.id === 'shrug')!.severity > 0.5);
+  assert.equal(sev.find((i) => i.id === 'headForward')!.severity, 0);
 });
 
 test('alert dopiero po 30 s złej postawy, z odstępem i histerezą', () => {
