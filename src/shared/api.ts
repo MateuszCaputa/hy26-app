@@ -32,6 +32,8 @@ export interface PosturaApi {
   activityStatus(): Promise<{ running: boolean; error: string | null }>;
   wipeData(): Promise<void>;
   openExternal(url: string): void;
+  /** Windows: ikona zasobnika z wynikiem postawy (PNG data URL); `null` = zwykła ikona. */
+  setTrayBadge(png: string | null): void;
 }
 
 declare global {

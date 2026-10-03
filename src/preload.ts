@@ -23,6 +23,7 @@ const api: PosturaApi = {
   activityStatus: () => ipcRenderer.invoke('activity-status'),
   wipeData: () => ipcRenderer.invoke('wipe-data'),
   openExternal: (url) => ipcRenderer.send('open-external', url),
+  setTrayBadge: (png) => ipcRenderer.send('tray-badge', png),
 };
 
 contextBridge.exposeInMainWorld('postura', api);

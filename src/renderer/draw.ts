@@ -1,7 +1,8 @@
 // Rysowanie linii kręgosłupa, barków i głowy na podglądzie kamery.
 import type { Calibration, PostureState } from '../shared/types';
 import type { Frame } from './analyzer';
-import { POSE } from '../core/metrics';
+import { POSE, type Landmark } from '../core/metrics';
+import { drawBody, drawFaceContours } from './landmarks';
 
 const css = (name: string) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
@@ -25,21 +26,26 @@ export function drawOverlay(canvas: HTMLCanvasElement, video: { videoWidth: numb
   const ctx = canvas.getContext('2d')!;
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   ctx.clearRect(0, 0, cw, ch);
-  const lm = f.pose;
-  if (!lm) return;
-
   const vw = video.videoWidth || 640;
   const vh = video.videoHeight || 480;
   const scale = Math.max(cw / vw, ch / vh);
   const ox = (cw - vw * scale) / 2;
   const oy = (ch - vh * scale) / 2;
+  const project = (p: Landmark): [number, number] => {
+    const x = ox + p.x * vw * scale;
+    return [o.mirror ? cw - x : x, oy + p.y * vh * scale];
+  };
+
+  // Styl demo MediaPipe: kontury twarzy (powieki, tęczówki) i czysty szkielet tułowia.
+  if (f.face) drawFaceContours(ctx, f.face, project);
+  const lm = f.pose;
+  if (!lm) return;
+  drawBody(ctx, lm, project);
+
   const P = (i: number): [number, number] | null => {
     const p = lm[i];
     if (!p || (p.visibility ?? 1) < 0.5) return null;
-    let x = ox + p.x * vw * scale;
-    const y = oy + p.y * vh * scale;
-    if (o.mirror) x = cw - x;
-    return [x, y];
+    return project(p);
   };
 
   const color = stateColor(f.tracker?.state);
@@ -49,8 +55,6 @@ export function drawOverlay(canvas: HTMLCanvasElement, video: { videoWidth: numb
   const nose = P(POSE.nose);
   const le = P(POSE.leftEye);
   const re = P(POSE.rightEye);
-  const lear = P(POSE.leftEar);
-  const rear = P(POSE.rightEar);
 
   ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
@@ -97,15 +101,13 @@ export function drawOverlay(canvas: HTMLCanvasElement, video: { videoWidth: numb
     ctx.globalAlpha = 1;
   }
 
-  line(ls, rs, 4, ink);
-  if (lear && rear) line(lear, rear, 2, ink, [3, 6]);
-  if (le && re) line(le, re, 3, ink);
-  if (nose) line(mid, nose, 7, color);
-  for (const p of [ls, rs, nose, le, re]) {
-    if (!p) continue;
-    ctx.fillStyle = p === nose ? color : ink;
+  // Barki i ramiona rysuje szkielet; tu zostaje „kręgosłup” w kolorze stanu postawy.
+  if (!f.face && le && re) line(le, re, 2, ink); // bez siatki twarzy: chociaż linia oczu
+  if (nose) {
+    line(mid, nose, 6, color);
+    ctx.fillStyle = color;
     ctx.beginPath();
-    ctx.arc(p[0], p[1], p === nose ? 6 : 4, 0, Math.PI * 2);
+    ctx.arc(nose[0], nose[1], 6, 0, Math.PI * 2);
     ctx.fill();
   }
 
@@ -120,6 +122,11 @@ export function drawOverlay(canvas: HTMLCanvasElement, video: { videoWidth: numb
       const roll = cal ? m.headRollDeg - cal.headRollDeg : m.headRollDeg;
       const ex = Math.max(le[0], re[0]) + 46;
       label(ex, (le[1] + re[1]) / 2, `głowa ${Math.abs(roll).toFixed(0)}°`, Math.abs(roll) > 10 ? css('--warn') : '#fff');
+      // Mrugnięcia obok konturu powiek: widać, że licznik reaguje na oczy.
+      const br = f.fatigue?.blinkRate;
+      if (f.face && br !== null && br !== undefined) {
+        label(Math.min(le[0], re[0]) - 58, (le[1] + re[1]) / 2, `mrugnięcia ${br.toFixed(0)}/min`, '#c08bff');
+      }
     }
     if (cal && nose) {
       const drop = ((cal.neckRatio - m.neckRatio) / cal.neckRatio) * 100;
