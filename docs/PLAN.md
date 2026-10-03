@@ -94,6 +94,8 @@
 - [x] C11 Two mini-widget styles (@Mateusz): **Karta** (score, state, fatigue) or **Pigułka** (dot + number, theme colours, fades when posture is good); chosen in Settings or tray → Mini-widget; click opens Postura, drag moves it (position remembered). Windows check pending (Marcin).
 - [x] C13 Calm nudges (@Mateusz): break and posture reminders as a small panel next to the widget (or top-right): 20-20-20 with a 20 s countdown (counts as an eye break), micro/move break with [Start] / [Za 5 min], posture tip that hides once posture is good; thin timeline instead of blinking, small „×”; doesn't steal focus. Settings: corner vs system notifications. Dev/demo tray trigger „Pokaż przypomnienie (test)”.
 - [x] C12 Card widget: long state/fatigue text ends with an ellipsis instead of overflowing. (@Marcin; 2 lines in `styles.css`)
+- [x] C14 Stats "Dziś": breaks (dashed line + dot) and posture alerts (▲) on the day chart, 70% fatigue line, legend; norms and "vs wczoraj" under every figure; caption explains fatigue gaps (no eye data). (@Marcin; `views/stats.ts`, `core/insights.ts` yesterday averages, `db.eventTimes`, 3 lines in `main.ts`, `types.ts`)
+- [x] C15 Stats "Ostatnie 7 dni": two column charts (average fatigue, time in good posture), today highlighted, hover/focus tooltip, screen-reader table, "Najwyższe zmęczenie: …" insight. (@Marcin; `views/stats.ts`, `core/insights.ts` `last7`)
 - [ ] C9 Screenshot pack at 1920×1080 for the slides + a 10 s clip of the neon overlay for the video intro.
 
 ## Area D: Pitch, video, submission & ops (owner: Bartłomiej, plus everyone for testing)

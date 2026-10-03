@@ -198,7 +198,21 @@ export interface StatsPayload {
     alerts: number;
     presentMinutes: number;
     topIssue: IssueId | null;
+    /** Czasy (ms) zrobionych przerw i alertów postawy – znaczniki na wykresie dnia. */
+    breakTimes: number[];
+    alertTimes: number[];
   };
+  /** Wczoraj, do porównania przy liczbach („↑ 5 vs wczoraj”); null, gdy wczoraj nie było pracy. */
+  yesterday: {
+    goodPercent: number | null;
+    avgPosture: number | null;
+    avgFatigue: number | null;
+    avgBlinkRate: number | null;
+    breaksTaken: number;
+    presentMinutes: number;
+  } | null;
+  /** Ostatnie 7 dni (z dziś, od najstarszego) do wykresów słupkowych; null = brak danych tego dnia. */
+  last7: { date: string; weekday: number; avgFatigue: number | null; goodPercent: number | null; presentMinutes: number }[];
   heatmap: { weekday: number; hour: number; form: number; minutes: number }[];
   bestHours: string | null;
   dipText: string | null;

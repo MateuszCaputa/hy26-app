@@ -175,10 +175,13 @@ button, input, select { font: inherit; color: inherit; }
 .empty { display: grid; gap: 14px; padding: 28px; background: var(--surface); border-radius: var(--radius-lg); max-width: 60ch; }
 
 .figs { display: flex; flex-wrap: wrap; gap: 0; }
-.fig { display: grid; padding: 4px 18px 4px 0; margin: 0 18px 8px 0; border-right: 1px solid var(--line); }
+.fig { display: grid; align-content: start; padding: 4px 14px 4px 0; margin: 0 14px 8px 0; border-right: 1px solid var(--line); }
 .fig:last-child { border-right: 0; }
 .fig-val { font-size: 28px; font-weight: 300; font-variant-numeric: tabular-nums; line-height: 1.2; }
 .fig-label { color: var(--muted); font-size: 13px; }
+.fig-note { color: var(--muted); font-size: 12px; opacity: .85; }
+.fig-note.up { color: var(--good); opacity: 1; }
+.fig-note.down { color: var(--bad); opacity: 1; }
 
 .chart { margin: 0; display: grid; gap: 6px; }
 .chart svg { width: 100%; height: auto; overflow: visible; }
@@ -191,6 +194,41 @@ button, input, select { font: inherit; color: inherit; }
 .chart .end { font-size: 12.5px; font-weight: 600; }
 .chart .end-post { fill: var(--spine); }
 .chart .end-fat { fill: var(--warn); }
+.chart .grid-tired { stroke: var(--bad); stroke-dasharray: 2 6; opacity: .55; }
+.chart .mark-break line { stroke: var(--good); stroke-width: 1.5; stroke-dasharray: 3 4; opacity: .5; }
+.chart .mark-break circle { fill: var(--good); }
+.chart .mark-alert { fill: var(--warn); opacity: .9; }
+.chart-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; }
+.chart-legend .lg { display: inline-block; width: 14px; height: 0; margin-right: -8px; vertical-align: middle; }
+.chart-legend .lg-break { width: 0; height: 12px; border-left: 2px dashed var(--good); margin-left: 4px; }
+.chart-legend .lg-alert { width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 8px solid var(--warn); }
+.chart-legend .lg-good { border-top: 2px dashed var(--good); }
+.chart-legend .lg-tired { border-top: 2px dotted var(--bad); }
+
+/* Ostatnie 7 dni: wykresy kolumnowe (jedna seria, dziś pełnym kolorem, wcześniejsze dni przygaszone) */
+.col-charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px 32px; }
+.col-chart { gap: 4px; }
+.col-title { font-size: 14px; font-weight: 600; display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.col-sub { color: var(--muted); font-size: 12px; font-weight: 400; display: inline-flex; align-items: center; gap: 6px; }
+.col-sub .lg-thr { display: inline-block; width: 16px; border-top: 1px dashed var(--muted); }
+.col-plot { position: relative; }
+.chart .col { opacity: .5; transition: opacity .15s ease; }
+.chart .col-today, .chart .col.hover { opacity: 1; }
+.chart .col-fat { fill: var(--warn); }
+.chart .col-post { fill: var(--spine); }
+.chart .col-thr { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 4; opacity: .7; }
+.chart .col-val { fill: var(--ink); font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.chart .axis-today { fill: var(--ink); font-weight: 600; }
+.chart .col-hit { fill: transparent; cursor: default; outline: none; }
+.chart .col-hit:focus-visible { stroke: var(--spine); stroke-width: 1.5; }
+.col-tip {
+  position: absolute; top: 0; transform: translate(-50%, -100%); pointer-events: none; opacity: 0; transition: opacity .12s ease;
+  display: grid; gap: 1px; padding: 6px 10px; border-radius: var(--radius-sm); background: var(--surface); border: 1px solid var(--line);
+  font-size: 12.5px; color: var(--muted); white-space: nowrap; box-shadow: 0 4px 14px rgb(0 0 0 / .25);
+}
+.col-tip.on { opacity: 1; }
+.col-tip strong { color: var(--ink); font-size: 15px; font-variant-numeric: tabular-nums; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 
 .heat { display: grid; gap: 3px; font-size: 11.5px; font-variant-numeric: tabular-nums; }
 .heat-h { text-align: center; color: var(--muted); }

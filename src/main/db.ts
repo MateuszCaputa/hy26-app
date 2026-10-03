@@ -109,9 +109,14 @@ export class Store {
     this.db.prepare('INSERT INTO events(ts, type, detail) VALUES(?, ?, ?)').run(ts, type, detail ?? null);
   }
 
-  countEvents(type: string, since: number): number {
-    const r = this.db.prepare('SELECT COUNT(*) AS n FROM events WHERE type = ? AND ts >= ?').get(type, since) as { n: number };
+  countEvents(type: string, since: number, until = Number.MAX_SAFE_INTEGER): number {
+    const r = this.db.prepare('SELECT COUNT(*) AS n FROM events WHERE type = ? AND ts >= ? AND ts < ?').get(type, since, until) as { n: number };
     return r.n;
+  }
+
+  /** Czasy zdarzeń danego typu od `since` (np. przerwy i alerty na wykres dnia). */
+  eventTimes(type: string, since: number): number[] {
+    return (this.db.prepare('SELECT ts FROM events WHERE type = ? AND ts >= ? ORDER BY ts').all(type, since) as { ts: number }[]).map((r) => r.ts);
   }
 
   saveGarminDay(g: GarminDay): void {

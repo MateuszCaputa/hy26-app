@@ -425,6 +425,9 @@ function statsNow() {
     garminConnected: garmin.connected,
     breaksToday: store.countEvents('break-done', dayStart),
     alertsToday: store.countEvents('alert', dayStart),
+    breakTimes: store.eventTimes('break-done', dayStart),
+    alertTimes: store.eventTimes('alert', dayStart),
+    breaksYesterday: store.countEvents('break-done', new Date(dayStart - 12 * 3600e3).setHours(0, 0, 0, 0), dayStart),
   });
 }
 
