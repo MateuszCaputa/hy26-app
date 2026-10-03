@@ -32,10 +32,6 @@ export interface PosturaApi {
   activityStatus(): Promise<{ running: boolean; error: string | null }>;
   wipeData(): Promise<void>;
   openExternal(url: string): void;
-  /** Mini-widget: pokaż główne okno (opcjonalnie na danym widoku). */
-  openMain(view?: string): void;
-  /** Mini-widget: przesuń okno widgetu (x, y w px ekranu); `done` zapisuje pozycję. */
-  moveWidget(x: number, y: number, done: boolean): void;
 }
 
 declare global {

@@ -225,8 +225,8 @@ function createMainWindow(): void {
   });
 }
 
-const WIDGET_W = 200;
-const WIDGET_H = 44;
+const WIDGET_W = 230;
+const WIDGET_H = 74;
 
 /** Zapamiętana pozycja widgetu, jeśli nadal leży na którymś ekranie; inaczej prawy górny róg. */
 function widgetPosition(): { x: number; y: number } {
@@ -273,6 +273,10 @@ function toggleWidget(on: boolean): void {
     widgetWin.setAlwaysOnTop(true, 'floating');
     void widgetWin.loadURL('app://local/widget.html');
     widgetWin.on('closed', () => (widgetWin = null));
+    widgetWin.on('moved', () => {
+      const b = widgetWin?.getBounds();
+      if (b) store.setMeta('widgetPos', { x: b.x, y: b.y });
+    });
     if (lastStatus) widgetWin.webContents.once('did-finish-load', () => widgetWin?.webContents.send('status', lastStatus));
   } else if (!on && widgetWin) {
     widgetWin.close();
@@ -281,9 +285,14 @@ function toggleWidget(on: boolean): void {
 }
 
 function applySettings(s: Settings): void {
+  const prev = settings as Settings | undefined; // przy starcie jeszcze nieustawione
   settings = s;
   store.saveSettings(s);
-  if (s.activityTracking) activity.start();
+  // macOS: bez zgody na Dostępność nie uruchamiamy haka – każda próba wywołuje systemowe pytanie od nowa.
+  // Pytamy tylko raz: gdy użytkownik sam włącza śledzenie tempa pracy.
+  const justEnabled = s.activityTracking && !!prev && !prev.activityTracking;
+  const accessOk = process.platform !== 'darwin' || systemPreferences.isTrustedAccessibilityClient(justEnabled);
+  if (s.activityTracking && accessOk) activity.start();
   else activity.stop();
   toggleWidget(s.miniWidget);
   if (app.isPackaged) app.setLoginItemSettings({ openAtLogin: s.autostart, args: ['--hidden'] });
@@ -391,12 +400,6 @@ function registerIpc(): void {
   ipcMain.on('event', (_e, ev: AppEvent) => store.addEvent(ev.type, ev.detail));
   ipcMain.handle('get-stats', () => statsNow());
   ipcMain.on('set-paused', (_e, p: boolean) => setPaused(p));
-  ipcMain.on('open-main', (_e, view?: string) => showMain(view));
-  ipcMain.on('widget-move', (_e, x: number, y: number, done: boolean) => {
-    if (!widgetWin) return;
-    widgetWin.setBounds({ x: Math.round(x), y: Math.round(y), width: WIDGET_W, height: WIDGET_H });
-    if (done) store.setMeta('widgetPos', { x: Math.round(x), y: Math.round(y) });
-  });
   ipcMain.handle('garmin-connect', async (_e, email: string, password: string) => {
     try {
       await garmin.connect(email, password);

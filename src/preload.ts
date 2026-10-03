@@ -23,8 +23,6 @@ const api: PosturaApi = {
   activityStatus: () => ipcRenderer.invoke('activity-status'),
   wipeData: () => ipcRenderer.invoke('wipe-data'),
   openExternal: (url) => ipcRenderer.send('open-external', url),
-  openMain: (view) => ipcRenderer.send('open-main', view),
-  moveWidget: (x, y, done) => ipcRenderer.send('widget-move', x, y, done),
 };
 
 contextBridge.exposeInMainWorld('postura', api);
