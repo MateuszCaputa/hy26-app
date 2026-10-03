@@ -37,6 +37,12 @@ const CAMERA_MSG: Record<string, string> = {
   stopped: 'Analiza wstrzymana. Kamera jest wyłączona.',
 };
 
+// Odchylenie bez „−0”: co zaokrągla się do zera, pokazujemy jako 0; minus zawsze typograficzny „−”.
+function fmtDev(v: number, unit: string): string {
+  const r = Math.round(v);
+  return `${r < 0 ? '−' : ''}${Math.abs(r)}${unit}`;
+}
+
 export class LiveView {
   private root: HTMLElement;
   // MP9: rysowanie w tempie ekranu (rAF), sylwetka wygładzana między pomiarami.
@@ -51,7 +57,8 @@ export class LiveView {
   private tip: HTMLElement;
   private fatNum: HTMLElement;
   private fatBar: HTMLElement;
-  private eyeCounts: HTMLElement;
+  private blinkVal: HTMLElement;
+  private yawnVal: HTMLElement;
   private breakText: HTMLElement;
   private breakBtn: HTMLButtonElement;
   private metricRows = new Map<IssueId, { val: HTMLElement; bar: HTMLElement; row: HTMLElement }>();
@@ -59,6 +66,7 @@ export class LiveView {
   private figure = new PostureFigure();
   private calibrateCta: HTMLElement;
   private hint: HTMLElement;
+  private recalBtn: HTMLButtonElement;
   private mounted = false;
 
   constructor(private ctx: AppCtx) {
@@ -77,7 +85,8 @@ export class LiveView {
 
     this.fatNum = h('span', { class: 'energy-pct' }, '–');
     this.fatBar = h('span', { class: 'meter-fill' });
-    this.eyeCounts = h('p', null, '–');
+    this.blinkVal = h('span', { class: 'metric-val' }, '–');
+    this.yawnVal = h('span', { class: 'metric-val' }, '–');
 
     this.scoreState = h('span', { class: 'score-state' }, 'Uruchamiam…');
     this.tip = h('p', { class: 'tip' });
@@ -112,19 +121,22 @@ export class LiveView {
       h('section', { class: 'r-block break-line' }, this.breakText, this.breakBtn),
       h('details', {
         class: 'r-block details',
-        // Po rozwinięciu przewiń sam panel do szczegółów – kamera zostaje na miejscu.
-        ontoggle: (e: Event) => {
-          const d = e.currentTarget as HTMLDetailsElement;
-          if (d.open) requestAnimationFrame(() => d.scrollIntoView({ behavior: 'smooth', block: 'start' }));
-        },
+        // Bez automatycznego przewijania: przewinięcie do „Szczegółów” ucinało górę panelu (ludzik, stan) w przypadkowym miejscu.
+        // Szczegóły rozwijają się w dół, a panel przewija się sam (kamera i tak stoi w miejscu).
       },
         h('summary', null, 'Szczegóły pomiaru'),
         h('div', { class: 'details-body' },
           h('h2', null, 'Oczy'),
-          this.eyeCounts,
+          // Te same wiersze co odchylenia niżej (nazwa po lewej, liczba po prawej), żeby panel czytał się jak jedna lista.
+          h('ul', { class: 'metric-list' },
+            h('li', { class: 'metric plain' }, h('span', { class: 'metric-name' }, 'Mrugnięcia'), this.blinkVal),
+            h('li', { class: 'metric plain' }, h('span', { class: 'metric-name' }, 'Ziewnięcia'), this.yawnVal),
+          ),
           h('h2', null, 'Jak daleko jesteś od swojej prostej postawy'),
           metrics,
-          h('button', { class: 'btn ghost small', onclick: () => ctx.startCalibration() }, 'Skalibruj ponownie'),
+          h('div', { class: 'details-foot' },
+            this.recalBtn = h('button', { class: 'btn ghost small', onclick: () => ctx.startCalibration() }, ctx.calibration ? 'Skalibruj ponownie' : 'Skalibruj'),
+          ),
         ),
       ),
     );
@@ -229,7 +241,7 @@ export class LiveView {
       r.row.dataset.level = s >= 0.66 ? 'bad' : s >= 0.33 ? 'warn' : 'ok';
       if (m && cal) {
         const dev = d.deviation(m, cal);
-        r.val.textContent = d.unit === '%' ? `${dev >= 0 ? '' : '−'}${Math.abs(dev * 100).toFixed(0)}%` : `${dev.toFixed(0)}°`;
+        r.val.textContent = fmtDev(d.unit === '%' ? dev * 100 : dev, d.unit);
       } else r.val.textContent = '–';
     }
   }
@@ -239,6 +251,8 @@ export class LiveView {
     const ctx = this.ctx;
     const noCal = !ctx.calibration;
     this.calibrateCta.hidden = !noCal || ctx.paused;
+    // „ponownie” dopiero, gdy jest już jakaś kalibracja (jak w Ustawieniach).
+    this.recalBtn.textContent = noCal ? 'Skalibruj' : 'Skalibruj ponownie';
     this.root.dataset.state = ctx.paused ? 'paused' : s.state;
     this.scoreState.textContent = noCal ? 'Czekam na kalibrację' : STATE_WORD[ctx.paused ? 'paused' : s.state] ?? '';
     this.tip.textContent = noCal ? 'Pokaż mi raz prostą postawę – od niej liczę resztę.'
@@ -254,7 +268,8 @@ export class LiveView {
     // W „Szczegółach” tylko surowe liczby z oczu.
     const blinks = f?.blinkRate != null ? `${Math.round(f.blinkRate)}/min` : '–';
     const yawns = f ? `${f.yawns10m} w 10 min` : '–';
-    this.eyeCounts.textContent = `Mrugnięcia: ${blinks} · Ziewnięcia: ${yawns}`;
+    this.blinkVal.textContent = blinks;
+    this.yawnVal.textContent = yawns;
 
     const be = ctx.analyzer.breakEngine;
     const pending = be.pendingSuggestion;

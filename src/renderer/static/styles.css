@@ -158,12 +158,33 @@ button, input, select { font: inherit; color: inherit; }
 .energy-pct { color: var(--ink); font-size: 15px; font-weight: 500; font-variant-numeric: tabular-nums; }
 .energy-row .fine[hidden] { display: none; }
 .details { padding: 0; border-bottom: 0; }
-.details > summary { cursor: pointer; padding: 13px 0; color: var(--muted); font-weight: 600; font-size: 15px; list-style: none; }
+/* Strzałka po prawej: tytuł i cała treść zaczynają się od tej samej lewej krawędzi co reszta panelu. */
+.details > summary {
+  cursor: pointer; padding: 13px 0; color: var(--muted); font-weight: 600; font-size: 15px; list-style: none;
+  display: flex; justify-content: space-between; align-items: center;
+}
 .details > summary::-webkit-details-marker { display: none; }
-.details > summary::before { content: "▸"; display: inline-block; width: 1.1em; transition: transform .15s ease; }
-.details[open] > summary::before { transform: rotate(90deg); }
-.details-body { display: grid; gap: 8px; padding-bottom: 12px; }
-.details-body h2 { margin-top: 8px; }
+/* Strzałka narysowana obramowaniem, nie znakiem – czytnik ekranu jej nie przeczyta. */
+.details > summary::after {
+  content: ""; width: 6px; height: 6px; margin-right: 3px;
+  border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor;
+  transform: rotate(-45deg); transition: transform .15s ease;
+}
+.details[open] > summary { padding-bottom: 4px; }
+.details[open] > summary::after { transform: rotate(45deg); }
+.details-body { display: grid; gap: 10px; padding-bottom: 16px; }
+/* Podtytuły mniejsze od „Szczegółów pomiaru”, żeby było widać, co jest czym. */
+.details-body h2 { margin-top: 12px; font-size: 13px; }
+.details-body h2:first-child { margin-top: 0; }
+/* Wiersze wcięte pod swoim podtytułem, żeby było widać, do której sekcji należą. */
+.details-body .metric-list { padding-left: 14px; }
+/* Przycisk kalibracji oddzielony od listy, na całą szerokość panelu – nie wisi pod ostatnim paskiem. */
+/* Przypięty do dołu panelu: po rozwinięciu nie wystaje ucięty poza krawędź, lista przewija się pod nim. */
+.details-foot {
+  margin-top: 8px; padding: 14px 0 4px; border-top: 1px solid var(--line); display: grid;
+  position: sticky; bottom: -18px; padding-bottom: 18px; background: var(--bg);
+}
+.details-foot .btn { justify-self: stretch; padding-block: 8px; }
 .adv > summary { cursor: pointer; font-weight: 600; color: var(--muted); padding: 6px 0; }
 .adv[open] > summary { margin-bottom: 8px; }
 .score-num { font-size: 72px; font-weight: 250; line-height: .95; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
@@ -192,6 +213,7 @@ button, input, select { font: inherit; color: inherit; }
 .metric-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
 .metric { display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto 4px; column-gap: 8px; row-gap: 3px; font-size: 14px; }
 .metric-val { font-variant-numeric: tabular-nums; color: var(--muted); }
+.metric.plain { grid-template-rows: auto; }
 .metric-bar { grid-column: 1 / -1; background: var(--spine-soft); border-radius: 2px; overflow: hidden; }
 .metric-bar-fill { display: block; height: 100%; width: 0; background: var(--muted); transition: width .4s ease; }
 .metric[data-level="warn"] .metric-bar-fill { background: var(--warn); }
