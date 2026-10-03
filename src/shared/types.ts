@@ -92,6 +92,14 @@ export interface Calibration {
   earOpen: number | null;
   /** Pochylenie głowy przy prostej postawie (stare kalibracje go nie mają). */
   headPitchDeg?: number | null;
+  /** Drugi krok kalibracji: zwykła (zgarbiona) pozycja – osobisty zakres progów. */
+  slouch?: SlouchReference;
+}
+
+export interface SlouchReference {
+  neckRatio: number;
+  earRatio: number;
+  headPitchDeg: number | null;
 }
 
 export interface IssueReading {

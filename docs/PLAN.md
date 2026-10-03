@@ -15,7 +15,7 @@
 - [ ] A7 (M5) `core/carePattern.ts`: detect a persistent pattern (e.g. 10 of the last 14 days with a dominant issue above threshold, or high eye strain) and produce the input for the doctor report.
 - [ ] A8 Record 2–3 landmark fixture clips (good posture, slouch, tired) for tests + demo mode.
 - [x] A10 Posture precision: nose/eyes from the face mesh instead of the pose model, `core/shoulderGate.ts` rejects guessed shoulders (visibility, width/tilt jumps, holds the last good ones), shoulder/head tilt judged vs level (calibration can shift zero by ≤ 3°). (@Kacper, branch `kacper/posture-precision`)
-- [ ] A11 Calibration that survives bad posture: live checks during calibration, two-step (tall + usual slouch) with a personal range, a "you sat straighter than your calibration" hint. (@Kacper, in progress)
+- [x] A11 Calibration that survives bad posture: live checks during calibration, two-step (tall + usual slouch) with a personal range, a "you sat straighter than your calibration" hint. (@Kacper, branch `kacper/calibration-guard`; touches `overlays.ts` calibration dialog (C) and one toast in `app.ts`)
 - [ ] A9 Document every formula in the README's "Jak liczona jest ocena" (how the score is computed), updated for A3–A7.
 
 ## Area MP: MediaPipe & camera (bugs first, then precision, then wow). One task at a time, in this order.

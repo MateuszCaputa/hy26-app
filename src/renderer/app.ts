@@ -86,8 +86,13 @@ async function main(): Promise<void> {
     },
     onMinute: (s) => api?.sendMinute(s),
     onCameraState: (state, detail) => live?.camera(state, detail),
-    onRecalibrateHint: () =>
-      ctx.toast('Kamera lub krzesło chyba się zmieniły – wyniki mogą być zawyżone.', { label: 'Skalibruj', run: () => ctx.startCalibration() }),
+    onRecalibrateHint: (kind) =>
+      ctx.toast(
+        kind === 'straighter'
+          ? 'Dziś siedzisz prościej niż przy kalibracji – nowa kalibracja da dokładniejsze wyniki.'
+          : 'Kamera lub krzesło chyba się zmieniły – wyniki mogą być zawyżone.',
+        { label: 'Skalibruj', run: () => ctx.startCalibration() },
+      ),
   });
   analyzer.demo = DEMO;
 

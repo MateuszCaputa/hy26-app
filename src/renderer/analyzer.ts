@@ -10,6 +10,8 @@ import { MinuteAggregator, postureAvg, postureSlope, topIssueOf } from '../core/
 import { FrameGate } from '../core/frameGate';
 import { headPoseFromMatrix, type HeadPose } from '../core/headPose';
 import { ShoulderGate } from '../core/shoulderGate';
+import { BaselineDrift, checkCalibrationPose, type CalibrationCheck } from '../core/calibration';
+import type { SlouchReference } from '../shared/types';
 
 export interface Frame {
   t: number;
@@ -28,7 +30,8 @@ export interface AnalyzerCallbacks {
   onBreak(s: BreakSuggestion): void;
   onMinute(s: MinuteSample): void;
   onCameraState(state: 'starting' | 'running' | 'busy' | 'denied' | 'missing' | 'stopped', detail?: string): void;
-  onRecalibrateHint(): void;
+  /** camera: kamera/krzesło się zmieniły; straighter: siedzisz prościej niż przy kalibracji. */
+  onRecalibrateHint(kind: 'camera' | 'straighter'): void;
 }
 
 const POSE_INTERVAL_MS = 125; // ~8 analiz sylwetki na sekundę
@@ -62,7 +65,19 @@ export class Analyzer {
   private recalHintDay = '';
   private onBattery = false;
   private retryTimer: number | null = null;
-  private calibrating: { until: number; samples: PostureMetrics[]; ears: number[]; resolve: (c: Calibration | null) => void } | null = null;
+  private calibrating: {
+    mode: 'tall' | 'slouch';
+    needSec: number;
+    goodSec: number;
+    lastT: number;
+    deadline: number;
+    samples: PostureMetrics[];
+    ears: number[];
+    onProgress?: (fraction: number, checks: CalibrationCheck[]) => void;
+    resolve: (c: Calibration | SlouchReference | null) => void;
+  } | null = null;
+  private drift: BaselineDrift | null = null;
+  private driftHintDay = '';
   demo = false;
   /** Bez WebGL MediaPipe nie przyjmuje <video>: wtedy podajemy klatki jako ImageData. */
   private cpuFrames = false;
@@ -150,6 +165,8 @@ export class Analyzer {
     else this.tracker = new PostureTracker(c, this.settings);
     this.eyes.setCalibratedEarOpen(c.earOpen);
     this.faceScaleHist = [];
+    if (this.drift) this.drift.reset(c.neckRatio);
+    else this.drift = new BaselineDrift(c.neckRatio);
   }
 
   get hasCalibration(): boolean {
@@ -224,11 +241,35 @@ export class Analyzer {
     return this.running;
   }
 
-  /** Zbiera pomiary przez `sec` sekund i zwraca medianę jako wzorzec prostej postawy. */
-  calibrate(sec = 5): Promise<Calibration | null> {
+  /**
+   * Krok 1 kalibracji: wzorzec prostej postawy. Liczą się tylko chwile, w których kontrola
+   * na żywo nie ma zastrzeżeń (głowa uniesiona, barki i głowa poziomo, twarz przodem) –
+   * `onProgress` dostaje postęp i listę rzeczy do poprawy. Po 40 s bez wyniku: null.
+   */
+  calibrate(sec = 5, onProgress?: (fraction: number, checks: CalibrationCheck[]) => void): Promise<Calibration | null> {
     return new Promise((resolve) => {
-      this.calibrating = { until: this.now() + sec, samples: [], ears: [], resolve };
+      const t = this.now();
+      this.calibrating = {
+        mode: 'tall', needSec: sec, goodSec: 0, lastT: t, deadline: t + sec + 35,
+        samples: [], ears: [], onProgress, resolve: resolve as (c: unknown) => void,
+      };
     });
+  }
+
+  /** Krok 2 kalibracji: zwykła pozycja przy pracy (osobisty zakres progów). */
+  captureSlouch(sec = 4, onProgress?: (fraction: number) => void): Promise<SlouchReference | null> {
+    return new Promise((resolve) => {
+      const t = this.now();
+      this.calibrating = {
+        mode: 'slouch', needSec: sec, goodSec: 0, lastT: t, deadline: t + sec + 15,
+        samples: [], ears: [], onProgress: onProgress ? (f) => onProgress(f) : undefined, resolve: resolve as (c: unknown) => void,
+      };
+    });
+  }
+
+  /** Ostatnie metryki (np. do kontroli postawy w czasie kalibracji). */
+  get currentMetrics(): PostureMetrics | null {
+    return this.lastMetrics;
   }
 
   private loop = (): void => {
@@ -310,12 +351,7 @@ export class Analyzer {
         this.shoulderGate.reset();
       }
 
-      if (this.calibrating) {
-        if (res.metrics) this.calibrating.samples.push(res.metrics);
-        // Na wolnym komputerze zbieramy dłużej (do +10 s), aż będzie min. 15 próbek.
-        const c = this.calibrating;
-        if (t >= c.until && (c.samples.length >= 15 || t >= c.until + 10)) this.finishCalibration();
-      }
+      if (this.calibrating) this.calibrationTick(t, res.metrics);
 
       if (this.tracker) {
         const out = this.tracker.update(t, res.metrics);
@@ -323,6 +359,7 @@ export class Analyzer {
         if (res.metrics && this.calibration) {
           this.eyes.updateHead(t, res.metrics.neckRatio / this.calibration.neckRatio);
           this.trackFaceScale(res.metrics.eyeDistPx / this.calibration.eyeDistPx);
+          this.trackDrift(t, res.metrics);
         }
         if (out.alert) {
           this.breaks.registerAlert(t);
@@ -425,15 +462,55 @@ export class Analyzer {
     const day = new Date().toDateString();
     if ((med > 1.3 || med < 0.75) && this.recalHintDay !== day) {
       this.recalHintDay = day;
-      this.cb.onRecalibrateHint();
+      this.cb.onRecalibrateHint('camera');
     }
+  }
+
+  private lastDriftCheck = 0;
+  private trackDrift(t: number, m: PostureMetrics): void {
+    if (!this.drift || this.calibrating) return;
+    this.drift.add(t, m);
+    if (t - this.lastDriftCheck < 60) return;
+    this.lastDriftCheck = t;
+    const day = new Date().toDateString();
+    if (this.driftHintDay !== day && this.drift.suggestsRecalibration()) {
+      this.driftHintDay = day;
+      this.cb.onRecalibrateHint('straighter');
+    }
+  }
+
+  private calibrationTick(t: number, m: PostureMetrics | null): void {
+    const c = this.calibrating!;
+    // Na wolnym komputerze analiza sylwetki bywa rzadka (nawet co 1 s) – nie ucinamy jej czasu za mocno.
+    const dt = Math.min(1, Math.max(0, t - c.lastT));
+    c.lastT = t;
+    if (m) {
+      const checks = c.mode === 'tall' ? checkCalibrationPose(m) : [];
+      if (checks.length === 0) {
+        c.samples.push(m);
+        c.goodSec += dt;
+      }
+      c.onProgress?.(Math.min(1, c.goodSec / c.needSec), checks);
+    }
+    const minSamples = c.mode === 'tall' ? 10 : 6;
+    // Na wolnym komputerze zbieramy dłużej, aż będzie dość próbek; po terminie kończymy z tym, co jest.
+    if ((c.goodSec >= c.needSec && c.samples.length >= minSamples) || t >= c.deadline) this.finishCalibration();
   }
 
   private finishCalibration(): void {
     const c = this.calibrating!;
     this.calibrating = null;
-    if (c.samples.length < 15) {
+    if (c.samples.length < (c.mode === 'tall' ? 10 : 6)) {
       c.resolve(null);
+      return;
+    }
+    if (c.mode === 'slouch') {
+      const pitches = c.samples.map((m) => m.headPitchDeg).filter((x): x is number => x != null);
+      c.resolve({
+        neckRatio: median(c.samples.map((m) => m.neckRatio)),
+        earRatio: median(c.samples.map((m) => m.earRatio)),
+        headPitchDeg: pitches.length >= c.samples.length / 2 ? median(pitches) : null,
+      });
       return;
     }
     const pick = (k: 'neckRatio' | 'earRatio' | 'headRollDeg' | 'shoulderTiltDeg' | 'eyeDistPx' | 'shoulderToEye') =>

@@ -1,5 +1,6 @@
 // Ocena postawy względem osobistej kalibracji: wynik 0–100, stany, histereza alertów.
 import type { Calibration, IssueId, IssueReading, PostureMetrics, PostureState } from '../shared/types';
+import { personalThreshold } from './calibration';
 
 interface IssueDef {
   id: Exclude<IssueId, 'stillness'>;
@@ -55,7 +56,12 @@ export const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
 export function evaluateIssues(m: PostureMetrics, c: Calibration, sensitivity = 1): IssueReading[] {
   return ISSUE_DEFS.map((d) => {
     const dev = d.deviation(m, c);
-    const thr = d.threshold * sensitivity;
+    // Szyja i garbienie: próg z osobistego zakresu (drugi krok kalibracji), jeśli jest.
+    const base =
+      d.id === 'headForward' ? personalThreshold(d.threshold, c.neckRatio, c.slouch?.neckRatio)
+      : d.id === 'slouch' ? personalThreshold(d.threshold, c.earRatio, c.slouch?.earRatio)
+      : d.threshold;
+    const thr = base * sensitivity;
     return {
       id: d.id,
       severity: clamp01((dev - 0.5 * thr) / thr),
