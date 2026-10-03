@@ -98,6 +98,13 @@ export async function renderSettings(view: HTMLElement, ctx: AppCtx): Promise<vo
       ]),
       group('Aplikacja', [
         toggle('miniWidget', 'Mini-widget z wynikiem na ekranie'),
+        h('div', { class: 'field' },
+          h('label', { for: 's-widgetStyle' }, 'Wygląd mini-widgetu'),
+          h('select', { id: 's-widgetStyle', onchange: (e: Event) => set('widgetStyle', (e.target as HTMLSelectElement).value as Settings['widgetStyle']) },
+            h('option', { value: 'card', selected: ctx.settings.widgetStyle === 'card' }, 'Karta: wynik, stan, zmęczenie'),
+            h('option', { value: 'pill', selected: ctx.settings.widgetStyle === 'pill' }, 'Pigułka: sama liczba'),
+          ),
+        ),
         toggle('autostart', 'Uruchamiaj z systemem', 'start w zasobniku, bez okna'),
       ]),
       h('section', { class: 'block group' },

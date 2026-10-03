@@ -34,6 +34,9 @@ export interface PosturaApi {
   openExternal(url: string): void;
   /** Windows: ikona zasobnika z wynikiem postawy (PNG data URL); `null` = zwykła ikona. */
   setTrayBadge(png: string | null): void;
+  /** Mini-widget: kliknięcie otwiera główne okno; przeciąganie przesuwa widget (x, y ekranu; `done` zapisuje). */
+  openMain(view?: string): void;
+  moveWidget(x: number, y: number, done: boolean): void;
 }
 
 declare global {
