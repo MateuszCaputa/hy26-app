@@ -53,7 +53,7 @@
 ## 2. Phases & gates
 
 ### Phase 0: UNBLOCK (16:45 → 17:15), everyone
-- [ ] **0.1 Mateusz: merge Kacper's PRs in this order, running `npm start` after each:** #73 (calibration) → #74 (Bateria, stacked on #73) → #72 (head pose + full model). Resolve `analyzer.ts` / `types.ts` conflicts by keeping both sides. Afterwards **everyone runs `git pull --rebase origin main`**.
+- [x] **0.1 Mateusz: merged Kacper's stacked PRs #72 → #73 → #74** (Sat ~17:00; conflicts resolved keeping Kacper's side, MP1 fix preserved, 55/55 tests). Resolve `analyzer.ts` / `types.ts` conflicts by keeping both sides. Afterwards **everyone runs `git pull --rebase origin main`**.
 - [ ] **0.2 Bartłomiej: D1 now.** Deadline 11:00 or 23:00? Dual entry with AI? Post in team chat and at the top of this file.
 - [ ] **0.3 Bartłomiej: start the team experiment.** All 4 keep Postura running from now on (laptop lids open). Export data at 20:00, 02:00 and 07:00. This is pitch beat 1.
 - [ ] **0.4 Each dev:** read this file and claim your Phase 1 tasks in PLAN.md (`/start`).
