@@ -10,8 +10,8 @@
 - [x] A1 (M7) Models bundled in `assets/models/` (face + pose full + lite, 19 MB, shipped via extraResources); loaded first, the userData download is only a fallback; `modelsReady` accepts full OR lite (fixes N1). Tested with an empty data dir: no download screen, "Modele wczytane (GPU)". (@Mateusz, PR #87)
 - [ ] A2 (M1) Measure FPS on the demo laptop with the overlay ON; keep it at 24+ (pose every 2nd frame if needed).
 - [ ] A3 (M3) `core/explain.ts`: for each alert/break, produce `{reason, evidence[]}` from the current metrics ("PERCLOS 18% (norm < 10%)", "52 min without a break"). Unit tests.
-- [ ] A4 (M4) `core/exerciseVerify.ts`: rep detection for chin tuck (nose–shoulder distance) and shoulder-blade squeeze (shoulder width); min duration and refractory period. Unit tests with recorded landmark fixtures.
-- [ ] A5 (M4) A score recovery bonus after a verified exercise (visible in the score/fatigue trend).
+- [x] A4 (M4) `core/exerciseVerify.ts`: camera-verified reps from the existing posture metrics, start position = median of the first 1 s after Start, hysteresis + min hold + refractory. Chin tuck (face shrinks vs shoulders, so leaning back does not count), shoulder raises (shoulder line up), neck side stretch (seconds of head roll per side). Other exercises keep the manual „Zrobione”. Tests with synthetic clips. (@Marcin; taken over from Kacper)
+- [x] A5 (M4) Recovery after a verified exercise: the break is credited automatically (resets time-since-break and the fatigue trend), and the toast shows the real Bateria change „Bateria 52% → 61%” (no artificial bonus). (@Marcin)
 - [x] A6 (S1) `core/energy.ts`: one fused 0–100 "energy/battery" from fatigue + posture + time since break + Garmin Body Battery if present; plus a linear prediction "minutes until < 30". Tests. (@Kacper, branch `kacper/energy-simple-ui`: `core/energy.ts` + tests; Garmin Body Battery used when today's entry exists)
 - [ ] A7 (M5) `core/carePattern.ts`: detect a persistent pattern (e.g. 10 of the last 14 days with a dominant issue above threshold, or high eye strain) and produce the input for the doctor report.
 - [ ] A8 Record 2–3 landmark fixture clips (good posture, slouch, tired) for tests + demo mode.
@@ -92,7 +92,8 @@
 - [ ] C3 (M2) Blink ripple on the eyes; the colour shifts green → amber → red with the score.
 - [ ] C4 (M6) **Demo-mode intensity** (hotkey): brighter glow, bigger numbers for the projector.
 - [ ] C5 (S1) → **live-view part in Kacper's PR #74**; remaining: tray widget + prediction badge. The energy / battery widget: a big animated number + a sparkline + the prediction badge, in the live view and the tray widget.
-- [ ] C6 (M4) Exercise screen: a guide figure, a rep counter driven by A4, a ✓ animation, the recovery moment.
+- [x] C6 (M4) Break screen: „Kamera sprawdza” counter next to the timer (reps or seconds per side, progress bar, cue, „Nie widzę Cię”), ✓ animation, auto-credit 1.4 s later. No video preview (shared <video>, FEEDBACK „Not now”). (@Marcin; `overlays.ts`, `styles.css` (C))
+- [x] C23 Animated exercise figures: all 8 stick figures show the movement in a loop (CSS keyframes; moving body part in accent colour, dashed ghost = start position). Always playing on the break screen, on hover/focus in the Ćwiczenia list; off with „reduce motion”. (@Marcin; `figures.ts`, `styles.css` (C))
 - [ ] C7 Visual pass on all views (live, stats, exercises, settings) against ENGINEERING §8: one palette, typography, the projector test.
 - [ ] C8 A calm empty/error state for every view (no face, camera busy, no data yet).
 - [x] C10 Quick glance (@Mateusz): live posture score next to the tray icon (macOS), tray quick menu (state, Bateria + forecast, fatigue, time since break; break now, pause 30 min), widget remembers its position, dev auto-reload. **Next:** widget nudges (20-20-20 countdown, stretch [Start]/[Za 5 min], „Cofnij brodę”).
@@ -131,4 +132,5 @@
 - [ ] I5 Tag `v1.0-submission`.
 
 ## Found issues / notes (anyone can add)
+- A4 thresholds (chin tuck 3.5% face-vs-shoulder change, shoulder raise 6% of shoulder width, neck tilt 12°) are set from geometry and synthetic tests, **not yet tuned on real people**: try each verified exercise with 2 people (one with glasses) and adjust `VERIFY_SPECS` in `core/exerciseVerify.ts`.
 -
