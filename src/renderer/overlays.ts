@@ -195,7 +195,7 @@ export function showModelsScreen(): Promise<void> {
       'Przygotowanie',
       h('div', { class: 'cal' },
         h('h1', null, 'Przygotowuję analizę'),
-        h('p', { class: 'fine' }, 'Pobieram modele rozpoznawania sylwetki i twarzy (ok. 13 MB). To jednorazowe – później Postura działa bez internetu, a obraz z kamery nigdy nie opuszcza komputera.'),
+        h('p', { class: 'fine' }, 'Pobieram modele rozpoznawania sylwetki i twarzy (ok. 13 MB). To jednorazowe – później Upright działa bez internetu, a obraz z kamery nigdy nie opuszcza komputera.'),
         h('span', { class: 'meter big' }, bar),
         text,
         retry,

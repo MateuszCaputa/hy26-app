@@ -1,6 +1,6 @@
 {
   "name": "postura",
-  "productName": "Postura",
+  "productName": "Upright",
   "version": "1.0.0",
   "description": "Analiza postawy siedzącej, zmęczenia i przerw z kamery – w pełni lokalnie.",
   "main": "dist/main/main.js",
@@ -34,7 +34,7 @@
   },
   "build": {
     "appId": "pl.postura.app",
-    "productName": "Postura",
+    "productName": "Upright",
     "directories": {
       "output": "release"
     },

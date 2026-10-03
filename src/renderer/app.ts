@@ -220,7 +220,7 @@ function buildShell(ctx: AppCtx): void {
   const rail = h(
     'nav',
     { class: 'rail', 'aria-label': 'Nawigacja' },
-    h('div', { class: 'brand' }, h('span', { class: 'brand-mark', html: '<svg viewBox="0 0 24 24"><path d="M12 3c-2 3 2 5 0 8s2 5 0 8" /></svg>' }), 'Postura'),
+    h('div', { class: 'brand' }, h('span', { class: 'brand-mark', 'aria-hidden': 'true' }), 'Upright'),
     h(
       'ul',
       null,
