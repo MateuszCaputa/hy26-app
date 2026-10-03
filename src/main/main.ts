@@ -10,7 +10,7 @@ import type { AppEvent, Calibration, LiveStatus, MinuteSample, Nudge, NudgeActio
 import type { InitData } from '../shared/api';
 import { Store } from './db';
 import { ActivityCounter } from './activity';
-import { ensureModels, modelsReady } from './models';
+import { ensureModels, findModel, modelsReady } from './models';
 import { buildStats, localDate } from '../core/insights';
 import { ERGONOMIC_TIP, ISSUE_LABEL, ISSUE_TIP } from '../core/coach';
 
@@ -38,6 +38,8 @@ if (!DEBUG_SHOT && !app.requestSingleInstanceLock()) app.quit();
 const RENDERER_DIR = path.join(__dirname, '..', 'renderer');
 const ASSETS_DIR = app.isPackaged ? path.join(process.resourcesPath, 'assets') : path.join(app.getAppPath(), 'assets');
 const MODELS_DIR = path.join(app.getPath('userData'), 'models');
+// Modele dołączone do aplikacji (offline) mają pierwszeństwo przed pobranymi.
+const MODEL_DIRS = [path.join(ASSETS_DIR, 'models'), MODELS_DIR];
 
 const MIME: Record<string, string> = {
   '.html': 'text/html; charset=utf-8',
@@ -68,10 +70,7 @@ const activity = new ActivityCounter();
 function resolveAppUrl(url: string): string | null {
   const u = new URL(url);
   const p = decodeURIComponent(u.pathname);
-  if (p.startsWith('/models/')) {
-    const file = path.join(MODELS_DIR, path.basename(p));
-    return existsSync(file) ? file : null;
-  }
+  if (p.startsWith('/models/')) return findModel(p, MODEL_DIRS);
   const file = path.normalize(path.join(RENDERER_DIR, p === '/' ? 'index.html' : p));
   if (!file.startsWith(RENDERER_DIR)) return null; // ochrona przed ../
   return existsSync(file) ? file : null;
@@ -446,7 +445,7 @@ function registerIpc(): void {
   ipcMain.handle('init', (): InitData => ({
     settings,
     calibration: store.getCalibration(),
-    modelsReady: modelsReady(MODELS_DIR),
+    modelsReady: modelsReady(MODEL_DIRS),
     paused,
     platform: process.platform,
   }));
@@ -457,7 +456,7 @@ function registerIpc(): void {
   });
   ipcMain.handle('ensure-models', async (e) => {
     try {
-      await ensureModels(MODELS_DIR, (p, f) => e.sender.send('models-progress', p, f));
+      await ensureModels(MODELS_DIR, MODEL_DIRS, (p, f) => e.sender.send('models-progress', p, f));
       return { ok: true };
     } catch (err) {
       return { ok: false, error: err instanceof Error ? err.message : String(err) };

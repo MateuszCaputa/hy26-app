@@ -6,7 +6,7 @@
 > **Gates:** 16:00 everyone has a branch running · **19:00 the demo path works end to end with M2 + M3** · 23:00 all MUSTs merged · 03:00 polish only · **07:00 FEATURE FREEZE** · 10:00 submitted.
 
 ## Area A: Core engine & measurement (owner: Kacper, the Postura author)
-- [ ] A1 (M7) Bundle the MediaPipe models + WASM in the app (`resources/`), load them locally, keep the download only as a fallback. Test with wifi OFF.
+- [x] A1 (M7) Models bundled in `assets/models/` (face + pose full + lite, 19 MB, shipped via extraResources); loaded first, the userData download is only a fallback; `modelsReady` accepts full OR lite (fixes N1). Tested with an empty data dir: no download screen, "Modele wczytane (GPU)". (@Mateusz, PR #87)
 - [ ] A2 (M1) Measure FPS on the demo laptop with the overlay ON; keep it at 24+ (pose every 2nd frame if needed).
 - [ ] A3 (M3) `core/explain.ts`: for each alert/break, produce `{reason, evidence[]}` from the current metrics ("PERCLOS 18% (norm < 10%)", "52 min without a break"). Unit tests.
 - [ ] A4 (M4) `core/exerciseVerify.ts`: rep detection for chin tuck (nose–shoulder distance) and shoulder-blade squeeze (shoulder width); min duration and refractory period. Unit tests with recorded landmark fixtures.

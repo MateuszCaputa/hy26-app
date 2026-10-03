@@ -1,4 +1,6 @@
-// Modele MediaPipe pobierane przy pierwszym uruchomieniu do katalogu danych aplikacji.
+// Modele MediaPipe: najpierw te dołączone do aplikacji (assets/models – działa offline),
+// potem pobrane wcześniej do katalogu danych; pobieramy tylko, gdy nie ma ich nigdzie.
+// Zmiana pliku modelu w analizatorze = podmień też plik w assets/models.
 import { net } from 'electron';
 import { existsSync } from 'node:fs';
 import { mkdir, rename, writeFile } from 'node:fs/promises';
@@ -16,12 +18,24 @@ export const MODELS = [
   },
 ] as const;
 
-export const modelsReady = (dir: string): boolean => MODELS.every((m) => existsSync(path.join(dir, m.file)));
+/** Pierwsza ścieżka z pliku modelu w podanych katalogach (kolejność = priorytet) albo null. */
+export function findModel(file: string, dirs: string[]): string | null {
+  for (const d of dirs) {
+    const p = path.join(d, path.basename(file));
+    if (existsSync(p)) return p;
+  }
+  return null;
+}
+
+/** Gotowe, gdy jest model twarzy i dowolny model sylwetki (full albo zapasowy lite). */
+export const modelsReady = (dirs: string[]): boolean =>
+  !!findModel('face_landmarker.task', dirs) &&
+  (!!findModel('pose_landmarker_full.task', dirs) || !!findModel('pose_landmarker_lite.task', dirs));
 
 /** Pobiera brakujące modele; `progress` dostaje 0–1. */
-export async function ensureModels(dir: string, progress: (p: number, file: string) => void): Promise<void> {
+export async function ensureModels(dir: string, searchDirs: string[], progress: (p: number, file: string) => void): Promise<void> {
   await mkdir(dir, { recursive: true });
-  const missing = MODELS.filter((m) => !existsSync(path.join(dir, m.file)));
+  const missing = MODELS.filter((m) => !findModel(m.file, searchDirs));
   for (let i = 0; i < missing.length; i++) {
     const m = missing[i];
     const res = await net.fetch(m.url);

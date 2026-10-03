@@ -108,6 +108,7 @@ Layout:
 ## Gotchas
 
 <!-- one line each, add as discovered -->
+- MediaPipe models are bundled in `assets/models/` and loaded first (offline). If you switch the model file in `analyzer.ts`, put the new `.task` file there too (and in `MODELS` in `src/main/models.ts` for the download fallback).
 - Dev loop: `npm run dev` (watch, also re-copies HTML/CSS) + `npx electron .` (the dot matters). Renderer changes auto-reload the windows; `src/main/` changes need an Electron restart (tray → Zakończ). Launched from a terminal, macOS attributes permission prompts (Accessibility, camera) to that terminal app.
 - Verified 2026-10-03 14:xx on macOS / Node 22.19: `npm install`, typecheck, 17/17 tests and build are all green on main.
 - MediaPipe models currently download on first run (`src/main/models.ts`), which is a stage risk offline. Task A1 bundles them.
