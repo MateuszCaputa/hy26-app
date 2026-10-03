@@ -53,15 +53,6 @@ export class Store {
     this.setKv('calibration', c);
   }
 
-  getSecret(key: string): string | null {
-    return this.getKv<string>(`secret:${key}`);
-  }
-
-  setSecret(key: string, value: string | null): void {
-    if (value === null) this.db.prepare('DELETE FROM kv WHERE key = ?').run(`secret:${key}`);
-    else this.setKv(`secret:${key}`, value);
-  }
-
   getMeta<T>(key: string): T | null {
     return this.getKv<T>(`meta:${key}`);
   }
