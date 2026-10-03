@@ -27,9 +27,19 @@ Mentorzy mówili wprost, że źle oceniają prace, które wyglądają na zrobion
 - [ ] **Opcja języka angielskiego w aplikacji** (przełącznik PL/EN w Ustawieniach). Uwaga: dużo tekstów jest rozsianych po kodzie (`src/core/coach.ts`, widoki, zasobnik, przypomnienia) – realnie 2–3 h. Jeśli brakuje czasu: minimum = EN na ekranach pokazywanych w prezentacji/wideo. — kto: ___
 - [ ] **Merge PR #105** (ziewnięcie ≠ mówienie) po 2-minutowym teście: 3 udawane ziewnięcia z włączoną diagnostyką (klawisz D) → „Ziewnięcia” +3. — kto: Mateusz
 - [ ] **Test mrugnięć dla slajdu**: licznik przed/po 20 mrugnięciach, w okularach i bez (diagnostyka – klawisz D). — kto: Mateusz
-- [ ] **Sprzątanie kodu** (opcjonalnie, tylko jeśli zdążymy przed zamrożeniem): jedna gałąź `mateusz/cleanup`, testy, jedno zatwierdzenie – prompt w historii rozmowy / u Mateusza.
 - [ ] **Zamrożenie funkcji o 07:00** – po tej godzinie tylko poprawki błędów.
 - [ ] **Próba generalna**: świeży start aplikacji bez internetu (modele są w paczce) + pełna ścieżka demo 2× bez błędu.
+
+## 3a. Z audytu kodu (`docs/CLEANUP.md`, sekcja B) – braki względem wymagań zadania
+- [ ] **❌ Filar „dostęp do opieki zdrowotnej” – największa dziura** (kryterium „Relation to category”, 20%). W aplikacji jest tylko jedno zdanie „skonsultuj się z fizjoterapeutą”. **Minimum:** karta NFZ (lekarz rodzinny / fizjoterapeuta / okulista, TIP NFZ 800 190 590, niepokojące objawy → 112) + prosty wydruk podsumowania z 14 dni, pokazywane, gdy problem się utrzymuje. — kto: Marcin (+ Kacper do wykrycia wzorca)
+- [ ] **⚠️ Dobrostan psychiczny** – mamy zmęczenie i energię, ale nie „nastrój”. „Najlepsze godziny” są liczone, ale już nie pokazywane. Ująć w pitchu jako „rytm zmęczenia i energii” albo przywrócić „najlepsze godziny”. — kto: ___
+- [ ] **⚠️ Kod sprzed hackathonu** – `AI_USAGE.md` ma jeszcze puste miejsce „*Kacper: opisz, co istniało…*”. Regulamin wymaga oddzielenia gotowego kodu od pracy na hackathonie. Kacper uzupełnia; README dostaje sekcję „Co było wcześniej”; ewentualnie tag `pre-hackathon-baseline` → `345cf6e`. — kto: Kacper
+- [ ] **⚠️ Ujawnienie AI w `AI_USAGE.md`** – dopisać modele MediaPipe (face_landmarker, pose_landmarker_full + lite, linki do kart modeli, licencja Apache 2.0), ikony (sprawdzić licencję), „bez zewnętrznych zbiorów danych”; usunąć wzmiankę o Claude API, bo asystent AI nie powstał. — kto: ___
+- [ ] **⚠️ „Wskaźnik, nie diagnoza” w samej aplikacji** – jedno zdanie np. w opisie zmęczenia albo w ustawieniach prywatności. — kto: Mateusz
+- [ ] **⚠️ Nazwa w systemowym pytaniu o kamerę** (`package.json` → `NSCameraUsageDescription`) wciąż mówi „Postura”, a interfejs już nowa nazwa – jury zobaczy to przy pierwszym uruchomieniu na Macu. — kto: Mateusz
+- [ ] **⚠️ Instalatory nigdy nie zbudowane** – `npm run dist:mac` (i Windows, jeśli ktoś ma) + test na czystym koncie; Mac niepodpisany → instrukcja „prawy klik → Otwórz”. — kto: ___
+- [ ] **Błędy do poprawy (zgłoszone w audycie):** pętla kalibratora bez zabezpieczenia przed wyjątkiem (jeden błąd = zamrożona kalibracja), timer podsumowania dnia bez try/catch. — kto: Kacper / Mateusz
+- [ ] **Sprzątanie kodu** – bezpieczne poprawki (S1–S10) jako szkic PR na gałęzi `mateusz/cleanup`: przetestować aplikację na tej gałęzi i zatwierdzić jednym ruchem.
 
 ## 4. Zgłoszenie na HackTribe (wymagane przez regulamin)
 - [ ] Tytuł projektu: **Postura**
