@@ -234,8 +234,11 @@ export class LiveView {
       this.fatNum.textContent = '–';
       this.fatWord.textContent = '';
       this.fatBar.style.width = '0';
-      this.fatDetail.textContent = 'Pojawi się, gdy będziesz w kadrze.';
-      this.fatAdvice.textContent = '';
+      const inFrame = !noCal && s.state !== 'absent' && s.state !== 'paused';
+      this.fatDetail.textContent = !inFrame ? 'Pojawi się, gdy będziesz w kadrze.'
+        : ctx.settings.faceAnalysis ? 'Za mało danych z oczu – nie zgadujemy.'
+        : 'Analiza twarzy wyłączona – zmęczenie nie jest liczone.';
+      this.fatAdvice.textContent = inFrame && ctx.settings.faceAnalysis ? 'Sprawdź światło na twarzy i odblaski okularów.' : '';
     }
 
     const be = ctx.analyzer.breakEngine;
