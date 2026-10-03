@@ -18,13 +18,9 @@
 Split is by **ownership area**, not by "frontend vs backend": each lane can ship visible progress on its own,
 and lanes meet only at the **contract** (shared types / API shapes).
 
-| Lane | Owner | Owns (dirs) | Responsibility | Branch prefix |
-|------|-------|-------------|----------------|---------------|
-| **A — Platform & data** | Mateusz | TODO | Scaffold, deploy, auth (if needed), DB/schema, API endpoints, shared contract | `mateusz/` |
-| **B — Core product UI** | Dev 2 | TODO | Screens of the demo flow, components, state, UX | `dev2/` |
-| **C — The "wow" + demo** | Dev 3 | TODO | The differentiating feature (AI / integration / algorithm), seed data, pitch & demo script | `dev3/` |
-
-Rename lanes to fit the brief, but keep the principle: **one owner per area, contract in between.**
+**4 lanes — tasks, owners, directories and data contracts are in [`docs/PODZIAL-PRACY.md`](PODZIAL-PRACY.md).**
+A — Measurement & app · B — Health data & decisions · C — UI & design · D — Healthcare content, pitch & team experiment.
+Tick tasks there (A1, B1, …) when merged to `main`; the generic phase checklist below still applies.
 
 ## Phases & timeline (adjust T to real deadline)
 
