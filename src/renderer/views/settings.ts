@@ -83,37 +83,41 @@ export async function renderSettings(view: HTMLElement, ctx: AppCtx): Promise<vo
   view.append(
     h('div', { class: 'page settings' },
       h('div', { class: 'page-head' }, h('h1', null, 'Ustawienia'), saved),
-      group('Kamera i ocena postawy', [
+      // Na wierzchu tylko to, co zmienia większość osób. Strojenie progów i analizy – w „Zaawansowanych”.
+      group('Kamera i kalibracja', [
         h('div', { class: 'field' }, h('label', { for: 's-cam' }, 'Kamera'), camSelect),
-        toggle('mirror', 'Odbicie lustrzane podglądu'),
-        sens,
         h('div', { class: 'field' }, h('span', null, 'Wzorzec prostej postawy'),
           h('button', { class: 'btn small', onclick: () => ctx.startCalibration() }, ctx.calibration ? 'Skalibruj ponownie' : 'Skalibruj')),
       ]),
-      group('Powiadomienia o postawie', [
-        num('alertDelaySec', 'Powiadom po złej postawie trwającej', 's', 10, 300),
-        num('alertCooldownMin', 'Najwyżej jedno powiadomienie na', 'min', 1, 60),
-        toggle('soundAlerts', 'Dźwięk powiadomień'),
-      ]),
-      group('Przerwy', [
-        num('eyeBreakMin', 'Przerwa dla oczu (20-20-20) co', 'min', 10, 60),
-        num('microBreakMin', 'Mikroprzerwa co', 'min', 15, 120),
-        num('moveBreakMin', 'Przerwa ruchowa co', 'min', 30, 180),
-        h('p', { class: 'fine' }, 'Wyjście z kadru na ponad 2 min liczy się jako przerwa. Przy rosnącym zmęczeniu przerwa może pojawić się wcześniej.'),
-      ]),
-      group('Godziny pracy', [
+      group('Powiadomienia', [
+        toggle('doNotDisturb', 'Nie przeszkadzać', 'wycisza wszystkie powiadomienia, analiza działa dalej'),
+        toggle('onlyWorkHours', 'Powiadamiaj tylko w godzinach pracy'),
         time('workStart', 'Początek pracy'),
         time('workEnd', 'Koniec pracy (podsumowanie dnia)'),
-        toggle('onlyWorkHours', 'Powiadamiaj tylko w godzinach pracy'),
-        toggle('doNotDisturb', 'Nie przeszkadzać', 'wycisza wszystkie powiadomienia, analiza działa dalej'),
+        toggle('soundAlerts', 'Dźwięk powiadomień'),
       ]),
-      group('Analiza', [
-        toggle('faceAnalysis', 'Mrugnięcia i zmęczenie z obrazu twarzy', 'wymaga ok. 25 klatek/s; wyłącz, by oszczędzać baterię'),
-        toggle('activityTracking', 'Tempo pracy z klawiatury i myszy'),
-        actStatus,
+      group('Aplikacja', [
         toggle('miniWidget', 'Mini-widget z wynikiem na ekranie'),
         toggle('autostart', 'Uruchamiaj z systemem', 'start w zasobniku, bez okna'),
       ]),
+      h('section', { class: 'block group' },
+        h('details', { class: 'adv' },
+          h('summary', null, 'Zaawansowane'),
+          h('div', { class: 'fields' },
+            sens,
+            toggle('mirror', 'Odbicie lustrzane podglądu'),
+            num('alertDelaySec', 'Powiadom po złej postawie trwającej', 's', 10, 300),
+            num('alertCooldownMin', 'Najwyżej jedno powiadomienie na', 'min', 1, 60),
+            num('eyeBreakMin', 'Przerwa dla oczu (20-20-20) co', 'min', 10, 60),
+            num('microBreakMin', 'Mikroprzerwa co', 'min', 15, 120),
+            num('moveBreakMin', 'Przerwa ruchowa co', 'min', 30, 180),
+            h('p', { class: 'fine' }, 'Wyjście z kadru na ponad 2 min liczy się jako przerwa. Przy rosnącym zmęczeniu przerwa może pojawić się wcześniej.'),
+            toggle('faceAnalysis', 'Mrugnięcia i zmęczenie z obrazu twarzy', 'wymaga ok. 25 klatek/s; wyłącz, by oszczędzać baterię'),
+            toggle('activityTracking', 'Tempo pracy z klawiatury i myszy', 'dokładniejsze „godziny formy”; na macOS wymaga uprawnienia Dostępności'),
+            actStatus,
+          ),
+        ),
+      ),
       garminGroup(ctx),
       group('Dane', [
         h('p', { class: 'fine' }, 'Obraz z kamery nie jest zapisywany ani wysyłany. Baza zawiera tylko liczby: wyniki co minutę, zdarzenia i dane z Garmina.'),

@@ -49,7 +49,8 @@ export const DEFAULT_SETTINGS: Settings = {
   onlyWorkHours: false,
   doNotDisturb: false,
   faceAnalysis: true,
-  activityTracking: true,
+  // Domyślnie wyłączone: na macOS wymaga uprawnienia Dostępności, co myli przy pierwszym uruchomieniu.
+  activityTracking: false,
   miniWidget: false,
   autostart: false,
   soundAlerts: false,
@@ -154,6 +155,8 @@ export interface LiveStatus {
   topIssue: IssueId | null;
   minutesSinceBreak: number;
   note?: string;
+  /** „Bateria” 0–100 i prognoza spadku poniżej 30% (null = nie spada / za mało danych). */
+  energy?: { percent: number; minutesToLow: number | null } | null;
 }
 
 export interface GarminDay {
