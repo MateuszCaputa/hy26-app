@@ -56,7 +56,7 @@
     3. Add **glasses mode**: auto-detected when EAR is noisy or barely bimodal, or set as a checkbox in settings. It weights blendshapes higher and uses an adaptive threshold from rolling percentiles.
     4. Add "blink 5 times" to calibration to learn each user's blink amplitude.
   - **Done when:** the blink count is within ±20% of the manual count for every tester, glasses included (Rytm A1 criterion).
-- [ ] **MP7 (wow, C) Neon face mesh.** (@Mateusz, in progress — redirected: clean MediaPipe-demo style instead of a dense web: lime upper-body skeleton + pink joints, violet eyelid contours + irises that visibly close on blinks, subtle face oval/brows/lips; face landmarks emitted every face tick (25 Hz) instead of at pose rate — touches `analyzer.ts`, FYI Kacper)
+- [x] **MP7 (wow, C) MediaPipe-style overlay** (@Mateusz, PR #78, approved by mentors): violet eyelid contours + dots and irises that visibly close on blinks + live blink rate label; subtle face oval/brows/lips; glowing lime upper-body skeleton with pink joints; overlay frames at face rate (25 Hz, `analyzer.ts`). Also: Windows tray icon shows the live posture score.
   - `FaceLandmarker.FACE_LANDMARKS_TESSELATION` in thin cyan at ~0.35 alpha.
   - `FACE_LANDMARKS_FACE_OVAL`, `_LIPS`, `_LEFT_EYE`, `_RIGHT_EYE`, `_LEFT_IRIS`, `_RIGHT_IRIS` bright, with glow (`shadowBlur`).
   - Video darkened behind it; a blink ripple on the eyes.
