@@ -255,7 +255,6 @@ button, input, select { font: inherit; color: inherit; }
 .fig-delta { font-size: 13px; font-weight: 600; margin-left: 8px; vertical-align: 6px; }
 .fig-delta.up { color: var(--good); }
 .fig-delta.down { color: var(--bad); }
-.stat-hint { margin: 0; font-size: 15px; }
 
 .chart { margin: 0; display: grid; gap: 6px; }
 .chart svg { width: 100%; height: auto; overflow: visible; }
