@@ -4,7 +4,7 @@ import { computeMetrics, lineAngleDeg, type Landmark } from '../src/core/metrics
 import { followPositionRef } from '../src/core/calibration';
 import { pickExercise } from '../src/core/coach';
 import { evaluateIssues, PostureTracker, rankIssues, scoreFromIssues } from '../src/core/scoring';
-import { EyeAnalyzer, FatigueEstimator, fatiguePercent } from '../src/core/fatigue';
+import { EyeAnalyzer, FatigueEstimator, fatiguePercent, simulateTired } from '../src/core/fatigue';
 import { BreakEngine } from '../src/core/breakEngine';
 import { MinuteAggregator, postureSlope } from '../src/core/aggregate';
 import { buildStats, hoursToRanges } from '../src/core/insights';
@@ -366,3 +366,35 @@ test('pickExercise daje różne ćwiczenia, nie tylko te pasujące do problemu',
   assert.deepEqual([...seen].sort(), ['blade-squeeze', 'chest-opener', 'chin-tuck', 'neck-side', 'seated-twist', 'shrugs']);
 });
 
+test('estymator zmęczenia zwraca składowe do „Dlaczego tyle?”', () => {
+  const eyes = simulateEyes(90, 4, 0.15);
+  const a = new FatigueEstimator().update(90, eyes, { postureAvg15: 60, minutesSinceBreak: 55 });
+  assert.ok(a?.components);
+  assert.equal(a.postureAvg15, 60);
+  assert.equal(a.minutesSinceBreak, 55);
+  assert.equal(a.components.posture, 0.5); // (80 − 60) / 40
+  assert.equal(a.components.time, 0.5); // (55 − 20) / 70
+  for (const v of Object.values(a.components)) assert.ok(v === null || (v >= 0 && v <= 1));
+});
+
+test('tryb prezentacji: symulacja przesuwa oczy w stronę zmęczenia, wynik oznaczony', () => {
+  const base = { blinkRate: 16, perclos: 0.03, longBlinksPerMin: 0, yawns10m: 0, nods10m: 0, postureAvg15: 85, minutesSinceBreak: 10 };
+  assert.deepEqual(simulateTired(base, 0), base);
+  const full = simulateTired(base, 1);
+  assert.equal(full.blinkRate, 3);
+  assert.equal(full.perclos, 0.2);
+  assert.equal(full.yawns10m, 3);
+  assert.equal(full.postureAvg15, 85); // postawa zostaje prawdziwa
+  assert.ok(fatiguePercent(full) >= 55);
+
+  const eyes = simulateEyes(90, 4, 0.15);
+  const real = new FatigueEstimator().update(90, eyes, { postureAvg15: 85, minutesSinceBreak: 10 });
+  const sim = new FatigueEstimator().update(90, eyes, { postureAvg15: 85, minutesSinceBreak: 10 }, 1);
+  assert.ok(real && sim);
+  assert.ok(!real.simulated);
+  assert.ok(sim.simulated);
+  assert.ok(sim.percent > real.percent + 30);
+  // Bez wiarygodnych oczu prawdziwy wynik jest null, a symulacja i tak działa (pokaz na scenie).
+  assert.equal(new FatigueEstimator().update(1, new EyeAnalyzer(0.3), { postureAvg15: 85, minutesSinceBreak: 10 }), null);
+  assert.ok(new FatigueEstimator().update(1, new EyeAnalyzer(0.3), { postureAvg15: 85, minutesSinceBreak: 10 }, 1)?.simulated);
+});
