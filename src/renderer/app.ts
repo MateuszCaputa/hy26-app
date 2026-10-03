@@ -85,6 +85,12 @@ async function main(): Promise<void> {
       ctx.toast(`${title}: czas na chwilę odpoczynku.`, { label: 'Zacznij przerwę', run: () => ctx.startBreak(s) });
       live?.status(analyzer.status());
     },
+    onAwayBreak: (awaySec) => {
+      ctx.pendingBreak = null;
+      api?.logEvent({ type: 'break-done', detail: 'move:away' });
+      ctx.toast(`Witaj z powrotem. ${Math.round(awaySec / 60)} min poza biurkiem liczę jako przerwę.`);
+      live?.status(analyzer.status());
+    },
     onMinute: (s) => api?.sendMinute(s),
     onCameraState: (state, detail) => live?.camera(state, detail),
     onRecalibrateHint: (kind) =>

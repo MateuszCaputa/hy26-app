@@ -33,6 +33,7 @@ export class BreakEngine {
   private snoozedUntil = -Infinity;
   private pending: BreakSuggestion | null = null;
   private awaySince: number | null = null;
+  private awayBreak: { kind: BreakKind; awaySec: number } | null = null;
 
   constructor(private cfg: BreakConfig, t: number) {
     this.lastEye = this.lastMicro = this.lastMove = t;
@@ -62,8 +63,13 @@ export class BreakEngine {
     if (this.awaySince !== null) {
       const away = t - this.awaySince;
       this.awaySince = null;
-      if (away >= AWAY_IS_BREAK_SEC) this.done('move', t, false);
-      else if (away >= AWAY_IS_EYE_BREAK_SEC) this.lastEye = t;
+      if (away >= AWAY_IS_BREAK_SEC) {
+        this.done('move', t, false);
+        this.awayBreak = { kind: 'move', awaySec: away };
+      } else if (away >= AWAY_IS_EYE_BREAK_SEC) {
+        this.lastEye = t;
+        this.awayBreak = { kind: 'eye', awaySec: away };
+      }
     }
 
     if (this.pending || t < this.snoozedUntil) return null;
@@ -112,6 +118,13 @@ export class BreakEngine {
   /** Zamknięcie okna przerwy bez wyboru = odłożenie. */
   dismiss(t: number): void {
     this.snooze(t);
+  }
+
+  /** Przerwa zaliczona przez odejście od biurka (raz, potem null): ≥ 2 min = ruchowa, 20 s – 2 min = dla oczu. */
+  takeAwayBreak(): { kind: BreakKind; awaySec: number } | null {
+    const b = this.awayBreak;
+    this.awayBreak = null;
+    return b;
   }
 
   get pendingSuggestion(): BreakSuggestion | null {
