@@ -18,6 +18,10 @@ const IRISES: Pair[] = [...pairs(FaceLandmarker.FACE_LANDMARKS_LEFT_IRIS), ...pa
 const BROWS: Pair[] = [...pairs(FaceLandmarker.FACE_LANDMARKS_LEFT_EYEBROW), ...pairs(FaceLandmarker.FACE_LANDMARKS_RIGHT_EYEBROW)];
 const LIPS: Pair[] = pairs(FaceLandmarker.FACE_LANDMARKS_LIPS);
 const OVAL: Pair[] = pairs(FaceLandmarker.FACE_LANDMARKS_FACE_OVAL);
+/** Unikalne punkty z listy odcinków (liczone raz, nie co klatkę). */
+const points = (list: Pair[]): number[] => [...new Set(list.flat())];
+const EYE_DOTS = points(EYES);
+const BROW_DOTS = points(BROWS);
 
 const LIME = '#b6ff3b';
 const PINK = '#ff3d9a';
@@ -41,6 +45,18 @@ function strokePairs(ctx: CanvasRenderingContext2D, lm: Landmark[], list: Pair[]
 }
 
 const always = () => true;
+
+function dots(ctx: CanvasRenderingContext2D, lm: Landmark[], idx: number[], project: Project, r: number): void {
+  ctx.beginPath();
+  for (const i of idx) {
+    const p = lm[i];
+    if (!p) continue;
+    const [x, y] = project(p);
+    ctx.moveTo(x + r, y);
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+  }
+  ctx.fill();
+}
 const poseVisible = (p: Landmark) => (p.visibility ?? 1) >= MIN_VIS;
 
 export function drawFaceContours(ctx: CanvasRenderingContext2D, face: Landmark[], project: Project): void {
@@ -58,28 +74,48 @@ export function drawFaceContours(ctx: CanvasRenderingContext2D, face: Landmark[]
   ctx.strokeStyle = VIOLET;
   ctx.shadowColor = VIOLET;
   ctx.shadowBlur = 6;
-  ctx.lineWidth = 2;
+  ctx.lineWidth = 1.5;
   strokePairs(ctx, face, EYES, project, always);
+  ctx.fillStyle = VIOLET;
+  dots(ctx, face, EYE_DOTS, project, 1.8);
   if (face.length > 468) {
     ctx.lineWidth = 1.5;
     strokePairs(ctx, face, IRISES, project, always);
   }
+  ctx.shadowBlur = 0;
+  ctx.fillStyle = SOFT;
+  dots(ctx, face, BROW_DOTS, project, 1.4);
   ctx.restore();
 }
 
 export function drawBody(ctx: CanvasRenderingContext2D, pose: Landmark[], project: Project): void {
   ctx.save();
   ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
   ctx.strokeStyle = LIME;
-  ctx.lineWidth = 3;
+  // 1) miękka, szeroka poświata (tania: bez shadowBlur), 2) jasna linia z rozmyciem
+  ctx.globalAlpha = 0.18;
+  ctx.lineWidth = 12;
   strokePairs(ctx, pose, BODY, project, poseVisible);
-  ctx.fillStyle = PINK;
+  ctx.globalAlpha = 1;
+  ctx.lineWidth = 3.5;
+  ctx.shadowColor = LIME;
+  ctx.shadowBlur = 12;
+  strokePairs(ctx, pose, BODY, project, poseVisible);
+  // stawy: różowe kółka z poświatą i jasnym środkiem
+  ctx.shadowColor = PINK;
+  ctx.shadowBlur = 14;
   for (const i of BODY_JOINTS) {
     const p = pose[i];
     if (!p || !poseVisible(p)) continue;
     const [x, y] = project(p);
+    ctx.fillStyle = PINK;
     ctx.beginPath();
-    ctx.arc(x, y, 5, 0, Math.PI * 2);
+    ctx.arc(x, y, 6.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#fff3f9';
+    ctx.beginPath();
+    ctx.arc(x, y, 2.4, 0, Math.PI * 2);
     ctx.fill();
   }
   ctx.restore();
