@@ -163,3 +163,17 @@ test('mówienie (szczęka w ruchu, ale nisko) to nie ziewnięcie', () => {
   for (let i = 0; i < 30 * 20; i++, t += 1 / 30) e.update(t, { ear: 0.28, blinkBlend: 0.1, jawOpen: 0.1 + 0.25 * Math.abs(Math.sin(i / 3)) });
   assert.equal(e.yawns10m(t), 0);
 });
+
+test('ziewnięcie nie jest oznaczane jako mówienie, a jest liczone', () => {
+  const eyes = new EyeAnalyzer(OPEN);
+  let talkingDuringYawn = false;
+  // 2,5 s ziewnięcia: żuchwa narasta do 0,9 i opada
+  for (let t = 0; t < 30; t += 1 / FPS) {
+    // narastanie 0,4 s, szeroko otwarte ok. 1,7 s, opadanie 0,4 s
+    const y = t < 10 || t >= 12.5 ? 0.05 : t < 10.4 ? 0.05 + (t - 10) * 2.1 : t < 12.1 ? 0.9 : 0.9 - (t - 12.1) * 2.1;
+    eyes.update(t, { ear: OPEN, blinkBlend: null, jawOpen: y, pitchDeg: 0 });
+    if (t >= 10.8 && t < 12.5 && eyes.isTalking()) talkingDuringYawn = true;
+  }
+  assert.equal(talkingDuringYawn, false);
+  assert.equal(eyes.yawns10m(30), 1);
+});

@@ -51,7 +51,7 @@ const YAWN_JAW = 0.55; // szczęka otwarta szerzej niż przy mówieniu (do wykry
 // długie ziewnięcie przymyka się w połowie do ~0,4 – jeden próg 0,55 liczył je podwójnie, a 6,3 s odrzucał limit 6 s.
 const YAWN_ON = 0.5;
 const YAWN_OFF = 0.25;
-const YAWN_MIN_SEC = 1.5;
+const YAWN_MIN_SEC = 1.2; // krótkie, szybkie ziewnięcie trzyma usta szeroko ok. 1,2–1,5 s
 const YAWN_MAX_SEC = 8; // dłużej otwarte usta = jedzenie, picie, śmiech – nie ziewnięcie
 const MIN_FPS_FOR_BLINKS = 12;
 /** Głowa pochylona o tyle w dół względem wzorca = patrzenie na klawiaturę: nie oceniamy powiek. */
@@ -233,7 +233,9 @@ export class EyeAnalyzer {
       const v = this.jawHist.map((x) => x.v);
       const mean = v.reduce((a, b) => a + b, 0) / v.length;
       const std = Math.sqrt(v.reduce((a, b) => a + (b - mean) ** 2, 0) / v.length);
-      this.talking = v.length >= 10 && std >= TALK_JAW_STD && mean < YAWN_JAW;
+      // Ziewnięcie (usta szeroko otwarte w oknie) to nie mówienie, nawet jeśli żuchwa się porusza.
+      const max = Math.max(...v);
+      this.talking = v.length >= 10 && std >= TALK_JAW_STD && max < YAWN_JAW && this.yawnStart === null;
       if (this.talking) this.talkSamples.push({ t, dt });
     }
 
@@ -297,7 +299,7 @@ export class EyeAnalyzer {
       }
     }
 
-    // Ziewanie: usta szeroko otwarte 1,5–8 s i zamknięte z powrotem (dłużej = jedzenie, picie, śmiech).
+    // Ziewanie: usta szeroko otwarte 1,2–8 s i zamknięte z powrotem (dłużej = jedzenie, picie, śmiech).
     if (f.jawOpen !== null && f.jawOpen >= YAWN_ON) {
       if (this.yawnStart === null) {
         this.yawnStart = t;
