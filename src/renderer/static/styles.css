@@ -249,6 +249,7 @@ button, input, select { font: inherit; color: inherit; }
 .page-head { display: flex; align-items: baseline; gap: 16px; }
 .saved { color: var(--good); font-size: 14px; }
 .block { display: grid; gap: 14px; padding-top: 22px; border-top: 1px solid var(--line); }
+.block[hidden] { display: none; }
 .empty { display: grid; gap: 14px; padding: 28px; background: var(--surface); border-radius: var(--radius-lg); max-width: 60ch; }
 
 /* Statystyki: przełącznik metryki + proste słupki (kolor = ocena) */

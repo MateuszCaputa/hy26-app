@@ -62,6 +62,10 @@ export async function renderSettings(view: HTMLElement, ctx: AppCtx): Promise<vo
       onchange: (e: Event) => set('sensitivity', Number((e.target as HTMLInputElement).value)) }),
   );
 
+  // Podgląd powiadomień to narzędzie do pokazu: widoczny dopiero po włączeniu trybu prezentacji.
+  const preview = previewGroup(ctx);
+  preview.hidden = !ctx.analyzer.presentationMode;
+
   view.append(
     h('div', { class: 'page settings' },
       h('div', { class: 'page-head' }, h('h1', null, 'Ustawienia'), saved),
@@ -103,7 +107,6 @@ export async function renderSettings(view: HTMLElement, ctx: AppCtx): Promise<vo
           ),
         ),
       ),
-      previewGroup(ctx),
       // Tryb prezentacji: nie zapisujemy go w ustawieniach – działa tylko do zamknięcia aplikacji.
       group('Prezentacja', [
         h('div', { class: 'field toggle' },
@@ -111,12 +114,14 @@ export async function renderSettings(view: HTMLElement, ctx: AppCtx): Promise<vo
             onchange: (e: Event) => {
               const on = (e.target as HTMLInputElement).checked;
               ctx.analyzer.setPresentationMode(on);
+              preview.hidden = !on;
               ctx.toast(on ? 'Symulacja zmęczenia włączona: wynik rośnie przez ok. 45 s i jest oznaczony „SYMULACJA”.' : 'Symulacja wyłączona – wracam do prawdziwych pomiarów.');
             } }),
           h('label', { for: 's-presentation' }, 'Tryb prezentacji: symulacja zmęczenia',
-            h('span', { class: 'hint' }, 'rzadsze mruganie, przymykanie oczu i ziewanie narastają przez ok. 45 s; wynik oznaczony „SYMULACJA”, nie trafia do statystyk; wyłącza się po zamknięciu aplikacji')),
+            h('span', { class: 'hint' }, 'rzadsze mruganie, przymykanie oczu i ziewanie narastają przez ok. 45 s; wynik oznaczony „SYMULACJA”, nie trafia do statystyk; odsłania podgląd powiadomień; wyłącza się po zamknięciu aplikacji')),
         ),
       ]),
+      preview,
       group('Dane', [
         h('p', { class: 'fine' }, 'Obraz z kamery nie jest zapisywany ani wysyłany. Baza zawiera tylko liczby: wyniki co minutę i zdarzenia.'),
         h('button', { class: 'btn danger small', onclick: async (e: Event) => {
