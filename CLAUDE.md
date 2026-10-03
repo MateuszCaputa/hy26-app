@@ -32,9 +32,11 @@ Layout: `src/lib/` measurement core (`monitor.js` camera loop, `metrics.js` post
 
 | Person   | Area (directories they own) |
 |----------|-----------------------------|
-| Mateusz  | TODO                        |
-| Dev 2    | TODO                        |
-| Dev 3    | TODO                        |
+| Marcin   | Lane 1 — camera & app: `src/lib/{monitor,metrics,useMonitor,decide}.js`, `ticker.worker.js`, `src/screens/{Start,Live,Day,Data}.jsx`, `src/components/`, `electron/`, `scripts/` |
+| Mateusz  | Lane 2 — phone data & what-if: `src/lib/health/`, `src/lib/whatif.js`, `src/screens/{Import,WhatIf}.jsx`, `public/sample/` |
+| Dev 3    | Lane 3 — doctor report, NFZ & pitch: `src/lib/{report,nfz}.js`, `src/screens/Report.jsx`, `docs/pitch/` |
+
+Shared contract (data shapes between lanes) and hot-file rules: `docs/PLAN.md` → "Contract" and "Hot files". Build against stubs of the contract; never block on another lane.
 
 - Stay inside your owner's area. Touching another area = tell that person first (or leave a note in `docs/PLAN.md`).
 - **Shared hot files** (dependency manifest + lockfile, DB schema/migrations, shared types, route/nav registry, global styles, env config): pull right before editing, keep the change minimal, commit it on its own and push immediately so others rebase onto it.
