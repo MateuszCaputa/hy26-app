@@ -182,6 +182,7 @@ export const EN: Record<string, string> = {
   'Usiądź głęboko, unieś mostek, cofnij brodę. Gdy wszystko się zaświeci, kalibracja ruszy sama.': 'Sit back, lift your chest, tuck your chin. When everything lights up, calibration starts by itself.',
   'Świetnie – nie ruszaj się.': 'Great, hold still.',
   'Szukam Cię w kadrze…': 'Looking for you in frame…',
+  'Chwilka… próbuję ponownie.': 'One moment… trying again.',
   'mniej niż minutę': 'less than a minute',
   // ——— „Dlaczego tyle?” (zmęczenie)
   'Przymknięte oczy': 'Eyes closed',
@@ -199,6 +200,7 @@ export const EN: Record<string, string> = {
   'do 20 min bez wpływu': 'no effect up to 20 min',
   'Dlaczego tyle?': 'Why this much?',
   'Pasek = jak bardzo składowa podnosi zmęczenie. Brak danych = jej waga przechodzi na pozostałe.': 'Bar = how much this factor raises fatigue. No data = its weight goes to the others.',
+  'Wskaźnik orientacyjny, nie diagnoza medyczna.': 'An approximate indicator, not a medical diagnosis.',
   // ——— okienko przypomnień, ekran przerwy, modele
   'Dzięki, oczy odpoczęły': 'Thanks, your eyes got a rest',
   'Wracam do obserwacji.': 'Back to watching.',

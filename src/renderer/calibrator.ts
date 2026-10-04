@@ -254,8 +254,25 @@ export function openCalibrator(ctx: AppCtx, onDone: (c: Calibration) => void): v
 
   // ——— Pętla: kontrola kadru i postawy + rysowanie ———
 
+  let lastLoopWarn = 0;
   const loop = () => {
     if (closed) return;
+    // Jeden wyjątek w klatce (np. chwilowo brak wymiarów wideo) nie może zamrozić kalibracji:
+    // logujemy go, pokazujemy spokojny komunikat i i tak planujemy następną klatkę.
+    try {
+      loopFrame();
+    } catch (err) {
+      const t = performance.now();
+      if (t - lastLoopWarn > 2000) {
+        lastLoopWarn = t;
+        console.warn('[calibrator] błąd klatki, próbuję dalej', err);
+      }
+      if (phase === 'align' || phase === 'count') hint.textContent = tr('Chwilka… próbuję ponownie.');
+    }
+    raf = requestAnimationFrame(loop);
+  };
+
+  const loopFrame = () => {
     attachStream();
     const now = performance.now();
     const m = a.currentMetrics;
@@ -302,7 +319,6 @@ export function openCalibrator(ctx: AppCtx, onDone: (c: Calibration) => void): v
       shoulderOk: Math.abs(m?.shoulderTiltDeg ?? 0) <= CAL_LIMITS.shoulderTiltDeg,
       headOk: Math.abs(m?.headRollDeg ?? 0) <= CAL_LIMITS.headRollDeg,
     });
-    raf = requestAnimationFrame(loop);
   };
   setButtons(null, tr('Później'));
   raf = requestAnimationFrame(loop);
