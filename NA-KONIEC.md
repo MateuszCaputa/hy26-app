@@ -9,6 +9,8 @@
 - [ ] **Kontakt z mentorami rano** – czy da się jeszcze z kimś porozmawiać (nawet krótko) i pokazać, co zmieniliśmy po ich feedbacku. — kto: ___
 
 ## 1. Prezentacja (forma + treść)
+- [ ] **Zrzuty ekranu do PDF – OBOWIĄZKOWE w praktyce.** W 1. rundzie mentorzy NIE uruchamiają aplikacji – Design (20%) oceniają ze zrzutów i wideo. Wybrać 4–6 najlepszych (1920×1080): Na żywo z nakładką (kontur powiek + szkielet), ćwiczenie z licznikiem z kamery, przypomnienie w rogu / widget, statystyki, kalibracja z sylwetką. Kandydaci do wyboru w `docs/pitch/screenshots/` (generowane automatycznie). — kto: ___
+- [ ] **Tekst zgłoszenia** (tytuł, nazwa zespołu, członkowie, opis PL/EN) – szkic w `docs/pitch/SUBMISSION.md`, do poprawienia własnymi słowami. — kto: ___
 - [ ] **Decyzja: wideo, slajdy czy hybryda.** Wymagane na HackTribe jest **PDF, maks. 10 slajdów**. Wideo jest dodatkiem, ale w 1. rundzie (ocena przez mentorów na platformie) często to ono „opowiada” projekt. Rekomendacja: **PDF (obowiązkowy) + krótkie wideo ≤ 3 min**. — kto: ___
 - [ ] **Story na pierwszym miejscu** – w 1. rundzie liczy się historia, nie lista funkcji. Szkielet: problem (ból szyi, zmęczone oczy, ludzie zauważają za późno) → my w trakcie hackathonu → moment „wow” (kontur powiek, szkielet świecący przy problemie) → decyzja („przerwa teraz, bo…”) → ścieżka do specjalisty / NFZ → prywatność → co dalej.
 - [ ] **Nie zalać jury funkcjami** (uwaga mentora). Pokazać **3–4 rzeczy dobrze**, resztę zostawić na pytania. Lista funkcji do wyboru: `docs/FEATURES.md`; czego NIE obiecywać: tamże „Known gaps / don't claim yet”.
@@ -41,7 +43,7 @@ Mentorzy mówili wprost, że źle oceniają prace, które wyglądają na zrobion
 - [ ] **⚠️ Ujawnienie AI w `AI_USAGE.md`** – dopisać modele MediaPipe (face_landmarker, pose_landmarker_full + lite, linki do kart modeli, licencja Apache 2.0), ikony (sprawdzić licencję), „bez zewnętrznych zbiorów danych”; usunąć wzmiankę o Claude API, bo asystent AI nie powstał. — kto: ___
 - [ ] **⚠️ „Wskaźnik, nie diagnoza” w samej aplikacji** – jedno zdanie np. w opisie zmęczenia albo w ustawieniach prywatności. — kto: Mateusz
 - [ ] **⚠️ Nazwa w systemowym pytaniu o kamerę** (`package.json` → `NSCameraUsageDescription`) wciąż mówi „Postura”, a interfejs już nowa nazwa – jury zobaczy to przy pierwszym uruchomieniu na Macu. — kto: Mateusz
-- [ ] **⚠️ Instalatory nigdy nie zbudowane** – `npm run dist:mac` (i Windows, jeśli ktoś ma) + test na czystym koncie; Mac niepodpisany → instrukcja „prawy klik → Otwórz”. — kto: ___
+- [ ] *(Opcjonalne – regulamin tego NIE wymaga)* Instalator `.dmg`/`.exe`: tylko jeśli chcemy dać jury link do pobrania. Mentorzy oceniają opis + PDF, a pitch idzie z naszego laptopa. — kto: ___
 - [ ] **Błędy do poprawy (zgłoszone w audycie):** pętla kalibratora bez zabezpieczenia przed wyjątkiem (jeden błąd = zamrożona kalibracja), timer podsumowania dnia bez try/catch. — kto: Kacper / Mateusz
 - [ ] **Sprzątanie kodu** – bezpieczne poprawki (S1–S10) jako szkic PR na gałęzi `mateusz/cleanup`: przetestować aplikację na tej gałęzi i zatwierdzić jednym ruchem.
 
