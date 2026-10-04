@@ -1,4 +1,4 @@
-# Postura
+# Upright
 
 Aplikacja desktopowa (Windows i macOS) analizująca postawę siedzącą, zmęczenie i rytm przerw na podstawie obrazu z kamery. Wszystko liczy się lokalnie: obraz nie jest zapisywany ani wysyłany, baza zawiera tylko liczby.
 
