@@ -4,16 +4,21 @@ import type { AppCtx } from '../app';
 import type { IssueId, StatsPayload } from '../../shared/types';
 import { h } from '../dom';
 import { ISSUE_LABEL } from '../../core/coach';
+import { getLang, tr } from '../../shared/i18n';
 
-const DAYS = ['pon', 'wt', 'śr', 'czw', 'pt', 'sob', 'nd'];
-const MONTHS = ['sty', 'lut', 'mar', 'kwi', 'maj', 'cze', 'lip', 'sie', 'wrz', 'paź', 'lis', 'gru'];
+// Skróty dni i miesięcy w bieżącym języku (ta sama kolejność co wcześniej: od poniedziałku, od stycznia).
+const EN_UI = getLang() === 'en';
+const DAYS = EN_UI ? ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] : ['pon', 'wt', 'śr', 'czw', 'pt', 'sob', 'nd'];
+const MONTHS = EN_UI
+  ? ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  : ['sty', 'lut', 'mar', 'kwi', 'maj', 'cze', 'lip', 'sie', 'wrz', 'paź', 'lis', 'gru'];
 
 type TabId = 'posture' | 'fatigue';
 type RangeId = 'today' | '3' | '7' | '30';
 type Day = StatsPayload['last30'][number];
 
-const TABS: Record<TabId, string> = { posture: 'Postawa', fatigue: 'Zmęczenie' };
-const RANGES: Record<RangeId, string> = { today: 'Dziś', '3': 'Ostatnie 3 dni', '7': 'Ostatnie 7 dni', '30': 'Ostatni miesiąc' };
+const TABS: Record<TabId, string> = { posture: tr('Postawa'), fatigue: tr('Zmęczenie') };
+const RANGES: Record<RangeId, string> = { today: tr('Dziś'), '3': tr('Ostatnie 3 dni'), '7': tr('Ostatnie 7 dni'), '30': tr('Ostatni miesiąc') };
 
 // Dobra strefa (kolor słupka): postawa 80+, zmęczenie poniżej 40%.
 const goodPosture = (v: number) => v >= 80;
@@ -37,8 +42,8 @@ function save(key: string, v: string): void {
 }
 
 export async function renderStats(view: HTMLElement, ctx: AppCtx): Promise<void> {
-  const head = h('div', { class: 'page-head' }, h('h1', null, 'Statystyki'));
-  const page = h('div', { class: 'page stats' }, head, h('p', { class: 'fine' }, 'Wczytuję…'));
+  const head = h('div', { class: 'page-head' }, h('h1', null, tr('Statystyki')));
+  const page = h('div', { class: 'page stats' }, head, h('p', { class: 'fine' }, tr('Wczytuję…')));
   view.append(page);
   let st: StatsPayload | null = null;
   try {
@@ -50,8 +55,8 @@ export async function renderStats(view: HTMLElement, ctx: AppCtx): Promise<void>
   if (!st || st.daysOfData === 0) {
     page.append(
       h('div', { class: 'empty' },
-        h('p', null, 'Nie ma jeszcze danych. Pierwsze wyniki pojawią się po kilku minutach pracy.'),
-        h('button', { class: 'btn', onclick: () => ctx.navigate('live') }, 'Przejdź do podglądu'),
+        h('p', null, tr('Nie ma jeszcze danych. Pierwsze wyniki pojawią się po kilku minutach pracy.')),
+        h('button', { class: 'btn', onclick: () => ctx.navigate('live') }, tr('Przejdź do podglądu')),
       ),
     );
     return;
@@ -65,7 +70,7 @@ export async function renderStats(view: HTMLElement, ctx: AppCtx): Promise<void>
   // Zakres zamiast nagłówka „Dziś”. Własna lista zamiast <select>: natywna na macOS otwierała się nad przyciskiem
   // (system ustawia wybraną opcję na przycisku). Ta zawsze rozwija się pod nim.
   const label = h('span', null, RANGES[range]);
-  const btn = h('button', { class: 'range-select', type: 'button', 'aria-haspopup': 'listbox', 'aria-expanded': 'false', 'aria-label': 'Zakres' }, label);
+  const btn = h('button', { class: 'range-select', type: 'button', 'aria-haspopup': 'listbox', 'aria-expanded': 'false', 'aria-label': tr('Zakres') }, label);
   const menu = h('ul', { class: 'range-menu', role: 'listbox', hidden: true });
   const outside = (e: Event) => {
     if (!select.contains(e.target as Node)) close();
@@ -112,7 +117,7 @@ export async function renderStats(view: HTMLElement, ctx: AppCtx): Promise<void>
   }, btn, menu);
 
   const draw = () => body.replaceChildren(...(tab === 'posture' ? postureTab(data, range, select) : fatigueTab(data, range, select)));
-  const seg = h('div', { class: 'seg', role: 'tablist', 'aria-label': 'Statystyki' },
+  const seg = h('div', { class: 'seg', role: 'tablist', 'aria-label': tr('Statystyki') },
     (Object.keys(TABS) as TabId[]).map((id) =>
       h('button', {
         type: 'button',
@@ -156,20 +161,20 @@ function postureTab(st: StatsPayload, range: RangeId, select: HTMLElement): HTML
   let chart: HTMLElement;
   if (range === 'today') {
     figs = h('div', { class: 'figs' },
-      fig(pct(t.goodPercent), 'dobra postawa', delta(t.goodPercent, y?.goodPercent, true)),
-      fig(t.avgPosture === null ? '–' : String(t.avgPosture), 'średni wynik', delta(t.avgPosture, y?.avgPosture, true)),
+      fig(pct(t.goodPercent), tr('dobra postawa'), delta(t.goodPercent, y?.goodPercent, true)),
+      fig(t.avgPosture === null ? '–' : String(t.avgPosture), tr('średni wynik'), delta(t.avgPosture, y?.avgPosture, true)),
       fig(String(t.alerts), 'alerty', null),
     );
-    chart = hourChart(st, 'posture', goodPosture, '', 'Postawa dziś, godzina po godzinie');
+    chart = hourChart(st, 'posture', goodPosture, '', tr('Postawa dziś, godzina po godzinie'));
   } else {
     const days = daysOf(st, range);
     const avgScore = weighted(days, (d) => d.avgPosture);
     figs = h('div', { class: 'figs' },
-      fig(pct(weighted(days, (d) => d.goodPercent)), 'dobra postawa', null),
-      fig(avgScore === null ? '–' : String(avgScore), 'średni wynik', null),
+      fig(pct(weighted(days, (d) => d.goodPercent)), tr('dobra postawa'), null),
+      fig(avgScore === null ? '–' : String(avgScore), tr('średni wynik'), null),
       fig(String(days.reduce((a, d) => a + d.alerts, 0)), 'alerty', null),
     );
-    chart = dayChart(days, (d) => d.goodPercent, goodPosture, '%', `Czas w dobrej postawie, ${RANGES[range].toLowerCase()}`);
+    chart = dayChart(days, (d) => d.goodPercent, goodPosture, '%', tr('Czas w dobrej postawie, {r}', { r: RANGES[range].toLowerCase() }));
   }
   return [h('section', { class: 'block' }, select, figs, chart), issuesSection(st)];
 }
@@ -181,21 +186,21 @@ function fatigueTab(st: StatsPayload, range: RangeId, select: HTMLElement): HTML
   let chart: HTMLElement;
   if (range === 'today') {
     figs = h('div', { class: 'figs' },
-      fig(pct(t.avgFatigue), 'zmęczenie', delta(t.avgFatigue, y?.avgFatigue, false)),
+      fig(pct(t.avgFatigue), tr('zmęczenie'), delta(t.avgFatigue, y?.avgFatigue, false)),
       breaksFig(t.breaksTaken, Math.floor(t.presentMinutes / 60)),
-      fig(fmtDesk(t.presentMinutes), 'przy biurku', null),
+      fig(fmtDesk(t.presentMinutes), tr('przy biurku'), null),
     );
-    chart = hourChart(st, 'fatigue', lowFatigue, '%', 'Zmęczenie dziś, godzina po godzinie');
+    chart = hourChart(st, 'fatigue', lowFatigue, '%', tr('Zmęczenie dziś, godzina po godzinie'));
   } else {
     const days = daysOf(st, range);
     const present = days.reduce((a, d) => a + d.presentMinutes, 0);
     figs = h('div', { class: 'figs' },
-      fig(pct(weighted(days, (d) => d.avgFatigue)), 'zmęczenie', null),
+      fig(pct(weighted(days, (d) => d.avgFatigue)), tr('zmęczenie'), null),
       // BHP liczone dzień po dniu: 5 min przerwy po każdej pełnej godzinie pracy danego dnia.
       breaksFig(days.reduce((a, d) => a + d.breaks, 0), days.reduce((a, d) => a + Math.floor(d.presentMinutes / 60), 0)),
-      fig(fmtDesk(present), 'przy biurku', null),
+      fig(fmtDesk(present), tr('przy biurku'), null),
     );
-    chart = dayChart(days, (d) => d.avgFatigue, lowFatigue, '%', `Zmęczenie, ${RANGES[range].toLowerCase()}`);
+    chart = dayChart(days, (d) => d.avgFatigue, lowFatigue, '%', tr('Zmęczenie, {r}', { r: RANGES[range].toLowerCase() }));
   }
   return [h('section', { class: 'block' }, select, figs, chart)];
 }
@@ -206,7 +211,7 @@ function delta(now: number | null, prev: number | null | undefined, higherIsBett
   const d = Math.round(now - prev);
   if (d === 0) return null;
   const good = d > 0 === higherIsBetter;
-  return h('span', { class: `fig-delta ${good ? 'up' : 'down'}`, title: `${d > 0 ? '+' : '−'}${Math.abs(d)} względem wczoraj` }, `${d > 0 ? '↑' : '↓'}${Math.abs(d)}`);
+  return h('span', { class: `fig-delta ${good ? 'up' : 'down'}`, title: tr('{d} względem wczoraj', { d: `${d > 0 ? '+' : '−'}${Math.abs(d)}` }) }, `${d > 0 ? '↑' : '↓'}${Math.abs(d)}`);
 }
 
 const pct = (v: number | null) => (v === null ? '–' : `${v}%`);
@@ -220,8 +225,8 @@ function fig(val: string, label: string, extra: HTMLElement | null, title?: stri
 
 /** Przerwy z minimum BHP (5 min po każdej godzinie przy monitorze). */
 function breaksFig(taken: number, due: number): HTMLElement {
-  return fig(String(taken), due ? `przerwy · min. ${due}` : 'przerwy', null,
-    due ? `Zalecane co najmniej ${due} (5 min po każdej godzinie przy monitorze)` : undefined);
+  return fig(String(taken), due ? tr('przerwy · min. {n}', { n: due }) : tr('przerwy'), null,
+    due ? tr('Zalecane co najmniej {n} (5 min po każdej godzinie przy monitorze)', { n: due }) : undefined);
 }
 
 interface Bar {
@@ -303,7 +308,7 @@ function hourChart(st: StatsPayload, key: 'posture' | 'fatigue', good: (v: numbe
     byHour.set(hr, acc);
   }
   const hours = [...byHour.entries()].filter(([, a]) => a.n >= 5).sort((a, b) => a[0] - b[0]);
-  if (!hours.length) return h('p', { class: 'fine' }, 'Dziś jeszcze brak pomiarów.');
+  if (!hours.length) return h('p', { class: 'fine' }, tr('Dziś jeszcze brak pomiarów.'));
   const bars: Bar[] = hours.map(([hr, a]) => {
     const v = a.sum / a.n;
     return { label: `${hr}:00`, value: v, tone: good(v) ? 'good' : 'warn' };
@@ -313,27 +318,27 @@ function hourChart(st: StatsPayload, key: 'posture' | 'fatigue', good: (v: numbe
 
 /** Zakres dni: jeden słupek na dzień. Przy miesiącu podpis co kilka dni, wartości tylko w podpowiedzi. */
 function dayChart(days: Day[], pick: (d: Day) => number | null, good: (v: number) => boolean, unit: string, aria: string): HTMLElement {
-  if (days.filter((d) => d.presentMinutes > 0).length === 0) return h('p', { class: 'fine' }, 'Brak pomiarów w tym okresie.');
+  if (days.filter((d) => d.presentMinutes > 0).length === 0) return h('p', { class: 'fine' }, tr('Brak pomiarów w tym okresie.'));
   const long = days.length > 7;
   const last = days.length - 1;
   const bars: Bar[] = days.map((d, i) => {
     const v = d.presentMinutes ? pick(d) : null;
     const date = `${DAYS[d.weekday]} ${d.day} ${MONTHS[Number(d.date.slice(5, 7)) - 1]}`;
-    const label = i === last ? 'dziś' : long ? ((last - i) % 5 === 0 ? String(d.day) : '') : DAYS[d.weekday];
-    return { label, tip: i === last ? `dziś, ${date}` : date, value: v, tone: v === null ? 'mute' : good(v) ? 'good' : 'warn', strong: i === last };
+    const label = i === last ? tr('dziś') : long ? ((last - i) % 5 === 0 ? String(d.day) : '') : DAYS[d.weekday];
+    return { label, tip: i === last ? tr('dziś, {d}', { d: date }) : date, value: v, tone: v === null ? 'mute' : good(v) ? 'good' : 'warn', strong: i === last };
   });
   return barChart(bars, unit, aria, !long);
 }
 
 function issuesSection(st: StatsPayload): HTMLElement {
-  const sec = h('section', { class: 'block' }, h('h2', null, 'Co poprawić'));
+  const sec = h('section', { class: 'block' }, h('h2', null, tr('Co poprawić')));
   const entries = (Object.entries(st.weekIssueShare) as [IssueId, number][]).sort((a, b) => b[1] - a[1]).slice(0, 3);
   if (!entries.length) {
-    sec.append(h('p', { class: 'fine' }, 'Brak powtarzających się problemów. Dobra robota.'));
+    sec.append(h('p', { class: 'fine' }, tr('Brak powtarzających się problemów. Dobra robota.')));
     return sec;
   }
   sec.append(
-    h('ul', { class: 'bars', title: 'Udział w czasie ze złą postawą, ostatnie 7 dni' },
+    h('ul', { class: 'bars', title: tr('Udział w czasie ze złą postawą, ostatnie 7 dni') },
       entries.map(([k, v]) =>
         h('li', null,
           h('span', { class: 'bar-name' }, ISSUE_LABEL[k]),

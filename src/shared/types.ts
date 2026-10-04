@@ -34,6 +34,8 @@ export interface Settings {
   miniWidget: boolean;
   /** Powiadomienia systemowe, gdy mini-widget jest wyłączony (z widgetem przypomnienia są w okienku pod nim). */
   systemNotifications: boolean;
+  /** Język interfejsu (domyślnie polski). */
+  language: 'pl' | 'en';
   /** Wygląd mini-widgetu: karta (wynik + stan + zmęczenie) albo mała pigułka z samą liczbą. */
   widgetStyle: 'card' | 'pill';
   autostart: boolean;
@@ -59,6 +61,7 @@ export const DEFAULT_SETTINGS: Settings = {
   activityTracking: false,
   miniWidget: false,
   systemNotifications: true,
+  language: 'pl',
   widgetStyle: 'card',
   autostart: false,
   soundAlerts: false,

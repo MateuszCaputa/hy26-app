@@ -2,6 +2,7 @@
 // potem pobrane wcześniej do katalogu danych; pobieramy tylko, gdy nie ma ich nigdzie.
 // Zmiana pliku modelu w analizatorze = podmień też plik w assets/models.
 import { net } from 'electron';
+import { tr } from '../shared/i18n';
 import { existsSync } from 'node:fs';
 import { mkdir, rename, writeFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -39,7 +40,7 @@ export async function ensureModels(dir: string, searchDirs: string[], progress: 
   for (let i = 0; i < missing.length; i++) {
     const m = missing[i];
     const res = await net.fetch(m.url);
-    if (!res.ok || !res.body) throw new Error(`Nie udało się pobrać ${m.file} (HTTP ${res.status})`);
+    if (!res.ok || !res.body) throw new Error(tr('Nie udało się pobrać {f} (HTTP {s})', { f: m.file, s: res.status }));
     const total = Number(res.headers.get('content-length') ?? 0);
     const reader = res.body.getReader();
     const chunks: Uint8Array[] = [];

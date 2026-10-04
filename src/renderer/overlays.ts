@@ -6,6 +6,7 @@ import { ExerciseVerifier, VERIFY_SPECS, type VerifyProgress } from '../core/exe
 import { openCalibrator } from './calibrator';
 import { $, clear, h, svg } from './dom';
 import { FIGURES } from './figures';
+import { tr } from '../shared/i18n';
 
 function overlay(label: string, ...children: HTMLElement[]): { el: HTMLElement; close: () => void } {
   const root = $('#overlay-root');
@@ -55,9 +56,9 @@ let lastExerciseId: string | null = null;
 function verifyPanel(spec: (typeof VERIFY_SPECS)[string]): { el: HTMLElement; set: (p: VerifyProgress) => void } {
   const count = h('span', { class: 'verify-count' });
   const bar = h('span', { class: 'meter-fill', style: 'width:0%' });
-  const note = h('span', { class: 'verify-note', 'aria-live': 'polite' }, 'Kliknij Start – kamera policzy ruchy.');
+  const note = h('span', { class: 'verify-note', 'aria-live': 'polite' }, tr('Kliknij Start – kamera policzy ruchy.'));
   const el = h('div', { class: 'verify', 'data-state': 'idle' },
-    h('div', { class: 'verify-head' }, h('span', { class: 'verify-label' }, 'Kamera sprawdza'), count),
+    h('div', { class: 'verify-head' }, h('span', { class: 'verify-label' }, tr('Kamera sprawdza')), count),
     h('span', { class: 'meter' }, bar),
     note,
   );
@@ -70,10 +71,10 @@ function verifyPanel(spec: (typeof VERIFY_SPECS)[string]): { el: HTMLElement; se
       bar.style.width = `${Math.round(p.fraction * 100)}%`;
       count.textContent = p.phase === 'done' ? '✓' : p.sides ? `${p.sides.left} s | ${p.sides.right} s` : `${p.count}${unit}`;
       note.textContent =
-        p.phase === 'done' ? 'Wykonane!'
-          : p.lost ? 'Nie widzę Cię – usiądź przed kamerą.'
-            : p.phase === 'baseline' ? 'Usiądź swobodnie, mierzę pozycję wyjściową…'
-              : p.sides ? `${spec.cue}: po ${spec.target} s na każdą stronę.`
+        p.phase === 'done' ? tr('Wykonane!')
+          : p.lost ? tr('Nie widzę Cię – usiądź przed kamerą.')
+            : p.phase === 'baseline' ? tr('Usiądź swobodnie, mierzę pozycję wyjściową…')
+              : p.sides ? tr('{cue}: po {n} s na każdą stronę.', { cue: spec.cue, n: spec.target })
                 : `${spec.cue}.`;
     },
   };
@@ -91,9 +92,9 @@ export function openBreakOverlay(ctx: AppCtx, sug?: BreakSuggestion, exerciseId?
   rg.set(0, fmt(ex.seconds));
   let started = 0;
   let raf = 0;
-  const startBtn = h('button', { class: 'btn primary' }, 'Start');
-  const doneBtn = h('button', { class: 'btn' }, 'Zrobione');
-  const snoozeBtn = h('button', { class: 'btn ghost' }, 'Odłóż o 5 min');
+  const startBtn = h('button', { class: 'btn primary' }, tr('Start'));
+  const doneBtn = h('button', { class: 'btn' }, tr('Zrobione'));
+  const snoozeBtn = h('button', { class: 'btn ghost' }, tr('Odłóż o 5 min'));
 
   // Weryfikacja kamerą tylko dla ćwiczeń z pewnym sygnałem i przy działającej analizie (bez podglądu wideo:
   // czytamy metryki z analizatora, wspólnego <video> nie ruszamy).
@@ -120,7 +121,7 @@ export function openBreakOverlay(ctx: AppCtx, sug?: BreakSuggestion, exerciseId?
   const tick = () => {
     const el = (performance.now() - started) / 1000;
     const left = Math.max(0, ex.seconds - el);
-    rg.set(el / ex.seconds, left > 0 ? fmt(left) : 'Gotowe');
+    rg.set(el / ex.seconds, left > 0 ? fmt(left) : tr('Gotowe'));
     if (left > 0) raf = requestAnimationFrame(tick);
     else {
       doneBtn.classList.add('primary');
@@ -167,7 +168,7 @@ export function openBreakOverlay(ctx: AppCtx, sug?: BreakSuggestion, exerciseId?
       const after = ctx.analyzer.status().energy?.percent ?? null;
       window.postura?.logEvent({ type: 'break-done', detail: `${kind}:${ex.id}${verified ? ':verified' : ''}` });
       const gain = before !== null && after !== null && after > before ? ` Bateria ${before}% → ${after}%.` : '';
-      ctx.toast(`${verified ? 'Ćwiczenie wykonane – kamera to potwierdziła.' : 'Przerwa zaliczona.'}${gain}`);
+      ctx.toast(`${verified ? tr('Ćwiczenie wykonane – kamera to potwierdziła.') : tr('Przerwa zaliczona.')}${gain}`);
     } else {
       ctx.analyzer.breakSnoozed();
       window.postura?.logEvent({ type: 'break-snoozed', detail: kind });
@@ -189,13 +190,13 @@ export function showModelsScreen(): Promise<void> {
   return new Promise((resolve) => {
     const api = window.postura;
     const bar = h('span', { class: 'meter-fill', style: 'width:0%' });
-    const text = h('p', { class: 'fine', 'aria-live': 'polite' }, 'Łączę się…');
-    const retry = h('button', { class: 'btn primary', hidden: true }, 'Spróbuj ponownie');
+    const text = h('p', { class: 'fine', 'aria-live': 'polite' }, tr('Łączę się…'));
+    const retry = h('button', { class: 'btn primary', hidden: true }, tr('Spróbuj ponownie'));
     const { close } = overlay(
-      'Przygotowanie',
+      tr('Przygotowanie'),
       h('div', { class: 'cal' },
-        h('h1', null, 'Przygotowuję analizę'),
-        h('p', { class: 'fine' }, 'Pobieram modele rozpoznawania sylwetki i twarzy (ok. 13 MB). To jednorazowe – później Upright działa bez internetu, a obraz z kamery nigdy nie opuszcza komputera.'),
+        h('h1', null, tr('Przygotowuję analizę')),
+        h('p', { class: 'fine' }, tr('Pobieram modele rozpoznawania sylwetki i twarzy (ok. 13 MB). To jednorazowe – później Upright działa bez internetu, a obraz z kamery nigdy nie opuszcza komputera.')),
         h('span', { class: 'meter big' }, bar),
         text,
         retry,
@@ -203,17 +204,17 @@ export function showModelsScreen(): Promise<void> {
     );
     api.onModelsProgress((p) => {
       bar.style.width = `${Math.round(p * 100)}%`;
-      text.textContent = `Pobrano ${Math.round(p * 100)}%`;
+      text.textContent = tr('Pobrano {p}%', { p: Math.round(p * 100) });
     });
     const run = async () => {
       retry.hidden = true;
-      text.textContent = 'Pobieram…';
+      text.textContent = tr('Pobieram…');
       const r = await api.ensureModels();
       if (r.ok) {
         close();
         resolve();
       } else {
-        text.textContent = `Nie udało się pobrać modeli: ${r.error}. Sprawdź połączenie z internetem.`;
+        text.textContent = tr('Nie udało się pobrać modeli: {e}. Sprawdź połączenie z internetem.', { e: r.error ?? '' });
         retry.hidden = false;
       }
     };

@@ -9,33 +9,34 @@ import { BREAK_TITLE, ISSUE_LABEL, ISSUE_TIP } from '../../core/coach';
 import { ISSUE_DEFS } from '../../core/scoring';
 import { LandmarkFollower } from '../../core/landmarkFollower';
 import { PostureFigure } from '../postureFigure';
+import { tr } from '../../shared/i18n';
 
 const STATE_WORD: Record<string, string> = {
-  good: 'Siedzisz prosto',
-  warn: 'Postawa się psuje',
-  bad: 'Zła postawa',
-  absent: 'Nie widzę Cię w kadrze',
-  paused: 'Analiza wstrzymana',
+  good: tr('Siedzisz prosto'),
+  warn: tr('Postawa się psuje'),
+  bad: tr('Zła postawa'),
+  absent: tr('Nie widzę Cię w kadrze'),
+  paused: tr('Analiza wstrzymana'),
 };
 
 /** Dymek przy wartości: prostymi słowami, co znaczy liczba (kiedy się poprawić, mówią komunikaty o postawie). */
 const ISSUE_HELP: Record<Exclude<IssueId, 'stillness'>, string> = {
-  headForward: '0% = głowa tak jak przy kalibracji. Im więcej, tym bardziej wysunięta.',
-  headBack: 'O ile stopni broda jest wyżej niż przy kalibracji. 0° = tak jak wtedy.',
-  slouch: '0% = plecy tak proste jak przy kalibracji. Im więcej, tym mocniej się garbisz.',
-  shrug: '0% = barki rozluźnione. Im więcej, tym wyżej je unosisz.',
-  shoulderTilt: 'O ile stopni jeden bark jest niżej od drugiego. 0° = równo.',
-  tooClose: '0% = ta sama odległość od ekranu co przy kalibracji. Im więcej, tym bliżej siedzisz.',
-  headTilt: 'O ile stopni głowa jest przechylona na bok. 0° = prosto.',
-  twist: '0% = siedzisz przodem do ekranu. Im więcej, tym bardziej obrócony tułów.',
+  headForward: tr('0% = głowa tak jak przy kalibracji. Im więcej, tym bardziej wysunięta.'),
+  headBack: tr('O ile stopni broda jest wyżej niż przy kalibracji. 0° = tak jak wtedy.'),
+  slouch: tr('0% = plecy tak proste jak przy kalibracji. Im więcej, tym mocniej się garbisz.'),
+  shrug: tr('0% = barki rozluźnione. Im więcej, tym wyżej je unosisz.'),
+  shoulderTilt: tr('O ile stopni jeden bark jest niżej od drugiego. 0° = równo.'),
+  tooClose: tr('0% = ta sama odległość od ekranu co przy kalibracji. Im więcej, tym bliżej siedzisz.'),
+  headTilt: tr('O ile stopni głowa jest przechylona na bok. 0° = prosto.'),
+  twist: tr('0% = siedzisz przodem do ekranu. Im więcej, tym bardziej obrócony tułów.'),
 };
 
 const CAMERA_MSG: Record<string, string> = {
-  starting: 'Włączam kamerę…',
-  busy: 'Kamerę używa inna aplikacja (np. Teams lub Zoom). Analiza wróci sama, gdy kamera się zwolni.',
-  denied: 'Brak zgody na kamerę. Zezwól Posturze na dostęp w ustawieniach systemu i uruchom ją ponownie.',
-  missing: 'Nie znalazłem kamery. Podłącz kamerę i wybierz ją w ustawieniach.',
-  stopped: 'Analiza wstrzymana. Kamera jest wyłączona.',
+  starting: tr('Włączam kamerę…'),
+  busy: tr('Kamerę używa inna aplikacja (np. Teams lub Zoom). Analiza wróci sama, gdy kamera się zwolni.'),
+  denied: tr('Brak zgody na kamerę. Zezwól aplikacji Upright na dostęp w ustawieniach systemu i uruchom ją ponownie.'),
+  missing: tr('Nie znalazłem kamery. Podłącz kamerę i wybierz ją w ustawieniach.'),
+  stopped: tr('Analiza wstrzymana. Kamera jest wyłączona.'),
 };
 
 // Odchylenie bez „−0”: co zaokrągla się do zera, pokazujemy jako 0; minus zawsze typograficzny „−”.
@@ -62,7 +63,7 @@ export class LiveView {
   private fatNum: HTMLElement;
   private fatBar: HTMLElement;
   private why = fatigueWhy();
-  private simBadge = h('span', { class: 'sim-badge', hidden: true, 'data-tip': 'Tryb prezentacji: sygnały oczu są symulowane (Ustawienia → Prezentacja).' }, 'SYMULACJA');
+  private simBadge = h('span', { class: 'sim-badge', hidden: true, 'data-tip': tr('Tryb prezentacji: sygnały oczu są symulowane (Ustawienia → Prezentacja).') }, tr('SYMULACJA'));
   private blinkVal: HTMLElement;
   private yawnVal: HTMLElement;
   private breakText: HTMLElement;
@@ -81,25 +82,25 @@ export class LiveView {
     this.canvas = h('canvas', { class: 'stage-canvas', 'aria-hidden': 'true' });
     this.camMsg = h('div', { class: 'stage-msg', hidden: true });
     this.calibrateCta = h('div', { class: 'stage-cta', hidden: true },
-      h('p', null, 'Najpierw pokaż mi, jak wygląda Twoja prosta postawa.'),
-      h('button', { class: 'btn primary', onclick: () => ctx.startCalibration() }, 'Skalibruj postawę'),
+      h('p', null, tr('Najpierw pokaż mi, jak wygląda Twoja prosta postawa.')),
+      h('button', { class: 'btn primary', onclick: () => ctx.startCalibration() }, tr('Skalibruj postawę')),
     );
     this.hint = h('p', { class: 'stage-hint', hidden: true });
-    this.stage = h('section', { class: 'stage', 'aria-label': 'Podgląd z kamery' }, a.video, this.canvas, this.hint, this.camMsg, this.calibrateCta,
-      h('p', { class: 'stage-legend' }, h('span', { class: 'legend-ring' }), 'przerywane kółko: gdzie powinna być głowa'),
+    this.stage = h('section', { class: 'stage', 'aria-label': tr('Podgląd z kamery') }, a.video, this.canvas, this.hint, this.camMsg, this.calibrateCta,
+      h('p', { class: 'stage-legend' }, h('span', { class: 'legend-ring' }), tr('przerywane kółko: gdzie powinna być głowa')),
     );
 
-    this.fatNum = h('span', { class: 'energy-pct', 'data-tip': '0% = wypoczęty, 100% = bardzo zmęczony. Liczę z mrugania, przymykania oczu i ziewania.' }, '–');
+    this.fatNum = h('span', { class: 'energy-pct', 'data-tip': tr('0% = wypoczęty, 100% = bardzo zmęczony. Liczę z mrugania, przymykania oczu i ziewania.') }, '–');
     this.fatBar = h('span', { class: 'meter-fill' });
     this.blinkVal = h('span', { class: 'metric-val' }, '–');
     this.yawnVal = h('span', { class: 'metric-val' }, '–');
 
-    this.scoreState = h('span', { class: 'score-state' }, 'Uruchamiam…');
+    this.scoreState = h('span', { class: 'score-state' }, tr('Uruchamiam…'));
     this.tip = h('p', { class: 'tip' });
 
 
     this.breakText = h('p', { class: 'break-text' }, '–');
-    this.breakBtn = h('button', { class: 'btn small', onclick: () => ctx.startBreak() }, 'Zrób przerwę');
+    this.breakBtn = h('button', { class: 'btn small', onclick: () => ctx.startBreak() }, tr('Zrób przerwę'));
 
     const metrics = h('ul', { class: 'metric-list' },
       ISSUE_DEFS.map((d) => {
@@ -120,7 +121,7 @@ export class LiveView {
         h('div', { class: 'hero-row' }, this.figure.el, h('div', { class: 'hero-text' }, this.scoreState, this.tip)),
       ),
       h('section', { class: 'r-block energy-row' },
-        h('div', { class: 'energy-head' }, h('span', null, 'Zmęczenie', this.simBadge), this.fatNum),
+        h('div', { class: 'energy-head' }, h('span', null, tr('Zmęczenie'), this.simBadge), this.fatNum),
         h('span', { class: 'meter', role: 'presentation' }, this.fatBar),
         this.why.el,
       ),
@@ -142,18 +143,18 @@ export class LiveView {
           });
         },
       },
-        h('summary', null, 'Szczegóły pomiaru'),
+        h('summary', null, tr('Szczegóły pomiaru')),
         h('div', { class: 'details-body' },
-          h('h2', null, 'Oczy'),
+          h('h2', null, tr('Oczy')),
           // Te same wiersze co odchylenia niżej (nazwa po lewej, liczba po prawej), żeby panel czytał się jak jedna lista.
           h('ul', { class: 'metric-list' },
-            h('li', { class: 'metric plain' }, h('span', { class: 'metric-name', 'data-tip': 'Średnio z ostatnich 3 minut, bez chwil, gdy mówisz. Przy pracy przy ekranie 5–10/min to norma (w spoczynku ok. 15–20).' }, 'Mrugnięcia (śr. 3 min)'), this.blinkVal),
-            h('li', { class: 'metric plain' }, h('span', { class: 'metric-name' }, 'Ziewnięcia'), this.yawnVal),
+            h('li', { class: 'metric plain' }, h('span', { class: 'metric-name', 'data-tip': tr('Średnio z ostatnich 3 minut, bez chwil, gdy mówisz. Przy pracy przy ekranie 5–10/min to norma (w spoczynku ok. 15–20).') }, tr('Mrugnięcia (śr. 3 min)')), this.blinkVal),
+            h('li', { class: 'metric plain' }, h('span', { class: 'metric-name' }, tr('Ziewnięcia')), this.yawnVal),
           ),
-          h('h2', null, 'Jak daleko jesteś od swojej prostej postawy'),
+          h('h2', null, tr('Jak daleko jesteś od swojej prostej postawy')),
           metrics,
           h('div', { class: 'details-foot' },
-            this.recalBtn = h('button', { class: 'btn ghost small', onclick: () => ctx.startCalibration() }, ctx.calibration ? 'Skalibruj ponownie' : 'Skalibruj'),
+            this.recalBtn = h('button', { class: 'btn ghost small', onclick: () => ctx.startCalibration() }, ctx.calibration ? tr('Skalibruj ponownie') : tr('Skalibruj')),
           ),
         ),
       ),
@@ -248,8 +249,8 @@ export class LiveView {
     if (f.pose !== this.lastFrame?.pose) this.follower.setTarget(f.pose);
     this.lastFrame = f;
     const hints: Record<string, string> = {
-      'shoulders-hidden': 'Nie widzę barków – odsuń się trochę albo obniż kamerę.',
-      'face-hidden': 'Twarz jest zasłonięta – wyniki chwilowo wstrzymane.',
+      'shoulders-hidden': tr('Nie widzę barków – odsuń się trochę albo obniż kamerę.'),
+      'face-hidden': tr('Twarz jest zasłonięta – wyniki chwilowo wstrzymane.'),
     };
     const hint = f.reason ? hints[f.reason] : undefined;
     this.hint.hidden = !hint;
@@ -284,13 +285,13 @@ export class LiveView {
     const noCal = !ctx.calibration;
     this.calibrateCta.hidden = !noCal || ctx.paused;
     // „ponownie” dopiero, gdy jest już jakaś kalibracja (jak w Ustawieniach).
-    this.recalBtn.textContent = noCal ? 'Skalibruj' : 'Skalibruj ponownie';
+    this.recalBtn.textContent = noCal ? tr('Skalibruj') : tr('Skalibruj ponownie');
     this.root.dataset.state = ctx.paused ? 'paused' : s.state;
-    this.scoreState.textContent = noCal ? 'Czekam na kalibrację' : STATE_WORD[ctx.paused ? 'paused' : s.state] ?? '';
-    this.tip.textContent = noCal ? 'Pokaż mi raz prostą postawę – od niej liczę resztę.'
+    this.scoreState.textContent = noCal ? tr('Czekam na kalibrację') : STATE_WORD[ctx.paused ? 'paused' : s.state] ?? '';
+    this.tip.textContent = noCal ? tr('Pokaż mi raz prostą postawę – od niej liczę resztę.')
       : s.issues?.length && s.state !== 'absent' ? s.issues.map((id) => ISSUE_TIP[id]).join(' ') // do dwóch wskazówek naraz
       : s.topIssue && s.state !== 'absent' ? ISSUE_TIP[s.topIssue]
-      : s.state === 'absent' ? 'Usiądź przed kamerą, a pomiar wróci sam.' : '';
+      : s.state === 'absent' ? tr('Usiądź przed kamerą, a pomiar wróci sam.') : '';
 
     const f = s.fatigue;
     const fatOn = !!f && !noCal && !ctx.paused;
@@ -301,7 +302,7 @@ export class LiveView {
     this.simBadge.hidden = !(fatOn && f!.simulated);
     // W „Szczegółach” tylko surowe liczby z oczu.
     const blinks = f?.blinkRate != null ? `${Math.round(f.blinkRate)}/min` : '–';
-    const yawns = f ? `${f.yawns10m} w 10 min` : '–';
+    const yawns = f ? tr('{n} w 10 min', { n: f.yawns10m }) : '–';
     this.blinkVal.textContent = blinks;
     this.yawnVal.textContent = yawns;
 
@@ -310,8 +311,8 @@ export class LiveView {
     const t = performance.now() / 1000;
     const next = be.nextDueInMin(t);
     const dueKind = pending ? pending.kind : next.min <= 0 ? next.kind : null;
-    this.breakText.textContent = dueKind ? 'Pora na przerwę' : `Przerwa za ${fmtMin(next.min)}`;
-    this.breakText.dataset.tip = `${BREAK_TITLE[dueKind ?? next.kind]}. Pracujesz bez przerwy od ${fmtMin(s.minutesSinceBreak)}.`;
+    this.breakText.textContent = dueKind ? tr('Pora na przerwę') : tr('Przerwa za {t}', { t: fmtMin(next.min) });
+    this.breakText.dataset.tip = `${BREAK_TITLE[dueKind ?? next.kind]}. ${tr('Pracujesz bez przerwy od {t}.', { t: fmtMin(s.minutesSinceBreak) })}`;
     // Gdy jest pora na przerwę, przycisk wyróżnia się – na co dzień jest spokojny.
     this.breakBtn.className = dueKind ? 'btn primary small' : 'btn small';
   }

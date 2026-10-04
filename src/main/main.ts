@@ -13,6 +13,7 @@ import { ActivityCounter } from './activity';
 import { ensureModels, findModel, modelsReady } from './models';
 import { buildStats, localDate } from '../core/insights';
 import { ERGONOMIC_TIP, ISSUE_LABEL } from '../core/coach';
+import { setLang, tr } from '../shared/i18n';
 
 // Nazwa w menu, oknach i „O programie” (w trybie deweloperskim system i tak bierze nazwę z Electron.app – patrz scripts/dev-brand.mjs).
 app.setName('Upright');
@@ -123,6 +124,7 @@ function setPaused(p: boolean, minutes = 0): void {
 }
 
 const STATE_WORD: Record<string, string> = { good: 'prosto', warn: 'popraw się', bad: 'zła postawa' };
+const stateWord = (st: string) => (STATE_WORD[st] ? tr(STATE_WORD[st]) : '');
 let trayMenuKey = '';
 
 function updateTray(): void {
@@ -134,23 +136,23 @@ function updateTray(): void {
   // macOS: wynik postawy w pasku menu obok kolorowej ikony (Windows nie pokazuje tekstu w zasobniku).
   if (process.platform === 'darwin') tray.setTitle(present && s.score !== null ? ` ${s.score}` : '', { fontType: 'monospacedDigit' });
 
-  const resumeAt = pausedUntil ? new Date(pausedUntil).toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' }) : '';
+  const resumeAt = pausedUntil ? new Date(pausedUntil).toLocaleTimeString(settings.language === 'en' ? 'en-GB' : 'pl-PL', { hour: '2-digit', minute: '2-digit' }) : '';
   const label =
-    paused ? (resumeAt ? `Upright – pauza do ${resumeAt}` : 'Upright – pauza')
-    : !present ? 'Upright – brak osoby w kadrze'
-    : `Upright – postawa ${s.score ?? '–'}/100${s.fatigue ? `, zmęczenie ${s.fatigue.percent}%` : ''}`;
+    paused ? (resumeAt ? tr('Upright – pauza do {t}', { t: resumeAt }) : tr('Upright – pauza'))
+    : !present ? tr('Upright – brak osoby w kadrze')
+    : tr('Upright – postawa {s}/100', { s: s.score ?? '–' }) + (s.fatigue ? tr(', zmęczenie {f}%', { f: s.fatigue.percent }) : '');
   tray.setToolTip(label);
 
   // Szybki podgląd bez otwierania okna: tylko to, co na głównym ekranie (postawa i zmęczenie).
   const info: string[] = [];
   if (present) {
     // Bez liczby: macOS zamraża treść otwartego menu, a liczba obok ikony odświeża się na żywo.
-    info.push(`Postawa: ${STATE_WORD[s.state] ?? ''}`);
-    if (s.fatigue) info.push(`Zmęczenie: ${s.fatigue.percent}%`);
+    info.push(tr('Postawa: {w}', { w: stateWord(s.state) }));
+    if (s.fatigue) info.push(tr('Zmęczenie: {f}%', { f: s.fatigue.percent }));
   } else info.push(label.replace('Upright – ', ''));
 
   // Menu przebudowujemy tylko, gdy zmienia się jego treść (status przychodzi kilka razy na sekundę).
-  const key = [...info, paused, settings.miniWidget, settings.widgetStyle].join('|');
+  const key = [...info, paused, settings.miniWidget, settings.widgetStyle, settings.language].join('|');
   if (key === trayMenuKey) return;
   trayMenuKey = key;
   // Krótko: przerwa i pauza, potem okno i ustawienia widgetu. Podgląd powiadomień jest w Ustawieniach, statystyki w oknie.
@@ -159,7 +161,7 @@ function updateTray(): void {
       ...info.map((l) => ({ label: l, enabled: false })),
       { type: 'separator' },
       {
-        label: 'Zrób przerwę teraz',
+        label: tr('Zrób przerwę teraz'),
         enabled: !paused,
         click: () => {
           showMain('live');
@@ -167,23 +169,38 @@ function updateTray(): void {
         },
       },
       paused
-        ? { label: 'Wznów analizę', click: () => setPaused(false) }
-        : { label: 'Wstrzymaj analizę', click: () => setPaused(true) },
+        ? { label: tr('Wznów analizę'), click: () => setPaused(false) }
+        : { label: tr('Wstrzymaj analizę'), click: () => setPaused(true) },
       { type: 'separator' },
-      { label: 'Otwórz Upright', click: () => showMain('live') },
-      { label: 'Kalibracja', click: () => showMain('calibrate') },
+      { label: tr('Otwórz Upright'), click: () => showMain('live') },
+      { label: tr('Kalibracja'), click: () => showMain('calibrate') },
       {
         label: 'Mini-widget',
         submenu: [
-          { label: 'Wyłączony', type: 'radio', checked: !settings.miniWidget, click: () => applySettings({ ...settings, miniWidget: false }) },
-          { label: 'Karta (wynik, stan, zmęczenie)', type: 'radio', checked: settings.miniWidget && settings.widgetStyle === 'card', click: () => applySettings({ ...settings, miniWidget: true, widgetStyle: 'card' }) },
-          { label: 'Pigułka (sama liczba)', type: 'radio', checked: settings.miniWidget && settings.widgetStyle === 'pill', click: () => applySettings({ ...settings, miniWidget: true, widgetStyle: 'pill' }) },
+          { label: tr('Wyłączony'), type: 'radio', checked: !settings.miniWidget, click: () => applySettings({ ...settings, miniWidget: false }) },
+          { label: tr('Karta (wynik, stan, zmęczenie)'), type: 'radio', checked: settings.miniWidget && settings.widgetStyle === 'card', click: () => applySettings({ ...settings, miniWidget: true, widgetStyle: 'card' }) },
+          { label: tr('Pigułka (sama liczba)'), type: 'radio', checked: settings.miniWidget && settings.widgetStyle === 'pill', click: () => applySettings({ ...settings, miniWidget: true, widgetStyle: 'pill' }) },
         ],
       },
       { type: 'separator' },
-      { label: 'Zakończ', click: () => { quitting = true; app.quit(); } },
+      { label: tr('Zakończ'), click: () => { quitting = true; app.quit(); } },
     ]),
   );
+}
+
+/** Adres głównego okna (widok startowy, demo, język). */
+function mainWindowUrl(view?: string | null): string {
+  const qs = new URLSearchParams();
+  if (view) qs.set('view', view);
+  if (argv.includes('--demo')) qs.set('demo', '1');
+  if (argv.includes('--autocal')) qs.set('autocal', '1'); // test: kalibracja bez klikania
+  qs.set('lang', settings.language);
+  return `app://local/index.html?${qs}`;
+}
+
+/** Po zmianie języka: przeładuj okno w bieżącym widoku (Ustawienia). */
+function reloadMainWindow(): void {
+  void mainWin?.loadURL(mainWindowUrl('settings'));
 }
 
 function createMainWindow(): void {
@@ -205,12 +222,7 @@ function createMainWindow(): void {
       backgroundThrottling: false, // analiza musi działać, gdy okno jest schowane
     },
   });
-  const qs = new URLSearchParams();
-  if (DEBUG_VIEW) qs.set('view', DEBUG_VIEW);
-  if (argv.includes('--demo')) qs.set('demo', '1');
-  if (argv.includes('--autocal')) qs.set('autocal', '1'); // test: kalibracja bez klikania
-  const q = qs.size ? `?${qs}` : '';
-  void mainWin.loadURL(`app://local/index.html${q}`);
+  void mainWin.loadURL(mainWindowUrl(DEBUG_VIEW));
   const startHidden = app.getLoginItemSettings().wasOpenedAtLogin || argv.includes('--hidden');
   mainWin.once('ready-to-show', () => {
     if (!startHidden || DEBUG_SHOT) mainWin?.show();
@@ -281,7 +293,7 @@ function toggleWidget(on: boolean): void {
       webPreferences: { preload: path.join(__dirname, '..', 'preload.js'), contextIsolation: true, sandbox: true },
     });
     widgetWin.setAlwaysOnTop(true, 'floating');
-    void widgetWin.loadURL(`app://local/widget.html?style=${settings.widgetStyle}`);
+    void widgetWin.loadURL(`app://local/widget.html?style=${settings.widgetStyle}&lang=${settings.language}`);
     // Przy zmianie wyglądu stare okno zamyka się asynchronicznie – nie wolno mu wyzerować referencji do nowego.
     const win = widgetWin;
     win.on('closed', () => {
@@ -297,6 +309,16 @@ function toggleWidget(on: boolean): void {
 function applySettings(s: Settings): void {
   const prev = settings as Settings | undefined; // przy starcie jeszcze nieustawione
   settings = s;
+  setLang(s.language);
+  // Nowy język: widget i okienko przypomnień powstaną od nowa z nowymi tekstami, menu w pasku też.
+  if (prev && prev.language !== s.language) {
+    widgetWin?.close();
+    widgetWin = null;
+    nudgeWin?.close();
+    nudgeWin = null;
+    trayMenuKey = '';
+    reloadMainWindow();
+  }
   store.saveSettings(s);
   // macOS: bez zgody na Dostępność nie uruchamiamy haka – każda próba wywołuje systemowe pytanie od nowa.
   // Pytamy tylko raz: gdy użytkownik sam włącza śledzenie tempa pracy.
@@ -366,7 +388,7 @@ function showNudge(nudge: Nudge): void {
     win.on('closed', () => {
       if (nudgeWin === win) nudgeWin = null;
     });
-    void win.loadURL('app://local/nudge.html');
+    void win.loadURL(`app://local/nudge.html?lang=${settings.language}`);
     win.webContents.once('did-finish-load', () => {
       win.showInactive();
       win.webContents.send('nudge', n);
@@ -424,10 +446,10 @@ function maybeEndOfDay(): void {
   const st = statsNow();
   if (st.today.presentMinutes < 60) return;
   store.setMeta('eodSent', today);
-  const tip = st.today.topIssue ? `Na jutro: ${ERGONOMIC_TIP[st.today.topIssue]}` : 'Na jutro: utrzymaj rytm przerw.';
-  const head = `Dobra postawa ${st.today.goodPercent ?? '–'}% czasu, przerwy: ${st.today.breaksTaken}`;
-  const issue = st.today.topIssue ? `, najczęściej: ${ISSUE_LABEL[st.today.topIssue].toLowerCase()}` : '';
-  notify({ title: 'Podsumowanie dnia', body: `${head}${issue}. ${tip}`, kind: 'info' });
+  const tip = st.today.topIssue ? tr('Na jutro: {tip}', { tip: ERGONOMIC_TIP[st.today.topIssue] }) : tr('Na jutro: utrzymaj rytm przerw.');
+  const head = tr('Dobra postawa {p}% czasu, przerwy: {b}', { p: st.today.goodPercent ?? '–', b: st.today.breaksTaken });
+  const issue = st.today.topIssue ? tr(', najczęściej: {i}', { i: ISSUE_LABEL[st.today.topIssue].toLowerCase() }) : '';
+  notify({ title: tr('Podsumowanie dnia'), body: `${head}${issue}. ${tip}`, kind: 'info' });
 }
 
 function registerIpc(): void {

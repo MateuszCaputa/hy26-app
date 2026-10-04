@@ -3,6 +3,7 @@
 // Współrzędne punktów: 0–1 względem obrazu z kamery (jak w MediaPipe).
 import type { Landmark } from './metrics';
 import { POSE } from './metrics';
+import { tr } from '../shared/i18n';
 
 export type FramingId = 'noPerson' | 'dark' | 'shoulders' | 'tooClose' | 'tooFar' | 'moveLeft' | 'moveRight' | 'headCut' | 'cameraLow';
 
@@ -41,26 +42,26 @@ const seen = (lm: Landmark[], i: number) => (lm[i]?.visibility ?? 1) >= VIS;
 export function checkFraming(i: FramingInput): FramingHint[] {
   const out: FramingHint[] = [];
   const lm = i.pose;
-  if (i.brightness !== null && i.brightness < FRAME.minBrightness) out.push({ id: 'dark', text: 'Za ciemno – zapal światło albo odwróć się przodem do okna.' });
+  if (i.brightness !== null && i.brightness < FRAME.minBrightness) out.push({ id: 'dark', text: tr('Za ciemno – zapal światło albo odwróć się przodem do okna.') });
   if (!lm || lm.length < 13 || !seen(lm, POSE.nose) || !seen(lm, POSE.leftEye) || !seen(lm, POSE.rightEye)) {
-    out.unshift({ id: 'noPerson', text: 'Usiądź przed kamerą, twarzą do ekranu.' });
+    out.unshift({ id: 'noPerson', text: tr('Usiądź przed kamerą, twarzą do ekranu.') });
     return out;
   }
   const eyeDist = Math.hypot(lm[POSE.leftEye].x - lm[POSE.rightEye].x, lm[POSE.leftEye].y - lm[POSE.rightEye].y);
-  if (eyeDist > FRAME.maxEyeDist) out.push({ id: 'tooClose', text: 'Odsuń się trochę od ekranu.' });
+  if (eyeDist > FRAME.maxEyeDist) out.push({ id: 'tooClose', text: tr('Odsuń się trochę od ekranu.') });
   else if (!seen(lm, POSE.leftShoulder) || !seen(lm, POSE.rightShoulder)) {
-    out.push({ id: 'shoulders', text: 'Barki muszą być w kadrze – odsuń się albo obniż kamerę.' });
-  } else if (eyeDist < FRAME.minEyeDist) out.push({ id: 'tooFar', text: 'Przysuń się bliżej ekranu.' });
+    out.push({ id: 'shoulders', text: tr('Barki muszą być w kadrze – odsuń się albo obniż kamerę.') });
+  } else if (eyeDist < FRAME.minEyeDist) out.push({ id: 'tooFar', text: tr('Przysuń się bliżej ekranu.') });
 
   // „Lewo/prawo” z perspektywy użytkownika: w lustrzanym podglądzie x rośnie w jego prawo.
   const faceX = (lm[POSE.leftEye].x + lm[POSE.rightEye].x) / 2;
   const userX = i.mirror ? 1 - faceX : faceX;
-  if (userX > 0.5 + FRAME.maxCenterOffset) out.push({ id: 'moveLeft', text: 'Przesuń się trochę w lewo.' });
-  else if (userX < 0.5 - FRAME.maxCenterOffset) out.push({ id: 'moveRight', text: 'Przesuń się trochę w prawo.' });
+  if (userX > 0.5 + FRAME.maxCenterOffset) out.push({ id: 'moveLeft', text: tr('Przesuń się trochę w lewo.') });
+  else if (userX < 0.5 - FRAME.maxCenterOffset) out.push({ id: 'moveRight', text: tr('Przesuń się trochę w prawo.') });
 
-  if (lm[POSE.nose].y < FRAME.minNoseY) out.push({ id: 'headCut', text: 'Głowa jest za wysoko – obniż ekran albo usiądź niżej.' });
+  if (lm[POSE.nose].y < FRAME.minNoseY) out.push({ id: 'headCut', text: tr('Głowa jest za wysoko – obniż ekran albo usiądź niżej.') });
   if (i.headPitchDeg !== null && i.headPitchDeg < FRAME.cameraLowPitchDeg) {
-    out.push({ id: 'cameraLow', text: 'Kamera patrzy od dołu – podnieś laptopa albo ekran.' });
+    out.push({ id: 'cameraLow', text: tr('Kamera patrzy od dołu – podnieś laptopa albo ekran.') });
   }
   return out;
 }

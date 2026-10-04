@@ -12,6 +12,7 @@
 //  - unoszenie barków: o ile linia barków poszła w górę, w szerokościach barków,
 //  - boczne rozciąganie szyi: przechył linii oczu w stopniach; liczymy sekundy utrzymania osobno na każdą stronę.
 import type { PostureMetrics } from '../shared/types';
+import { tr } from '../shared/i18n';
 
 export type VerifyMode = 'reps' | 'hold-sides';
 
@@ -34,9 +35,9 @@ export interface VerifySpec {
 
 /** Ćwiczenia, które kamera z przodu rozpoznaje pewnie. Pozostałe zalicza się przyciskiem „Zrobione”. */
 export const VERIFY_SPECS: Record<string, VerifySpec> = {
-  'chin-tuck': { mode: 'reps', signal: 'head-back', target: 10, enter: 0.035, exit: 0.015, minHoldMs: 1500, refractoryMs: 400, cue: 'Cofnij brodę i przytrzymaj' },
-  shrugs: { mode: 'reps', signal: 'shoulders-up', target: 10, enter: 0.06, exit: 0.025, minHoldMs: 150, refractoryMs: 300, cue: 'Unieś barki do uszu i opuść' },
-  'neck-side': { mode: 'hold-sides', signal: 'head-roll', target: 15, enter: 12, exit: 6, minHoldMs: 0, refractoryMs: 0, cue: 'Przechyl głowę uchem do barku' },
+  'chin-tuck': { mode: 'reps', signal: 'head-back', target: 10, enter: 0.035, exit: 0.015, minHoldMs: 1500, refractoryMs: 400, cue: tr('Cofnij brodę i przytrzymaj') },
+  shrugs: { mode: 'reps', signal: 'shoulders-up', target: 10, enter: 0.06, exit: 0.025, minHoldMs: 150, refractoryMs: 300, cue: tr('Unieś barki do uszu i opuść') },
+  'neck-side': { mode: 'hold-sides', signal: 'head-roll', target: 15, enter: 12, exit: 6, minHoldMs: 0, refractoryMs: 0, cue: tr('Przechyl głowę uchem do barku') },
 };
 
 export const canVerify = (exerciseId: string): boolean => exerciseId in VERIFY_SPECS;

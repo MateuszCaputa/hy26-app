@@ -10,6 +10,7 @@ import { POSE } from '../core/metrics';
 import { checkFraming, estimateDistanceCm, TARGET, type FramingHint } from '../core/framing';
 import { CAL_LIMITS, checkCalibrationPose, judgeCalibration, type CalibrationCheck } from '../core/calibration';
 import { $, clear, h } from './dom';
+import { tr } from '../shared/i18n';
 
 type Phase = 'align' | 'count' | 'capture' | 'intro2' | 'capture2' | 'result';
 
@@ -26,10 +27,10 @@ interface Item {
 }
 
 const ITEMS: Item[] = [
-  { id: 'frame', label: 'W kadrze' },
-  { id: 'head', label: 'Głowa prosto' },
-  { id: 'shoulders', label: 'Barki poziomo' },
-  { id: 'facing', label: 'Twarz przodem' },
+  { id: 'frame', label: tr('W kadrze') },
+  { id: 'head', label: tr('Głowa prosto') },
+  { id: 'shoulders', label: tr('Barki poziomo') },
+  { id: 'facing', label: tr('Twarz przodem') },
 ];
 
 const itemOk = (id: Item['id'], framing: FramingHint[], checks: CalibrationCheck[]): boolean => {
@@ -76,16 +77,16 @@ export function openCalibrator(ctx: AppCtx, onDone: (c: Calibration) => void): v
   const canvas = h('canvas', { class: 'calib-canvas', 'aria-hidden': 'true' });
   const stage = h('div', { class: 'calib-stage' }, video, canvas);
 
-  const stepLabel = h('p', { class: 'calib-step' }, 'Krok 1 z 2');
-  const title = h('h1', null, 'Usiądź najprościej, jak umiesz');
-  const lead = h('p', { class: 'fine' }, 'Wejdź w zarys na obrazie. Gdy wszystko się zaświeci, kalibracja ruszy sama.');
+  const stepLabel = h('p', { class: 'calib-step' }, tr('Krok 1 z 2'));
+  const title = h('h1', null, tr('Usiądź najprościej, jak umiesz'));
+  const lead = h('p', { class: 'fine' }, tr('Wejdź w zarys na obrazie. Gdy wszystko się zaświeci, kalibracja ruszy sama.'));
   const list = h('ul', { class: 'calib-list' }, ITEMS.map((it) => (it.li = h('li', null, h('span', { class: 'tick', 'aria-hidden': 'true' }), it.label))));
   const hint = h('p', { class: 'calib-hint', 'aria-live': 'polite' });
   const extra = h('div', { class: 'calib-extra' });
   const primary = h('button', { class: 'btn primary', hidden: true });
-  const secondary = h('button', { class: 'btn ghost' }, 'Później');
+  const secondary = h('button', { class: 'btn ghost' }, tr('Później'));
   const panel = h('aside', { class: 'calib-panel' }, stepLabel, title, lead, list, hint, extra, h('div', { class: 'row' }, primary, secondary));
-  const el = h('div', { class: 'calib', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Kalibracja postawy' }, stage, panel);
+  const el = h('div', { class: 'calib', role: 'dialog', 'aria-modal': 'true', 'aria-label': tr('Kalibracja postawy') }, stage, panel);
   root.append(el);
 
   let phase: Phase = 'align';
@@ -156,17 +157,17 @@ export function openCalibrator(ctx: AppCtx, onDone: (c: Calibration) => void): v
   const startCapture = async () => {
     phase = 'capture';
     progress = 0;
-    hint.textContent = 'Nie ruszaj się…';
+    hint.textContent = tr('Nie ruszaj się…');
     const cal = await a.calibrate(5, (f, checks) => {
       progress = f;
       if (checks.length) hint.textContent = checks[0].text;
-      else hint.textContent = 'Nie ruszaj się…';
+      else hint.textContent = tr('Nie ruszaj się…');
     });
     if (closed) return;
     if (!cal) {
       phase = 'align';
       okSince = null;
-      hint.textContent = 'Nie udało się – sprawdź, czy głowa i barki są w kadrze, i spróbuj jeszcze raz.';
+      hint.textContent = tr('Nie udało się – sprawdź, czy głowa i barki są w kadrze, i spróbuj jeszcze raz.');
       return;
     }
     tall = cal;
@@ -179,19 +180,19 @@ export function openCalibrator(ctx: AppCtx, onDone: (c: Calibration) => void): v
     phase = 'intro2';
     intro2Start = performance.now();
     progress = 0;
-    stepLabel.textContent = 'Krok 2 z 2';
-    title.textContent = 'Teraz usiądź tak, jak zwykle przy pracy';
-    lead.textContent = 'Nie poprawiaj się – nawet jeśli zwykle się garbisz. Z różnicy między krokami Upright dopasuje czułość do Ciebie.';
+    stepLabel.textContent = tr('Krok 2 z 2');
+    title.textContent = tr('Teraz usiądź tak, jak zwykle przy pracy');
+    lead.textContent = tr('Nie poprawiaj się – nawet jeśli zwykle się garbisz. Z różnicy między krokami Upright dopasuje czułość do Ciebie.');
     list.hidden = true;
     extra.replaceChildren(h('div', { class: 'slouch-demo', html: SLOUCH_FIGURE }));
-    setButtons('Zacznij teraz', 'Pomiń');
+    setButtons(tr('Zacznij teraz'), tr('Pomiń'));
   };
 
   const startCapture2 = async () => {
     phase = 'capture2';
     progress = 0;
     setButtons(null, null);
-    hint.textContent = 'Siedź zwyczajnie…';
+    hint.textContent = tr('Siedź zwyczajnie…');
     slouch = await a.captureSlouch(4, (f) => (progress = f));
     if (closed) return;
     slouchPose = a.currentPose ? a.currentPose.map((p) => ({ ...p })) : null;
@@ -208,19 +209,19 @@ export function openCalibrator(ctx: AppCtx, onDone: (c: Calibration) => void): v
     const verdict = judgeCalibration(tall!, slouch!);
     const range = Math.max(0, Math.round(((tall!.neckRatio - slouch!.neckRatio) / tall!.neckRatio) * 100));
     const dist = estimateDistanceCm(tall!.eyeDistPx, a.video.videoWidth || 640);
-    stepLabel.textContent = 'Wynik';
-    title.textContent = verdict.ok ? 'Kalibracja gotowa' : 'Sprawdźmy jeszcze raz';
-    lead.textContent = verdict.ok ? `Twój zakres: ${range}%. Czułość dopasowana do Ciebie.` : verdict.warning ?? '';
+    stepLabel.textContent = tr('Wynik');
+    title.textContent = verdict.ok ? tr('Kalibracja gotowa') : tr('Sprawdźmy jeszcze raz');
+    lead.textContent = verdict.ok ? tr('Twój zakres: {r}%. Czułość dopasowana do Ciebie.', { r: range }) : verdict.warning ?? '';
     hint.textContent = '';
     extra.replaceChildren(
-      h('div', { class: 'compare' }, skeletonCard('Prosto', tallPose, tallPose, true), skeletonCard('Zwykle', slouchPose, tallPose, false)),
+      h('div', { class: 'compare' }, skeletonCard(tr('Prosto'), tallPose, tallPose, true), skeletonCard(tr('Zwykle'), slouchPose, tallPose, false)),
       h('ul', { class: 'calib-summary' },
-        h('li', null, h('span', null, 'Barki'), h('b', null, `${Math.abs(tall!.shoulderTiltDeg).toFixed(0)}°`)),
-        h('li', null, h('span', null, 'Głowa'), h('b', null, `${Math.abs(tall!.headRollDeg).toFixed(0)}°`)),
-        dist ? h('li', null, h('span', null, 'Odległość od ekranu'), h('b', null, `ok. ${dist} cm`)) : null,
+        h('li', null, h('span', null, tr('Barki')), h('b', null, `${Math.abs(tall!.shoulderTiltDeg).toFixed(0)}°`)),
+        h('li', null, h('span', null, tr('Głowa')), h('b', null, `${Math.abs(tall!.headRollDeg).toFixed(0)}°`)),
+        dist ? h('li', null, h('span', null, tr('Odległość od ekranu')), h('b', null, tr('ok. {d} cm', { d: dist }))) : null,
       ),
     );
-    setButtons(verdict.ok ? 'Gotowe' : 'Powtórz kalibrację', verdict.ok ? 'Powtórz' : 'Zapisz mimo to');
+    setButtons(verdict.ok ? tr('Gotowe') : tr('Powtórz kalibrację'), verdict.ok ? tr('Powtórz') : tr('Zapisz mimo to'));
     primary.dataset.action = verdict.ok ? 'save' : 'restart';
     secondary.dataset.action = verdict.ok ? 'restart' : 'save';
     primary.focus();
@@ -231,12 +232,12 @@ export function openCalibrator(ctx: AppCtx, onDone: (c: Calibration) => void): v
     okSince = null;
     tall = slouch = null;
     tallPose = slouchPose = null;
-    stepLabel.textContent = 'Krok 1 z 2';
-    title.textContent = 'Usiądź najprościej, jak umiesz';
-    lead.textContent = 'Usiądź głęboko, unieś mostek, cofnij brodę. Gdy wszystko się zaświeci, kalibracja ruszy sama.';
+    stepLabel.textContent = tr('Krok 1 z 2');
+    title.textContent = tr('Usiądź najprościej, jak umiesz');
+    lead.textContent = tr('Usiądź głęboko, unieś mostek, cofnij brodę. Gdy wszystko się zaświeci, kalibracja ruszy sama.');
     list.hidden = false;
     extra.replaceChildren();
-    setButtons(null, 'Później');
+    setButtons(null, tr('Później'));
     delete primary.dataset.action;
     delete secondary.dataset.action;
   };
@@ -265,7 +266,7 @@ export function openCalibrator(ctx: AppCtx, onDone: (c: Calibration) => void): v
 
     if (phase === 'align' || phase === 'count') {
       for (const it of ITEMS) it.li!.classList.toggle('ok', !!m && itemOk(it.id, framing, checks));
-      hint.textContent = framing[0]?.text ?? checks[0]?.text ?? (m ? 'Świetnie – nie ruszaj się.' : 'Szukam Cię w kadrze…');
+      hint.textContent = framing[0]?.text ?? checks[0]?.text ?? (m ? tr('Świetnie – nie ruszaj się.') : tr('Szukam Cię w kadrze…'));
     }
     if (phase === 'align') {
       progress = 0;
@@ -284,12 +285,12 @@ export function openCalibrator(ctx: AppCtx, onDone: (c: Calibration) => void): v
       } else if (left <= 0) {
         void startCapture();
       } else {
-        hint.textContent = `Start za ${Math.ceil(left)}…`;
+        hint.textContent = tr('Start za {n}…', { n: Math.ceil(left) });
       }
     } else if (phase === 'intro2') {
       const left = STEP2_AUTOSTART_S - (now - intro2Start) / 1000;
       if (left <= 0) void startCapture2();
-      else hint.textContent = `Zaczynam za ${Math.ceil(left)} s…`;
+      else hint.textContent = tr('Zaczynam za {n} s…', { n: Math.ceil(left) });
     }
 
     draw(canvas, video.videoWidth ? video : a.video, pose, {
@@ -303,7 +304,7 @@ export function openCalibrator(ctx: AppCtx, onDone: (c: Calibration) => void): v
     });
     raf = requestAnimationFrame(loop);
   };
-  setButtons(null, 'Później');
+  setButtons(null, tr('Później'));
   raf = requestAnimationFrame(loop);
 }
 
