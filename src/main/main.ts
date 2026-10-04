@@ -12,6 +12,7 @@ import { Store } from './db';
 import { ActivityCounter } from './activity';
 import { ensureModels, findModel, modelsReady } from './models';
 import { buildStats, localDate } from '../core/insights';
+import { carePattern } from '../core/carePattern';
 import { ERGONOMIC_TIP, ISSUE_LABEL } from '../core/coach';
 import { setLang, tr } from '../shared/i18n';
 
@@ -424,9 +425,10 @@ function statsNow() {
   const dayStart = new Date(new Date().setHours(0, 0, 0, 0)).getTime();
   // Od północy 29 dni temu: pełne 30 dni kalendarzowych dla zakresu „Ostatni miesiąc” w Statystykach.
   const since = new Date(dayStart).setDate(new Date(dayStart).getDate() - 29);
-  return buildStats({
+  const samples = store.minutesSince(since);
+  const stats = buildStats({
     now,
-    samples: store.minutesSince(since),
+    samples,
     breaksToday: store.countEvents('break-done', dayStart),
     alertsToday: store.countEvents('alert', dayStart),
     breakTimes: store.eventTimes('break-done', dayStart),
@@ -435,6 +437,7 @@ function statsNow() {
     breakHistory: store.eventTimes('break-done', since),
     alertHistory: store.eventTimes('alert', since),
   });
+  return { ...stats, care: carePattern(samples, now) };
 }
 
 /** Podsumowanie dnia po godzinie końca pracy (raz dziennie). */
