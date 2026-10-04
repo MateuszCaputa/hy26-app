@@ -298,7 +298,8 @@ export class LiveView {
     this.fatNum.textContent = fatOn ? `${f!.percent}%` : '–';
     this.fatBar.style.width = fatOn ? `${f!.percent}%` : '0';
     if (fatOn) this.fatBar.dataset.level = f!.level;
-    this.why.update(fatOn ? f : null);
+    // „Dlaczego X%?” tylko w trybie prezentacji (Ustawienia → symulacja zmęczenia); na co dzień panel zostaje prosty.
+    this.why.update(fatOn && f!.simulated ? f : null);
     this.simBadge.hidden = !(fatOn && f!.simulated);
     // W „Szczegółach” tylko surowe liczby z oczu.
     // Zanim zbierze się średnia (30 s spokoju): liczba mrugnięć na żywo, żeby było widać, że licznik działa.
