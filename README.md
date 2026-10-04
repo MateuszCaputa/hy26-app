@@ -53,19 +53,21 @@ Dane demo trafiają do osobnego katalogu `demo-data` i nie mieszają się z Twoi
 
 ## Jak liczona jest ocena
 
-Kamera stoi zwykle na monitorze, więc widzi Cię z przodu. Pochylenia do przodu nie da się wtedy zmierzyć wprost, dlatego aplikacja mierzy jego skutki względem Twojej kalibracji:
+Kamera stoi zwykle na monitorze, więc widzi Cię z przodu. Aplikacja mierzy odchylenia względem Twojej kalibracji; pochylenie głowy bierze dodatkowo z ustawienia twarzy (model twarzy MediaPipe):
 
 | Metryka | Jak liczona | Próg ostrzeżenia |
 | --- | --- | --- |
-| Głowa wysunięta / opadanie szyi | pionowa odległość nos–linia barków ÷ szerokość barków | spadek > 15% |
+| Głowa wysunięta / opadanie szyi | pionowa odległość nos–linia barków ÷ szerokość barków (i pochylenie głowy w dół) | spadek > 15% |
+| Głowa odchylona do tyłu | pochylenie głowy w górę względem kalibracji | > 15° |
 | Garbienie | wysokość linii uszu nad barkami ÷ szerokość barków | spadek > 10% |
+| Barki uniesione | barki podchodzą do uszu (szyja „krótsza” bez opadania głowy) | spadek > 15% |
 | Przechył barków | kąt linii barków | > 5° |
 | Za blisko ekranu | rozstaw oczu w pikselach | twarz większa o > 15% |
 | Przechył głowy | kąt linii oczu | > 10° |
 | Skręt tułowia | szerokość barków ÷ rozstaw oczu | spadek > 15% |
 | Długi bezruch | ruch głowy w oknie 5 min | prawie zero przez > 30 min |
 
-Kara dla metryki rośnie od połowy progu do 1,5 progu; wynik = 100 × (1 − ważona suma kar ÷ 0,6), wygładzony ok. 12 s. Wagi: głowa 30%, garbienie 25%, barki 15%, odległość 15%, przechył głowy 10%, skręt 5%. Suwak „Czułość oceny” mnoży wszystkie progi (0,7–1,4).
+Kara dla metryki rośnie od połowy progu do 1,5 progu; wynik = 100 × (1 − ważona suma kar ÷ 0,6), wygładzony ok. 12 s. Wagi: głowa wysunięta 30%, garbienie 25%, głowa odchylona 15%, barki uniesione 15%, przechył barków 15%, odległość 15%, przechył głowy 10%, skręt 5%. Suwak „Czułość oceny” mnoży wszystkie progi (0,7–1,4).
 
 Wskaźnik zmęczenia = ważona suma składowych 0–1 (PERCLOS 30%, bardzo rzadkie (< 4/min) lub bardzo częste (> 28/min) mruganie 20%, długie mrugnięcia 15%, ziewanie 10%, spadek postawy 15%, czas od przerwy 10%), wygładzona ok. 60 s. Gdy dane z oczu są niewiarygodne (słabe światło, < 12 klatek/s), wskaźnik nie jest pokazywany. Mruganie liczymy z 3 minut, bez chwil, gdy mówisz; mało mrugnięć przy ekranie (ok. 7/min) to zmęczenie oczu, nie senność. Zamknięcia oczu przy głowie pochylonej w dół (klawiatura) i dłuższe niż 3 s nie są liczone. Progi oka są dopasowane do osoby. Szczegóły, źródła i wyniki testu: `docs/BADANIE-OCZU.md`. Wskaźnik orientacyjny, nie diagnoza medyczna.
 
@@ -96,7 +98,7 @@ src/core/       czysta logika (bez Electrona, w pełni testowana)
   breakEngine.ts  przerwy: 20-20-20, mikro, ruchowe, adaptacyjne
   coach.ts        komunikaty, ćwiczenia, porady ergonomiczne
   aggregate.ts    próbki minutowe, trend postawy
-  insights.ts     wskaźnik formy, mapa godzin, wpływ snu
+  insights.ts     statystyki dnia i tygodnia, porównanie z wczoraj
 src/main/       proces główny: okno, zasobnik, SQLite (node:sqlite), modele
 src/renderer/   interfejs i analizator (kamera + MediaPipe)
 test/           testy jednostkowe
