@@ -12,7 +12,7 @@ import { Store } from './db';
 import { ActivityCounter } from './activity';
 import { ensureModels, findModel, modelsReady } from './models';
 import { buildStats, localDate } from '../core/insights';
-import { ERGONOMIC_TIP, ISSUE_LABEL, ISSUE_TIP } from '../core/coach';
+import { ERGONOMIC_TIP, ISSUE_LABEL } from '../core/coach';
 
 const argv = process.argv.slice(1);
 const flag = (name: string) => argv.find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
@@ -139,23 +139,19 @@ function updateTray(): void {
     : `Upright – postawa ${s.score ?? '–'}/100${s.fatigue ? `, zmęczenie ${s.fatigue.percent}%` : ''}`;
   tray.setToolTip(label);
 
-  // Szybki podgląd bez otwierania okna: liczby + najczęstsze akcje.
+  // Szybki podgląd bez otwierania okna: tylko to, co na głównym ekranie (postawa i zmęczenie).
   const info: string[] = [];
   if (present) {
     // Bez liczby: macOS zamraża treść otwartego menu, a liczba obok ikony odświeża się na żywo.
     info.push(`Postawa: ${STATE_WORD[s.state] ?? ''}`);
-    if (s.energy) {
-      const low = s.energy.minutesToLow !== null ? ` · spadek <30% za ~${s.energy.minutesToLow} min` : '';
-      info.push(`Energia do pracy: ${s.energy.percent}%${low}`);
-    }
     if (s.fatigue) info.push(`Zmęczenie: ${s.fatigue.percent}%`);
-    info.push(`Od przerwy: ${Math.round(s.minutesSinceBreak)} min`);
   } else info.push(label.replace('Upright – ', ''));
 
   // Menu przebudowujemy tylko, gdy zmienia się jego treść (status przychodzi kilka razy na sekundę).
   const key = [...info, paused, settings.miniWidget, settings.widgetStyle].join('|');
   if (key === trayMenuKey) return;
   trayMenuKey = key;
+  // Krótko: przerwa i pauza, potem okno i ustawienia widgetu. Podgląd powiadomień jest w Ustawieniach, statystyki w oknie.
   tray.setContextMenu(
     Menu.buildFromTemplate([
       ...info.map((l) => ({ label: l, enabled: false })),
@@ -170,29 +166,10 @@ function updateTray(): void {
       },
       paused
         ? { label: 'Wznów analizę', click: () => setPaused(false) }
-        : { label: 'Wstrzymaj na 30 min', click: () => setPaused(true, 30) },
-      ...(paused ? [] : [{ label: 'Wstrzymaj do odwołania', click: () => setPaused(true) }]),
+        : { label: 'Wstrzymaj analizę', click: () => setPaused(true) },
       { type: 'separator' },
-      { label: 'Pokaż okno', click: () => showMain('live') },
-      { label: 'Statystyki', click: () => showMain('stats') },
+      { label: 'Otwórz Upright', click: () => showMain('live') },
       { label: 'Kalibracja', click: () => showMain('calibrate') },
-      // Tylko dewelopersko / w trybie demo: pokaż przypomnienie na żądanie (test i scena).
-      ...(!app.isPackaged || argv.includes('--demo')
-        ? [{
-            label: 'Pokaż przypomnienie (test)',
-            submenu: [
-              { label: 'Oczy 20-20-20', click: () => showNudge({ kind: 'eye', title: 'Spójrz w dal', body: 'Przez 20 s patrz na coś odległego (ok. 6 m).', seconds: 20 }) },
-              { label: 'Mikroprzerwa', click: () => showNudge({ kind: 'break', title: 'Mikroprzerwa', body: 'Krążenia barków' }) },
-              {
-                label: 'Postawa (Twój obecny największy problem)',
-                click: () => {
-                  const issue = lastStatus?.topIssue ?? 'headForward';
-                  showNudge({ kind: 'posture', title: ISSUE_LABEL[issue], body: ISSUE_TIP[issue] });
-                },
-              },
-            ],
-          }]
-        : []),
       {
         label: 'Mini-widget',
         submenu: [
