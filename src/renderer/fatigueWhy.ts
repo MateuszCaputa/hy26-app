@@ -32,7 +32,8 @@ export function fatigueWhy(): { el: HTMLElement; update: (f: FatigueSnapshot | n
   });
   const el = h('details', { class: 'why' }, summary,
     h('ul', { class: 'why-list' }, rows.map((x) => x.li)),
-    h('p', { class: 'why-foot' }, tr('Pasek = jak bardzo składowa podnosi zmęczenie. Brak danych = jej waga przechodzi na pozostałe.')),
+    // Uczciwość wobec użytkownika i jury (ENGINEERING §4): to heurystyka z kamery, nie badanie lekarskie.
+    h('p', { class: 'why-foot' }, `${tr('Pasek = jak bardzo składowa podnosi zmęczenie. Brak danych = jej waga przechodzi na pozostałe.')} ${tr('Wskaźnik orientacyjny, nie diagnoza medyczna.')}`),
   );
   return {
     el,
