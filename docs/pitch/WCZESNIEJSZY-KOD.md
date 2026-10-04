@@ -35,7 +35,7 @@
 - #73 Kalibracja odporna na złą postawę (dwa kroki, kontrola na żywo, dryf wzorca)
 - #74 „Bateria” (jedna liczba energii + prognoza, `energy.ts`), prostszy pierwszy ekran
 - Pełnoekranowy kalibrator z sylwetką, poziomicami i startem bez klikania (`be090f7`, `calibrator.ts`, `framing.ts`)
-- #86 Spokojny ekran główny, dokładniejsze komunikaty, usunięcie Garmina · #89 panel „na jeden rzut oka” · #96 dopracowanie widoku · #100 zmęczenie w jednej linii, losowe ćwiczenia bez powtórzeń · #106 pauza czyści nakładkę · #103 nowa nazwa **Upright**, logo i ikona · #115 krótsze menu w zasobniku
+- #86 Spokojny ekran główny, dokładniejsze komunikaty, usunięcie Garmina · #89 panel „na jeden rzut oka” · #96 dopracowanie widoku · #100 zmęczenie w jednej linii, losowe ćwiczenia bez powtórzeń · #106 pauza czyści nakładkę · #103 nowa nazwa **Upright**, logo i ikona · #115 krótsze menu w zasobniku · #117 Upright poza Dockiem i Cmd+Tab · #121 przełącznik języka PL / EN (Kacper)
 
 **Oczy i zmęczenie (Marcin, Mateusz)**
 - #77 Brak wyniku zmęczenia przy niepewnych oczach; 2+ min poza biurkiem = przerwa
