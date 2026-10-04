@@ -16,12 +16,6 @@ export const HIGH_FATIGUE = 70;
 const NECK: IssueId[] = ['headForward', 'headBack', 'headTilt'];
 const BACK: IssueId[] = ['slouch', 'shrug', 'shoulderTilt', 'twist'];
 
-const LABEL: Record<CareKind, string> = {
-  neck: 'Szyja (głowa wysunięta, odchylona lub przechylona)',
-  back: 'Plecy i barki (garbienie, uniesione lub krzywe barki)',
-  eyes: 'Oczy (rzadkie mruganie lub wysokie zmęczenie)',
-};
-
 interface DayLoad {
   neck: number; // minuty
   back: number;
@@ -81,9 +75,7 @@ export function carePattern(samples: MinuteSample[], now: number): CarePattern {
     .filter((k) => counts[k].days >= CARE_MIN_DAYS)
     .sort((a, b) => counts[b].days - counts[a].days); // sort stabilny: remis zostawia kolejność szyja > plecy > oczy
   if (!triggered.length) return { kind: null, days: 0, evidence: [] };
-  const evidence = triggered.map((k) => {
-    const c = counts[k];
-    return `${LABEL[k]}: ${c.days} z ${CARE_WINDOW_DAYS} dni, średnio ${Math.round(c.minutes / c.days)} min dziennie`;
-  });
+  // Same liczby; tekst (w języku interfejsu) składa renderer/careCard.ts.
+  const evidence = triggered.map((k) => ({ kind: k, days: counts[k].days, avgMinutes: Math.round(counts[k].minutes / counts[k].days) }));
   return { kind: triggered[0], days: counts[triggered[0]].days, evidence };
 }

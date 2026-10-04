@@ -46,7 +46,7 @@ test('szyja: 7 dni po 30 min → karta; 6 dni → nie', () => {
   const r = carePattern(days(7, NECK_30), NOW);
   assert.equal(r.kind, 'neck');
   assert.equal(r.days, 7);
-  assert.match(r.evidence[0], /7 z 14 dni, średnio 30 min/);
+  assert.deepEqual(r.evidence[0], { kind: 'neck', days: 7, avgMinutes: 30 });
   assert.equal(carePattern(days(6, NECK_30), NOW).kind, null);
 });
 
@@ -89,6 +89,6 @@ test('kilka wzorców: wygrywa ten z większą liczbą dni, dowody dla wszystkich
   assert.equal(r.kind, 'eyes');
   assert.equal(r.days, 11);
   assert.equal(r.evidence.length, 2);
-  assert.match(r.evidence[0], /^Oczy/);
-  assert.match(r.evidence[1], /^Szyja/);
+  assert.equal(r.evidence[0].kind, 'eyes');
+  assert.equal(r.evidence[1].kind, 'neck');
 });

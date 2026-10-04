@@ -254,7 +254,16 @@ export type CareKind = 'neck' | 'back' | 'eyes';
 export interface CarePattern {
   kind: CareKind | null;
   days: number;
-  evidence: string[];
+  /** Spełnione wzorce (najwięcej dni pierwszy): liczby, tekst składa renderer. */
+  evidence: CareEvidence[];
+}
+
+export interface CareEvidence {
+  kind: CareKind;
+  /** Dni z 14 z wzorcem. */
+  days: number;
+  /** Średnio minut dziennie z problemem w tych dniach. */
+  avgMinutes: number;
 }
 
 export interface AppEvent {
