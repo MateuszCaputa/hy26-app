@@ -9,6 +9,7 @@
   "private": true,
   "scripts": {
     "build": "node build.mjs",
+    "prestart": "node scripts/dev-brand.mjs",
     "start": "node build.mjs && electron .",
     "dev": "node build.mjs --watch",
     "typecheck": "tsc --noEmit -p tsconfig.json",
@@ -65,7 +66,7 @@
       "icon": "assets/icon.png",
       "category": "public.app-category.healthcare-fitness",
       "extendInfo": {
-        "NSCameraUsageDescription": "Postura analizuje postawę i mrugnięcia z obrazu kamery. Obraz nie opuszcza komputera i nie jest zapisywany."
+        "NSCameraUsageDescription": "Upright analizuje postawę i mrugnięcia z obrazu kamery. Obraz nie opuszcza komputera i nie jest zapisywany."
       }
     },
     "linux": {

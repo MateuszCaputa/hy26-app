@@ -14,6 +14,8 @@ import { ensureModels, findModel, modelsReady } from './models';
 import { buildStats, localDate } from '../core/insights';
 import { ERGONOMIC_TIP, ISSUE_LABEL } from '../core/coach';
 
+// Nazwa w menu, oknach i „O programie” (w trybie deweloperskim system i tak bierze nazwę z Electron.app – patrz scripts/dev-brand.mjs).
+app.setName('Upright');
 const argv = process.argv.slice(1);
 const flag = (name: string) => argv.find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
 const DEBUG_SHOT = flag('screenshot'); // zrzut okna i zamknięcie (testy)
@@ -358,7 +360,8 @@ function showNudge(nudge: Nudge): void {
       webPreferences: { preload: path.join(__dirname, '..', 'preload.js'), contextIsolation: true, sandbox: true },
     });
     nudgeWin.setAlwaysOnTop(true, 'floating');
-    nudgeWin.setVisibleOnAllWorkspaces(true);
+    // skipTransformProcessType: bez tego macOS przełącza aplikację w tryb „pierwszoplanowy” – wraca do Docka i Cmd+Tab jako „Electron”.
+    nudgeWin.setVisibleOnAllWorkspaces(true, { skipTransformProcessType: true });
     const win = nudgeWin;
     win.on('closed', () => {
       if (nudgeWin === win) nudgeWin = null;
@@ -518,8 +521,10 @@ void app.whenReady().then(async () => {
   session.defaultSession.setPermissionRequestHandler((_wc, permission, cb) => cb(permission === 'media' || permission === 'notifications'));
   session.defaultSession.setPermissionCheckHandler((_wc, permission) => permission === 'media' || permission === 'notifications');
   if (process.platform === 'darwin') {
-    await systemPreferences.askForMediaAccess('camera').catch(() => false);
+    // Tylko w pasku menu: bez ikony w Docku i bez pozycji w Cmd+Tab (przed pytaniem o kamerę, żeby nie mignęła).
+    app.setActivationPolicy('accessory');
     app.dock?.hide();
+    await systemPreferences.askForMediaAccess('camera').catch(() => false);
   }
   if (process.platform === 'win32') app.setAppUserModelId('pl.postura.app');
 
