@@ -81,7 +81,7 @@ Mentorzy mówili wprost, że źle oceniają prace, które wyglądają na zrobion
 - [ ] **Sprzątanie kodu** – bezpieczne poprawki (S1–S10) jako szkic PR na gałęzi `mateusz/cleanup`: przetestować aplikację na tej gałęzi i zatwierdzić jednym ruchem.
 
 ## 4. Zgłoszenie na HackTribe (wymagane przez regulamin)
-- [ ] Tytuł projektu: **Postura**
+- [ ] Tytuł projektu: **Upright** (tak nazywa się aplikacja w interfejsie; wewnętrznie kod nadal używa „postura”)
 - [ ] Nazwa zespołu: ___
 - [ ] Lista członków (1–6): Mateusz, Kacper, Marcin, Bartłomiej
 - [ ] Opis projektu (PL albo EN)
