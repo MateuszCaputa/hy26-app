@@ -46,15 +46,19 @@ const CLOSE_OFF = 0.42;
 /** Długie mrugnięcie = oko naprawdę zamknięte przez większość czasu, nie seria szybkich mrugnięć. */
 const LONG_MIN_CLOSED_SHARE = 0.6;
 const PERCLOS_CLOSED = 0.8; // oko zamknięte w co najmniej 80%
-const YAWN_JAW = 0.55;
+const YAWN_JAW = 0.55; // szczęka otwarta szerzej niż przy mówieniu (do wykrywania mówienia)
+// Ziewnięcie z histerezą: start przy 0,5, koniec dopiero przy prawie zamkniętych ustach (< 0,25). Test na żywo:
+// długie ziewnięcie przymyka się w połowie do ~0,4 – jeden próg 0,55 liczył je podwójnie, a 6,3 s odrzucał limit 6 s.
+const YAWN_ON = 0.5;
+const YAWN_OFF = 0.25;
 const YAWN_MIN_SEC = 1.5;
-const YAWN_MAX_SEC = 6; // dłużej otwarte usta = jedzenie, picie, śmiech – nie ziewnięcie
+const YAWN_MAX_SEC = 8; // dłużej otwarte usta = jedzenie, picie, śmiech – nie ziewnięcie
 const MIN_FPS_FOR_BLINKS = 12;
 /** Głowa pochylona o tyle w dół względem wzorca = patrzenie na klawiaturę: nie oceniamy powiek. */
 export const GAZE_DOWN_DEG = 12;
 /** Okno liczby mrugnięć: mruganie zmienia się 4–5× z czynnością, 60 s to za mało (BADANIE-OCZU #6). */
 const BLINK_WINDOW_SEC = 180;
-const BLINK_MIN_SPAN_SEC = 60;
+const BLINK_MIN_SPAN_SEC = 30; // pierwsza średnia po 30 s (wcześniej 60 s – panel długo pokazywał „–”)
 /** Mówienie: żuchwa „pracuje” (odchylenie jawOpen w 2 s), ale nie jest otwarta jak przy ziewaniu. */
 const TALK_JAW_STD = 0.08;
 
@@ -293,13 +297,13 @@ export class EyeAnalyzer {
       }
     }
 
-    // Ziewanie: usta szeroko otwarte 1,5–6 s i zamknięte z powrotem (dłużej = jedzenie, picie, śmiech).
-    if (f.jawOpen !== null && f.jawOpen >= YAWN_JAW) {
+    // Ziewanie: usta szeroko otwarte 1,5–8 s i zamknięte z powrotem (dłużej = jedzenie, picie, śmiech).
+    if (f.jawOpen !== null && f.jawOpen >= YAWN_ON) {
       if (this.yawnStart === null) {
         this.yawnStart = t;
         this.yawnCounted = false;
       }
-    } else if (this.yawnStart !== null) {
+    } else if (this.yawnStart !== null && (f.jawOpen === null || f.jawOpen < YAWN_OFF)) {
       const d = t - this.yawnStart;
       if (d >= YAWN_MIN_SEC && d <= YAWN_MAX_SEC && !this.yawnCounted) {
         this.yawns.push(t);

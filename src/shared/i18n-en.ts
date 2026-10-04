@@ -364,4 +364,5 @@ export const EN: Record<string, string> = {
   ' (symulacja)': ' (simulation)',
   'Pobrano {p}%': 'Downloaded {p}%',
   'Nie udało się pobrać {f} (HTTP {s})': 'Couldn’t download {f} (HTTP {s})',
+  '{n} · liczę średnią': '{n} · averaging',
 };
