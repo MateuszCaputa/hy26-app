@@ -267,7 +267,7 @@ export function openCalibrator(ctx: AppCtx, onDone: (c: Calibration) => void): v
         lastLoopWarn = t;
         console.warn('[calibrator] błąd klatki, próbuję dalej', err);
       }
-      if (phase === 'align' || phase === 'count') hint.textContent = 'Chwilka… próbuję ponownie.';
+      if (phase === 'align' || phase === 'count') hint.textContent = tr('Chwilka… próbuję ponownie.');
     }
     raf = requestAnimationFrame(loop);
   };
