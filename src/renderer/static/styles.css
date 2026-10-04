@@ -256,6 +256,16 @@ button, input, select { font: inherit; color: inherit; }
 .stats .page-head { align-items: center; flex-wrap: wrap; }
 .stats .block { gap: 12px; }
 .stats-body { display: grid; gap: 26px; }
+/* Karta „Do kogo iść?” (careCard.ts): spokojna, bez alarmowych kolorów; czerwony tylko dla „Nie czekaj”. */
+.care { max-width: 68ch; }
+.care p { margin: 0; }
+.care-routes, .care-evidence { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
+.care-tip { padding: 10px 14px; background: var(--surface); border-radius: var(--radius-sm); }
+.care-flags { font-size: 14px; }
+.care-flags strong:first-child { color: var(--bad); }
+.care-more { display: grid; gap: 10px; }
+.care-more > summary { cursor: pointer; color: var(--brand); font-size: 14px; width: fit-content; }
+.care-more[open] { gap: 12px; }
 /* Zakres zamiast nagłówka „Dziś”: select wygląda jak nagłówek sekcji ze strzałką. */
 .range-select {
   appearance: none; -webkit-appearance: none; cursor: pointer;
