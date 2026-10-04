@@ -301,7 +301,9 @@ export class LiveView {
     this.why.update(fatOn ? f : null);
     this.simBadge.hidden = !(fatOn && f!.simulated);
     // W „Szczegółach” tylko surowe liczby z oczu.
-    const blinks = f?.blinkRate != null ? `${Math.round(f.blinkRate)}/min` : '–';
+    // Zanim zbierze się średnia (30 s spokoju): liczba mrugnięć na żywo, żeby było widać, że licznik działa.
+    const eyes = this.lastFrame?.eyes;
+    const blinks = f?.blinkRate != null ? `${Math.round(f.blinkRate)}/min` : eyes && eyes.blinksTotal > 0 ? tr('{n} · liczę średnią', { n: eyes.blinksTotal }) : '–';
     const yawns = f ? tr('{n} w 10 min', { n: f.yawns10m }) : '–';
     this.blinkVal.textContent = blinks;
     this.yawnVal.textContent = yawns;

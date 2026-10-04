@@ -140,3 +140,26 @@ test('płytkie mrugnięcia (punkty powiek domykają się tylko do ok. 0,45) są 
   const r = eyes.blinkRate(180)!;
   assert.ok(r > 17 && r < 23, `rate ${r}`);
 });
+
+test('ziewanie z nagrania na żywo: długie z przymknięciem w środku liczy się raz, w sumie 3', () => {
+  // Profil otwarcia szczęki jak w teście na żywo (30 kl./s): ziewnięcie 6,3 s z przymknięciem do 0,41 w połowie,
+  // potem dwa ziewnięcia po ~4 s z pełnym zamknięciem ust między nimi.
+  const e = new EyeAnalyzer(0.3);
+  const segs: [number, number][] = [
+    [2, 0.05], [2.5, 0.8], [0.3, 0.41], [3.5, 0.62], [0.8, 0.02], // ziewnięcie 1 (6,3 s otwarcia)
+    [4, 0.6], [1.3, 0.0], // ziewnięcie 2
+    [4, 0.67], [2, 0.01], // ziewnięcie 3
+  ];
+  let t = 0;
+  for (const [sec, jaw] of segs) {
+    for (let i = 0; i < sec * 30; i++, t += 1 / 30) e.update(t, { ear: 0.28, blinkBlend: 0.1, jawOpen: jaw });
+  }
+  assert.equal(e.yawns10m(t), 3);
+});
+
+test('mówienie (szczęka w ruchu, ale nisko) to nie ziewnięcie', () => {
+  const e = new EyeAnalyzer(0.3);
+  let t = 0;
+  for (let i = 0; i < 30 * 20; i++, t += 1 / 30) e.update(t, { ear: 0.28, blinkBlend: 0.1, jawOpen: 0.1 + 0.25 * Math.abs(Math.sin(i / 3)) });
+  assert.equal(e.yawns10m(t), 0);
+});
