@@ -41,7 +41,7 @@ Drobny brak na `main` (dla Kacpra): w Statystykach po angielsku słowo „alerty
 | **PDF maks. 10 slajdów** | ❌ | do zrobienia rano (szkic układu slajdów w SUBMISSION.md) |
 | Wideo / zrzuty / link do repo (opcjonalne, ale w 1. rundzie to „pokazuje” aplikację) | ⚠️ | zrzuty demo nocą; zrzuty z kamery + wideo rano |
 | Ujawnienie użycia AI, modeli, danych | ⚠️ | nocny PR uzupełnia `AI_USAGE.md` (modele MediaPipe, licencje) |
-| Oddzielenie kodu sprzed hackathonu | ⚠️ | Kacper opisuje w `AI_USAGE.md`, co istniało wcześniej |
+| Oddzielenie kodu sprzed hackathonu | ✅ | brak kodu sprzed startu – projekt zaczęty od zera 3.10 o 11:00 (zapisane w `AI_USAGE.md`) |
 | Zespół umie wyjaśnić każdy moduł | ⚠️ | 30 min „wytłumacz nam” + `docs/ARCHITECTURE.md` (w PR #110) |
 | Prywatność, bez diagnoz i rozpoznawania emocji | ✅ | jedno zdanie „wskaźnik, nie diagnoza” w samej aplikacji |
 | Brak zmian po terminie | ⚠️ | potwierdzić termin, tag `v1.0-submission`, potem stop |
@@ -67,7 +67,7 @@ Drobny brak na `main` (dla Kacpra): w Statystykach po angielsku słowo „alerty
 Mentorzy mówili wprost, że źle oceniają prace, które wyglądają na zrobione przez AI bez zrozumienia. Regulamin też: **zespół musi umieć wyjaśnić każdą decyzję techniczną**.
 - [ ] **Każda osoba umie w 2–3 zdaniach wyjaśnić**: jak liczymy postawę (kalibracja → odchylenia), mruganie i zmęczenie (EAR, PERCLOS, próg dopasowany do osoby), dlaczego wszystko jest lokalnie (MediaPipe na urządzeniu, tylko liczby w bazie), jak działają przypomnienia i przerwy.
 - [ ] **30 min wspólnego „wytłumacz nam”** rano (każdy pyta Claude'a o swój i cudzy obszar, potem tłumaczy reszcie własnymi słowami).
-- [ ] **`AI_USAGE.md` aktualny** – jakich narzędzi AI użyliśmy, co było przed hackathonem (prototyp Kacpra), co powstało w trakcie.
+- [ ] **`AI_USAGE.md` aktualny** – jakich narzędzi AI użyliśmy, projekt zaczęty od zera na HackYeah, lista tego, co powstało w trakcie. ✅ zrobione (#126)
 - [ ] **Przygotowane odpowiedzi na trudne pytania**: „czym się różnicie od Straighty / Rest & Blink?”, „czy to wyrób medyczny?”, „czy działa w okularach / przy innym kolorze skóry?”, „co z RODO / AI Act?” (materiał: `docs/BADANIE-OCZU.md`, `research/BATERIA-vision.md` §7).
 
 ## 3. Aplikacja – ostatnie rzeczy
@@ -83,7 +83,7 @@ Mentorzy mówili wprost, że źle oceniają prace, które wyglądają na zrobion
 ## 3a. Z audytu kodu (`docs/CLEANUP.md`, sekcja B) – braki względem wymagań zadania
 - [ ] **❌ Filar „dostęp do opieki zdrowotnej” – największa dziura** (kryterium „Relation to category”, 20%). W aplikacji jest tylko jedno zdanie „skonsultuj się z fizjoterapeutą”. **Minimum:** karta NFZ (lekarz rodzinny / fizjoterapeuta / okulista, TIP NFZ 800 190 590, niepokojące objawy → 112) + prosty wydruk podsumowania z 14 dni, pokazywane, gdy problem się utrzymuje. — kto: Marcin (+ Kacper do wykrycia wzorca)
 - [ ] **⚠️ Dobrostan psychiczny** – mamy zmęczenie i energię, ale nie „nastrój”. „Najlepsze godziny” są liczone, ale już nie pokazywane. Ująć w pitchu jako „rytm zmęczenia i energii” albo przywrócić „najlepsze godziny”. — kto: ___
-- [ ] **⚠️ Kod sprzed hackathonu** – `AI_USAGE.md` ma jeszcze puste miejsce „*Kacper: opisz, co istniało…*”. Regulamin wymaga oddzielenia gotowego kodu od pracy na hackathonie. Kacper uzupełnia; README dostaje sekcję „Co było wcześniej”; ewentualnie tag `pre-hackathon-baseline` → `345cf6e`. — kto: Kacper
+- [x] **Kod sprzed hackathonu** – brak; projekt zaczęty od zera 3.10 o 11:00, zapisane w `AI_USAGE.md` (#126).
 - [ ] **⚠️ Ujawnienie AI w `AI_USAGE.md`** – dopisać modele MediaPipe (face_landmarker, pose_landmarker_full + lite, linki do kart modeli, licencja Apache 2.0), ikony (sprawdzić licencję), „bez zewnętrznych zbiorów danych”; usunąć wzmiankę o Claude API, bo asystent AI nie powstał. — kto: ___
 - [ ] **⚠️ „Wskaźnik, nie diagnoza” w samej aplikacji** – jedno zdanie np. w opisie zmęczenia albo w ustawieniach prywatności. — kto: Mateusz
 - [ ] **⚠️ Nazwa w systemowym pytaniu o kamerę** (`package.json` → `NSCameraUsageDescription`) wciąż mówi „Postura”, a interfejs już nowa nazwa – jury zobaczy to przy pierwszym uruchomieniu na Macu. — kto: Mateusz

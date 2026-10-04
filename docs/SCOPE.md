@@ -71,4 +71,4 @@ Full pitch beats, judge Q&A and the wow visual spec: `research/BATERIA-vision.md
 - [ ] All MUST items checked in `docs/PLAN.md`
 - [ ] `npm test` and `npm run typecheck` are green
 - [ ] Video uploaded, PDF exported, HackTribe form filled, links tested in incognito
-- [ ] `AI_USAGE.md` lists the AI tools used and what was pre-existing (Kacper's prototype) vs built at HackYeah
+- [ ] `AI_USAGE.md` lists the AI tools used and that the project was started from scratch at HackYeah (no pre-existing code)
