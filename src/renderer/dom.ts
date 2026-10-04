@@ -47,13 +47,3 @@ export const fmtMin = (m: number): string => {
   const r = Math.round(m % 60);
   return r ? `${h} h ${r} min` : `${h} h`;
 };
-
-/** Polska odmiana: 1 mrugnięcie, 2–4 mrugnięcia, 5+ mrugnięć. */
-export function plural(n: number, one: string, few: string, many: string): string {
-  const a = Math.abs(n);
-  if (a === 1) return one;
-  const d = a % 10;
-  const t = a % 100;
-  if (d >= 2 && d <= 4 && !(t >= 12 && t <= 14)) return few;
-  return many;
-}

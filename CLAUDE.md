@@ -110,7 +110,8 @@ Layout:
 <!-- one line each, add as discovered -->
 - MediaPipe models are bundled in `assets/models/` and loaded first (offline). If you switch the model file in `analyzer.ts`, put the new `.task` file there too (and in `MODELS` in `src/main/models.ts` for the download fallback).
 - Dev loop: `npm run dev` (watch, also re-copies HTML/CSS) + `npx electron .` (the dot matters). Renderer changes auto-reload the windows; `src/main/` changes need an Electron restart (tray → Zakończ). Launched from a terminal, macOS attributes permission prompts (Accessibility, camera) to that terminal app.
-- Verified 2026-10-03 14:xx on macOS / Node 22.19: `npm install`, typecheck, 17/17 tests and build are all green on main.
-- MediaPipe models currently download on first run (`src/main/models.ts`), which is a stage risk offline. Task A1 bundles them.
+- Verified 2026-10-04 ~01:00 on macOS / Node 22.19: `npm install`, typecheck, 119/119 tests and build green (branch `mateusz/cleanup` on top of main).
+- MediaPipe models are bundled in `assets/models/` and loaded first (offline start works); the download in `src/main/models.ts` is only a fallback.
+- Eye diagnostics: key **D** on the live view shows the blink counter, closure vs threshold, EAR vs reference, gaze-down and talking flags (see `docs/BADANIE-OCZU.md`).
 - Electron binary downloads on first `npx electron` run (npm 11 allow-scripts skips postinstall) — run `npx electron --version` once after `npm install`.
 - **Never replace or delete the whole repo / other people's files.** Never delete `CLAUDE.md`, `docs/`, `research/` or `.claude/`. To swap a codebase, discuss it with the team first and do it in a PR.

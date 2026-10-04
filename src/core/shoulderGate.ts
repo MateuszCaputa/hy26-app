@@ -6,6 +6,8 @@
 // nagle się przekrzywia. Wtedy przez chwilę trzymamy ostatnie dobre barki.
 // Jeśli „nowe” barki są stabilne przez dłużej, uznajemy je za prawdziwą zmianę pozycji.
 
+import { median } from './metrics';
+
 export interface ShoulderPoints {
   lx: number;
   ly: number;
@@ -38,12 +40,6 @@ interface Sample {
   tilt: number;
 }
 
-const med = (v: number[]) => {
-  const s = [...v].sort((a, b) => a - b);
-  const m = s.length >> 1;
-  return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
-};
-
 const describe = (p: ShoulderInput): Sample & { t: number } => ({
   t: 0,
   ratio: Math.hypot(p.lx - p.rx, p.ly - p.ry) / Math.max(1, p.eyeDist),
@@ -70,15 +66,15 @@ export class ShoulderGate {
 
     let ok = p.visibility >= MIN_VISIBILITY;
     if (ok && this.accepted.length >= 5) {
-      const mRatio = med(this.accepted.map((a) => a.ratio));
-      const mTilt = med(this.accepted.map((a) => a.tilt));
+      const mRatio = median(this.accepted.map((a) => a.ratio));
+      const mTilt = median(this.accepted.map((a) => a.tilt));
       ok = Math.abs(s.ratio - mRatio) / mRatio <= MAX_WIDTH_JUMP && tiltDiff(s.tilt, mTilt) <= MAX_TILT_JUMP_DEG;
 
       if (!ok && p.visibility >= MIN_VISIBILITY) {
         // Może to prawdziwa zmiana pozycji: jeśli „nowe” barki są stabilne, przyjmujemy je.
         this.candidates = this.candidates.filter((c) => t - c.t <= ACCEPT_NEW_AFTER_SEC + 0.5);
-        const cR = this.candidates.length ? med(this.candidates.map((c) => c.ratio)) : s.ratio;
-        const cT = this.candidates.length ? med(this.candidates.map((c) => c.tilt)) : s.tilt;
+        const cR = this.candidates.length ? median(this.candidates.map((c) => c.ratio)) : s.ratio;
+        const cT = this.candidates.length ? median(this.candidates.map((c) => c.tilt)) : s.tilt;
         const consistent = Math.abs(s.ratio - cR) / cR <= MAX_WIDTH_JUMP / 2 && tiltDiff(s.tilt, cT) <= MAX_TILT_JUMP_DEG / 2;
         if (!consistent) this.candidates = [];
         this.candidates.push(s);

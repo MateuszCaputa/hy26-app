@@ -16,7 +16,7 @@ function minutes(now: number, dayOffset: number, hour: number, n: number, postur
 }
 
 const NOW = new Date(2026, 9, 3, 15, 0, 0).getTime();
-const base = { now: NOW, garmin: [], garminConnected: false, breaksToday: 2, alertsToday: 1 };
+const base = { now: NOW, breaksToday: 2, alertsToday: 1 };
 
 test('wczoraj: średnie z wczorajszych minut, liczba przerw z wejścia', () => {
   const samples = [...minutes(NOW, -1, 9, 60, 70, 50, 12), ...minutes(NOW, 0, 9, 60, 90, 20, 16)];

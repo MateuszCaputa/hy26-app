@@ -157,12 +157,14 @@
 | Team 24 h data export (hook) | 📋 Roadmap 0.3 | ROADMAP Phase 0 |
 
 ## Known gaps / don't claim yet
-- **"Works offline from first start"**: false today. Models (~13 MB) download on first run from Google storage (`main/models.ts`). Claim only after A1 (N1) passes with wifi off.
-- **Neon face mesh / skeleton**: not drawn yet. Today's overlay is the spine line, shoulder/eye lines, ring and labels (`draw.ts`). Don't show mesh mockups as the real app before MP7/C2.
-- **Alert speed**: the default needs 30 s of bad posture plus ~12 s smoothing, so about **40 s**. In a live demo, lower "Powiadom po…" in Zaawansowane or use demo mode; don't say "instantly".
-- **Blinks with glasses**: unreliable (showed 0/min for Mateusz). Don't claim blink accuracy until MP6.
-- **"Why now"** today is only a generic reason line on the break overlay (`BREAK_REASON`); posture alerts show issue + tip without evidence numbers. A3/B3 add the evidence.
-- **Camera-verified exercises, Bateria recharge, doctor report, NFZ card, Team view**: not in main yet.
-- **Pause → resume freeze** (MP2) not yet verified fixed; avoid pausing on stage.
-- **Keyboard/mouse tempo** is off by default (needs macOS Accessibility), so "form" uses fatigue + posture unless enabled.
+_Updated 2026-10-04 ~01:00 (cleanup review). Check `NA-KONIEC.md` for the must-fix list._
+- **Access to healthcare (NFZ card, doctor report)**: not in the app yet (only a static "skonsultuj się z fizjoterapeutą" line). Don't show it as working until it's on main.
+- **Alert speed**: the default needs 30 s of bad posture plus ~12 s smoothing, so about **40 s**. In a live demo, use the tray test „Pokaż przypomnienie (test)” or demo mode; don't say "instantly".
+- **Blink accuracy**: fixed and live-tested (A26, `docs/BADANIE-OCZU.md`), but quote only measured numbers (e.g. "X/20 wykrytych"), never a generic accuracy.
+- **Yawns**: counting improved (PR #105); no accuracy claim.
+- **"Why now"** evidence numbers on posture alerts (A3) are not built; the break overlay gives a reason line and the fatigue panel has „Dlaczego X%?”.
+- **Camera-verified exercises (A4/A5/C6)**: on main (Marcin); thresholds not tuned on many people – demo with 1–2 exercises you rehearsed.
+- **Pause → resume** (MP2): not formally verified; avoid pausing on stage.
+- **Installers**: never built/tested; for judges, run from source or test `npm run dist:mac` first.
+- **Removed features** (don't mention): Garmin, keyboard/mouse tempo, "Godziny formy" chart, work-hours settings.
 - **Medical claims**: habit tool, not a diagnosis. Never say "diagnoses" or "detects disease".
