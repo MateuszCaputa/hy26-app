@@ -557,7 +557,15 @@ void app.whenReady().then(async () => {
   tray.on('click', () => showMain());
   applySettings(settings);
 
-  setInterval(maybeEndOfDay, 60e3);
+  // Błąd bazy albo powiadomienia w podsumowaniu dnia nie może wywołać nieobsłużonego wyjątku w main
+  // (to proces całej aplikacji) – logujemy i próbujemy znowu za minutę.
+  setInterval(() => {
+    try {
+      maybeEndOfDay();
+    } catch (err) {
+      console.warn('[main] podsumowanie dnia nie powiodło się', err);
+    }
+  }, 60e3);
   powerMonitor.on('lock-screen', () => mainWin?.webContents.send('paused', true));
   powerMonitor.on('unlock-screen', () => mainWin?.webContents.send('paused', paused));
   void debugScreenshot();
