@@ -3,6 +3,39 @@
 > **To jest najważniejsza lista.** Inne pliki (`docs/PLAN.md`, `docs/POMYSLY.md`, …) to pomysły i zaplecze – ta lista to **must-have**, bez którego nie kończymy.
 > Odhaczaj `[x]`, dopisz **kto** i **kiedy**. Ostatnia aktualizacja: niedz. 04.10, ok. 00:30.
 
+## ⏰ Plan poranka (termin zakładamy 11:00 – do potwierdzenia na Discordzie)
+| Godzina | Co | Kto |
+|---|---|---|
+| od pobudki | Discord: termin, jury, kontakt z mentorami (sekcja 0) | ___ |
+| do 07:30 | **Przejrzeć i scalić nocne PR-y** (lista niżej) – po każdym `npm test` + szybkie przeklikanie aplikacji | Mateusz |
+| 07:00 | **Zamrożenie funkcji** – potem tylko poprawki | wszyscy |
+| 07:30–08:00 | 30 min „wytłumacz nam” – każdy umie opowiedzieć każdy moduł (sekcja 2) | wszyscy |
+| 07:30–08:30 | Test: tryb prezentacji, podgląd powiadomień, interaktywne ćwiczenie, ziewanie (sekcja 3) | ___ |
+| 08:00–09:00 | **Zrzuty z prawdziwej kamery** + **nagranie wideo pitchu** | Mateusz / Bartek |
+| 09:00–10:00 | **PDF ≤ 10 slajdów** + tekst zgłoszenia (szkic w `docs/pitch/SUBMISSION.md`) | Bartek (+ wszyscy) |
+| 10:00–10:30 | **Zgłoszenie na HackTribe** + tag `v1.0-submission` + zrzut potwierdzenia | ___ |
+| 10:30–11:00 | Zapas. Po terminie **żadnych zmian** w repo i zgłoszeniu (regulamin pkt 13) | – |
+
+**Nocne PR-y do przejrzenia rano** (żaden nie jest scalony – decyzja zespołu): #105 ziewanie ≠ mówienie · #110 sprzątanie kodu · materiały do pitchu (zrzuty, szkic zgłoszenia, ujawnienie AI) · wersja angielska aplikacji · poprawki 2 błędów z audytu · karta „do kogo iść” (opcjonalna – filar „dostęp do opieki”). Linki: `gh pr list` albo zakładka Pull requests na GitHubie.
+
+## ✅ Zgodność z wymaganiami zadania (Sport & Healthcare) – stan na noc 03/04.10
+| Wymaganie (regulamin / opis zadania) | Stan | Co brakuje |
+|---|---|---|
+| Łączy **sport / ruch** | ✅ | – (ćwiczenia, przerwy, powtórzenia liczone kamerą) |
+| Łączy **zdrowie fizyczne** | ✅ | – (postawa, kalibracja, kąt głowy) |
+| Łączy **dobrostan psychiczny** | ⚠️ | mamy zmęczenie i energię, nie nastrój – w pitchu jako „rytm zmęczenia i energii” |
+| Łączy **dostęp do opieki zdrowotnej** | ❌ | w aplikacji tylko zdanie o fizjoterapeucie; opcjonalny nocny PR z kartą „do kogo iść”; minimum: w pitchu jako „co dalej” |
+| **Pomaga podejmować decyzje**, nie tylko mierzy | ✅ | – (przypomnienia, przerwa z powodem, „Dlaczego X%?”, prognoza energii) |
+| Zgłoszenie: tytuł, zespół, członkowie, opis (PL/EN) | ❌ | szkic nocą w `docs/pitch/SUBMISSION.md`; uzupełnić nazwę zespołu i nazwisko Bartka |
+| **PDF maks. 10 slajdów** | ❌ | do zrobienia rano (szkic układu slajdów w SUBMISSION.md) |
+| Wideo / zrzuty / link do repo (opcjonalne, ale w 1. rundzie to „pokazuje” aplikację) | ⚠️ | zrzuty demo nocą; zrzuty z kamery + wideo rano |
+| Ujawnienie użycia AI, modeli, danych | ⚠️ | nocny PR uzupełnia `AI_USAGE.md` (modele MediaPipe, licencje) |
+| Oddzielenie kodu sprzed hackathonu | ⚠️ | Kacper opisuje w `AI_USAGE.md`, co istniało wcześniej |
+| Zespół umie wyjaśnić każdy moduł | ⚠️ | 30 min „wytłumacz nam” + `docs/ARCHITECTURE.md` (w PR #110) |
+| Prywatność, bez diagnoz i rozpoznawania emocji | ✅ | jedno zdanie „wskaźnik, nie diagnoza” w samej aplikacji |
+| Brak zmian po terminie | ⚠️ | potwierdzić termin, tag `v1.0-submission`, potem stop |
+| Prawa autorskie | ✅ | zostają przy nas (regulamin zadania pkt 14) |
+
 ## 0. Najpierw (rano, zanim cokolwiek innego)
 - [ ] **Discord: potwierdzić termin zgłoszenia** – 11:00 czy 23:00 w niedzielę? Zasady są sprzeczne (angielski tekst zadania: 23:00, polski regulamin ogólny §4.3: 11:00). **Do potwierdzenia planujemy na 11:00.** — kto: ___
 - [ ] **Discord: kto jest w jury** – regulamin (pkt 15) mówi, że jury zostanie ogłoszone na Discordzie najpóźniej 4.10. Sprawdzić nazwiska i firmy, żeby wiedzieć, do kogo mówimy. — kto: ___
@@ -17,7 +50,7 @@
 - [ ] **Pokazać interaktywne ćwiczenie – warto!** Kamera sama liczy powtórzenia (Marcin, #99): **cofanie brody**, **unoszenie barków** i **przechylanie głowy uchem do barku**. To najmocniejszy „żywy” moment: robisz ćwiczenie, licznik rośnie, na końcu Bateria idzie w górę. Przećwiczyć wcześniej to, które działa najpewniej (2–3 próby), i tylko je pokazać. — kto: ___
 - [ ] **Sekcja „Co dalej – implikacje na przyszłość”** (obowiązkowo) – gotowe punkty w `docs/pitch/IDEAS.md`.
 - [ ] **Uczciwie o pomiarach** – gotowe zdania i liczby w `docs/BADANIE-OCZU.md` („wskaźnik, nie diagnoza”, „porównujemy Cię tylko z Tobą”). Wpisać zmierzony wynik mrugnięć (np. „X/20 wykrytych”) – tylko prawdziwe liczby.
-- [ ] **Nagranie wideo** (jeśli robimy): tryb demo + czyste konto, bez powiadomień systemowych (Focus/Nie przeszkadzać), 1080p, plan z sekcji wyżej. — kto: ___
+- [ ] **Nagranie wideo pitchu (maks. ok. 3 min)** – dołączane do zgłoszenia jako link (np. YouTube niepubliczny – sprawdzić w trybie incognito). W 1. rundzie to ono „pokazuje” aplikację mentorom. Prawdziwa kamera (kontur powiek!), tryb prezentacji do pokazania zmęczenia, interaktywne ćwiczenie, bez powiadomień systemowych (Focus / Nie przeszkadzać), 1080p, kolejność wg story wyżej. — kto: Mateusz
 
 ## 2. Wszyscy muszą znać projekt (nie „wyklepany przez AI”)
 Mentorzy mówili wprost, że źle oceniają prace, które wyglądają na zrobione przez AI bez zrozumienia. Regulamin też: **zespół musi umieć wyjaśnić każdą decyzję techniczną**.
