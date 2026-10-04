@@ -30,7 +30,7 @@
 - **No medical claims.** Wording: "may indicate", "consider talking to", never "you have". Red flags → 112 / NFZ TIP 800 190 590.
 - Privacy claims must be literally true: no frames stored or sent. If the AI coach is on, show exactly what numbers are sent.
 - The team must be able to **explain every module** (HackYeah AI policy: functionality you can't explain hurts the score). Every PR description says *how it works* in 2–3 lines.
-- Keep `AI_USAGE.md` updated: tools used, what was pre-existing (Kacper's Postura prototype, Marcin's Rytm ideas) vs built during HackYeah.
+- Keep `AI_USAGE.md` updated: tools used, everything was built during HackYeah (started 3 Oct, 11:00); Rytm and Postura were parallel prototypes from the first hours.
 
 ## 5. Testing & verification (definition of done)
 1. `npm run typecheck` is green.
