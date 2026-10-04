@@ -5,6 +5,7 @@ import type { IssueId, StatsPayload } from '../../shared/types';
 import { h } from '../dom';
 import { ISSUE_LABEL } from '../../core/coach';
 import { getLang, tr } from '../../shared/i18n';
+import { careCard } from '../careCard';
 
 // Skróty dni i miesięcy w bieżącym języku (ta sama kolejność co wcześniej: od poniedziałku, od stycznia).
 const EN_UI = getLang() === 'en';
@@ -135,7 +136,7 @@ export async function renderStats(view: HTMLElement, ctx: AppCtx): Promise<void>
   );
   head.append(seg);
   draw();
-  page.append(body);
+  page.append(body, careCard(data));
 }
 
 /** Dni z wybranego zakresu (od najstarszego). */

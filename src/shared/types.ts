@@ -244,6 +244,26 @@ export interface StatsPayload {
   daysOfData: number;
   weekTopIssue: IssueId | null;
   weekIssueShare: Partial<Record<IssueId, number>>;
+  /** Wzorzec z 14 dni do karty „Do kogo iść?” (core/carePattern.ts); brak = nie liczono. */
+  care?: CarePattern;
+}
+
+export type CareKind = 'neck' | 'back' | 'eyes';
+
+/** Utrzymujący się wzorzec z ostatnich 14 dni. To nie diagnoza, tylko liczba dni z danym problemem. */
+export interface CarePattern {
+  kind: CareKind | null;
+  days: number;
+  /** Spełnione wzorce (najwięcej dni pierwszy): liczby, tekst składa renderer. */
+  evidence: CareEvidence[];
+}
+
+export interface CareEvidence {
+  kind: CareKind;
+  /** Dni z 14 z wzorcem. */
+  days: number;
+  /** Średnio minut dziennie z problemem w tych dniach. */
+  avgMinutes: number;
 }
 
 export interface AppEvent {

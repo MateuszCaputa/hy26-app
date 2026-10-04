@@ -35,7 +35,9 @@ export interface VerifySpec {
 
 /** Ćwiczenia, które kamera z przodu rozpoznaje pewnie. Pozostałe zalicza się przyciskiem „Zrobione”. */
 export const VERIFY_SPECS: Record<string, VerifySpec> = {
-  'chin-tuck': { mode: 'reps', signal: 'head-back', target: 10, enter: 0.035, exit: 0.015, minHoldMs: 1500, refractoryMs: 400, cue: tr('Cofnij brodę i przytrzymaj') },
+  // Test na żywo: sygnał cofania brody jest mały i drga – przy 1,5 s i wyjściu 0,015 krótkie spadki gubiły powtórzenie
+  // (licznik migał na zielono, ale nie rósł). 0,8 s utrzymania i niższy próg wyjścia.
+  'chin-tuck': { mode: 'reps', signal: 'head-back', target: 10, enter: 0.035, exit: 0.008, minHoldMs: 800, refractoryMs: 400, cue: tr('Cofnij brodę i przytrzymaj') },
   shrugs: { mode: 'reps', signal: 'shoulders-up', target: 10, enter: 0.06, exit: 0.025, minHoldMs: 150, refractoryMs: 300, cue: tr('Unieś barki do uszu i opuść') },
   'neck-side': { mode: 'hold-sides', signal: 'head-roll', target: 15, enter: 12, exit: 6, minHoldMs: 0, refractoryMs: 0, cue: tr('Przechyl głowę uchem do barku') },
 };
