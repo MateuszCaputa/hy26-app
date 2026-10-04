@@ -16,7 +16,18 @@
 | 10:00–10:30 | **Zgłoszenie na HackTribe** + tag `v1.0-submission` + zrzut potwierdzenia | ___ |
 | 10:30–11:00 | Zapas. Po terminie **żadnych zmian** w repo i zgłoszeniu (regulamin pkt 13) | – |
 
-**Nocne PR-y do przejrzenia rano** (żaden nie jest scalony – decyzja zespołu): #105 ziewanie ≠ mówienie · #110 sprzątanie kodu · materiały do pitchu (zrzuty, szkic zgłoszenia, ujawnienie AI) · wersja angielska aplikacji · poprawki 2 błędów z audytu · karta „do kogo iść” (opcjonalna – filar „dostęp do opieki”). Linki: `gh pr list` albo zakładka Pull requests na GitHubie.
+**Nocne PR-y do przejrzenia rano** – wszystkie zaktualizowane do `main` (po wersji PL/EN Kacpra #121 i ziewaniu #123), bez konfliktów, **żaden nie jest scalony, nikt ich nie testował na żywo**:
+
+| PR | Co | Rekomendacja | Test przed scaleniem |
+|---|---|---|---|
+| #118 | zrzuty do PDF, szkic zgłoszenia PL/EN + plan slajdów, ujawnienie AI | ✅ scalić | tylko przeczytać (same dokumenty) |
+| #122 | ściąga Q&A, wcześniejszy kod (Kacper potwierdza!), szkic 10 slajdów PDF | ✅ scalić | tylko przeczytać |
+| #105 | ziewnięcie ≠ mówienie (na bazie zmian Kacpra #123) | ✅ scalić | 3 udawane ziewnięcia z klawiszem D → „Ziewnięcia” +3, bez „MÓWISZ” |
+| #116 | 2 błędy (kalibracja, timer), „nie diagnoza”, scenariusz wideo | ✅ scalić | jedna kalibracja + „Dlaczego X%?” pokazuje nowe zdanie (PL i EN) |
+| #120 | karta „Do kogo iść?” – filar opieki zdrowotnej | ❓ decyzja zespołu + Marcin | Statystyki w trybie demo → karta, PL i EN |
+| #110 | sprzątanie kodu (bez zmian działania) | ⏸️ można pominąć | przeklikać wszystkie ekrany |
+
+Drobny brak na `main` (dla Kacpra): w Statystykach po angielsku słowo „alerty” nie jest przetłumaczone (`stats.ts`, `fig(…, 'alerty', …)`).
 
 ## ✅ Zgodność z wymaganiami zadania (Sport & Healthcare) – stan na noc 03/04.10
 | Wymaganie (regulamin / opis zadania) | Stan | Co brakuje |
