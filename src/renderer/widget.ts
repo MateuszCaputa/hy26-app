@@ -3,13 +3,14 @@
 // Kliknięcie otwiera główne okno; przeciągnięcie przesuwa widget (pozycja zapamiętana).
 import '../shared/api';
 import type { LiveStatus } from '../shared/types';
+import { tr } from '../shared/i18n';
 
 const WORD: Record<string, string> = {
-  good: 'Prosto',
-  warn: 'Popraw się',
-  bad: 'Zła postawa',
-  absent: 'Nie widzę Cię',
-  paused: 'Pauza',
+  good: tr('Prosto'),
+  warn: tr('Popraw się'),
+  bad: tr('Zła postawa'),
+  absent: tr('Nie widzę Cię'),
+  paused: tr('Pauza'),
 };
 
 const el = (id: string) => document.getElementById(id)!;
@@ -45,6 +46,6 @@ window.postura.onStatus((s: LiveStatus) => {
   const away = s.score === null || s.state === 'absent' || s.state === 'paused';
   el('w-score').textContent = away ? '–' : String(s.score);
   el('w-state').textContent = WORD[s.state] ?? '';
-  el('w-sub').textContent = s.fatigue ? `zmęczenie ${s.fatigue.percent}%` : '';
-  box.title = `Postawa ${away ? '–' : `${s.score}/100`} · ${WORD[s.state] ?? ''}${s.energy ? ` · Energia do pracy ${s.energy.percent}%` : ''}\nKliknij: otwórz Posturę · przeciągnij: przesuń`;
+  el('w-sub').textContent = s.fatigue ? tr('zmęczenie {f}%', { f: s.fatigue.percent }) : '';
+  box.title = `${tr('Postawa')} ${away ? '–' : `${s.score}/100`} · ${WORD[s.state] ?? ''}\n${tr('Kliknij: otwórz Upright · przeciągnij: przesuń')}`;
 });

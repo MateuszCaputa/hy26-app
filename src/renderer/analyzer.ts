@@ -1,5 +1,6 @@
 // Analizator: kamera → MediaPipe (sylwetka + twarz) → metryki → ocena, zmęczenie, przerwy.
 import { FaceLandmarker, FilesetResolver, PoseLandmarker } from '@mediapipe/tasks-vision';
+import { tr as trText } from '../shared/i18n';
 import type { Calibration, FatigueSnapshot, IssueId, LiveStatus, MinuteSample, PostureMetrics, Settings, BreakSuggestion } from '../shared/types';
 import { computeMetrics, median, type Landmark } from '../core/metrics';
 import { PointSmoother } from '../core/oneEuro';
@@ -492,7 +493,7 @@ export class Analyzer {
       topIssue: tr?.topIssue ?? null,
       issues: tr?.issues ?? [],
       minutesSinceBreak: Math.round(this.breaks.minutesSinceBreak(t)),
-      note: !this.calibration ? 'Wymagana kalibracja' : undefined,
+      note: !this.calibration ? trText('Wymagana kalibracja') : undefined,
     };
   }
 

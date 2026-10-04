@@ -1,7 +1,8 @@
 // Komunikaty, ćwiczenia rozluźniające i porady ergonomiczne.
 import type { BreakKind, FatigueLevel, IssueId } from '../shared/types';
+import { localized, tr } from '../shared/i18n';
 
-export const ISSUE_LABEL: Record<IssueId, string> = {
+export const ISSUE_LABEL: Record<IssueId, string> = localized({
   headForward: 'Głowa wysunięta do przodu',
   headBack: 'Głowa odchylona do tyłu',
   shrug: 'Barki uniesione',
@@ -11,10 +12,10 @@ export const ISSUE_LABEL: Record<IssueId, string> = {
   tooClose: 'Za blisko ekranu',
   twist: 'Skręt tułowia',
   stillness: 'Długi bezruch',
-};
+});
 
 /** Jedna, konkretna wskazówka „na teraz”. */
-export const ISSUE_TIP: Record<IssueId, string> = {
+export const ISSUE_TIP: Record<IssueId, string> = localized({
   headForward: 'Cofnij brodę, jakbyś robił „podwójny podbródek”.',
   headBack: 'Opuść lekko brodę – patrz prosto przed siebie.',
   shrug: 'Opuść barki – rozluźnij je w dół, z dala od uszu.',
@@ -24,10 +25,10 @@ export const ISSUE_TIP: Record<IssueId, string> = {
   tooClose: 'Odsuń się na długość ręki (ok. 50–70 cm).',
   twist: 'Usiądź przodem do ekranu.',
   stillness: 'Zmień pozycję – rusz barkami i plecami.',
-};
+});
 
 /** Co poprawić na stałe: rada ergonomiczna do najczęstszego problemu tygodnia. */
-export const ERGONOMIC_TIP: Record<IssueId, string> = {
+export const ERGONOMIC_TIP: Record<IssueId, string> = localized({
   shrug: 'Obniż biurko lub podłokietniki, żeby przedramiona leżały swobodnie, a barki nie musiały się unosić.',
   headBack: 'Obniż monitor: górna krawędź na wysokości oczu lub trochę niżej, żeby nie zadzierać głowy.',
   headForward: 'Podnieś monitor tak, by jego górna krawędź była na wysokości oczu; laptop postaw na podstawce z osobną klawiaturą.',
@@ -37,7 +38,7 @@ export const ERGONOMIC_TIP: Record<IssueId, string> = {
   tooClose: 'Odsuń monitor na ok. 50–70 cm albo powiększ czcionkę w systemie zamiast przysuwać się do ekranu.',
   twist: 'Ustaw główny monitor dokładnie na wprost; drugi ekran obok, nie pod kątem wymagającym skrętu.',
   stillness: 'Ustaw sobie nawyk: każda rozmowa telefoniczna na stojąco, woda poza zasięgiem ręki.',
-};
+});
 
 export interface Exercise {
   id: string;
@@ -52,7 +53,7 @@ export interface Exercise {
   figure: 'chin' | 'blades' | 'shrug' | 'neck-side' | 'eyes' | 'walk' | 'chest' | 'twist';
 }
 
-export const EXERCISES: Exercise[] = [
+const RAW_EXERCISES: Exercise[] = [
   {
     id: 'eyes-20',
     name: 'Reguła 20-20-20',
@@ -127,6 +128,11 @@ export const EXERCISES: Exercise[] = [
   },
 ];
 
+/** Nazwa i kroki ćwiczenia tłumaczone przy odczycie (reszta pól bez zmian). */
+export const EXERCISES: Exercise[] = RAW_EXERCISES.map((e) => new Proxy(e, {
+  get: (t, k) => (k === 'name' ? tr(t.name) : k === 'steps' ? t.steps.map((x) => tr(x)) : t[k as keyof Exercise]),
+}));
+
 export const exerciseById = (id: string): Exercise => EXERCISES.find((e) => e.id === id) ?? EXERCISES[0];
 
 /** Dobiera ćwiczenie: najpierw pasujące do problemu, potem rotacja (seed = minuta). */
@@ -142,28 +148,28 @@ export function pickExercise(kind: BreakKind, _issue: IssueId | null, seed = 0, 
   return list[Math.floor(Math.abs(seed)) % list.length].id;
 }
 
-export const BREAK_TITLE: Record<BreakKind, string> = {
+export const BREAK_TITLE: Record<BreakKind, string> = localized({
   eye: 'Przerwa dla oczu',
   micro: 'Mikroprzerwa',
   move: 'Przerwa ruchowa',
-};
+});
 
-export const BREAK_REASON: Record<string, string> = {
+export const BREAK_REASON: Record<string, string> = localized({
   timer: 'Minął zaplanowany czas pracy.',
   alerts: 'Postawa psuła się kilka razy w ciągu ostatnich 15 min.',
   fatigue: 'Wskaźnik zmęczenia rośnie – lepiej odpocząć teraz.',
   'posture-trend': 'Wynik postawy spada od kwadransa – to typowy znak zmęczenia.',
-};
+});
 
-export const FATIGUE_LABEL: Record<FatigueLevel, string> = {
+export const FATIGUE_LABEL: Record<FatigueLevel, string> = localized({
   fresh: 'świeży',
   tired: 'zmęczony',
   veryTired: 'bardzo zmęczony',
-};
+});
 
 export function fatigueAdvice(level: FatigueLevel, blinkRate: number | null): string {
-  if (blinkRate !== null && blinkRate < 8) return 'Mrugasz rzadko – mrugnij świadomie kilka razy i spójrz w dal.';
-  if (level === 'veryTired') return 'Zrób przerwę ruchową: wstań, napij się wody, przewietrz pokój.';
-  if (level === 'tired') return 'Zaplanuj przerwę w ciągu kilkunastu minut.';
-  return 'Dobra forma – to dobry moment na zadania wymagające skupienia.';
+  if (blinkRate !== null && blinkRate < 8) return tr('Mrugasz rzadko – mrugnij świadomie kilka razy i spójrz w dal.');
+  if (level === 'veryTired') return tr('Zrób przerwę ruchową: wstań, napij się wody, przewietrz pokój.');
+  if (level === 'tired') return tr('Zaplanuj przerwę w ciągu kilkunastu minut.');
+  return tr('Dobra forma – to dobry moment na zadania wymagające skupienia.');
 }

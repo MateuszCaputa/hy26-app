@@ -2,6 +2,7 @@
 // i strzałką pokazuje, jak go poprawić. Widok z boku: garbienie, głowa w przód/w dół, za blisko ekranu.
 // Widok z przodu: przechył głowy, przechył barków, skręt tułowia.
 import type { IssueId, PostureState } from '../shared/types';
+import { tr } from '../shared/i18n';
 
 const NS = 'http://www.w3.org/2000/svg';
 const FRONT: IssueId[] = ['headTilt', 'shoulderTilt', 'twist'];
@@ -56,7 +57,7 @@ export class PostureFigure {
   private arrows: Partial<Record<IssueId, SVGGElement>> = {};
 
   constructor() {
-    this.el = el('svg', { viewBox: '0 0 260 200', class: 'pfig', role: 'img', 'aria-label': 'Ludzik pokazujący Twoją postawę' });
+    this.el = el('svg', { viewBox: '0 0 260 200', class: 'pfig', role: 'img', 'aria-label': tr('Ludzik pokazujący Twoją postawę') });
     // Od startu jeden widok (z boku) i szary stan „czekam” – bez tego przed pierwszym pomiarem oba widoki rysowały się naraz.
     this.el.dataset.view = 'side';
     this.el.dataset.state = 'idle';

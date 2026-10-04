@@ -5,6 +5,7 @@
 // Zawsze jest małe „×” (Pomiń) dla kogoś, kto jest skupiony.
 import '../shared/api';
 import type { LiveStatus, Nudge, NudgeAction } from '../shared/types';
+import { tr } from '../shared/i18n';
 
 const el = (id: string) => document.getElementById(id)!;
 const box = el('nudge');
@@ -59,8 +60,8 @@ function runCountdown(seconds: number): void {
     sec.textContent = String(Math.ceil(left));
     if (left > 0) raf = requestAnimationFrame(step);
     else {
-      el('n-title').textContent = 'Dzięki, oczy odpoczęły';
-      el('n-body').textContent = 'Wracam do obserwacji.';
+      el('n-title').textContent = tr('Dzięki, oczy odpoczęły');
+      el('n-body').textContent = tr('Wracam do obserwacji.');
       sec.textContent = '✓';
       timer = window.setTimeout(() => close('eye-done'), 1800);
     }
@@ -78,7 +79,7 @@ window.postura.onNudge((n: Nudge) => {
   el('n-body').textContent = n.body;
   const actions = el('n-actions');
   actions.replaceChildren();
-  if (n.kind === 'break') actions.append(button('Start', 'start', true), button('Za 5 min', 'snooze'));
+  if (n.kind === 'break') actions.append(button(tr('Start'), 'start', true), button(tr('Za 5 min'), 'snooze'));
 
   const ring = el('n-ring');
   ring.hidden = !n.seconds;
@@ -93,4 +94,6 @@ window.postura.onStatus((s: LiveStatus) => {
   if (current?.kind === 'posture' && s.state === 'good') close('dismiss');
 });
 
+el('n-close').title = tr('Pomiń');
+el('n-close').setAttribute('aria-label', tr('Pomiń'));
 el('n-close').addEventListener('click', () => close('dismiss'));

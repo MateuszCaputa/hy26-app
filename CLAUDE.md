@@ -28,7 +28,7 @@ If the user didn't say their area, **ask once**: "Which area are you: A Kacper, 
   - Camera frames never leave the device; only numbers are stored.
   - No diagnoses: suggest a professional (NFZ) when a pattern persists.
   - No emotion recognition (EU AI Act art. 5).
-  - UI language: Polish.
+  - UI language: Polish by default, English via Settings → „Język / Language”. **Every new user-visible string goes through `tr('polski tekst')`** (`src/shared/i18n.ts`) and gets an English entry in `src/shared/i18n-en.ts`; `test/i18n.test.ts` checks the `{vars}` match.
 - **Wow and pitch ideas:** `research/BATERIA-vision.md` (neon face mesh, a single "battery" energy score, crash prediction, camera-verified recovery, the 3-min pitch, judge Q&A). Reference only. The code here is the source of truth.
 - **Differentiation vs past winners:** Straighty (2024) did posture only; Rest & Blink (2025) did eyes only. We fuse posture + fatigue + rhythm, and we predict.
 

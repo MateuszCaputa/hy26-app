@@ -1,5 +1,6 @@
 // Statystyki i wnioski: wskaźnik formy, mapa godzin, najlepsze godziny.
 import type { IssueId, MinuteSample, StatsPayload } from '../shared/types';
+import { tr } from '../shared/i18n';
 import { topIssueOf } from './aggregate';
 
 const FORM_W = { fatigue: 0.45, posture: 0.35, activity: 0.2 };
@@ -91,7 +92,7 @@ export function bestHoursText(profile: HourProfile[]): { best: string | null; di
   let dip: string | null = null;
   if (max - min >= 8) {
     const low = profile.find((p) => p.form === min)!;
-    dip = `spadek formy ok. ${low.hour}:00–${low.hour + 1}:00 (o ${Math.round(max - min)} pkt niżej niż w najlepszej godzinie)`;
+    dip = tr('spadek formy ok. {from}:00–{to}:00 (o {d} pkt niżej niż w najlepszej godzinie)', { from: low.hour, to: low.hour + 1, d: Math.round(max - min) });
   }
   return { best: hoursToRanges(best), dip };
 }

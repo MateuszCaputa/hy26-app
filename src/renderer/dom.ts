@@ -1,3 +1,4 @@
+import { tr } from '../shared/i18n';
 // Minimalny pomocnik do budowy DOM bez frameworka.
 type Child = Node | string | number | null | undefined | false | Child[];
 type Attrs = Record<string, unknown> & { class?: string; style?: string };
@@ -40,7 +41,7 @@ export function clear(el: HTMLElement): void {
 }
 
 export const fmtMin = (m: number): string => {
-  if (m < 1) return 'mniej niż minutę';
+  if (m < 1) return tr('mniej niż minutę');
   if (m < 60) return `${Math.round(m)} min`;
   const h = Math.floor(m / 60);
   const r = Math.round(m % 60);

@@ -8,6 +8,7 @@
 // 3. Dryf wzorca: jeśli w ciągu dnia siedzisz wyraźnie prościej niż przy kalibracji,
 //    proponujemy nową kalibrację.
 import type { Calibration, PostureMetrics, SlouchReference } from '../shared/types';
+import { tr } from '../shared/i18n';
 
 export interface CalibrationCheck {
   id: 'headDown' | 'headUp' | 'turned' | 'shoulders' | 'headTilt';
@@ -25,11 +26,11 @@ export const CAL_LIMITS = {
 /** Co poprawić, zanim zapamiętamy pozycję jako prostą. Pusta lista = można kalibrować. */
 export function checkCalibrationPose(m: PostureMetrics): CalibrationCheck[] {
   const out: CalibrationCheck[] = [];
-  if (m.headPitchDeg != null && m.headPitchDeg > CAL_LIMITS.headDownDeg) out.push({ id: 'headDown', text: 'Unieś głowę i patrz na środek ekranu.' });
-  if (m.headPitchDeg != null && m.headPitchDeg < -CAL_LIMITS.headUpDeg) out.push({ id: 'headUp', text: 'Opuść lekko brodę.' });
-  if (m.headYawDeg != null && Math.abs(m.headYawDeg) > CAL_LIMITS.yawDeg) out.push({ id: 'turned', text: 'Usiądź przodem do ekranu.' });
-  if (Math.abs(m.shoulderTiltDeg) > CAL_LIMITS.shoulderTiltDeg) out.push({ id: 'shoulders', text: 'Wyrównaj barki.' });
-  if (Math.abs(m.headRollDeg) > CAL_LIMITS.headRollDeg) out.push({ id: 'headTilt', text: 'Wyprostuj głowę – bez przechylania na bok.' });
+  if (m.headPitchDeg != null && m.headPitchDeg > CAL_LIMITS.headDownDeg) out.push({ id: 'headDown', text: tr('Unieś głowę i patrz na środek ekranu.') });
+  if (m.headPitchDeg != null && m.headPitchDeg < -CAL_LIMITS.headUpDeg) out.push({ id: 'headUp', text: tr('Opuść lekko brodę.') });
+  if (m.headYawDeg != null && Math.abs(m.headYawDeg) > CAL_LIMITS.yawDeg) out.push({ id: 'turned', text: tr('Usiądź przodem do ekranu.') });
+  if (Math.abs(m.shoulderTiltDeg) > CAL_LIMITS.shoulderTiltDeg) out.push({ id: 'shoulders', text: tr('Wyrównaj barki.') });
+  if (Math.abs(m.headRollDeg) > CAL_LIMITS.headRollDeg) out.push({ id: 'headTilt', text: tr('Wyprostuj głowę – bez przechylania na bok.') });
   return out;
 }
 
@@ -50,12 +51,12 @@ export function judgeCalibration(cal: Calibration, slouch: SlouchReference): Cal
   const ear = relDrop(slouch.earRatio, cal.earRatio);
   const pitch = slouch.headPitchDeg != null && cal.headPitchDeg != null ? slouch.headPitchDeg - cal.headPitchDeg : 0;
   if (neck < -0.05 && ear < -0.05) {
-    return { ok: false, warning: 'W drugim kroku siedziałeś prościej niż w pierwszym. Spróbuj jeszcze raz: najpierw najprościej, potem zwyczajnie.' };
+    return { ok: false, warning: tr('W drugim kroku siedziałeś prościej niż w pierwszym. Spróbuj jeszcze raz: najpierw najprościej, potem zwyczajnie.') };
   }
   if (Math.max(neck, ear) < MIN_PERSONAL_RANGE && pitch < 6) {
     return {
       ok: false,
-      warning: 'Twoja „prosta” postawa prawie nie różni się od zwykłej. Spróbuj wyprostować się mocniej: usiądź głęboko, unieś mostek, cofnij brodę.',
+      warning: tr('Twoja „prosta” postawa prawie nie różni się od zwykłej. Spróbuj wyprostować się mocniej: usiądź głęboko, unieś mostek, cofnij brodę.'),
     };
   }
   return { ok: true };
