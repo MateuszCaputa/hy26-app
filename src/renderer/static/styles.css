@@ -260,8 +260,9 @@ button, input, select { font: inherit; color: inherit; }
 .care { max-width: 68ch; }
 .care p { margin: 0; }
 .care-routes, .care-evidence { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
-.care-tip { padding: 10px 14px; background: var(--surface); border-radius: var(--radius-sm); }
-.care-flags { font-size: 14px; }
+.care-tip { padding: 10px 14px; margin: 10px 0; background: var(--surface); border-radius: var(--radius-sm); }
+.care-flags { font-size: 14px; margin-top: 4px; }
+.care-routes + .care-routes, .care-routes { margin-bottom: 6px; }
 .care-flags strong:first-child { color: var(--bad); }
 .care-more { display: grid; gap: 10px; }
 .care-more > summary { cursor: pointer; color: var(--brand); font-size: 14px; width: fit-content; }

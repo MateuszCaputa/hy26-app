@@ -56,7 +56,7 @@ test('cofanie brody: utrzymane 2 s i powrót = powtórzenie; za krótko się nie
   c.hold(2000, chinBack(0.06));
   let p = c.hold(500, REST);
   assert.equal(p.count, 1);
-  c.hold(600, chinBack(0.06)); // 0,6 s < 1,5 s
+  c.hold(600, chinBack(0.06)); // 0,6 s < 0,8 s
   p = c.hold(500, REST);
   assert.equal(p.count, 1);
   assert.ok(p.peak >= 0.05);
@@ -121,4 +121,14 @@ test('brak osoby: licznik stoi, flaga „lost”, po powrocie liczy dalej', () =
   p = c.hold(400, REST);
   assert.equal(p.count, 2);
   assert.ok(!p.lost);
+});
+
+test('cofanie brody: krótkie drgnięcie sygnału w trakcie utrzymania nie gubi powtórzenia (test na żywo)', () => {
+  const c = new Clip(new ExerciseVerifier(VERIFY_SPECS['chin-tuck']));
+  c.hold(1100, REST);
+  c.hold(500, chinBack(0.05));
+  c.hold(100, chinBack(0.012)); // chwilowy spadek poniżej starego progu wyjścia 0,015
+  c.hold(500, chinBack(0.05));
+  const p = c.hold(500, REST);
+  assert.equal(p.count, 1);
 });
