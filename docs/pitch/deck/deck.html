@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Upright – prezentacja (SZKIC)</title>
+<!--
+  SZKIC 10 slajdów (HackYeah 2026, Sport & Healthcare). Jeden plik HTML, bez zewnętrznych zależności;
+  obrazy leżą obok (img-*.png) i w assets/ – podmień pliki, a PDF wygeneruj ponownie (patrz README w opisie PR).
+  Ramki przerywane z napisem „DO PODMIANY” = zrzut z prawdziwej kamery do zrobienia rano.
+-->
+<style>
+  :root {
+    /* Paleta z src/renderer/static/styles.css (tryb ciemny) */
+    --bg: #151617;
+    --surface: #1d1e20;
+    --ink: #e6e6e4;
+    --muted: #94969b;
+    --line: #2d2e31;
+    --spine: #9aaabb;
+    --brand: #6fb0c0;
+    --good: #82b593;
+    --warn: #cfae6b;
+    --bad: #d08c7f;
+    --font: system-ui, "Segoe UI Variable Text", "Segoe UI", "SF Pro Text", -apple-system, Ubuntu, sans-serif;
+  }
+  @page { size: 1920px 1080px; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #0d0e0f; }
+  body { font-family: var(--font); color: var(--ink); -webkit-font-smoothing: antialiased; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .slide {
+    position: relative; width: 1920px; height: 1080px; overflow: hidden;
+    background: var(--bg); padding: 110px 140px 100px;
+    display: flex; flex-direction: column;
+    page-break-after: always; break-after: page;
+    margin: 0 auto 40px;
+  }
+  .slide:last-child { page-break-after: auto; break-after: auto; }
+  @media print { .slide { margin: 0; } }
+  .num { position: absolute; right: 140px; bottom: 56px; font-size: 22px; color: var(--muted); letter-spacing: .08em; }
+  .brandmark { position: absolute; left: 140px; bottom: 50px; display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: 22px; font-weight: 600; }
+  .brandmark img { width: 34px; height: 34px; }
+  .kicker { font-size: 26px; letter-spacing: .14em; text-transform: uppercase; color: var(--brand); font-weight: 600; margin-bottom: 28px; }
+  h1 { font-size: 92px; line-height: 1.04; margin: 0; font-weight: 650; letter-spacing: -0.02em; }
+  h2 { font-size: 68px; line-height: 1.08; margin: 0; font-weight: 650; letter-spacing: -0.015em; }
+  p.lead { font-size: 38px; line-height: 1.35; color: var(--muted); margin: 36px 0 0; max-width: 1300px; }
+  .muted { color: var(--muted); }
+  .good { color: var(--good); } .warn { color: var(--warn); } .bad { color: var(--bad); } .brand { color: var(--brand); }
+  .row { display: flex; gap: 72px; flex: 1; min-height: 0; margin-top: 56px; align-items: stretch; }
+  .col { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+  .shot { border-radius: 22px; border: 1px solid var(--line); overflow: hidden; background: var(--surface); }
+  .shot img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center; }
+  .todo {
+    border: 3px dashed var(--warn); border-radius: 22px; color: var(--warn);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+    font-size: 30px; line-height: 1.4; padding: 40px; background: rgba(207,174,107,.06);
+  }
+  .todo b { font-size: 34px; letter-spacing: .06em; display: block; margin-bottom: 12px; }
+  .tag-todo { position: absolute; top: 40px; right: 140px; font-size: 20px; color: var(--warn); border: 2px dashed var(--warn); border-radius: 999px; padding: 6px 18px; }
+  ul.big { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 34px; }
+  ul.big li { font-size: 38px; line-height: 1.3; padding-left: 44px; position: relative; }
+  ul.big li::before { content: ""; position: absolute; left: 0; top: 18px; width: 16px; height: 16px; border-radius: 50%; background: var(--brand); }
+  ul.big li small { display: block; font-size: 28px; color: var(--muted); margin-top: 6px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 40px 44px; }
+  .quote { font-size: 54px; line-height: 1.25; font-weight: 600; }
+  .stat { white-space: nowrap; font-size: 120px; font-weight: 650; line-height: 1; letter-spacing: -0.03em; }
+  .stat-label { font-size: 30px; color: var(--muted); margin-top: 14px; line-height: 1.35; }
+  .src { font-size: 22px; color: var(--muted); margin-top: auto; padding-top: 24px; }
+  .grid4 { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .pillar h3 { font-size: 40px; margin: 0 0 12px; font-weight: 650; }
+  .pillar p { font-size: 29px; line-height: 1.35; color: var(--muted); margin: 0; }
+  .pillar .st { font-size: 24px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; margin-bottom: 16px; }
+  .s7 .stat { font-size: 84px; }
+  .team { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; margin-top: 70px; }
+  .team .card h3 { font-size: 40px; margin: 0 0 12px; }
+  .team .card p { font-size: 28px; color: var(--muted); margin: 0; line-height: 1.35; }
+  /* Makieta przypomnienia: teksty 1:1 z aplikacji (app.ts onBreak, coach.ts BREAK_REASON na ekranie przerwy) */
+  .nudge { width: 640px; background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 34px 38px 30px; box-shadow: 0 30px 80px rgba(0,0,0,.45); }
+  .nudge .t { font-size: 34px; font-weight: 650; }
+  .nudge .b { font-size: 27px; color: var(--muted); margin-top: 10px; line-height: 1.4; }
+  .nudge .btns { display: flex; gap: 16px; margin-top: 26px; }
+  .nudge .btn { font-size: 26px; font-weight: 650; border-radius: 999px; padding: 12px 26px; border: 1px solid var(--line); }
+  .nudge .btn.primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .nudge .line { height: 4px; background: var(--line); border-radius: 2px; margin-top: 26px; overflow: hidden; }
+  .nudge .line i { display: block; height: 100%; width: 62%; background: var(--brand); }
+  .chip { display: inline-block; font-size: 24px; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 8px 20px; margin-right: 12px; }
+</style>
+</head>
+<body>
+
+<!-- 1. Problem -->
+<section class="slide">
+  <div class="kicker">Problem</div>
+  <h1>Ból szyi i zmęczone oczy<br>zauważasz wieczorem.<br><span class="muted">Wtedy jest już za późno.</span></h1>
+  <p class="lead">Przy ekranie garbimy się, wysuwamy głowę i mrugamy rzadziej – nie czując tego. Zwykły timer przerw nie wie, <em>kiedy</em> naprawdę jej potrzebujesz.</p>
+  <div class="brandmark"><img src="../../../assets/logo-mark.png" alt="">Upright</div>
+  <div class="num">01</div>
+</section>
+
+<!-- 2. Insight / my -->
+<section class="slide">
+  <div class="kicker">Nasz pomysł</div>
+  <h2>Nie kolejny timer.<br>Kamera, która mówi <span class="brand">„teraz”</span> – i dlaczego.</h2>
+  <div class="row">
+    <div class="col card">
+      <div class="stat brand">Ty</div>
+      <div class="stat-label">jako punkt odniesienia: osobista kalibracja zamiast „idealnej postawy”</div>
+    </div>
+    <div class="col card">
+      <div class="stat brand">0 B</div>
+      <div class="stat-label">obrazu opuszcza laptop – analiza w całości na urządzeniu</div>
+    </div>
+    <div class="col card">
+      <div class="stat brand">5</div>
+      <div class="stat-label">błędów pomiaru oczu znalezionych i naprawionych w teście na sobie, w nocy hackathonu</div>
+    </div>
+  </div>
+  <div class="brandmark"><img src="../../../assets/logo-mark.png" alt="">Upright</div>
+  <div class="num">02</div>
+</section>
+
+<!-- 3. Co robi Upright -->
+<section class="slide">
+  <div class="tag-todo">zrzut z prawdziwej kamery</div>
+  <div class="kicker">Upright</div>
+  <h2>Aplikacja na komputer, która patrzy na postawę i oczy –<br><span class="muted">i pomaga zdecydować o przerwie.</span></h2>
+  <div class="row">
+    <div class="col shot" style="flex:1.65"><img src="img-live.png" alt="Widok Na żywo (tryb demo)"></div>
+    <div class="col" style="justify-content:center">
+      <ul class="big">
+        <li>Postawa 0–100<small>względem Twojej kalibracji</small></li>
+        <li>Zmęczenie oczu<small>mruganie, PERCLOS, ziewanie</small></li>
+        <li>Przerwy i ćwiczenia<small>we właściwym momencie</small></li>
+      </ul>
+    </div>
+  </div>
+  <div class="num">03</div>
+</section>
+
+<!-- 4. Wow: kontur powiek + szkielet -->
+<section class="slide">
+  <div class="tag-todo">DO PODMIANY rano</div>
+  <div class="kicker">Co widzi kamera</div>
+  <h2>Kontur powiek zamyka się, gdy mrugasz.</h2>
+  <p class="lead" style="margin-top:20px">Widać, że licznik naprawdę widzi Twoje oczy. Szkielet jest spokojny i szary – świeci tylko to, co wymaga poprawy.</p>
+  <div class="row" style="margin-top:44px">
+    <div class="col todo"><b>DO PODMIANY: ZRZUT Z PRAWDZIWEJ KAMERY</b>Widok „Na żywo”: kontur powiek, tęczówki i szkielet na twarzy osoby.<br>Najlepiej klatka w trakcie mrugnięcia (oko zamknięte).<br><span style="font-size:24px">Plik: img-live-camera.png · 1920×1080</span></div>
+  </div>
+  <div class="num">04</div>
+</section>
+
+<!-- 5. Decyzje: przypomnienie z powodem -->
+<section class="slide">
+  <div class="tag-todo">makieta – podmień na zrzut</div>
+  <div class="kicker">Decyzja, nie tylko pomiar</div>
+  <h2>„Przerwa teraz, bo…”</h2>
+  <div class="row" style="align-items:center; gap:110px">
+    <div class="col" style="flex:0 0 auto">
+      <div class="nudge">
+        <div class="t">Mikroprzerwa</div>
+        <div class="b">Cofanie brody</div>
+        <div class="btns"><span class="btn primary">Start</span><span class="btn">Za 5 min</span></div>
+        <div class="line"><i></i></div>
+      </div>
+      <p style="font-size:28px; color:var(--muted); margin:36px 0 0; max-width:640px; line-height:1.4">Ekran przerwy podaje powód:<br><span style="color:var(--ink)">„Wynik postawy spada od kwadransa – to typowy znak zmęczenia.”</span></p>
+    </div>
+    <div class="col">
+      <ul class="big">
+        <li>Każda przerwa ma powód<small>czas, rosnące zmęczenie, spadek postawy, kilka alertów</small></li>
+        <li>Spokojnie, bez nękania<small>alert po 30 s złej postawy, max raz na 5 min, samo znika</small></li>
+        <li>„Dlaczego X%?”<small>zmęczenie rozłożone na 6 składowych z wagami</small></li>
+      </ul>
+    </div>
+  </div>
+  <div class="num">05</div>
+</section>
+
+<!-- 6. Ruch: ćwiczenie liczone kamerą -->
+<section class="slide">
+  <div class="tag-todo">DO PODMIANY rano</div>
+  <div class="kicker">Ruch</div>
+  <h2>Ćwiczenie, które kamera liczy za Ciebie.</h2>
+  <div class="row">
+    <div class="col todo" style="flex:1.5"><b>DO PODMIANY: ZRZUT Z PRAWDZIWEJ KAMERY</b>Ekran przerwy z licznikiem powtórzeń, np. „Cofanie brody 6/10”.<br><span style="font-size:24px">Plik: img-exercise-camera.png</span></div>
+    <div class="col" style="justify-content:center">
+      <ul class="big">
+        <li>Cofanie brody</li>
+        <li>Unoszenie barków</li>
+        <li>Przechylanie głowy<small>sekundy na każdą stronę</small></li>
+      </ul>
+      <p class="src" style="font-size:26px">Liczy zakres ruchu, utrzymanie i powrót – nie zastępuje fizjoterapeuty.</p>
+    </div>
+  </div>
+  <div class="num">06</div>
+</section>
+
+<!-- 7. Oczy i zmęczenie – uczciwie -->
+<section class="slide s7">
+  <div class="kicker">Oczy i zmęczenie – uczciwie</div>
+  <h2>Wskaźnik, nie diagnoza.</h2>
+  <div class="row">
+    <div class="col card">
+      <div class="stat">~22 → 7</div>
+      <div class="stat-label">mrugnięć na minutę: spoczynek vs praca przy ekranie. Rzadkie mruganie = zmęczone oczy → przerwa 20-20-20.</div>
+      <div class="src">Tsubota i Nakamori, NEJM 1993</div>
+    </div>
+    <div class="col card">
+      <div class="stat">PERCLOS</div>
+      <div class="stat-label">udział czasu z przymkniętymi oczami + długie mrugnięcia – najlepiej zbadane sygnały senności z kamery.</div>
+      <div class="src">Dinges 1998 · Schleicher 2008</div>
+    </div>
+    <div class="col card">
+      <div class="stat">Ty vs Ty</div>
+      <div class="stat-label">progi dopasowane do Twoich oczu. Patrzysz w dół lub mówisz – nie liczymy. Dane niepewne – nie pokazujemy liczby.</div>
+      <div class="src">Wynik testu mrugnięć: <span class="warn">[wpisać tylko zmierzone, np. X/20]</span></div>
+    </div>
+  </div>
+  <div class="num">07</div>
+</section>
+
+<!-- 8. Prywatność + 4 filary -->
+<section class="slide">
+  <div class="kicker">Prywatność i kategoria</div>
+  <h2>Wszystko na urządzeniu. <span class="muted">Obraz nigdy nie jest zapisywany.</span></h2>
+  <p style="margin:26px 0 0"><span class="chip">MediaPipe lokalnie</span><span class="chip">działa offline</span><span class="chip">w bazie tylko liczby z minut</span><span class="chip">bez rozpoznawania emocji</span><span class="chip">„Usuń moje dane”</span></p>
+  <div class="grid4" style="margin-top:48px">
+    <div class="card pillar"><div class="st good">jest</div><h3>Sport i ruch</h3><p>Przerwy ruchowe, ćwiczenia liczone kamerą.</p></div>
+    <div class="card pillar"><div class="st good">jest</div><h3>Zdrowie fizyczne</h3><p>Postawa względem Twojej kalibracji, odległość od ekranu.</p></div>
+    <div class="card pillar"><div class="st good">jest</div><h3>Dobrostan</h3><p>Rytm zmęczenia i energii w ciągu dnia, przerwy zanim „padniesz”.</p></div>
+    <div class="card pillar"><div class="st warn">co dalej</div><h3>Dostęp do opieki</h3><p>Podsumowanie z 14 dni dla lekarza lub fizjoterapeuty, ścieżka NFZ.</p></div>
+  </div>
+  <div class="num">08</div>
+</section>
+
+<!-- 9. Co dalej -->
+<section class="slide">
+  <div class="kicker">Co dalej</div>
+  <h2>Ta sama kamera, więcej zastosowań.</h2>
+  <div class="row">
+    <div class="col">
+      <ul class="big">
+        <li>Ścieżka do specjalisty<small>utrzymujący się wzorzec → raport dla lekarza / fizjoterapeuty, NFZ</small></li>
+        <li>Pracodawcy (B2B)<small>benefit wspierający przerwy w pracy przy monitorze; anonimowy widok zespołu</small></li>
+      </ul>
+    </div>
+    <div class="col">
+      <ul class="big">
+        <li>Fizjoterapia między wizytami<small>za zgodą, same liczby, ćwiczenia sprawdzane kamerą</small></li>
+        <li>Szkoły, e-sport, operatorzy<small>wszędzie, gdzie ktoś długo patrzy w ekran</small></li>
+      </ul>
+    </div>
+  </div>
+  <div class="num">09</div>
+</section>
+
+<!-- 10. Zespół -->
+<section class="slide">
+  <div class="kicker">Zespół</div>
+  <h2>Dziękujemy!</h2>
+  <div class="team">
+    <div class="card"><h3>Kacper Smaga</h3><p>pomiar postawy, kalibracja, logika przerw</p></div>
+    <div class="card"><h3>Marcin Pałys</h3><p>ćwiczenia liczone kamerą, zmęczenie, statystyki</p></div>
+    <div class="card"><h3>Mateusz Caputa</h3><p>nakładka, widget, przypomnienia, integracja</p></div>
+    <div class="card"><h3>Bartłomiej <span class="warn">[nazwisko]</span></h3><p>prezentacja i pitch</p></div>
+  </div>
+  <p class="lead" style="margin-top:auto">Repozytorium: <span class="warn">[link]</span> · Wideo: <span class="warn">[link]</span></p>
+  <div class="brandmark" style="position:static; margin-top:28px"><img src="../../../assets/logo-mark.png" alt="">Upright · HackYeah 2026 · Sport &amp; Healthcare</div>
+  <div class="num">10</div>
+</section>
+
+</body>
+</html>
